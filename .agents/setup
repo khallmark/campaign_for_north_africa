@@ -36,4 +36,18 @@ time {
 
 echo '[setup] Installing locked dependencies (including development tools)'
 time npm ci --include=dev --prefer-offline --no-audit --no-fund
+
+echo '[setup] Preparing Rust and WebAssembly bindings'
+export PATH="$HOME/.cargo/bin:$PATH"
+time {
+  if ! command -v rustup >/dev/null; then
+    curl --proto '=https' --tlsv1.2 --fail --silent --show-error https://sh.rustup.rs |
+      sh -s -- -y --profile minimal --default-toolchain none
+  fi
+  rustup target add wasm32-unknown-unknown
+  if [[ "$(wasm-bindgen --version 2>/dev/null || true)" != 'wasm-bindgen 0.2.105' ]]; then
+    cargo install wasm-bindgen-cli --version 0.2.105 --locked
+  fi
+  cargo fetch --locked
+}
 echo '[setup] Ready. Run npm test, npm run build, or amp orb services ensure.'

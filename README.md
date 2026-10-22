@@ -4,20 +4,22 @@ A small browser-playable prototype inspired by SPI's _The Campaign for North Afr
 
 ## Run
 
-Use Node.js 24.22.1 (pinned in `.node-version`) and its bundled npm.
+Use Node.js 24.22.1 (pinned in `.node-version`) and its bundled npm, plus Rust 1.99.1 and the WebAssembly target (pinned in `rust-toolchain.toml`). Application state, simulation, DOM/SVG rendering, input handling, and sprite motion are authored in Rust. JavaScript is limited to generated Wasm bindings and their loader; Vite serves the browser assets.
 
 ```sh
+rustup target add wasm32-unknown-unknown
+cargo install wasm-bindgen-cli --version 0.2.105 --locked
 npm ci
 npm run dev
 npm test
 npm run build
 ```
 
-Vite prints the development URL. `npm run preview` serves the production build. No account, backend, or API key is needed. Fonts use Google Fonts with local system fallbacks. Play is session-only: reloading starts again.
+`npm run dev` builds Rust/Wasm before starting Vite, which prints the development URL. After editing Rust, run `npm run wasm` and reload the page. `npm run preview` serves the production build. No game account, backend, or API key is needed. Fonts use Google Fonts with local system fallbacks. Play is session-only: reloading starts again.
 
 ## Amp orbs
 
-Amp runs `.agents/setup` when preparing a fresh or stale project snapshot. It installs the pinned Node.js release only when needed, checks the official download checksum, and runs `npm ci` with the npm cache. Node and npm are available to subsequent login shells and supervised services without activating a shell environment. Matching snapshots skip setup and retain the installed dependencies.
+Amp runs `.agents/setup` when preparing a fresh or stale project snapshot. It installs the pinned Node.js release only when needed, checks the official download checksum, runs `npm ci`, and prepares Rust, the Wasm target, and the matching wasm-bindgen CLI. Matching snapshots skip setup and retain the installed dependencies. The build script makes Rust's user-local tools available to supervised services.
 
 ```sh
 .agents/setup             # Safe to rerun manually; installs tools and dependencies
@@ -48,8 +50,12 @@ Unit sprites in `public/sprites/` were newly generated with Amp's AI image-gener
 
 ## Code
 
-- `src/game.js`: standalone game state, hex geometry, legal moves, combat, supply, AI, outcomes.
-- `src/game.test.js`: public game-action regression tests; Node's built-in test runner.
-- `src/map.js`: SVG map and sprite rendering.
-- `src/main.js`: interface, orders, dialogs, and session state.
+- `crates/cna-sim/`: dependency-free game state, hex geometry, legal moves, combat, supply, AI, outcomes, and public-action regression tests.
+- `crates/frontend/src/lib.rs`: Rust browser input, dialogs, and session state.
+- `crates/frontend/src/view.rs`: interface markup, formation panel, and dialogs.
+- `crates/frontend/src/map.rs`: persistent keyed SVG map and sprite rendering.
+- `crates/frontend/src/motion.rs`: shortest-arc sprite turns and movement interpolation, with reduced-motion support.
 - `src/style.css`: responsive field-map interface.
+- `scripts/build-wasm.sh`: builds the Rust frontend and generates browser bindings in ignored `public/wasm/`.
+
+`npm test` runs the Rust workspace tests. `cargo clippy --workspace --all-targets -- -D warnings` checks Rust code. Keep the CLI version in setup and this document aligned with the exact wasm-bindgen dependency in `crates/frontend/Cargo.toml`.

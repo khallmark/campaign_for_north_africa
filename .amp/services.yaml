@@ -4,4 +4,4 @@ services:
     health: /
     portal:
       title: Campaign for North Africa
-      description: Play the Field Command prototype. No sign-in is required.
+      description: Play the Field Command prototype. Sign in to Amp with access to this thread; the game needs no separate account.

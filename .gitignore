@@ -4,3 +4,5 @@ node_modules/
 dist/
 .amp/in/
 .amp/portals/
+target/
+public/wasm/

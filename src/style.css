@@ -373,10 +373,11 @@ i {
   cursor: pointer;
   outline-offset: 5px;
 }
-.map-unit .unit-sprite {
+.map-unit .unit-hover {
   transition: transform 0.15s;
 }
-.map-unit:hover .unit-sprite {
+.map-unit:hover .unit-hover,
+.map-unit:focus-visible .unit-hover {
   transform: translateY(-3px);
 }
 .map-unit:hover .selection-halo {
@@ -1445,6 +1446,9 @@ footer i {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .map-unit .unit-hover {
+    transform: none !important;
+  }
   *,
   *::before,
   *::after {

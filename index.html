@@ -10,9 +10,11 @@
     />
     <title>The Campaign for North Africa — Field Command</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <div id="app"><p role="status">Loading Field Command…</p></div>
+    <noscript>Field Command requires JavaScript and WebAssembly to load the Rust application.</noscript>
+    <script type="module" src="/wasm/boot.js"></script>
   </body>
 </html>

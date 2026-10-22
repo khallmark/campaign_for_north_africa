@@ -1,0 +1,7 @@
+services:
+  cna:
+    command: npm run dev -- --port "$PORT" --strictPort
+    health: /
+    portal:
+      title: Campaign for North Africa
+      description: Play the Field Command prototype. No sign-in is required.

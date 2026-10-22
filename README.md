@@ -4,7 +4,7 @@ A small browser-playable prototype inspired by SPI's _The Campaign for North Afr
 
 ## Run
 
-Node.js 22.12+ (or 20.19+) and npm are required.
+Use Node.js 24.22.1 (pinned in `.node-version`) and its bundled npm.
 
 ```sh
 npm ci
@@ -14,6 +14,17 @@ npm run build
 ```
 
 Vite prints the development URL. `npm run preview` serves the production build. No account, backend, or API key is needed. Fonts use Google Fonts with local system fallbacks. Play is session-only: reloading starts again.
+
+## Amp orbs
+
+Amp runs `.agents/setup` when preparing a fresh or stale project snapshot. It installs the pinned Node.js release only when needed, checks the official download checksum, and runs `npm ci` with the npm cache. Node and npm are available to subsequent login shells and supervised services without activating a shell environment. Matching snapshots skip setup and retain the installed dependencies.
+
+```sh
+.agents/setup             # Safe to rerun manually; installs tools and dependencies
+amp orb services ensure   # Starts the supervised Vite server and prints its portal URL
+```
+
+The development service is declared in `.amp/services.yaml`; setup does not start it. No resume hook is needed because there are no credentials, tunnels, or databases to refresh. Generated `.amp/portals/` state stays untracked. Setup changes must reach the project's default branch before future orbs can use them.
 
 ## Play
 

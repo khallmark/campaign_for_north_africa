@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
+TIMEFORMAT='[setup] %3R seconds'
+node_version="$(cat .node-version)"
+
+echo "[setup] Preparing Node.js $node_version (with its bundled npm)"
+time {
+  if [[ "$(node --version 2>/dev/null || true)" != "v$node_version" ]] || ! command -v npm >/dev/null; then
+    case "$(uname -s)-$(uname -m)" in
+      Linux-x86_64) arch=x64 ;;
+      Linux-aarch64) arch=arm64 ;;
+      *) echo '[setup] This installer requires a Linux x64 or arm64 orb.' >&2; exit 1 ;;
+    esac
+    archive="node-v$node_version-linux-$arch.tar.xz"
+    download_dir="$(mktemp -d)"
+    trap 'rm -rf -- "$download_dir"' EXIT
+    curl --fail --silent --show-error --location --retry 3 \
+      "https://nodejs.org/dist/v$node_version/$archive" -o "$download_dir/$archive"
+    curl --fail --silent --show-error --location --retry 3 \
+      "https://nodejs.org/dist/v$node_version/SHASUMS256.txt" -o "$download_dir/SHASUMS256.txt"
+    (cd "$download_dir"; grep "  $archive$" SHASUMS256.txt | sha256sum --check -)
+    sudo -n mkdir -p /opt
+    sudo -n tar -xJf "$download_dir/$archive" -C /opt --no-same-owner
+    # Standard paths also work in fresh login shells and supervised services.
+    for executable in node npm npx; do
+      sudo -n ln -sfn "/opt/node-v$node_version-linux-$arch/bin/$executable" "/usr/local/bin/$executable"
+    done
+    hash -r
+  fi
+  [[ "$(node --version)" == "v$node_version" ]]
+  node --version
+  npm --version
+}
+
+echo '[setup] Installing locked dependencies (including development tools)'
+time npm ci --include=dev --prefer-offline --no-audit --no-fund
+
+echo '[setup] Preparing Rust and WebAssembly bindings'
+export PATH="$HOME/.cargo/bin:$PATH"
+time {
+  if ! command -v rustup >/dev/null; then
+    curl --proto '=https' --tlsv1.2 --fail --silent --show-error https://sh.rustup.rs |
+      sh -s -- -y --profile minimal --default-toolchain none
+  fi
+  rustup target add wasm32-unknown-unknown
+  if [[ "$(wasm-bindgen --version 2>/dev/null || true)" != 'wasm-bindgen 0.2.105' ]]; then
+    cargo install wasm-bindgen-cli --version 0.2.105 --locked
+  fi
+  cargo fetch --locked
+}
+echo '[setup] Ready. Run npm test, npm run build, or amp orb services ensure.'

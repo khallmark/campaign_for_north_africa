@@ -1,2 +1,8 @@
 .DS_Store
 .claude/devkit-hud.local.json
+node_modules/
+dist/
+.amp/in/
+.amp/portals/
+target/
+public/wasm/

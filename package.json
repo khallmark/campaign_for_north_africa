@@ -1,0 +1,17 @@
+{
+  "name": "campaign-for-north-africa",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "wasm": "bash scripts/build-wasm.sh",
+    "predev": "npm run wasm",
+    "dev": "vite --host 0.0.0.0",
+    "build": "npm run wasm && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "PATH=\"$HOME/.cargo/bin:$PATH\" cargo test --workspace --locked"
+  },
+  "devDependencies": {
+    "vite": "^7.3.1"
+  }
+}

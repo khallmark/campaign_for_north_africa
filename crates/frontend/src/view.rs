@@ -1,4 +1,4 @@
-use crate::{map::sprite, App};
+use crate::App;
 use cna_sim::*;
 
 pub fn escape(value: &str) -> String {
@@ -55,11 +55,7 @@ fn side(unit: &Unit) -> &'static str {
     }
 }
 fn kind(unit: &Unit) -> &'static str {
-    match unit.unit_type.as_str() {
-        "tank" => "Armoured formation",
-        "infantry" => "Infantry formation",
-        _ => "Supply &amp; transport",
-    }
+    unit.role().name
 }
 
 fn panel(app: &App) -> String {
@@ -83,21 +79,25 @@ fn panel(app: &App) -> String {
         })
         .collect();
     let resources: String = [("fuel", "Fuel", u.fuel), ("water", "Water", u.water), ("ammo", "Ammunition", u.ammo)].iter().map(|(key, label, value)| {
-        format!(r#"<div class="resource-row {}">{}<span>{label}</span><div class="resource-track"><i style="width:{value}%"></i></div><strong>{}</strong></div>"#, if *value < 25 { "low" } else { "" }, icon(key), if u.unit_type == "infantry" && *key == "fuel" { "—".into() } else { format!("{value}%") })
+        format!(r#"<div class="resource-row {}">{}<span>{label}</span><div class="resource-track"><i style="width:{value}%"></i></div><strong>{}</strong></div>"#, if *value < 25 { "low" } else { "" }, icon(key), if !u.role().motorized && *key == "fuel" { "—".into() } else { format!("{value}%") })
     }).collect();
     let orders = if friendly {
         format!(
-            r#"<div class="order-grid">{}{}{}{}</div><p class="order-hint">{}</p>"#,
+            r#"<div class="order-grid">{}{}{}{}{}</div><p class="order-hint">{}</p>"#,
             button(
                 "move",
                 "Move",
                 "move",
-                !active || u.cp < 1 || u.water <= 0 || (u.unit_type != "infantry" && u.fuel < 8),
+                !active || reachable(&app.game, Some(u)).is_empty(),
                 if app.mode == "move" { "active" } else { "" }
             ),
             button(
                 "attack",
-                "Assault",
+                if u.role().range > 1 {
+                    "Attack"
+                } else {
+                    "Assault"
+                },
                 "attack",
                 !active || !enemies,
                 if app.mode == "attack" {
@@ -110,7 +110,7 @@ fn panel(app: &App) -> String {
                 "digin",
                 if u.entrenched { "Dug in" } else { "Dig in" },
                 "shield",
-                !active || u.cp < 1 || u.entrenched || u.unit_type == "truck",
+                !active || u.cp < 1 || u.entrenched || !u.role().can_capture(),
                 ""
             ),
             button(
@@ -123,10 +123,34 @@ fn panel(app: &App) -> String {
                     || (u.fuel == 100 && u.water == 100 && u.ammo == 100),
                 ""
             ),
+            if matches!(
+                u.role().support,
+                Support::Command | Support::Repair | Support::Fortify
+            ) {
+                button(
+                    "support",
+                    match u.role().support {
+                        Support::Command => "Rally",
+                        Support::Repair => "Repair",
+                        _ => "Fortify",
+                    },
+                    "shield",
+                    !active
+                        || !app
+                            .game
+                            .units
+                            .iter()
+                            .any(|target| can_support(&app.game, Some(u), Some(target))),
+                    if app.mode == "support" { "active" } else { "" },
+                )
+            } else {
+                String::new()
+            },
             match app.mode {
                 "move" => "Click a highlighted hex to move. Numbers show CP cost.",
-                "attack" => "Choose a marked enemy to preview an assault.",
-                _ => "Movement costs 1–2 CP per hex. Assaults cost 2 CP.",
+                "attack" => "Choose a marked enemy in range to preview an attack.",
+                "support" => "Choose a marked adjacent friendly unit.",
+                _ => u.role().description,
             }
         )
     } else {
@@ -136,7 +160,7 @@ fn panel(app: &App) -> String {
         r#"<div class="panel-heading"><span>Formation details</span><span class="hex-coordinate">{:02}:{:02}</span></div>
     <section class="unit-detail"><div class="allegiance"><i class="faction-dot {}"></i>{}<span>{}</span></div>
     <div class="unit-portrait"><div class="portrait-ring"></div><img src="{}" alt="{}"/><span class="unit-stamp">{}</span></div>
-    <h2>{}</h2><p class="unit-subtitle">{}</p><div class="strength-line"><span>Combat strength</span><strong>{}<small>%</small></strong></div>
+    <h2>{}</h2><p class="unit-subtitle">{} · {} · range {}</p><p class="artwork-status">{}</p><div class="strength-line"><span>Sandbox strength</span><strong>{}<small>%</small></strong></div>
     <div class="strength-track"><span style="width:{}%"></span></div><div class="capability"><span>Capability points</span><div aria-label="{} of {} capability points">{cp}<strong>{}/{}</strong></div></div>{}</section>
     <section class="supplies-panel"><div class="section-title"><h3>Field supplies</h3><span class="supply-state {}">{}</span></div>{resources}{}</section>
     <section class="orders-panel"><h3>{}</h3>{orders}</section>"#,
@@ -149,11 +173,14 @@ fn panel(app: &App) -> String {
             "infantry" => "×",
             _ => "◇",
         },
-        sprite(u),
+        escape(&app.inventory.portrait(u)),
         kind(u),
         escape(&u.short),
         escape(&u.name),
         kind(u),
+        u.role().domain_name(),
+        u.role().range,
+        app.inventory.artwork_label(u),
         u.hp,
         u.hp,
         u.cp,
@@ -176,7 +203,7 @@ fn panel(app: &App) -> String {
         if friendly {
             format!(
                 "<p class=supply-note>{}</p>",
-                if u.unit_type == "truck" {
+                if u.role().support == Support::Supply {
                     "Stocked trucks supply formations within 2 hexes. Refill at the frontier depot."
                 } else {
                     "Keep your supply trucks close. The desert takes its share every stage."
@@ -198,11 +225,14 @@ fn modal(app: &App) -> String {
         return String::new();
     };
     let body = match modal {
+        "catalog" => app.catalog.panel(),
+        "reinforcements" => app.inventory.panel(),
         "help" => format!(
             r#"<span class="eyebrow">Field manual / prototype 0.1</span><h2>A war of distance.<br>A battle for supplies.</h2><p>Lead the Commonwealth west to Tobruk. This is a small, fictional training scenario inspired by the land and logistics rules of <em>The Campaign for North Africa</em>, not a historical order of battle.</p>
         <div class="manual-grid"><section>{}<h3>Move with purpose</h3><p>Select a green formation, then Move. Desert costs 1 capability point (CP); ridges cost 2. Vehicles spend 8 fuel per CP. Entering an enemy’s adjacent hex ends that move.</p></section><section>{}<h3>Fight at close range</h3><p>Assault an adjacent enemy for 2 CP and 20 ammunition. Preview exact damage before committing. Dig in for 1 CP to reduce incoming damage by 10; moving or assaulting removes cover.</p></section><section>{}<h3>Mind the supply line</h3><p>Resupply for 1 CP within 2 hexes of a stocked truck or the depot. Trucks transfer up to 25 of each resource; the depot refills stores. Zero water prevents movement and assaults.</p></section><section>{}<h3>The desert takes a toll</h3><p>End stage activates the Axis, consumes 10 water and 2 vehicle fuel, then restores CP. Every third stage costs 18 water and 5 fuel instead. Zero water causes 10 strength loss.</p></section></div>
         <div class="manual-objective">{}<p><strong>Secure Tobruk within {STAGE_LIMIT} operations stages.</strong><br>Move a combat formation into its hex after defeating the garrison. Lose if time runs out or all combat formations are destroyed.</p></div>
-        <p class="fine-print">Inspired by rules §§5, 6, 8, 15, 49 and 52. Three stages represent a week. Map, forces, costs, weather, and combat are simplified; air, naval, detailed logistics, and the pasta rule are not implemented. Newly AI-generated unit art. Session resets on page reload.</p>{}"#,
+        <p>Reinforcements lets you place named candidate identities or fictional role units. Sandbox aircraft overfly land, sea and ground control; ships stay at sea. Attack range and permitted targets depend on role. Engineers fortify adjacent ground combat units; HQ restores one CP for two CP; recovery vehicles restore twenty strength for one CP and twenty fuel. Ground support units transfer supplies like trucks.</p>
+        <p class="fine-print">Inspired by rules §§5, 6, 8, 15, 49 and 52. Three stages represent a week. Map, forces, costs, weather, and combat are simplified. Air/naval actions are demonstrations, not the full rulebook systems. Detailed logistics and the pasta rule are not implemented. Unique unit art is incomplete and placeholders are marked. Session resets on page reload.</p>{}"#,
             icon("move"),
             icon("attack"),
             icon("box"),
@@ -226,30 +256,32 @@ fn modal(app: &App) -> String {
             let b = app.game.units.iter().find(|u| u.id == app.target).unwrap();
             let preview = combat_preview(a, b);
             format!(
-                r#"<span class="eyebrow">Close assault / {} → {}</span><h2>Commit to the assault?</h2><p>{} will engage {}.</p><div class="combat-comparison"><div><img src="{}" alt="Attacking formation"/><span>Commonwealth</span><strong>{}% strength</strong><small>{} return damage</small></div><span class="versus">vs.</span><div><img src="{}" alt="Defending formation"/><span>Axis forces</span><strong>{}% strength</strong><small>−{}% on assault</small></div></div><p class="combat-cost">Cost: <strong>2 CP</strong> and <strong>20 ammunition</strong>. {}</p><div class="dialog-actions">{}{}</div>"#,
+                r#"<span class="eyebrow">Attack / {} → {}</span><h2>Commit to the attack?</h2><p>{} will engage {}.</p><div class="combat-comparison"><div><img src="{}" alt="Attacking formation"/><span>Player forces</span><strong>{}% strength</strong><small>{} return damage</small></div><span class="versus">vs.</span><div><img src="{}" alt="Defending formation"/><span>Enemy forces</span><strong>{}% strength</strong><small>−{}% on attack</small></div></div><p class="combat-cost">Cost: <strong>2 CP</strong> and <strong>20 ammunition</strong>. {}</p><div class="dialog-actions">{}{}</div>"#,
                 escape(&a.short),
                 escape(&b.short),
                 escape(&a.name),
                 escape(&b.name),
-                sprite(a),
+                escape(&app.inventory.portrait(a)),
                 a.hp,
                 if b.hp <= preview.damage {
                     "No".into()
                 } else {
                     format!("{}%", preview.retaliation)
                 },
-                sprite(b),
+                escape(&app.inventory.portrait(b)),
                 b.hp,
                 preview.damage,
                 if b.hp <= preview.damage {
-                    "This assault will destroy the enemy formation."
+                    "This attack will destroy the enemy formation."
+                } else if preview.retaliation == 0 {
+                    "The defender cannot return fire at this range or against this target."
                 } else {
                     "The defender will return fire if it survives."
                 },
                 button("close", "Cancel", "close", false, ""),
                 button(
                     "confirm-attack",
-                    "Launch assault",
+                    "Launch attack",
                     "attack",
                     false,
                     "primary"
@@ -259,7 +291,7 @@ fn modal(app: &App) -> String {
         "outcome" => {
             let victory = app.game.outcome.as_deref() == Some("victory");
             format!(
-                r#"<span class="eyebrow">Operation report</span><div class="outcome-symbol">{}</div><h2>{}</h2><p>{}</p><p>Stages played: {} · Surviving formations: {}/4</p><div class="dialog-actions">{}{}</div>"#,
+                r#"<span class="eyebrow">Operation report</span><div class="outcome-symbol">{}</div><h2>{}</h2><p>{}</p><p>Stages played: {} · Surviving formations: {}/{}</p><div class="dialog-actions">{}{}</div>"#,
                 icon("flag"),
                 if victory {
                     "Tobruk is secured."
@@ -279,6 +311,7 @@ fn modal(app: &App) -> String {
                     .iter()
                     .filter(|u| u.side == "allied" && u.hp > 0)
                     .count(),
+                app.game.units.iter().filter(|u| u.side == "allied").count(),
                 button("close", "Review the map", "grid", false, ""),
                 button(
                     "confirm-reset",
@@ -293,9 +326,16 @@ fn modal(app: &App) -> String {
     };
     format!(
         r#"<dialog class="dialog {}" aria-label="{}"><button class="dialog-close icon-button" data-action="close" aria-label="Close dialog">{}</button>{body}</dialog>"#,
-        if modal == "help" { "manual" } else { "" },
+        match modal {
+            "help" => "manual",
+            "catalog" => "catalog",
+            "reinforcements" => "catalog",
+            _ => "",
+        },
         match modal {
             "help" => "Field manual",
+            "catalog" => "Unit catalog",
+            "reinforcements" => "Reinforcements",
             "combat" => "Assault preview",
             "outcome" => "Operation result",
             _ => "New operation",
@@ -313,16 +353,17 @@ pub fn page(app: &App) -> String {
         .filter(|u| u.side == "allied")
         .collect();
     let roster: String = friendlies.iter().map(|u| format!(r#"<button class="roster-unit {} {}" data-unit="{}" aria-label="Select {}" aria-pressed="{}" {}><img src="{}" alt=""/><div><strong>{}</strong><span>{}</span></div><span class="roster-dot {}"></span></button>"#,
-        if u.id==app.selected{"chosen"}else{""},if u.hp<=0{"destroyed"}else{""},u.id,escape(&u.name),u.id==app.selected,if u.hp<=0{"disabled"}else{""},sprite(u),if u.short=="RASC"{"Supply column".into()}else{escape(&u.name.replace(" Brigade",""))},if u.hp<=0{"Formation lost".into()}else{format!("{}% strength <i>·</i> {} CP",u.hp,u.cp)},if u.cp==0{"spent"}else{""})).collect();
+        if u.id==app.selected{"chosen"}else{""},if u.hp<=0{"destroyed"}else{""},u.id,escape(&u.name),u.id==app.selected,if u.hp<=0{"disabled"}else{""},escape(&app.inventory.portrait(u)),if u.short=="RASC"{"Supply column".into()}else{escape(&u.name.replace(" Brigade",""))},if u.hp<=0{"Formation lost".into()}else{format!("{}% strength <i>·</i> {} CP",u.hp,u.cp)},if u.cp==0{"spent"}else{""})).collect();
     let journal: String = app.game.log.iter().take(3).map(|e|format!(r#"<div class="journal-entry {}"><span class="journal-tick"></span><p>{}</p><time>S{}</time></div>"#,escape(&e.log_type),escape(&e.text),e.stage)).collect();
     let order_mode = if app.mode != "inspect" {
         format!(
             r#"<div class="map-mode">{}<span>{}</span><button data-action="cancel" aria-label="Cancel order">{}</button></div>"#,
             icon(if app.mode == "move" { "move" } else { "attack" }),
-            if app.mode == "move" {
-                "Choose a highlighted destination"
-            } else {
-                "Choose an adjacent enemy"
+            match app.mode {
+                "move" => "Choose a highlighted destination",
+                "deploy" => "Place the reinforcement on an empty highlighted hex",
+                "support" => "Choose a marked friendly unit",
+                _ => "Choose a marked enemy in range",
             },
             icon("close")
         )
@@ -330,7 +371,7 @@ pub fn page(app: &App) -> String {
         String::new()
     };
     format!(
-        r#"<header class="site-header"><a href="/" class="brand" aria-label="The Campaign for North Africa home"><span class="brand-mark">{compass}</span><div><span class="brand-prefix">The Campaign for</span><span class="brand-name">North Africa</span></div></a><div class="edition"><span class="edition-line"></span><span>A desert warfare simulation<small>1940 — 1943</small></span></div><nav aria-label="Game controls">{help}{reset}</nav></header>
+        r#"<header class="site-header"><a href="/" class="brand" aria-label="The Campaign for North Africa home"><span class="brand-mark">{compass}</span><div><span class="brand-prefix">The Campaign for</span><span class="brand-name">North Africa</span></div></a><div class="edition"><span class="edition-line"></span><span>A desert warfare simulation<small>1940 — 1943</small></span></div><nav aria-label="Game controls">{help}{catalog}{reinforcements}{reset}</nav></header>
     <main><section class="operation-bar"><div class="operation-heading"><div class="scenario-meta"><span class="live-dot"></span>Sandbox scenario<span class="separator">/</span><span>Western Desert</span></div><h1>The road to Tobruk</h1></div><div class="turn-controls"><div class="weather">{sun}<div>{weather}<small>{loss}</small></div></div><div class="turn-date"><strong>{date}</strong><span>Week {week} <i>·</i> Stage {stage} of 3</span></div>{end}</div></section>
     <div class="game-layout"><section class="map-panel" aria-label="Battlefield"><div class="map-toolbar"><div class="map-title">{compass}<span>Operational map</span><span class="map-tag">Tobruk sector</span></div><div class="map-toggles"><button data-action="grid" aria-label="Toggle hex grid" aria-pressed="{grid}" class="icon-button {grid_class}" title="Hex grid">{grid_icon}</button><button data-action="supplies" aria-label="Toggle supply range" aria-pressed="{supplies}" class="icon-button {supply_class}" title="Supply range">{box_icon}</button></div></div>
     <div class="map-viewport"><div id="map-slot"></div><div class="objective-note">{flag}<div><strong>Secure Tobruk</strong><span>{remaining} stages remaining</span></div></div><div class="map-zoom"><button data-action="zoom-in" aria-label="Zoom in" {max_zoom}>{plus}</button><button data-action="zoom-reset" aria-label="Reset map zoom">{zoom}%</button><button data-action="zoom-out" aria-label="Zoom out" {min_zoom}>{minus}</button></div>{order_mode}</div>
@@ -338,6 +379,14 @@ pub fn page(app: &App) -> String {
     <section class="bottom-layout"><div class="roster-section"><div class="section-title"><h2>Order of battle <span>{count} formations</span></h2><span class="your-command"><i class="faction-dot allied"></i>Your command</span></div><div class="roster">{roster}</div></div><section class="journal"><div class="section-title"><h2>Field journal</h2><span>Latest dispatches</span></div><div class="journal-entries">{journal}</div></section></section></main><footer><span>Distance is the enemy. Supply is the lifeline.</span><span>Playable prototype <i>·</i> Simplified rules <i>·</i> Session only</span></footer>{modal}"#,
         compass = icon("compass"),
         help = button("help", "Field manual", "book", false, ""),
+        catalog = button("catalog", "Unit catalog", "box", false, ""),
+        reinforcements = button(
+            "reinforcements",
+            "Reinforcements",
+            "plus",
+            app.game.outcome.is_some(),
+            ""
+        ),
         reset = button("reset", "New operation", "reset", false, ""),
         sun = icon("sun"),
         weather = if hot { "Hot winds" } else { "Clear skies" },

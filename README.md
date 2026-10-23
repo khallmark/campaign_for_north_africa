@@ -31,22 +31,30 @@ The development service is declared in `.amp/services.yaml`; setup does not star
 ## Play
 
 - Select a Commonwealth formation on the map or in the order of battle.
-- **Move:** choose a highlighted destination. Desert costs 1 CP per hex, ridges 2; vehicles use 8 fuel per CP. Occupied hexes and water are impassable. Entering an enemy-adjacent hex ends that move order.
-- **Assault:** choose an adjacent enemy and confirm the damage preview. Costs 2 CP and 20 ammunition. A surviving defender returns fire. Combat is deterministic.
+- **Move:** choose a highlighted destination. Ground movement costs 1 CP in desert and 2 on ridges. Motorized units use 8 fuel per CP; foot troops and camel scouts do not. Ships stay at sea; aircraft cross land, sea, occupied hexes and ground control for 1 CP per hex, but cannot end on an occupied hex. Entering an armed enemy's adjacent hex in the same ground/naval domain ends movement.
+- **Attack:** choose an eligible enemy in the selected role's range and confirm the preview. Costs 2 CP and 20 ammunition. A surviving defender returns fire only if it can engage the attacker at that range. Artillery can bombard; fighters intercept aircraft; bombers attack ground/naval targets; flying boats attack ships; AA can engage aircraft and ground units. Combat is deterministic.
 - **Dig in:** spend 1 CP for 10 damage protection until moving or attacking.
 - **Resupply:** spend 1 CP within 2 hexes of a stocked truck or the frontier depot. Trucks transfer up to 25 of each resource, limited by recipient capacity; the depot refills all stores. Trucks need at least 25 of each resource to act as a supply source.
 - **End stage:** Axis formations move and attack; supply upkeep consumes water and vehicle fuel, then CP refreshes. Every third incoming stage is hot. Units at zero water cannot move/assault and lose strength at upkeep.
-- Move a surviving combat formation into Tobruk to win. Lose after stage 12 or when all Commonwealth combat formations are destroyed.
+- **Reinforcements:** search the candidate-identity inventory or expand the fictional role roster, choose player or enemy control, then place on an empty highlighted hex. All 24 sandbox capability roles are available, including the additional twenty. These values do not come from historical catalog characteristics. AI combat units engage compatible targets; support units do not issue autonomous support orders.
+- **Support:** engineers fortify adjacent ground combat units for 1 CP; headquarters spends 2 CP to restore 1 CP to a neighbor; recovery vehicles spend 1 CP and 20 fuel to repair 20 strength on a surviving adjacent ground vehicle. Ground support units transfer stores like supply trucks.
+- Move a surviving ground combat formation into Tobruk to win. Aircraft, ships and unarmed support units cannot capture it. Lose after stage 12 or when all player ground combat formations are destroyed.
 
 Map controls toggle the grid and geometric supply range. Zoom centers on the selected formation. All buttons, formations, and highlighted destinations support keyboard activation. Escape cancels the current order or closes a dialog.
+
+**Unit catalog:** search 1,450 source records and 124 characteristic profiles by name, nationality, role, or ID, filter by record type and side, and expand a record for characteristics and source citations. Only individually sourced values are shown, preserving printed notation and conditional restrictions; verified identity does not imply verified stats. These are source rows, not 1,450 unique historical units or deployable formations. The coverage notice describes unfinished scenario data and counter reconciliation. See [catalog provenance and limitations](docs/unit-catalog.md).
+
+**Unit identities:** `public/data/unit-identities.json` links provisional canonical identities to source rows, sandbox roles and individual portrait/atlas paths. Aircraft load configurations may share an identity, while formation aliases still need review; its candidate count is not a certified count of distinct historical units. Reinforcement, battlefield, portrait and catalog views use reviewed identity-specific artwork when available. Missing/candidate art retains an explicitly labeled shared-role placeholder and does not count as unique-art coverage. The original seven scenario formations remain prototype proxies, not falsely matched to headquarters records. Unique artwork for every identity is **not complete**.
 
 ## Scope and source material
 
 The supplied rulebook text is in `docs/rules.txt`. This prototype adapts the ideas of operations stages (§5), capability points (§6), hex movement and enemy zones (§8), close assault (§15), fuel loss (§49), and water supply (§52). Three stages represent one week; hexes are nominally 8 km.
 
-**This is not a rules-complete implementation or a historical scenario.** Forces, positions, terrain, timings within stages, values, weather cycle, and combat formulas are invented for a short playable demonstration. It omits the full order of battle, stacking, morale/cohesion, breakdowns, air and naval warfare, detailed logistical networks, stores, replacements, and the Italian pasta rule. The infantry sprite is shared between factions; labels distinguish sides. Roads are decorative and do not change movement cost. The supply overlay shows distance, not guaranteed truck stocks or a traced route.
+**This is not a rules-complete implementation or a historical scenario.** Forces, positions, terrain, timings within stages, values, weather cycle, and combat formulas are invented for a playable demonstration. Air, naval and support actions are simplified sandbox behaviors, not the rulebook's full systems. The simulation omits the full order of battle, stacking, morale/cohesion, breakdowns, detailed logistical networks, stores, replacements, and the Italian pasta rule. Shared fallback artwork is distinguished by labels. Roads are decorative and do not change movement cost. The supply overlay shows distance, not guaranteed stocks or a traced route. Movement animation interpolates endpoints, not every hex of the engine's reachable path.
 
-Unit sprites in `public/sprites/` were newly generated with Amp's AI image-generation tool from a four-part transparent sprite atlas, then cropped and resized. They are illustrative, not historically exact or extracted from the rulebook. The map is original SVG artwork. The original game and rulebook belong to their respective rights holders; this prototype does not establish a license for commercial distribution.
+The 24 shared unit-role sprites in `public/sprites/` were generated with Amp's AI image-generation tool, then cropped and resized with transparency preserved. They are illustrative, not unique portraits, historically exact reconstructions, or extracted rulebook counters. The original four game sprites are unchanged; the catalog adds twenty role illustrations. The map is original SVG artwork. The original game and rulebook belong to their respective rights holders; this prototype does not establish a license for commercial distribution.
+
+All 24 shared sprite roles have 18 upright directional views each in `public/sprites/directional/` (432 frames), and all are available as sandbox role units. The renderer completes the shortest-arc turn in place, then moves with a fixed heading. Turns use an even angular cadence at 2 ms per degree (80 ms minimum, 360 ms for a half-turn); travel eases independently over 420–1800 ms by distance. Already aligned units move immediately. Exactly one fully opaque directional view is shown at a time, with no crossfade, double exposure or flat image rotation. Reduced motion snaps immediately. Each atlas has six columns and three rows of 256px cells, ordered clockwise from east. Nominal 20° intervals and ground-contact alignment remain approximate illustrations, not calibrated 3D renders; discrete heading and detail changes remain visible. `public/data/directional-sprites.json` records role-art provenance and limitations, including near-duplicate views and ambiguous AA, engineer and warship bearings. Individual unit artwork uses the same atlas geometry but resolves through the identity inventory, not the shared-role path.
 
 ## Code
 
@@ -55,6 +63,10 @@ Unit sprites in `public/sprites/` were newly generated with Amp's AI image-gener
 - `crates/frontend/src/view.rs`: interface markup, formation panel, and dialogs.
 - `crates/frontend/src/map.rs`: persistent keyed SVG map and sprite rendering.
 - `crates/frontend/src/motion.rs`: shortest-arc sprite turns and movement interpolation, with reduced-motion support.
+- `crates/frontend/src/catalog.rs`: source catalog parsing, search, filters, and reference rendering.
+- `crates/frontend/src/inventory.rs`: candidate identity search, unique-art readiness and per-unit asset resolution.
+- `crates/cna-sim/src/roles.rs`: explicitly fictional sandbox capabilities for ground, air, naval and support roles.
+- `public/data/unit-catalog.json`: versioned source records, stat verification, and sprite metadata; embedded in the Wasm build, so rebuild after changing it.
 - `src/style.css`: responsive field-map interface.
 - `scripts/build-wasm.sh`: builds the Rust frontend and generates browser bindings in ignored `public/wasm/`.
 

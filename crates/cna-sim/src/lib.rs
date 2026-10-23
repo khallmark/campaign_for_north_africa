@@ -2,6 +2,8 @@
 //! All state and rules live here; the browser is only an input/rendering adapter.
 
 use std::collections::HashMap;
+mod roles;
+pub use roles::{role, Domain, Role, Support, ROLES};
 
 pub const COLS: i32 = 15;
 pub const ROWS: i32 = 10;
@@ -38,6 +40,8 @@ pub struct Hex {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Unit {
     pub id: String,
+    /// Canonical catalog identity; absent for fictional prototype role units.
+    pub identity_id: Option<String>,
     pub name: String,
     pub short: String,
     pub side: String,
@@ -54,6 +58,19 @@ pub struct Unit {
 }
 
 impl Unit {
+    pub fn role(&self) -> &'static Role {
+        let id = if self.unit_type == "tank" {
+            if self.side == "axis" {
+                "panzer"
+            } else {
+                "crusader"
+            }
+        } else {
+            &self.unit_type
+        };
+        role(id).expect("Every simulation unit has a known sandbox role")
+    }
+
     pub fn hex(&self) -> Hex {
         Hex {
             c: self.c,
@@ -136,14 +153,30 @@ pub fn terrain(hex: Hex) -> &'static str {
 }
 
 /// Row-major order is also the deterministic AI tie-break order.
-pub fn hexes() -> Vec<Hex> {
+pub fn all_hexes() -> Vec<Hex> {
     (0..COLS * ROWS)
         .map(|i| Hex {
             c: i % COLS,
             r: i / COLS,
         })
+        .collect()
+}
+
+pub fn hexes() -> Vec<Hex> {
+    all_hexes()
+        .into_iter()
         .filter(|&h| terrain(h) != "sea")
         .collect()
+}
+
+pub fn passable(role: &Role, hex: Hex) -> bool {
+    (0..COLS).contains(&hex.c)
+        && (0..ROWS).contains(&hex.r)
+        && match role.domain {
+            Domain::Land => terrain(hex) != "sea",
+            Domain::Sea => terrain(hex) == "sea",
+            Domain::Air => true,
+        }
 }
 
 pub fn neighbors(hex: Hex) -> Vec<Hex> {
@@ -158,9 +191,16 @@ pub fn unit_at(state: &State, hex: Hex) -> Option<&Unit> {
 }
 
 fn make_unit(id: &str, name: &str, short: &str, side: &str, unit_type: &str, hex: Hex) -> Unit {
-    let cp = if unit_type == "infantry" { 3 } else { 5 };
+    let cp = role(if unit_type == "tank" {
+        "crusader"
+    } else {
+        unit_type
+    })
+    .unwrap()
+    .cp;
     Unit {
         id: id.into(),
+        identity_id: None,
         name: name.into(),
         short: short.into(),
         side: side.into(),
@@ -270,6 +310,43 @@ fn ready(state: &State, unit: Option<&Unit>, side: &str) -> bool {
     state.outcome.is_none() && unit.is_some_and(|u| u.hp > 0 && u.side == side)
 }
 
+/// Place a sandbox reinforcement, not an imported historical counter's stats.
+pub fn deploy_unit(state: &mut State, role_id: &str, side: &str, hex: Hex) -> ActionResult {
+    let Some(role) = role(role_id) else {
+        return result(false, "Unknown sandbox role.");
+    };
+    if state.outcome.is_some()
+        || !matches!(side, "allied" | "axis")
+        || !passable(role, hex)
+        || unit_at(state, hex).is_some()
+    {
+        return result(
+            false,
+            "Choose an empty hex in this unit's movement domain during an active operation.",
+        );
+    }
+    let id = format!("reinforcement-{}", state.units.len() + 1);
+    let short = format!("R{}", state.units.len() + 1);
+    state
+        .units
+        .push(make_unit(&id, role.name, &short, side, role_id, hex));
+    log(
+        state,
+        format!(
+            "{} deployed as a fictional sandbox reinforcement.",
+            role.name
+        ),
+        "order",
+    );
+    result(
+        true,
+        format!(
+            "{} deployed. Sandbox values, not historical characteristics.",
+            role.name
+        ),
+    )
+}
+
 /// Dijkstra uses the same terrain costs for highlights and executed movement.
 pub fn reachable(state: &State, unit: Option<&Unit>) -> HashMap<Hex, i32> {
     let mut costs = HashMap::new();
@@ -279,10 +356,10 @@ pub fn reachable(state: &State, unit: Option<&Unit>) -> HashMap<Hex, i32> {
     if unit.hp <= 0 || state.outcome.is_some() || unit.water <= 0 {
         return costs;
     }
-    let budget = unit.cp.min(if unit.unit_type == "infantry" {
-        i32::MAX
-    } else {
+    let budget = unit.cp.min(if unit.role().motorized {
         unit.fuel / 8
+    } else {
+        i32::MAX
     });
     costs.insert(unit.hex(), 0);
     let mut queue = vec![(unit.hex(), 0)];
@@ -294,18 +371,32 @@ pub fn reachable(state: &State, unit: Option<&Unit>) -> HashMap<Hex, i32> {
         }
         // Entering enemy control ends movement; a later order may leave it.
         if current_cost > 0
-            && state
-                .units
-                .iter()
-                .any(|u| u.hp > 0 && u.side != unit.side && distance(u.hex(), current) == 1)
+            && unit.role().domain != Domain::Air
+            && state.units.iter().any(|u| {
+                u.hp > 0
+                    && u.side != unit.side
+                    && u.role().domain == unit.role().domain
+                    && u.role().strength > 0
+                    && distance(u.hex(), current) == 1
+            })
         {
             continue;
         }
-        for next in neighbors(current) {
-            if unit_at(state, next).is_some_and(|u| u.id != unit.id) {
+        for next in all_hexes()
+            .into_iter()
+            .filter(|&h| distance(h, current) == 1 && passable(unit.role(), h))
+        {
+            if unit.role().domain != Domain::Air
+                && unit_at(state, next).is_some_and(|u| u.id != unit.id)
+            {
                 continue;
             }
-            let cost = current_cost + if terrain(next) == "ridge" { 2 } else { 1 };
+            let cost = current_cost
+                + if unit.role().domain == Domain::Land && terrain(next) == "ridge" {
+                    2
+                } else {
+                    1
+                };
             if cost <= budget && cost < *costs.get(&next).unwrap_or(&i32::MAX) {
                 costs.insert(next, cost);
                 queue.push((next, cost));
@@ -313,16 +404,18 @@ pub fn reachable(state: &State, unit: Option<&Unit>) -> HashMap<Hex, i32> {
         }
     }
     costs.remove(&unit.hex());
+    // Aircraft may overfly occupied hexes, but this sandbox does not stack units.
+    costs.retain(|hex, _| unit_at(state, *hex).is_none());
     costs
 }
 
 pub fn check_outcome(state: &mut State) -> Option<String> {
-    if unit_at(state, TOBRUK).is_some_and(|u| u.side == "allied" && u.unit_type != "truck") {
+    if unit_at(state, TOBRUK).is_some_and(|u| u.side == "allied" && u.role().can_capture()) {
         state.outcome = Some("victory".into());
     } else if !state
         .units
         .iter()
-        .any(|u| u.side == "allied" && u.unit_type != "truck" && u.hp > 0)
+        .any(|u| u.side == "allied" && u.role().can_capture() && u.hp > 0)
         || state.stage > STAGE_LIMIT
     {
         state.outcome = Some("defeat".into());
@@ -346,7 +439,7 @@ pub fn move_unit(state: &mut State, id: &str, destination: Hex) -> ActionResult 
     unit.c = destination.c;
     unit.r = destination.r;
     unit.cp -= cost;
-    if unit.unit_type != "infantry" {
+    if unit.role().motorized {
         unit.fuel -= cost * 8;
     }
     unit.entrenched = false;
@@ -372,25 +465,42 @@ pub fn can_attack(state: &State, attacker: Option<&Unit>, target: Option<&Unit>)
         && a.hp > 0
         && b.hp > 0
         && a.side != b.side
-        && a.unit_type != "truck"
+        && a.role().can_target(b.role())
         && a.cp >= 2
         && a.ammo >= 20
         && a.water > 0
-        && distance(a.hex(), b.hex()) == 1
+        && (1..=a.role().range).contains(&distance(a.hex(), b.hex()))
 }
 
 pub fn combat_preview(attacker: &Unit, target: &Unit) -> CombatPreview {
-    let cover = if terrain(target.hex()) == "ridge" {
+    let cover = if target.role().domain == Domain::Land && terrain(target.hex()) == "ridge" {
         8
     } else {
         0
     } + if target.entrenched { 10 } else { 0 };
-    let strength = if attacker.unit_type == "tank" { 40 } else { 27 };
+    let strength = attacker.role().strength
+        + if attacker.role().id == "anti-tank"
+            && matches!(
+                target.role().id,
+                "crusader" | "panzer" | "italian-tank" | "armored-car"
+            )
+        {
+            10
+        } else {
+            0
+        };
     let damage = (8).max((f64::from(strength * attacker.hp) / 100.).round() as i32 - cover);
-    let retaliation = if target.unit_type == "truck" || target.ammo < 10 {
+    let retaliation = if !target.role().can_target(attacker.role())
+        || distance(attacker.hex(), target.hex()) > target.role().range
+        || target.ammo < 10
+    {
         0
     } else {
-        let strength = if target.unit_type == "tank" { 18 } else { 12 };
+        let strength = if matches!(target.role().id, "crusader" | "panzer") {
+            18
+        } else {
+            (target.role().strength * 4 / 9).max(1)
+        };
         (4).max(
             (f64::from(strength * target.hp) / 100. * if target.water > 0 { 1. } else { 0.5 })
                 .round() as i32,
@@ -414,7 +524,7 @@ pub fn attack(state: &mut State, attacker_id: &str, target_id: &str, side: &str)
     {
         return result(
             false,
-            "Assault needs an adjacent enemy, 2 CP, water, and 20 ammunition.",
+            "Attack needs a target in this role's range and domain, 2 CP, water, and 20 ammunition.",
         );
     }
     let (ai, bi) = (ai.unwrap(), bi.unwrap());
@@ -451,7 +561,7 @@ pub fn dig_in(state: &mut State, id: &str) -> ActionResult {
     if !ready(state, index.map(|i| &state.units[i]), "allied")
         || index.is_some_and(|i| {
             let u = &state.units[i];
-            u.cp < 1 || u.entrenched || u.unit_type == "truck"
+            u.cp < 1 || u.entrenched || !u.role().can_capture()
         })
     {
         return result(
@@ -480,8 +590,8 @@ pub fn supply_source(state: &State, unit: Option<&Unit>) -> Option<SupplySource>
         .units
         .iter()
         .find(|u| {
-            u.side == "allied"
-                && u.unit_type == "truck"
+            u.side == unit.side
+                && u.role().support == Support::Supply
                 && u.hp > 0
                 && u.id != unit.id
                 && u.water >= 25
@@ -490,6 +600,70 @@ pub fn supply_source(state: &State, unit: Option<&Unit>) -> Option<SupplySource>
                 && distance(u.hex(), unit.hex()) <= 2
         })
         .map(|u| SupplySource::Truck(u.id.clone()))
+}
+
+pub fn can_support(state: &State, source: Option<&Unit>, target: Option<&Unit>) -> bool {
+    let (Some(a), Some(b)) = (source, target) else {
+        return false;
+    };
+    ready(state, Some(a), "allied")
+        && b.hp > 0
+        && a.side == b.side
+        && a.water > 0
+        && distance(a.hex(), b.hex()) == 1
+        && match a.role().support {
+            Support::Command => a.cp >= 2 && b.cp < b.max_cp,
+            Support::Repair => {
+                a.cp >= 1
+                    && a.fuel >= 20
+                    && b.hp < 100
+                    && b.role().motorized
+                    && b.role().domain == Domain::Land
+            }
+            Support::Fortify => a.cp >= 1 && !b.entrenched && b.role().can_capture(),
+            _ => false,
+        }
+}
+
+pub fn support_unit(state: &mut State, source_id: &str, target_id: &str) -> ActionResult {
+    let a = state.units.iter().position(|u| u.id == source_id);
+    let b = state.units.iter().position(|u| u.id == target_id);
+    if !can_support(
+        state,
+        a.map(|i| &state.units[i]),
+        b.map(|i| &state.units[i]),
+    ) {
+        return result(
+            false,
+            "Choose an adjacent eligible friendly unit with the required resources.",
+        );
+    }
+    let (a, b) = (a.unwrap(), b.unwrap());
+    let action = match state.units[a].role().support {
+        Support::Command => {
+            state.units[a].cp -= 2;
+            state.units[b].cp += 1;
+            "restored one CP to"
+        }
+        Support::Repair => {
+            state.units[a].cp -= 1;
+            state.units[a].fuel -= 20;
+            state.units[b].hp = (state.units[b].hp + 20).min(100);
+            "repaired"
+        }
+        Support::Fortify => {
+            state.units[a].cp -= 1;
+            state.units[b].entrenched = true;
+            "fortified"
+        }
+        _ => unreachable!(),
+    };
+    let message = format!(
+        "{} {action} {}.",
+        state.units[a].short, state.units[b].short
+    );
+    log(state, &message, "order");
+    result(true, message)
 }
 
 pub fn resupply(state: &mut State, id: &str) -> ActionResult {
@@ -528,7 +702,7 @@ pub fn resupply(state: &mut State, id: &str) -> ActionResult {
         if source == SupplySource::Depot {
             "the frontier depot"
         } else {
-            "RASC trucks"
+            "a supply unit"
         }
     );
     if let SupplySource::Truck(id) = source {
@@ -565,16 +739,16 @@ pub fn end_stage(state: &mut State) -> ActionResult {
             .units
             .iter()
             .enumerate()
-            .filter(|(_, u)| u.side == "allied" && u.hp > 0)
+            .filter(|(_, u)| u.side == "allied" && u.hp > 0 && enemy.role().can_target(u.role()))
             .min_by_key(|(_, u)| distance(enemy.hex(), u.hex()))
             .map(|(i, _)| i);
         let Some(ti) = target else {
-            break;
+            continue;
         };
         let target_hex = state.units[ti].hex();
-        if enemy.id != "garrison" && distance(enemy.hex(), target_hex) > 1 {
+        if enemy.id != "garrison" && distance(enemy.hex(), target_hex) > enemy.role().range {
             let moves = reachable(state, Some(enemy));
-            let best = hexes()
+            let best = all_hexes()
                 .into_iter()
                 .filter(|h| moves.get(h).is_some_and(|&cost| cost <= 2))
                 .min_by_key(|&h| distance(h, target_hex));
@@ -586,7 +760,9 @@ pub fn end_stage(state: &mut State) -> ActionResult {
                 enemy.c = best.c;
                 enemy.r = best.r;
                 enemy.cp -= cost;
-                enemy.fuel -= cost * 8;
+                if enemy.role().motorized {
+                    enemy.fuel -= cost * 8;
+                }
                 enemy.entrenched = false;
                 let entry = format!("{} repositioned toward Commonwealth forces.", enemy.short);
                 log(state, entry, "move");
@@ -605,7 +781,7 @@ pub fn end_stage(state: &mut State) -> ActionResult {
     let hot = state.stage % 3 == 0;
     for unit in state.units.iter_mut().filter(|u| u.hp > 0) {
         unit.water = (unit.water - if hot { 18 } else { 10 }).max(0);
-        if unit.unit_type != "infantry" {
+        if unit.role().motorized {
             unit.fuel = (unit.fuel - if hot { 5 } else { 2 }).max(0);
         }
         if unit.water == 0 {

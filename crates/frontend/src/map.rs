@@ -1,33 +1,41 @@
 use crate::{
     document,
-    motion::{Motion, Pose},
+    motion::{directional_frame, Motion, Pose},
     now,
     view::escape,
     App,
 };
 use cna_sim::*;
+use wasm_bindgen::{closure::Closure, JsCast};
 use web_sys::Element;
+
+// Asset contract: 18 upright yaw views, east first, clockwise in a 6×3 atlas.
+const FRAME_COUNT: usize = 18;
+const ATLAS_COLUMNS: usize = 6;
+const FRAME_SIZE: usize = 256;
 
 pub struct UnitMotion {
     motion: Motion,
     destination: Pose,
     last_pose: Option<Pose>,
+    last_frame: Option<usize>,
     node: Element,
-    facing: Element,
+    atlas_viewport: Element,
+    atlas_image: Element,
+    atlas_load: Closure<dyn FnMut(web_sys::Event)>,
+}
+
+impl Drop for UnitMotion {
+    fn drop(&mut self) {
+        // Reset/removal may happen before the image request finishes.
+        let _ = self
+            .atlas_image
+            .remove_event_listener_with_callback("load", self.atlas_load.as_ref().unchecked_ref());
+    }
 }
 
 pub fn sprite(unit: &Unit) -> String {
-    let name = match unit.unit_type.as_str() {
-        "tank" => {
-            if unit.side == "axis" {
-                "panzer"
-            } else {
-                "crusader"
-            }
-        }
-        other => other,
-    };
-    format!("/sprites/{name}.png")
+    format!("/sprites/{}.png", unit.role().id)
 }
 fn points(x: f64, y: f64, radius: f64) -> String {
     (0..6)
@@ -97,12 +105,17 @@ pub fn update(app: &mut App) {
         ),
     )
     .unwrap();
-    let truck = app.game.units.iter().find(|u| u.id == "supply" && u.hp > 0);
     let supplies = if app.supplies {
-        hexes()
+        all_hexes()
             .into_iter()
             .filter(|h| {
-                distance(*h, DEPOT) <= 2 || truck.is_some_and(|t| distance(*h, t.hex()) <= 2)
+                distance(*h, DEPOT) <= 2
+                    || app.game.units.iter().any(|u| {
+                        u.side == "allied"
+                            && u.hp > 0
+                            && u.role().support == Support::Supply
+                            && distance(*h, u.hex()) <= 2
+                    })
             })
             .map(|h| polygon(h, 40.0))
             .collect()
@@ -115,11 +128,28 @@ pub fn update(app: &mut App) {
         .set_inner_html(&supplies);
     let mut moves: Vec<_> = if app.mode == "move" {
         reachable(&app.game, app.selected()).into_iter().collect()
+    } else if app.mode == "deploy" && app.game.outcome.is_none() {
+        app.deployment
+            .as_ref()
+            .and_then(|d| role(&d.role_id))
+            .map(|role| {
+                all_hexes()
+                    .into_iter()
+                    .filter(|&h| passable(role, h) && unit_at(&app.game, h).is_none())
+                    .map(|h| (h, 0))
+                    .collect()
+            })
+            .unwrap_or_default()
     } else {
         vec![]
     };
     moves.sort_by_key(|(hex, _)| (hex.r, hex.c));
-    let targets:String=moves.into_iter().map(|(hex,cost)|{let (x,y)=position(hex);format!(r#"<g role="button" tabindex="0" data-hex="{},{}" aria-label="Move to hex {}:{}, {cost} CP">{}<text x="{x}" y="{}" text-anchor="middle">{cost}</text></g>"#,hex.c,hex.r,hex.c+1,hex.r+1,polygon(hex,39.0),y+4.0)}).collect();
+    let action = if app.mode == "deploy" {
+        "Deploy at"
+    } else {
+        "Move to"
+    };
+    let targets:String=moves.into_iter().map(|(hex,cost)|{let (x,y)=position(hex);let label=if app.mode=="deploy"{"+".into()}else{cost.to_string()};format!(r#"<g role="button" tabindex="0" data-hex="{},{}" aria-label="{action} hex {}:{}, {cost} CP">{}<text x="{x}" y="{}" text-anchor="middle">{label}</text></g>"#,hex.c,hex.r,hex.c+1,hex.r+1,polygon(hex,39.0),y+4.0)}).collect();
     svg.query_selector(".move-targets")
         .unwrap()
         .unwrap()
@@ -140,21 +170,40 @@ pub fn update(app: &mut App) {
     }
     for u in units.iter().filter(|u| u.hp > 0) {
         let selected = u.id == app.selected;
-        let target = app.mode == "attack" && can_attack(&app.game, app.selected(), Some(u));
+        let target = (app.mode == "attack" && can_attack(&app.game, app.selected(), Some(u)))
+            || (app.mode == "support" && can_support(&app.game, app.selected(), Some(u)));
         let (x, y) = position(u.hex());
+        let portrait = escape(&app.inventory.portrait(u));
+        let atlas_path = app.inventory.atlas(u);
         let entry=app.motions.entry(u.id.clone()).or_insert_with(||{
             let node=document().create_element_ns(Some("http://www.w3.org/2000/svg"),"g").unwrap();
             node.set_attribute("data-unit",&u.id).unwrap();node.set_attribute("role","button").unwrap();node.set_attribute("tabindex","0").unwrap();
-            node.set_inner_html(&format!(r##"<title></title><ellipse class="selection-halo" rx="39" ry="29" cy="3"/><path class="entrenchment" d="M-34 8L-34 20L-18 28H18L34 20V8" fill="none" stroke="#605a3d" stroke-width="4"/><g class="unit-hover"><g class="unit-facing"><image href="{}" x="-39" y="-37" width="78" height="60" filter="url(#unit-shadow)" class="unit-sprite"/></g></g><rect class="counter" x="-26" y="16" width="52" height="19" rx="3"/><text class="counter-text" x="0" y="29" text-anchor="middle">{}</text><rect x="-23" y="35" width="46" height="3" rx="1" fill="#685b45" opacity=".3"/><rect class="health" x="-23" y="35" height="3" rx="1" fill="{}"/><circle class="target-ring" r="32" fill="none" stroke="#a04c38" stroke-width="2" stroke-dasharray="4 3"/>"##,sprite(u),escape(&u.short),if u.side=="allied"{"#546a46"}else{"#a15c45"}));
+            let atlas_id = format!("unit-atlas-{}", u.id);
+            let atlas_width = ATLAS_COLUMNS * FRAME_SIZE;
+            let atlas_height = FRAME_COUNT / ATLAS_COLUMNS * FRAME_SIZE;
+            node.set_inner_html(&format!(r##"<title></title><ellipse class="selection-halo" rx="39" ry="29" cy="3"/><path class="entrenchment" d="M-34 8L-34 20L-18 28H18L34 20V8" fill="none" stroke="#605a3d" stroke-width="4"/><defs><pattern id="{atlas_id}" class="unit-atlas" patternUnits="userSpaceOnUse" x="-30" y="-37" width="60" height="60" viewBox="0 0 {FRAME_SIZE} {FRAME_SIZE}" overflow="hidden"><image width="{atlas_width}" height="{atlas_height}" preserveAspectRatio="none"/></pattern></defs><g class="unit-hover" filter="url(#unit-shadow)"><image href="{portrait}" x="-39" y="-37" width="78" height="60" class="unit-sprite"/><g class="unit-frames" visibility="hidden"><rect class="frame-from" x="-30" y="-37" width="60" height="60" fill="url(#{atlas_id})"/></g></g><rect class="counter" x="-26" y="16" width="52" height="19" rx="3"/><text class="counter-text" x="0" y="29" text-anchor="middle">{}</text><rect x="-23" y="35" width="46" height="3" rx="1" fill="#685b45" opacity=".3"/><rect class="health" x="-23" y="35" height="3" rx="1" fill="{}"/><circle class="target-ring" r="32" fill="none" stroke="#a04c38" stroke-width="2" stroke-dasharray="4 3"/>"##,escape(&u.short),if u.side=="allied"{"#546a46"}else{"#a15c45"}));
+            // A square pattern clips exactly one cell. Keeping the full sheet in
+            // defs also keeps its offscreen pixels out of unit focus/hit bounds.
+            let atlas_viewport = node.query_selector(".unit-atlas").unwrap().unwrap();
+            let atlas_image = atlas_viewport.query_selector("image").unwrap().unwrap();
+            let fallback = node.query_selector(".unit-sprite").unwrap().unwrap();
+            let loaded_frame = node.query_selector(".unit-frames").unwrap().unwrap();
+            let atlas_load = Closure::<dyn FnMut(web_sys::Event)>::new(move |_| {
+                loaded_frame.set_attribute("visibility", "visible").unwrap();
+                fallback.set_attribute("visibility", "hidden").unwrap();
+            });
+            atlas_image.add_event_listener_with_callback("load", atlas_load.as_ref().unchecked_ref()).unwrap();
+            // Missing/loading atlases leave the original upright sprite visible.
+            atlas_image.set_attribute("href", &atlas_path).unwrap();
             layer.append_child(&node).unwrap();
-            let facing=node.query_selector(".unit-facing").unwrap().unwrap();
-            let destination=Pose{x,y,heading:0.0};UnitMotion{motion:Motion::new(destination),destination,last_pose:None,node,facing}
+            let destination=Pose{x,y,heading:160.0};UnitMotion{motion:Motion::new(destination),destination,last_pose:None,last_frame:None,node,atlas_viewport,atlas_image,atlas_load}
         });
         if x != entry.destination.x || y != entry.destination.y {
             let heading = (y - entry.destination.y)
                 .atan2(x - entry.destination.x)
-                .to_degrees()
-                - 150.0;
+                .to_degrees();
+            // Stop on a real view so stationary units never remain double-exposed.
+            let heading = directional_frame(heading, FRAME_COUNT) as f64 * 20.0;
             entry.destination = Pose { x, y, heading };
             entry.motion.retarget(entry.destination, time);
         }
@@ -251,10 +300,17 @@ pub fn animate(app: &mut App) -> bool {
             .node
             .set_attribute("transform", &format!("translate({} {})", pose.x, pose.y))
             .unwrap();
-        entry
-            .facing
-            .set_attribute("transform", &format!("rotate({} 0 -7)", pose.heading))
-            .unwrap();
+        // One fully opaque view avoids double silhouettes during a fast turn.
+        let frame = directional_frame(pose.heading, FRAME_COUNT);
+        if entry.last_frame != Some(frame) {
+            entry.last_frame = Some(frame);
+            let x = frame % ATLAS_COLUMNS * FRAME_SIZE;
+            let y = frame / ATLAS_COLUMNS * FRAME_SIZE;
+            entry
+                .atlas_viewport
+                .set_attribute("viewBox", &format!("{x} {y} {FRAME_SIZE} {FRAME_SIZE}"))
+                .unwrap();
+        }
     }
     active
 }

@@ -1,3 +1,5 @@
+mod catalog;
+mod inventory;
 mod map;
 mod motion;
 mod view;
@@ -10,8 +12,17 @@ use std::{
 use wasm_bindgen::{prelude::*, JsCast};
 use web_sys::{Element, HtmlDialogElement, KeyboardEvent, MouseEvent};
 
+struct Deployment {
+    role_id: String,
+    identity_id: Option<String>,
+    side: String,
+}
+
 struct App {
     game: State,
+    catalog: catalog::Catalog,
+    inventory: inventory::Inventory,
+    deployment: Option<Deployment>,
     selected: String,
     mode: &'static str,
     grid: bool,
@@ -27,8 +38,18 @@ struct App {
 
 impl App {
     fn new() -> Self {
+        let inventory =
+            inventory::Inventory::parse(include_str!("../../../public/data/unit-identities.json"))
+                .expect("The identity inventory must match schema v1");
+        let mut catalog =
+            catalog::Catalog::parse(include_str!("../../../public/data/unit-catalog.json"))
+                .expect("The bundled catalog must match schema v1");
+        catalog.apply_identity_artwork(&inventory);
         Self {
             game: new_game(),
+            catalog,
+            inventory,
+            deployment: None,
             selected: "7arm".into(),
             mode: "inspect",
             grid: true,
@@ -76,9 +97,12 @@ impl App {
             let Some(unit) = self.game.units.iter().find(|u| u.id == id) else {
                 return;
             };
-            if self.mode == "attack" && unit.side == "axis" {
+            if self.mode == "support" {
+                let result = support_unit(&mut self.game, &self.selected, &id);
+                self.apply(result);
+            } else if self.mode == "attack" && unit.side == "axis" {
                 if !can_attack(&self.game, self.selected(), Some(unit)) {
-                    self.apply(ActionResult { ok: false, message: "That enemy is not a valid target. Move adjacent with at least 2 CP and 20 ammunition remaining.".into() });
+                    self.apply(ActionResult { ok: false, message: "That target is outside this role's attack domain/range, or needs 2 CP, water and 20 ammunition.".into() });
                 } else {
                     self.target = id;
                     self.modal = Some("combat");
@@ -100,7 +124,34 @@ impl App {
         } else if let Some(hex) = element.get_attribute("data-hex") {
             if let Some((c, r)) = hex.split_once(',') {
                 if let (Ok(c), Ok(r)) = (c.parse(), r.parse()) {
-                    let result = move_unit(&mut self.game, &self.selected, Hex { c, r });
+                    let result = if self.mode == "deploy" {
+                        let Some(deployment) = &self.deployment else {
+                            return;
+                        };
+                        let result = deploy_unit(
+                            &mut self.game,
+                            &deployment.role_id,
+                            &deployment.side,
+                            Hex { c, r },
+                        );
+                        if result.ok {
+                            let unit = self.game.units.last_mut().unwrap();
+                            unit.identity_id = deployment.identity_id.clone();
+                            if let Some(identity) = unit
+                                .identity_id
+                                .as_deref()
+                                .and_then(|id| self.inventory.find(id))
+                            {
+                                unit.name = identity.name.clone();
+                            }
+                            self.selected = unit.id.clone();
+                            self.mode = "inspect";
+                            self.deployment = None;
+                        }
+                        result
+                    } else {
+                        move_unit(&mut self.game, &self.selected, Hex { c, r })
+                    };
                     self.apply(result);
                 }
             }
@@ -111,6 +162,54 @@ impl App {
                 .unwrap_or("")
             {
                 "help" => self.modal = Some("help"),
+                "catalog" => self.modal = Some("catalog"),
+                "reinforcements" => self.modal = Some("reinforcements"),
+                "deploy-role" | "deploy-identity" => {
+                    let identity_id = element.get_attribute("data-identity");
+                    let role_id = identity_id
+                        .as_deref()
+                        .and_then(|id| self.inventory.find(id))
+                        .and_then(|entry| entry.role_id.clone())
+                        .or_else(|| element.get_attribute("data-role"));
+                    let Some(role_id) = role_id.filter(|id| role(id).is_some()) else {
+                        return;
+                    };
+                    let side = document()
+                        .get_element_by_id("deployment-side")
+                        .unwrap()
+                        .unchecked_into::<web_sys::HtmlSelectElement>()
+                        .value();
+                    self.message = format!(
+                        "Choose an empty {} hex for this sandbox reinforcement.",
+                        role(&role_id).unwrap().domain_name().to_lowercase()
+                    );
+                    self.deployment = Some(Deployment {
+                        role_id,
+                        identity_id,
+                        side,
+                    });
+                    self.mode = "deploy";
+                    self.modal = None;
+                    self.error = false;
+                }
+                "inventory-page" => {
+                    let page = element.get_attribute("data-page").unwrap().parse().unwrap();
+                    self.inventory.update_results(page);
+                    if let Some(heading) = document().query_selector(".inventory-count").unwrap() {
+                        let _ = heading.unchecked_ref::<web_sys::HtmlElement>().focus();
+                    }
+                    return;
+                }
+                "catalog-page" => {
+                    let page = element.get_attribute("data-page").unwrap().parse().unwrap();
+                    self.catalog.update_results(page);
+                    let heading = document()
+                        .query_selector(".catalog-count")
+                        .unwrap()
+                        .unwrap();
+                    let _ = heading.unchecked_ref::<web_sys::HtmlElement>().focus();
+                    return;
+                }
                 "reset" => self.modal = Some("reset"),
                 "outcome" => self.modal = Some("outcome"),
                 "close" => self.modal = None,
@@ -122,6 +221,7 @@ impl App {
                     self.zoom = 1.0;
                     self.error = false;
                     self.motions.clear();
+                    self.deployment = None;
                     self.message = "New orders received. Advance west and secure Tobruk.".into();
                 }
                 "grid" => self.grid = !self.grid,
@@ -129,7 +229,17 @@ impl App {
                 "zoom-in" => self.zoom = (self.zoom + 0.25).min(1.75),
                 "zoom-out" => self.zoom = (self.zoom - 0.25).max(1.0),
                 "zoom-reset" => self.zoom = 1.0,
-                "cancel" => self.mode = "inspect",
+                "cancel" => {
+                    self.mode = "inspect";
+                    self.deployment = None;
+                }
+                "support" => {
+                    self.mode = if self.mode == "support" {
+                        "inspect"
+                    } else {
+                        "support"
+                    }
+                }
                 "move" => {
                     self.mode = if self.mode == "move" {
                         "inspect"
@@ -286,6 +396,33 @@ pub fn start() -> Result<(), JsValue> {
     });
     root.add_event_listener_with_callback("click", click.as_ref().unchecked_ref())?;
     click.forget();
+    let input = Closure::<dyn FnMut(web_sys::Event)>::new(|event: web_sys::Event| {
+        if event.type_() == "input"
+            && event
+                .target()
+                .and_then(|t| t.dyn_into::<Element>().ok())
+                .is_some_and(|target| target.has_attribute("data-inventory-filter"))
+        {
+            APP.with(|app| app.borrow().inventory.update_results(0));
+            return;
+        }
+        if event
+            .target()
+            .and_then(|t| t.dyn_into::<Element>().ok())
+            .is_some_and(|target| {
+                target.has_attribute("data-catalog-filter")
+                    && matches!(
+                        (event.type_().as_str(), target.tag_name().as_str()),
+                        ("input", "INPUT") | ("change", "SELECT")
+                    )
+            })
+        {
+            APP.with(|app| app.borrow().catalog.update_results(0));
+        }
+    });
+    root.add_event_listener_with_callback("input", input.as_ref().unchecked_ref())?;
+    root.add_event_listener_with_callback("change", input.as_ref().unchecked_ref())?;
+    input.forget();
     let keyboard = Closure::<dyn FnMut(KeyboardEvent)>::new(|event: KeyboardEvent| {
         let Some(target) = event.target().and_then(|t| t.dyn_into::<Element>().ok()) else {
             return;

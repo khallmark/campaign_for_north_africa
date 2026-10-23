@@ -201,3 +201,126 @@ fn capture_wins_trucks_cannot_capture_and_losses_or_deadline_end_play() {
     end_stage(&mut deadline);
     assert_eq!(deadline.outcome.as_deref(), Some("defeat"));
 }
+
+#[test]
+fn every_sandbox_role_can_deploy_and_move_with_domain_and_fuel_rules() {
+    let mut ids = HashSet::new();
+    for role in ROLES {
+        assert!(ids.insert(role.id));
+        let mut state = new_game();
+        let start = if role.domain == Domain::Sea {
+            Hex { c: 10, r: 1 }
+        } else {
+            Hex { c: 11, r: 7 }
+        };
+        assert!(
+            deploy_unit(&mut state, role.id, "allied", start).ok,
+            "{}",
+            role.id
+        );
+        let unit = state.units.last().unwrap();
+        let id = unit.id.clone();
+        let destination = Hex {
+            c: start.c + 1,
+            r: start.r,
+        };
+        assert_eq!(reachable(&state, Some(unit)).get(&destination), Some(&1));
+        assert!(move_unit(&mut state, &id, destination).ok);
+        let unit = state.units.last().unwrap();
+        assert_eq!(unit.hex(), destination);
+        assert_eq!(unit.cp, role.cp - 1);
+        assert_eq!(unit.fuel, if role.motorized { 92 } else { 100 });
+        assert_eq!(dig_in(&mut state, &id).ok, role.can_capture());
+        let before = state.clone();
+        assert!(!deploy_unit(&mut state, role.id, "allied", destination).ok);
+        assert!(!deploy_unit(&mut state, role.id, "allied", Hex { c: -1, r: 0 }).ok);
+        assert_eq!(state, before);
+    }
+    assert_eq!(ids.len(), 24);
+}
+
+#[test]
+fn air_overflies_ground_control_and_ships_cannot_cross_land() {
+    let mut state = new_game();
+    assert!(deploy_unit(&mut state, "fighter", "allied", Hex { c: 7, r: 4 }).ok);
+    let aircraft = state.units.last().unwrap();
+    let moves = reachable(&state, Some(aircraft));
+    assert_eq!(moves.get(&Hex { c: 5, r: 4 }), Some(&2));
+    assert!(moves.keys().any(|&h| terrain(h) == "sea"));
+    assert!(!moves.contains_key(&state.units[4].hex()));
+    assert!(deploy_unit(&mut state, "warship", "allied", Hex { c: 3, r: 1 }).ok);
+    assert!(reachable(&state, state.units.last())
+        .keys()
+        .all(|&h| terrain(h) == "sea"));
+    let before = state.clone();
+    assert!(!deploy_unit(&mut state, "warship", "allied", Hex { c: 12, r: 7 }).ok);
+    assert!(!deploy_unit(&mut state, "infantry", "allied", Hex { c: 12, r: 1 }).ok);
+    assert_eq!(state, before);
+}
+
+#[test]
+fn ranged_and_air_targets_and_retaliation_use_roles_not_only_distance() {
+    let mut state = new_game();
+    assert!(deploy_unit(&mut state, "field-artillery", "allied", Hex { c: 6, r: 7 }).ok);
+    let artillery = state.units.last().unwrap();
+    let tank = &state.units[4];
+    assert_eq!(distance(artillery.hex(), tank.hex()), 2);
+    assert!(can_attack(&state, Some(artillery), Some(tank)));
+    assert_eq!(combat_preview(artillery, tank).retaliation, 0);
+    let id = artillery.id.clone();
+    assert!(attack(&mut state, &id, "15pz", "allied").ok);
+    assert_eq!(state.units[4].hp, 65);
+    assert_eq!(state.units.last().unwrap().hp, 100);
+    assert!(deploy_unit(&mut state, "fighter", "axis", Hex { c: 7, r: 7 }).ok);
+    let aircraft = state.units.last().unwrap();
+    assert!(!can_attack(&state, Some(&state.units[1]), Some(aircraft)));
+    assert!(deploy_unit(&mut state, "heavy-anti-air", "allied", Hex { c: 8, r: 7 }).ok);
+    assert!(can_attack(
+        &state,
+        state.units.last(),
+        Some(&state.units[state.units.len() - 2])
+    ));
+    assert_eq!(
+        combat_preview(
+            state.units.last().unwrap(),
+            &state.units[state.units.len() - 2]
+        )
+        .retaliation,
+        0
+    );
+}
+
+#[test]
+fn support_roles_spend_resources_without_creating_command_points_or_reviving_wrecks() {
+    for (role, cp_cost, fuel_cost) in [
+        ("headquarters", 2, 0),
+        ("engineer", 1, 0),
+        ("tank-recovery", 1, 20),
+    ] {
+        let mut state = new_game();
+        state.units[1].hp = 85;
+        state.units[1].cp = 0;
+        assert!(deploy_unit(&mut state, role, "allied", Hex { c: 10, r: 7 }).ok);
+        let source = state.units.last().unwrap();
+        let id = source.id.clone();
+        let cp = source.cp;
+        assert!(support_unit(&mut state, &id, "4arm").ok);
+        assert_eq!(state.units.last().unwrap().cp, cp - cp_cost);
+        assert_eq!(state.units.last().unwrap().fuel, 100 - fuel_cost);
+        match role {
+            "headquarters" => assert_eq!(state.units[1].cp, 1),
+            "engineer" => assert!(state.units[1].entrenched),
+            _ => assert_eq!(state.units[1].hp, 100),
+        }
+        state.units[1].hp = 0;
+        let before = state.clone();
+        assert!(!support_unit(&mut state, &id, "4arm").ok);
+        assert_eq!(state, before);
+    }
+    let mut state = new_game();
+    state.units[3].unit_type = "ground-support".into();
+    state.units[1].ammo = 50;
+    assert!(resupply(&mut state, "4arm").ok);
+    assert_eq!(state.units[1].ammo, 75);
+    assert_eq!(state.units[3].ammo, 75);
+}

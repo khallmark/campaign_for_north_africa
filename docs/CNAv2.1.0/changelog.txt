@@ -1,0 +1,101 @@
+v2.1 September 2024
+
+Norman Harman njharman@gmail.com
+
+There are discrepancies between reinforcement listing and org charts. Esp 5th
+Leicht. Went with org chart.
+
+Map
+- Add starting dumps to map (all major cites are automatically dumps)
+- Add city fortification to map. Add port efficiency labels to map
+
+Scenarios
+- Add Scenarios "Crusader" and "Empty Map" options
+- Cut 1st line trucks from scenarios [They don't go on the map, should be recorded on Formation sheets]
+
+Menu bar
+- Add range tool
+- "Inventory Window"; organized by counter type
+- Hid "Units window" (Ctrl-Alt-U to reveal) [counters should be used from Org Charts Units]
+- Move "orgcharts no units" after "old charts"
+- Shorten org charts formation names
+- Reduce size of 51st highland org chart
+- Move Coastal Shipping and CW Fleet to "Org Charts w/units Window"
+- Add Italian Battlegroup markers to Org Chart
+
+Quality of Life
+- Add "Property sheets" and "details" to various markers for those who want to
+  track supplies, breakdowns, etc. in VASSAL.
+- Axis/Allied specific air facilities. Rt-click to place aircraft markers.
+  Rt-click Damage/Repair levels. These counters don't move with regular stacks.
+- Mouse over stack viewer; displays terrain
+- Every marker is cloneable and deleteable
+- Add Clear weather marker, that can "flip" to other weather types
+- Air facilities, Forts, mines, rails, water pipes, POW camps, others; don't move with regular stacks
+- Fortification; Rt-click Increase/Decrease levels 0-3
+- Roads, rails, pipelines; are rotatable, pipeline; Rt-click damage/repair
+- Contact/Engaged and Reserve1/Reserve2 are flippable
+- Minefields; add id label
+- Pinned marker; add "# Bn Equiv" label
+
+Counters
+- Elements of LTC return to LTC orgchart, not formation they start Campaign attached to
+- LTC LX had LXI designation
+- Tobruk V Art had CD symbol
+- 44inf 57th AT had art symbol
+- 5Ind 25th, 31st field arty had infantry symbol
+- Gave labels unique text field property names so they don't reset when running "Refresh Counters"
+
+
+v2.0 September 2021
+
+The main upgrade in this module over the previous module is a humongous map and SVG units.
+
+SVG Counters using "web safe" colors by Mitch Guthrie
+
+Map correcting misalignments and color variances in the original maps and scans by Mitch Guthrie wyomitch@hotmail.com.
+
+Charts for the most part have been removed as the charts are readily available in the various tabs
+
+
+v0.91 03 Apr 2020
+
+
+
+Fixed bug where could not right click to return Italian 185 FOlgore units to Organisation Chart
+
+Fixed bug where Italian San Giorgio naval unit did not set up in correct location
+
+Fixed bug where Allied naval units did not set up in correct location
+
+Added German KG unit with no unit name
+
+Added blank labels to the Markers panel
+
+
+
+v0.92 04 Apr 2020
+
+Fixed issue with some Italian units not showing on the Torbuk and Unassigned Unit Units Organisation Charts
+
+Bevel effect added to counters (thanks to John Edwards for this)
+
+
+
+v0.93 05 Apr 2020
+
+Replaced the map with a copy of the actual CNA map
+
+
+
+v0.94 06 Apr 2020
+
+Added escarpment hexside to D2228/2328 as per Sept 79 addenda
+
+Corrected counters as per Land rules p45 and 46 (note that the module has had
+the Commonwealth markers from sheet 9 in red on white rather than black on
+white, to match the Commonwealth markers from sheets 5, 6 and 8, since version v0.4)
+
+Incorporated errata from the Sept 79 addenda into the relevant charts and tables
+
+Added an 'Incorporated Errata' item to the Help menu

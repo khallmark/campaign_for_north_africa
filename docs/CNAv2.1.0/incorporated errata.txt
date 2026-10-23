@@ -1,0 +1,91 @@
+The following errata from the Sep 79 Addenda has been incorporated into this module.
+In addition, the counters noted on pg 45 and 46 of the Land rules have been corrected.
+
+
+MAPS
+
+Map "D": Hexside 2228/2328 should have an escarpment.
+
+
+RULES AND CHARTS:
+
+[4.4b] (addition) The Range for the Z506 is 110.
+
+[4.43a)] (important omission) The following items were left out of the schedule:
+  GT    OpS    Units
+  28    2    42d RTR (1 Army); T: 4M
+  64    2    WD: 32nd Army Tank Bde(2); Tpt: 20/15
+
+In addition, in 76/2 there is a reference to 2/68; ignore it. Refer instead to
+the newly added 64/2 WD.
+
+[4.44a] (important omission) The Fuel Consumption rating of the Gladiator is "1".
+
+[4.44b] (important omissions and corrections) All of the following apply to
+the OA Charts, Reinforcement Tables, etc. - i.e., OB information that has
+somehow been misprinted or left out.
+
+  1. The OA sheets for three entire Italian Divisions - Sirte, Cirene and
+     Marmarica - have been left out. See below. If your are not planning on
+     playing any scenario before February 1941 you can ignore these divisions,
+     as they were gone by then.
+  2. The 1st Buffs and 1st Hampshires (CW) start the campaign and Italian
+     scenarios as part of (assigned to) The Matruh Garrison.
+  3. The arrival date for the French Motor Marine Company is wrong: it should be "D".
+  4. On the CW Air Characteristics Chart, the Legend shows that "F" = Reconnaissance.
+     That should obviously be "R" = Reconnaissance.
+  5. The Italian Air Characteristics chart lists an Re.2000. If I'm not
+     mistaken, that plane appears in no scenario or reinforcement track. That is
+     probably correct, as the Re2000 saw little if any action in Africa, and we
+     accidentally left its characteristics in the table.
+  6. Under German Non-Divisional Artillery, the 362 Artillery Battery should
+     have an ID Code of "x" (not "w", which is anti-tank equipment).
+
+[4.44c] (correction) The Bf.109E should not have "D" capability. In addition,
+the Bf.110 as a fighter has a Maneuver rating of 32 only when on Night
+missions. Otherwise its rating is 30.
+
+[4.49] (important omission) The CPA for the 7.62cm Pak(R) is "15";for the
+Marder, "25". (important correction) The correct values for the German PzIIIE
+are 25 1 - 4 - 3 4/4 3 0 (reading across).
+
+[8.37] (correction, Terrain Effects Chart) The footnote (4) should be with
+Major City, not Swamp. (important correction) Footnote (8) is correct, not the
+number "1" listed on the chart. Tracks do not cost 1 CP; they simply halve the
+cost of the terrain they're in.
+
+[15.79] (correction) Under defender Losses, +4 differential, 10% line, the
+dice-roll should read 34-45.
+
+[20.3] (correction) The last item on this chart is the SGSU. Ignore that
+reference; SGSU's come in as desired, as per 34.82. They do not require any
+Replacement Points. [20.62] (correction) Note, in the example at the end of
+the Case, that the Axis Player would need 300 (not 350) tons.
+
+[20.66, Italian Production Chart] (correction) The next to the last line of
+the explanations at the bottom should refer to Italian M 11/39's, not 13/39's.
+
+[22.8] (correction) The last two sentences, concerning additions to the
+dierolls, on the Table explanation are wrong. See Case 22.34 for the correct
+dieroll modifications.
+
+[29.61] (correction) This chart, as some of you may have suspected, is
+completely backwards. The correct seasonal sequence is noted in 29.1 (i.e.
+Spring is from the 4th week of March to the end of the 3rd week of June, and
+so forth).
+
+[30.59] (clarification) There is no 30.59 chart. That chart is now Case 55.3.
+
+[41.5] (important correction) The "Barrage Points" row has been screwed up: 7,
+8, 9, 10 have been placed over the same column. Each column should have only
+two numbers, thus place 9, 10 in the next column, move the rest of the numbers
+one column to the right, and the last column should read 21+ (not 1+). In
+addition, Flak Suppression should read Flak Destruction.
+
+[42.53] (clarification) There is a chart for this case, located in the CW
+Chart Booklet.
+
+[46.4] (correction) This chart is wrong; the notes at the bottom of Case 46.3
+are correct.
+
+[54.17] (correction) The % under -1 should be "0", under +7, "100"%.

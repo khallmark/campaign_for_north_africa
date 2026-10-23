@@ -2,7 +2,7 @@
 
 `public/data/unit-identities.json` separates source rows, unit identities, equipment models and artwork. It is **not a certified complete roster**. The earlier 24 shared role illustrations do not satisfy the requirement for unique artwork per distinct unit.
 
-**Batch18 branch:** 58 sets available / 1,298 missing. The baseline through batch17 (55 sets) is merged; this branch adds three sets. Earlier batch paragraphs preserve their original handoff status. Subsequent parent gameplay evidence is recorded in the cumulative batch19 update.
+**Delivery status at batch19:** 55 sets through batch17 are merged; the parent has integrated and boundedly gameplay-checked six further sets in batches18–19 on its local feature branch. Those six are not merged. The inventory's `ready_unique_art` counts available reviewed files, **not merged or exhaustively gameplay-verified sets**. Earlier batch paragraphs retain the delivery state at their handoff.
 
 ## Inventory boundary
 
@@ -297,6 +297,8 @@ Coverage is **55 sets available / 1,301 missing among 1,356 provisional candidat
 
 **Later parent-reported motion update:** Kevin requested faster, sharper turns. Presentation now selects exactly one opaque nearest view, with no crossfade, at a constant 2ms per degree and an 80ms minimum (a half-turn takes 360ms). Units still finish turning in place before travelling. Parent reports tests and browser checks pass; source-art angle/detail steps remain. Earlier batch evidence records the behavior tested at that time and is not retroactively evidence for this newer timing. Parent is cutting the authorized merge at verified batch17 / 55 sets; subsequent artwork batches are separate incremental work.
 
+**Merged baseline:** GitHub confirms PR1 merged at [41adbb6](https://github.com/khallmark/campaign_for_north_africa/commit/41adbb690bc4b395b53727cc77b91a89c87af5e1). Parent reports `origin/main` and its local `main` match that merge, containing verified work through batch17 / 55 sets. Parent reports 25 tests, build, Clippy, schema and browser tank/infantry/reduced-motion checks passed for faster single-view turns; `.amp/in/artifacts/sharp-turn.mp4` was inspected at 15fps after the 30fps encoder failed. No GitHub CI checks were configured/reported. Batch18 was checksum-verified and preserved by the parent but deliberately not extracted or merged. Application code remains parent-owned.
+
 ## Eighteenth unique-art batch
 
 Three more identities from physical scan p.118 receive independent Painter sets:
@@ -312,6 +314,24 @@ Both tank sheets retain their original 18 views. The car initially reversed from
 All final light/dark proofs were inspected. The tanks show broad upright direction order without clear turret/hull disagreement, major scale jumps, clipping or bleed; near-repeat spans and thin pale track/hull fringes remain. The car's new8/12 have sharper grainy contours and edge speckling; 8 is slightly compact, several views repeat and body presentation changes at the wrap despite all checked alpha bounds ending at y240. These are not calibrated 20-degree views, smooth3D or exact historical reconstructions. **New three await parent gameplay checks.** No application or motion code is included.
 
 Coverage is **58 sets available / 1,298 missing among 1,356 provisional candidates**. Full coverage and identity reconciliation remain unfinished. Source catalog unchanged. This batch is separate from the parent's batch17 merge cut and remains local, uncommitted and unpushed; no README, `map.rs` or `motion.rs` is included.
+
+## Nineteenth unique-art batch
+
+Three separate Queens battalion rows under 131st Infantry Brigade, 44th (Home Counties) Infantry Division on physical scan p.118 receive independent Painter sets:
+
+- `unit-commonwealth-1-5-queens`: banded helmet, shorts, dark brown pack, cream lower blanket and olive satchel.
+- `unit-commonwealth-1-6-queens`: netted helmet, green shirt, shorts, light canvas pack, dark top roll and gray-green canteen.
+- `unit-commonwealth-1-7-queens`: sidecap, long trousers, olive pack, vertical gray blanket, small green roll and brown hip pouch.
+
+The supplied scan was rechecked: **“1/5 Queens”, “1/6 Queens”, “1/7 Queens”** are separate rows with equipment **“N”**, not three aliases. Clothing and equipment differences are illustrative artistic choices, not sourced battalion uniform assignments. All retain their existing `infantry` role, canonical IDs and source mappings; no stats changed.
+
+1/5 and 1/7 receive new left-profile9 and rear-left12 views, replacing weak side views and premature rear-right poses. 1/6 retains its original18 views. Final light/dark proofs were inspected: broad upright facing order, complete silhouettes, no obvious clipping, cell bleed or broad bright halo. All preserve the 18-view, 6×3, 256px-cell contract, common scale, x128/y240 anchor and portrait7. No flat rotation, mirroring or shared-role recoloring.
+
+Repeated poses and unequal angle steps remain. 1/5 raises its rifle at frame12 and changes stance; 1/6 has nearly direct-rear12–14 and a narrow stance at9; 1/7's corrected9/12 alter limb/trouser rendering and gear proportions. These are static standing sprites, not walking cycles, calibrated 20-degree yaw, smooth3D or historically certified uniforms. **All three await gameplay checks.**
+
+Coverage is **61 sets available / 1,295 missing among 1,356 provisional candidates: 55 merged plus six pending from batches18–19**. The cumulative batch19 inventory requires batch18 assets; apply both batches in order when integration is authorized. Full coverage and identity reconciliation remain unfinished. Source catalog unchanged. Batch19 remains local, uncommitted and unpushed, with no README, application or motion-code changes.
+
+**Subsequent parent-reported batches18–19 verification:** both batches were integrated in order on local `feat/identity-art-batches-18-19`. After rebuild, all six canonical portrait/atlas paths, deployments and movement checks passed: 27–28 sampled positions, 16–18 stationary turning samples, one travel heading, one opaque view, retained nodes and no rotations. All six screenshots were inspected and showed intact upright art; the existing Frontier depot label overlap remains. Only 1/7 Queens has inspected 15fps footage at `.amp/in/artifacts/batch19-queens-movement.mp4`, showing westward movement without obvious ghosting. Recording/contact-sheet quality cannot independently establish precise turn timing; DOM samples supply that evidence. Parent reports 25 tests, build, schema/1,098-cell validation and diff-check passed, with source catalog hash, IDs, roles and mappings unchanged. These are bounded checks, not all-heading, smoothness or historical certification. At that report, the six sets were local, uncommitted, unpushed and unmerged; the merged baseline remains 55 sets.
 
 ## Validation
 

@@ -16,8 +16,8 @@
       "naval_unit": 20,
       "support_unit": 11
     },
-    "ready_unique_art": 58,
-    "missing_unique_art": 1298,
+    "ready_unique_art": 61,
+    "missing_unique_art": 1295,
     "potential_alias_groups": 1,
     "resolved_alias_groups": 18
   },
@@ -1566,7 +1566,9 @@
           "geometry": "Final light/dark proofs inspected: broad upright right0/front4/left9/rear13/right17. No clear reversal,turret-hull disagreement,major size jump,clipping or cell bleed.",
           "limitations": "Near repeats1-2,6-8,10-12,13-14; uneven angular steps and details. Thin light track/hull edge fringes on dark backgrounds. Not calibrated20-degree yaw,smooth3D or exact Matilda reconstruction.",
           "historical_fidelity": "illustrative",
-          "gameplay_verified": false
+          "gameplay_verified": true,
+          "gameplay_scope": "Parent-reported batches18-19: canonical paths, deployment and movement passed after rebuild; 27-28 positions,16-18 stationary turning samples,one travel heading/opaque view,retained nodes,no rotations across six identities. This identity has DOM/screenshot evidence only. Bounded checks,not all headings or historical certification.",
+          "evidence_thread": "https://ampcode.com/threads/T-01a16336-bc20-76f1-8657-2aa709091712"
         }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
@@ -1600,7 +1602,9 @@
           "geometry": "Final light/dark proofs inspected: broad upright right0/front4/left9/rear13/right17. No clear reversal,turret-hull disagreement,major size jump,clipping or cell bleed.",
           "limitations": "Near repeats1-2,6-7,10-11,15-16 with larger intervening steps. Details vary and faint pale lower-track fringe visible on dark,especially0. Not calibrated20-degree yaw,smooth3D or exact Valentine reconstruction.",
           "historical_fidelity": "illustrative",
-          "gameplay_verified": false
+          "gameplay_verified": true,
+          "gameplay_scope": "Parent-reported batches18-19: canonical paths, deployment and movement passed after rebuild; 27-28 positions,16-18 stationary turning samples,one travel heading/opaque view,retained nodes,no rotations across six identities. This identity has DOM/screenshot evidence only. Bounded checks,not all headings or historical certification.",
+          "evidence_thread": "https://ampcode.com/threads/T-01a16336-bc20-76f1-8657-2aa709091712"
         }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
@@ -1795,7 +1799,9 @@
           "geometry": "Corrected light/dark proofs re-inspected: hood/lamps lead front-left8,side-left9,rear spare progressively exposed10-12,straight rear13 then rear-right14-16. No clear backtracking,premature rear-right,clipping or cell bleed; transparent margins retained.",
           "limitations": "Near repeats1-2,6-8,10-11; corrected8 slightly compact and8/12 show sharper grainy contours/edge speckling. Body presentation changes at17-0 despite common bottom240 anchor. Thin pale fringes remain. Not calibrated20-degree yaw,smooth3D or historical model certification.",
           "historical_fidelity": "illustrative",
-          "gameplay_verified": false
+          "gameplay_verified": true,
+          "gameplay_scope": "Parent-reported batches18-19: canonical paths, deployment and movement passed after rebuild; 27-28 positions,16-18 stationary turning samples,one travel heading/opaque view,retained nodes,no rotations across six identities. This identity has DOM/screenshot evidence only. Bounded checks,not all headings or historical certification.",
+          "evidence_thread": "https://ampcode.com/threads/T-01a16336-bc20-76f1-8657-2aa709091712"
         }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
@@ -1860,9 +1866,24 @@
         "scan-118"
       ],
       "sprite": {
-        "portrait_path": null,
-        "atlas_path": null,
-        "status": "missing"
+        "portrait_path": "/sprites/units/unit-commonwealth-1-5-queens/portrait.png",
+        "atlas_path": "/sprites/units/unit-commonwealth-1-5-queens/atlas.png",
+        "status": "ready",
+        "provenance": {
+          "generator": "Painter",
+          "original_sheet": "https://ampcode.com/user-content/attachments/62d3a2a74ffb2b9adac415b43456939eef7fef6f92849966cb89976f28ddaa05-file.png",
+          "replacement_strip": "https://ampcode.com/user-content/attachments/02b9a682433a30d392e32002fb31e5759f3bca58ed559aa850a27a2a52531afc-file.png",
+          "note": "Helmeted rifleman in shorts with dark brown pack, cream lower blanket and olive satchel. Scan118 lists this separate Queens battalion under131st Infantry Brigade, equipmentN. Uniform and gear illustrative, not sourced assignments.",
+          "processing": "New left-profile and rear-left views replace9/12, normalized to original rear-span height. Other16 views original. Alpha extraction,common scale,x128/y240 anchor,portrait7. No flat rotation,mirroring or shared-role recoloring."
+        },
+        "review": {
+          "geometry": "Final light/dark proofs inspected: upright right0/front4/left9/rear-left12/rear13/right17. Corrected9/12 remove earlier weak side view and premature rear-right. Complete silhouettes,no obvious clipping,bleed or broad bright halo.",
+          "limitations": "Near repeats1-3,4-5,6-8,10-11,14-15. At11-12 rifle rises from down-left to up-left and stance widens;9 narrows silhouette/pack. Not calibrated20-degree yaw,smooth3D,walking or historical uniform certification.",
+          "historical_fidelity": "illustrative",
+          "gameplay_verified": true,
+          "gameplay_scope": "Parent-reported batches18-19: canonical paths, deployment and movement passed after rebuild; 27-28 positions,16-18 stationary turning samples,one travel heading/opaque view,retained nodes,no rotations across six identities. This identity has DOM/screenshot evidence only. Bounded checks,not all headings or historical certification.",
+          "evidence_thread": "https://ampcode.com/threads/T-01a16336-bc20-76f1-8657-2aa709091712"
+        }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
       "formation_context": "44th (Home Counties) Infantry Division"
@@ -1882,9 +1903,23 @@
         "scan-118"
       ],
       "sprite": {
-        "portrait_path": null,
-        "atlas_path": null,
-        "status": "missing"
+        "portrait_path": "/sprites/units/unit-commonwealth-1-6-queens/portrait.png",
+        "atlas_path": "/sprites/units/unit-commonwealth-1-6-queens/atlas.png",
+        "status": "ready",
+        "provenance": {
+          "generator": "Painter",
+          "original_sheet": "https://ampcode.com/user-content/attachments/bcfefd52704c7f91a9051766a8d14ec890aaefab571b346c5e65a655df0f9281-file.png",
+          "note": "Netted-helmet rifleman in shorts with green shirt, light canvas pack, dark top roll and gray-green canteen. Scan118 lists this separate Queens battalion under131st Infantry Brigade, equipmentN. Uniform and gear illustrative, not sourced assignments.",
+          "processing": "Original18 views retained. Alpha extraction,common scale,x128/y240 anchor,portrait7. No flat rotation,mirroring or shared-role recoloring."
+        },
+        "review": {
+          "geometry": "Final light/dark proofs inspected: upright right0/front4/left9/rear13/right17. No clear broad-facing reversal;complete silhouettes,no obvious clipping,bleed or bright halo.",
+          "limitations": "Near repeats0-3,6-8,10-11,12-14,16-17;12 nearly straight rear rather than distinct rear-left. Frame9 narrows stance/feet; dark rifle/boots low contrast. Not calibrated20-degree yaw,smooth3D,walking or historical uniform certification.",
+          "historical_fidelity": "illustrative",
+          "gameplay_verified": true,
+          "gameplay_scope": "Parent-reported batches18-19: canonical paths, deployment and movement passed after rebuild; 27-28 positions,16-18 stationary turning samples,one travel heading/opaque view,retained nodes,no rotations across six identities. This identity has DOM/screenshot evidence only. Bounded checks,not all headings or historical certification.",
+          "evidence_thread": "https://ampcode.com/threads/T-01a16336-bc20-76f1-8657-2aa709091712"
+        }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
       "formation_context": "44th (Home Counties) Infantry Division"
@@ -1904,9 +1939,25 @@
         "scan-118"
       ],
       "sprite": {
-        "portrait_path": null,
-        "atlas_path": null,
-        "status": "missing"
+        "portrait_path": "/sprites/units/unit-commonwealth-1-7-queens/portrait.png",
+        "atlas_path": "/sprites/units/unit-commonwealth-1-7-queens/atlas.png",
+        "status": "ready",
+        "provenance": {
+          "generator": "Painter",
+          "original_sheet": "https://ampcode.com/user-content/attachments/1f3f9244d36786caa8cd2ade55ac8f6e0607c37966c18bb796b95377ab8f574e-file.png",
+          "replacement_strip": "https://ampcode.com/user-content/attachments/78d73d453805a001864ee1217f2b042ca0ab4c4425ce79be4886f48410e41737-file.png",
+          "note": "Side-capped rifleman in long trousers with olive pack, vertical gray blanket, small green roll and brown hip pouch. Scan118 lists this separate Queens battalion under131st Infantry Brigade, equipmentN. Uniform and gear illustrative, not sourced assignments.",
+          "processing": "New left-profile and rear-left views replace9/12, normalized to original rear-span height. Other16 views original. Alpha extraction,common scale,x128/y240 anchor,portrait7. No flat rotation,mirroring or shared-role recoloring."
+        },
+        "review": {
+          "geometry": "Final light/dark proofs inspected: upright right0/front4/left9/rear-left12/rear13/rightward17. Corrected9/12 show intended broad directions without opposite-facing reversal. Complete silhouettes,no obvious clipping,bleed or broad bright halo.",
+          "limitations": "Near repeats1-2,6-8,10-11,13-14,16-17. Corrected9/12 have slimmer limbs,changed trouser shading and weapon/foot placement. Gear shapes vary;17 more rearward than0. Not calibrated20-degree yaw,smooth3D,walking or historical uniform certification.",
+          "historical_fidelity": "illustrative",
+          "gameplay_verified": true,
+          "gameplay_scope": "Parent-reported batches18-19: canonical paths, deployment and movement passed after rebuild; 27-28 positions,16-18 stationary turning samples,one travel heading/opaque view,retained nodes,no rotations across six identities. This identity alone has inspected15fps footage showing westward movement without obvious ghosting. Precise turn timing comes from DOM samples,not recording/contact-sheet quality. Bounded checks,not all headings or historical certification.",
+          "evidence_thread": "https://ampcode.com/threads/T-01a16336-bc20-76f1-8657-2aa709091712",
+          "evidence_path": ".amp/in/artifacts/batch19-queens-movement.mp4"
+        }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
       "formation_context": "44th (Home Counties) Infantry Division"

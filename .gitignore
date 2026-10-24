@@ -11,3 +11,4 @@ test-results/
 playwright-report/
 data/vassal-decoded/
 *.vsav.decoded
+/public/tiles/

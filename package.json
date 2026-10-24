@@ -7,7 +7,7 @@
     "wasm": "bash scripts/build-wasm.sh",
     "predev": "npm run wasm",
     "dev": "vite --host 0.0.0.0",
-    "build": "npm run wasm && vite build",
+    "build": "cargo run --locked -p cna-map --bin map-census -- --release-check --bundle-dir public && npm run wasm && vite build && cargo run --locked -p cna-map --bin map-census -- --release-check",
     "preview": "vite preview --host 0.0.0.0",
     "tiles": "cargo run --release -p cna-map --bin cna-map-tiles",
     "test:browser": "playwright test",

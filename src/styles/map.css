@@ -270,3 +270,96 @@
   align-items: center;
   gap: 7px;
 }
+
+#map-research {
+  margin: 24px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--paper);
+  overflow: hidden;
+}
+#map-research > summary {
+  padding: 18px 24px;
+  cursor: pointer;
+  color: var(--olive);
+  font-weight: 600;
+}
+.research-heading, .research-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px 24px;
+}
+.research-heading h2 {
+  margin: 8px 0 0;
+  font: 26px var(--serif);
+}
+.research-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.research-status {
+  margin: 0;
+  padding: 12px 24px;
+  border-block: 1px solid var(--line);
+  color: #696044;
+  background: #f3eddd;
+  font-size: 13px;
+}
+.research-viewport {
+  position: relative;
+  height: 65vh;
+  min-height: 360px;
+  overflow: hidden;
+  background: #e0e3da;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+.research-viewport:focus-visible {
+  outline: 3px solid var(--olive);
+  outline-offset: -3px;
+}
+.research-viewport[data-dragging=true] { cursor: grabbing; }
+.research-board {
+  position: absolute;
+  transform-origin: 0 0;
+  background: #eee7d6;
+  outline: 2px solid #93876d;
+  pointer-events: none;
+}
+.research-unavailable {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  color: #8a7f63;
+  font: 24px var(--serif);
+  pointer-events: none;
+}
+.research-unavailable[hidden] { display: none; }
+.research-tile {
+  position: absolute;
+  overflow: hidden;
+  background: #eee7d6;
+  box-shadow: inset 0 0 0 1px #c9c0ac;
+}
+.research-tile > span {
+  position: absolute;
+  inset: 10px;
+  font-size: 20px;
+  color: #786d54;
+}
+.research-tile img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+}
+.research-tile[data-ready=true] > span { display: none; }
+.research-footer { font-size: 12px; color: var(--muted); }
+.research-footer p { margin: 0; }
+.research-readout { font-variant-numeric: tabular-nums; }

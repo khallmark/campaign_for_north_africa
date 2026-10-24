@@ -9,6 +9,9 @@ use cna_sim::*;
 use wasm_bindgen::{closure::Closure, JsCast};
 use web_sys::Element;
 
+mod research;
+pub use research::mount as mount_research;
+
 // Asset contract: 18 upright yaw views, east first, clockwise in a 6×3 atlas.
 const FRAME_COUNT: usize = 18;
 const ATLAS_COLUMNS: usize = 6;

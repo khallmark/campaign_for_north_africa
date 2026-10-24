@@ -31,3 +31,37 @@ is provided; run only one generator per output directory.
 `cargo test --locked -p cna-map tiles` uses a generated asymmetric 515×519 fixture
 to check exact pixel reconstruction, tiny boundary tiles, deterministic separate
 runs, unchanged-file reuse, corruption recovery and input/output safety.
+
+## Browser research viewport
+
+Expand **Full-board map · research** below the sandbox. This is a separate root
+outside `#app`; sandbox turns and dialog renders do not replace its camera or
+listeners. The shared startup entry calls `map::mount_research()` once. Map code
+and its styles own the surface; sandbox units and movement are unchanged.
+
+The viewer requests `/tiles/map/manifest.json` only when first opened. A missing,
+invalid or timed-out manifest leaves an explicit artwork-unavailable placeholder,
+with pan/zoom still available against census board dimensions. No source tiles
+are bundled while permission is pending. The viewer does not grant permission,
+change the distribution record or bypass the production guard.
+
+Drag/pinch, cursor-anchored wheel zoom, arrows, +/− and Home operate in CSS pixels
+through the shared viewport transform. Zoom runs from board fit to 4 CSS pixels
+per board pixel. Exact per-axis level ratios position cropped boundary tiles.
+Only the visible rectangle plus one tile ring is requested; a coarser level is
+used if the DPR-aware candidate exceeds 100 live tile images. Old levels are
+removed before new requests, and closing the viewer removes its tile nodes.
+Failed images retain labeled placeholders. Browser cache/GPU retention and frame
+budgets still require CNA-58 measurements; a node cap is not a memory proof.
+
+```sh
+npm run test:browser -- tests/browser/map-viewport.spec.ts tests/browser/smoke.spec.ts
+```
+
+Tests intercept the fixed tile URLs with explicitly synthetic images. They check
+a 500px drag, three cursor-anchored zoom steps, request bounds, keyboard clamping,
+two-finger pinch (Chromium touch emulation, not a physical device), missing tiles,
+resize, close/reopen and sandbox-render isolation at both named viewports/DPRs.
+Synthetic overview/gameplay captures establish layout, not historical map seams
+or source-art permission. Source imagery must not be added merely to make a
+portal screenshot look complete.

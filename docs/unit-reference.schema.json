@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CNA supplemental unit reference v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "purpose", "coverage", "input_sources", "identity_redirects", "units", "counters", "token_assets", "unit_types", "stat_definitions", "sources", "records", "profiles", "cpa_checks", "errata", "documents"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "purpose": {"type": "string"},
+    "coverage": {"type": "object", "required": ["complete", "canonical_candidates", "vassal_slots", "linked_canonical_candidates", "unresolved_canonical_candidates"], "properties": {"complete": {"const": false}}, "additionalProperties": {"type": ["integer", "boolean"]}},
+    "input_sources": {"type": "array", "items": {"$ref": "#/$defs/source"}},
+    "identity_redirects": {"type": "object", "additionalProperties": {"type": "string"}},
+    "units": {"type": "array", "items": {"$ref": "#/$defs/unit"}},
+    "counters": {"type": "array", "items": {"$ref": "#/$defs/counter"}},
+    "token_assets": {"type": "array", "items": {"$ref": "#/$defs/asset"}},
+    "unit_types": {"type": "array", "items": {"type": "object", "required": ["id", "name"]}},
+    "stat_definitions": {"type": "array", "items": {"type": "object", "required": ["id", "name", "description"]}},
+    "sources": {"type": "array", "items": {"type": "object", "required": ["id"]}},
+    "records": {"type": "array", "items": {"$ref": "#/$defs/record"}},
+    "profiles": {"type": "array", "items": {"$ref": "#/$defs/record"}},
+    "cpa_checks": {"type": "array", "items": {"type": "object", "required": ["record_id", "vassal_raw", "vassal_value", "manual_catalog_value", "manual_pages", "result"], "properties": {"result": {"enum": ["numeric_agreement", "conflict"]}}}},
+    "errata": {"type": "array", "items": {"type": "object", "required": ["id", "record_id", "source_path", "locator", "quote", "values", "note"]}},
+    "documents": {"type": "array", "items": {"allOf": [{"$ref": "#/$defs/source"}, {"type": "object", "required": ["kind", "titles", "text_status", "text_index_path"], "properties": {"text_status": {"enum": ["not_extracted", "ocr_unverified", "text_layer_unverified", "source_text"]}}}]}}
+  },
+  "$defs": {
+    "strings": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "source": {"type": "object", "required": ["source_path", "sha256", "size"], "properties": {"source_path": {"type": "string"}, "sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"}, "size": {"type": ["integer", "null"], "minimum": 0}}},
+    "asset": {
+      "allOf": [{"$ref": "#/$defs/source"}],
+      "type": "object",
+      "required": ["id", "exists", "kind", "public_path", "private_review_path", "distribution"],
+      "properties": {
+        "id": {"type": "string"}, "exists": {"type": "boolean"},
+        "kind": {"const": "vassal_source_image"}, "public_path": {"type": "null"},
+        "private_review_path": {"type": ["string", "null"], "pattern": "^/__source-tokens/[^/]+$"},
+        "distribution": {"const": "private_review_only_public_release_pending"}
+      },
+      "if": {"properties": {"exists": {"const": false}}},
+      "then": {"properties": {"sha256": {"type": "null"}, "size": {"type": "null"}, "private_review_path": {"type": "null"}}},
+      "else": {"properties": {"sha256": {"type": "string"}, "size": {"type": "integer"}, "private_review_path": {"type": "string"}}}
+    },
+    "unit": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "name", "side", "nationality", "entity_kind", "identity_status", "formation_context", "unit_type_ids", "source_record_ids", "characteristic_profile_ids", "source_refs", "counter_gpids", "token_link_status", "generated_art", "organization_at_arrival", "description"],
+      "properties": {
+        "id": {"type": "string"}, "name": {"type": "string"}, "side": {"enum": ["allied", "axis", "unspecified"]},
+        "nationality": {"type": "string"}, "entity_kind": {"type": "string"}, "identity_status": {"type": "string"},
+        "formation_context": {"type": ["string", "null"]}, "unit_type_ids": {"$ref": "#/$defs/strings"},
+        "source_record_ids": {"$ref": "#/$defs/strings"}, "characteristic_profile_ids": {"$ref": "#/$defs/strings"},
+        "source_refs": {"$ref": "#/$defs/strings"}, "counter_gpids": {"$ref": "#/$defs/strings"},
+        "token_link_status": {"enum": ["linked", "unresolved"]},
+        "generated_art": {"type": "object", "required": ["portrait_path", "atlas_path", "status"], "properties": {"portrait_path": {"type": ["string", "null"]}, "atlas_path": {"type": ["string", "null"]}, "status": {"enum": ["ready", "candidate", "missing"]}}},
+        "organization_at_arrival": {"type": ["object", "null"], "required": ["context", "equipment_toe_raw", "arrival_raw", "basic_morale_raw", "status", "source", "manual_source", "scope", "disagreements"], "properties": {"context": {"const": "organization_at_arrival"}, "status": {"const": "visually_cross_checked"}}},
+        "description": {"type": ["object", "null"], "required": ["text", "status", "scope", "source"]}
+      }
+    },
+    "counter": {
+      "type": "object", "required": ["gpid", "canonical_unit_id", "label", "kind", "side", "palette", "palette_path", "source_line", "basic_image_id", "image_ids", "layers", "duplicate_palette_candidates", "link_status"],
+      "properties": {"gpid": {"type": "string"}, "canonical_unit_id": {"type": ["string", "null"]}, "image_ids": {"$ref": "#/$defs/strings"}, "basic_image_id": {"type": ["string", "null"]}, "link_status": {"enum": ["reviewed_source_link", "evidenced_palette_copy", "unresolved"]}}
+    },
+    "record": {
+      "type": "object", "required": ["id", "name", "unit_type", "source_refs", "stats"],
+      "properties": {"stats": {"type": "object", "additionalProperties": {"$ref": "#/$defs/stat"}}, "playable": {"const": false}}
+    },
+    "stat": {
+      "type": "object", "required": ["value", "status", "raw", "note", "source_refs", "conditional"],
+      "properties": {"value": {"type": ["number", "null"]}, "status": {"enum": ["sourced", "unverified", "provisional", "unresolved", "not_applicable", "conflict"]}, "raw": {"type": ["string", "null"]}, "source_refs": {"$ref": "#/$defs/strings"}, "note": {"type": "string"}, "conditional": {"type": "boolean"}},
+      "allOf": [
+        {"if": {"properties": {"status": {"const": "sourced"}}}, "then": {"properties": {"value": {"type": "number"}}}},
+        {"if": {"properties": {"status": {"enum": ["unresolved", "not_applicable", "conflict"]}}}, "then": {"properties": {"value": {"type": "null"}}}}
+      ]
+    }
+  }
+}

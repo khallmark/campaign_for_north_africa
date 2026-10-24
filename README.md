@@ -17,6 +17,21 @@ npm run build
 
 `npm run dev` builds Rust/Wasm before starting Vite, which prints the development URL. After editing Rust, run `npm run wasm` and reload the page. `npm run preview` serves the production build. No game account, backend, or API key is needed. Fonts use Google Fonts with local system fallbacks. Play is session-only: reloading starts again.
 
+## Browser tests
+
+```sh
+npx playwright install --with-deps chromium  # Also run by .agents/setup
+npm run test:browser -- tests/browser/smoke.spec.ts
+```
+
+The harness builds Rust/Wasm and serves a fresh production preview on port 4175,
+then stops it when the run ends. Keep that port free; it never reuses an existing
+server. Chromium runs at 2458×1358 and 1280×800, each at DPR 1 and 2.
+To select one project, append `--project=chromium-1280x800-dpr1`.
+Screenshot snapshots live under ignored `tests/browser/__screenshots__/`;
+failure screenshots, videos and traces go to ignored `test-results/`.
+Each lane owns its feature specs; the shared smoke test only checks startup.
+
 ## Amp orbs
 
 Amp runs `.agents/setup` when preparing a fresh or stale project snapshot. It installs the pinned Node.js release only when needed, checks the official download checksum, runs `npm ci`, and prepares Rust, the Wasm target, and the matching wasm-bindgen CLI. Matching snapshots skip setup and retain the installed dependencies. The build script makes Rust's user-local tools available to supervised services.
@@ -58,14 +73,15 @@ All 24 shared sprite roles have 18 upright directional views each in `public/spr
 
 ## Code
 
-- `crates/cna-sim/`: dependency-free game state, hex geometry, legal moves, combat, supply, AI, outcomes, and public-action regression tests.
+- `crates/cna-sim/src/sandbox/`: unchanged teaching-game state, geometry, legal moves, combat, supply, AI and outcomes. The crate root re-exports this API for the existing browser. `tests/sandbox_behavior.rs` preserves the sandbox regression assertions. `contract/` defines versioned authoritative-engine envelopes, not implemented official rules; see [command boundary v1](docs/contracts/sim-command-v1.md).
+- `crates/cna-sim/build.rs`: conservative compile-time token lint rejects `sandbox` references anywhere under `src/official/`, including comments and unused source files. It is a direct-reference guard, not Rust name resolution; official modules must not use the crate-root compatibility re-exports either.
 - `crates/frontend/src/lib.rs`: Rust browser input, dialogs, and session state.
 - `crates/frontend/src/view.rs`: interface markup, formation panel, and dialogs.
 - `crates/frontend/src/map.rs`: persistent keyed SVG map and sprite rendering.
 - `crates/frontend/src/motion.rs`: shortest-arc sprite turns and movement interpolation, with reduced-motion support.
 - `crates/frontend/src/catalog.rs`: source catalog parsing, search, filters, and reference rendering.
 - `crates/frontend/src/inventory.rs`: candidate identity search, unique-art readiness and per-unit asset resolution.
-- `crates/cna-sim/src/roles.rs`: explicitly fictional sandbox capabilities for ground, air, naval and support roles.
+- `crates/cna-sim/src/sandbox/roles.rs`: explicitly fictional sandbox capabilities for ground, air, naval and support roles.
 - `public/data/unit-catalog.json`: versioned source records, stat verification, and sprite metadata; embedded in the Wasm build, so rebuild after changing it.
 - `src/style.css`: responsive field-map interface.
 - `scripts/build-wasm.sh`: builds the Rust frontend and generates browser bindings in ignored `public/wasm/`.

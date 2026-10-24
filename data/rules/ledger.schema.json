@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CNA rules ledger v1",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["case", "section", "book", "page", "original_ref", "correction_refs", "july_text_ref", "discrepancy", "status", "code_refs", "tests"],
+    "properties": {
+      "case": {"type": "string", "minLength": 1},
+      "section": {"type": "integer", "minimum": 1, "maximum": 65},
+      "book": {"enum": ["L21", "AL21", "SC21"]},
+      "page": {"type": "integer", "minimum": 1},
+      "original_ref": {"type": "string", "minLength": 1},
+      "correction_refs": {"$ref": "#/$defs/refs"},
+      "july_text_ref": {"type": "string", "minLength": 1},
+      "vassal_refs": {"allOf": [{"$ref": "#/$defs/refs"}], "minItems": 1},
+      "vassal": {"const": "absent"},
+      "discrepancy": {"type": "string", "minLength": 1},
+      "adjudication": {"type": ["string", "null"], "minLength": 1},
+      "status": {"enum": ["unread", "compared", "fixtures", "implemented", "verified", "not_applicable"]},
+      "justification": {"type": ["string", "null"], "minLength": 1},
+      "code_refs": {"$ref": "#/$defs/refs"},
+      "tests": {"$ref": "#/$defs/refs"}
+    },
+    "oneOf": [
+      {"required": ["vassal_refs"], "not": {"required": ["vassal"]}},
+      {"required": ["vassal"], "not": {"required": ["vassal_refs"]}}
+    ],
+    "allOf": [{
+      "if": {"properties": {"status": {"const": "not_applicable"}}},
+      "then": {"required": ["justification"], "properties": {"justification": {"type": "string", "minLength": 1}}}
+    }]
+  },
+  "$defs": {
+    "refs": {"type": "array", "items": {"type": "string", "minLength": 1}}
+  }
+}

@@ -49,7 +49,7 @@ The implementation owner reads the JSON directly with Rust/serde. `docs/unit-ide
 
 ## First unique-art batch
 
-These incremental batches do not fulfill all-unit artwork coverage; current totals appear at the top of this document. The first batch contains:
+These incremental batches do not fulfill all-unit artwork coverage; current totals appear at the top of this document. See [branch reconciliation and approval boundary](catalog/branch-reconciliation.md) for the earlier 55-set baseline. The first batch contains:
 
 1. `unit-commonwealth-2nd-bays`: independently generated red-pennant cruiser tank, pale rear tarpaulin, sand/sage pattern.
 2. `unit-commonwealth-10th-royal-hussars`: independently generated blue-pennant cruiser tank, rear crate, spare tracks on the nose, ochre pattern.

@@ -7,8 +7,10 @@ edition = "2021"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+cna-map = { path = "../cna-map" }
+cna-catalog = { path = "../cna-catalog" }
 cna-sim = { path = "../cna-sim" }
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
 wasm-bindgen = "=0.2.105"
-web-sys = { version = "=0.3.82", features = ["Window", "Document", "Element", "Node", "NodeList", "HtmlElement", "HtmlDialogElement", "HtmlInputElement", "HtmlSelectElement", "Event", "EventTarget", "KeyboardEvent", "MouseEvent", "DomRect", "Performance", "MediaQueryList", "FocusOptions"] }
+web-sys = { version = "=0.3.82", features = ["Window", "Document", "Element", "Node", "NodeList", "HtmlElement", "HtmlDialogElement", "HtmlInputElement", "HtmlSelectElement", "Event", "EventTarget", "KeyboardEvent", "MouseEvent", "PointerEvent", "WheelEvent", "AddEventListenerOptions", "XmlHttpRequest", "DomRect", "Performance", "MediaQueryList", "FocusOptions"] }

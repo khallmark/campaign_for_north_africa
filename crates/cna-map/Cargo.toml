@@ -1,0 +1,11 @@
+[package]
+name = "cna-map"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+roxmltree = "0.21.1"
+sha2 = "0.10"
+image = { version = "0.25", default-features = false, features = ["png"] }

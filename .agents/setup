@@ -34,8 +34,22 @@ time {
   npm --version
 }
 
+echo '[setup] Preparing source payloads'
+time {
+  if ! git lfs version >/dev/null 2>&1; then
+    sudo -n apt-get update -qq
+    sudo -n apt-get install -y git-lfs
+  fi
+  git lfs install --local
+  git lfs pull
+  bash scripts/check-sources.sh
+}
+
 echo '[setup] Installing locked dependencies (including development tools)'
 time npm ci --include=dev --prefer-offline --no-audit --no-fund
+
+echo '[setup] Preparing Chromium for browser tests'
+time npx playwright install --with-deps chromium
 
 echo '[setup] Preparing Rust and WebAssembly bindings'
 export PATH="$HOME/.cargo/bin:$PATH"

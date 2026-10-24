@@ -1,7 +1,10 @@
 mod catalog;
+mod catalog_view;
+mod inspect;
 mod inventory;
 mod map;
 mod motion;
+mod movement;
 mod view;
 
 use cna_sim::*;
@@ -63,13 +66,6 @@ impl App {
             error: false,
             motions: HashMap::new(),
         }
-    }
-
-    fn selected(&self) -> Option<&Unit> {
-        self.game
-            .units
-            .iter()
-            .find(|u| u.id == self.selected && u.hp > 0)
     }
 
     fn apply(&mut self, result: ActionResult) {
@@ -372,6 +368,7 @@ fn focus_selector(e: &Element) -> Option<String> {
 #[wasm_bindgen(start)]
 pub fn start() -> Result<(), JsValue> {
     APP.with(|app| app.borrow_mut().render());
+    map::mount_research()?;
     let root = document().get_element_by_id("app").unwrap();
     let click = Closure::<dyn FnMut(MouseEvent)>::new(|event: MouseEvent| {
         let Some(target) = event.target().and_then(|t| t.dyn_into::<Element>().ok()) else {

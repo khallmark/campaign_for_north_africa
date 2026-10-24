@@ -6,3 +6,9 @@ dist/
 .amp/portals/
 target/
 public/wasm/
+tests/browser/__screenshots__/
+test-results/
+playwright-report/
+data/vassal-decoded/
+*.vsav.decoded
+/public/tiles/

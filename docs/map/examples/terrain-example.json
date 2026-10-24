@@ -1,0 +1,45 @@
+[
+  {
+    "kind": "terrain", "hex": "C3617",
+    "record": {
+      "observation": {"status": "fixture", "value": "clear"},
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/TEC.png#8.37/Clear", "docs/map/terrain-schema.md#synthetic-examples"], "reviewer": "schema-example-not-historical-review", "date": "2026-10-24"}
+    }
+  },
+  {
+    "kind": "hexside", "side": {"hex": "C3617", "direction": "east"},
+    "record": {
+      "observation": {"status": "provisional", "value": "up_escarpment"},
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/TEC.png#8.37/Up Escarpment", "docs/map/terrain-schema.md#synthetic-examples"], "reviewer": "schema-example-not-historical-review", "date": "2026-10-24"}
+    }
+  },
+  {
+    "kind": "point", "hex": "C3617",
+    "record": {
+      "observation": {"status": "reviewed", "value": {"type": "port", "efficiency_ref": "tobruk"}},
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/55.3 Port Capacity and Efficiency Level Chart.png#55.3/Tobruk", "docs/map/terrain-schema.md#synthetic-examples"], "reviewer": "schema-example-not-historical-review", "date": "2026-10-24"}
+    }
+  },
+  {
+    "kind": "point", "hex": "C3618",
+    "record": {
+      "observation": {"status": "unresolved", "source_label": "Minor City — no authoritative category established"},
+      "provenance": {"source_refs": ["docs/map/terrain-schema.md#unresolved-minor-city"], "reviewer": "schema-example-not-historical-review", "date": "2026-10-24"},
+      "adjudication_id": "pending-minor-city-source"
+    }
+  },
+  {
+    "kind": "terrain", "hex": "C3618",
+    "record": {
+      "observation": {"status": "unresolved", "source_label": "Untranscribed terrain"},
+      "provenance": {"source_refs": ["docs/map/terrain-schema.md#synthetic-examples"], "reviewer": "schema-example-not-historical-review", "date": "2026-10-24"}
+    }
+  },
+  {
+    "kind": "point", "hex": "C3619",
+    "record": {
+      "observation": {"status": "fixture", "value": {"type": "fortification", "level": "two"}},
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/Rules_Land_07-2021.pdf#25.1", "docs/map/terrain-schema.md#synthetic-examples"], "reviewer": "schema-example-not-historical-review", "date": "2026-10-24"}
+    }
+  }
+]

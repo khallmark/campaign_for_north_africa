@@ -1,0 +1,10 @@
+{"status":"fixture","costs":"invented_non_certified","route":{
+  "command_id":"fixture-reveal","revision":15,"unit_ref":"fixture-unit-1",
+  "steps":[
+    {"hex":"C3922","cp":{"numerator":0,"denominator":1},"fuel":{"numerator":0,"denominator":1},"cumulative":{"cp":{"numerator":0,"denominator":1},"fuel":{"numerator":0,"denominator":1}}},
+    {"hex":"C3923","cp":{"numerator":1,"denominator":1},"fuel":{"numerator":2,"denominator":1},"cumulative":{"cp":{"numerator":1,"denominator":1},"fuel":{"numerator":2,"denominator":1}}},
+    {"hex":"C3924","cp":{"numerator":1,"denominator":2},"fuel":{"numerator":1,"denominator":1},"cumulative":{"cp":{"numerator":3,"denominator":2},"fuel":{"numerator":3,"denominator":1}}},
+    {"hex":"C3925","cp":{"numerator":1,"denominator":1},"fuel":{"numerator":2,"denominator":1},"cumulative":{"cp":{"numerator":5,"denominator":2},"fuel":{"numerator":5,"denominator":1}}},
+    {"hex":"C3926","cp":{"numerator":1,"denominator":2},"fuel":{"numerator":1,"denominator":1},"cumulative":{"cp":{"numerator":3,"denominator":1},"fuel":{"numerator":6,"denominator":1}}}
+  ],"stop":{"kind":"completed","at_step":4},"reveals":[{"at_step":3,"projection_delta_ref":"fixture-reveal-step-3"}]
+}}

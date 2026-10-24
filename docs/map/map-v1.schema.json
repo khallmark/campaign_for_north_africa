@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cna:map:v1",
+  "title": "CNA map geography records v1",
+  "description": "Source-labelled records, not movement costs or certification of historical assignments. Minor City is an unresolved source_label only. See terrain-schema.md for errata and supplemental features.",
+  "type": "array",
+  "items": {"oneOf": [{"$ref": "#/$defs/terrainRecord"}, {"$ref": "#/$defs/hexsideRecord"}, {"$ref": "#/$defs/pointRecord"}]},
+  "$defs": {
+    "hex": {"type": "string", "pattern": "^(?:[A-E]|Malta )[0-9]{4}(?![\\s\\S])"},
+    "side": {
+      "type": "object", "additionalProperties": false, "required": ["hex", "direction"],
+      "description": "Lower-ordered endpoint and outward direction. Rust HexsideId deserialization additionally validates that the adjacent identity exists and the side is canonical.",
+      "properties": {"hex": {"$ref": "#/$defs/hex"}, "direction": {"enum": ["east", "north_west", "north_east"]}}
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false, "required": ["source_refs", "reviewer", "date"],
+      "properties": {
+        "source_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "reviewer": {"type": "string", "minLength": 1},
+        "date": {"type": "string", "format": "date"}
+      }
+    },
+    "observation": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["status", "value"], "properties": {"status": {"enum": ["reviewed", "provisional", "fixture"]}, "value": {"not": {"type": "null"}}}},
+        {"type": "object", "additionalProperties": false, "required": ["status", "source_label"], "properties": {"status": {"const": "unresolved"}, "source_label": {"type": "string", "minLength": 1}}}
+      ]
+    },
+    "record": {
+      "type": "object", "additionalProperties": false, "required": ["observation", "provenance"],
+      "properties": {
+        "observation": {"$ref": "#/$defs/observation"},
+        "provenance": {"$ref": "#/$defs/provenance"},
+        "adjudication_id": {"type": ["string", "null"], "minLength": 1}
+      }
+    },
+    "terrain": {
+      "oneOf": [
+        {"const": "clear", "title": "Clear", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Clear"},
+        {"const": "gravel", "title": "Gravel", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Gravel"},
+        {"const": "salt_marsh", "title": "Salt Marsh", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Salt Marsh"},
+        {"const": "heavy_vegetation", "title": "Heavy Vegetation", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Heavy Vegetation"},
+        {"const": "rough", "title": "Rough", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Rough"},
+        {"const": "mountain", "title": "Mountain", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Mountain"},
+        {"const": "delta", "title": "Delta", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Delta"},
+        {"const": "desert", "title": "Desert", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Desert"},
+        {"const": "major_city", "title": "Major City", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Major City", "description": "Errata: footnote (4) applies here, not Swamp."},
+        {"const": "swamp", "title": "Swamp", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Swamp"},
+        {"const": "village_bir_oasis", "title": "Village/Bir/Oasis", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Village/Bir/Oasis"},
+        {"const": "fortification_level_one", "title": "Level One", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Level One", "description": "Under the Fortifications heading."},
+        {"const": "fortification_level_two", "title": "Level Two", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Level Two", "description": "Under the Fortifications heading."},
+        {"const": "fortification_level_three", "title": "Level Three", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Level Three", "description": "Under the Fortifications heading."},
+        {"const": "friendly_minefield", "title": "Friendly Minefield", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Friendly Minefield"},
+        {"const": "enemy_minefield", "title": "Enemy Minefield", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Enemy Minefield"}
+      ]
+    },
+    "hexside": {
+      "oneOf": [
+        {"const": "railroad", "title": "Railroad", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Railroad"},
+        {"const": "road", "title": "Road", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Road"},
+        {"const": "track", "title": "Track", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Track", "description": "Errata: footnote (8), not a fixed 1 CP. Halves terrain entry costs and hex/hexside breakdown values, except descending an escarpment; arithmetic belongs to simulation."},
+        {"const": "ridge", "title": "Ridge", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Ridge"},
+        {"const": "up_slope", "title": "Up Slope", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Up Slope"},
+        {"const": "down_slope", "title": "Down Slope", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Down Slope"},
+        {"const": "up_escarpment", "title": "Up Escarpment", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Up Escarpment"},
+        {"const": "down_escarpment", "title": "Down Escarpment", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Down Escarpment"},
+        {"const": "wadi", "title": "Wadi", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Wadi"},
+        {"const": "major_river", "title": "Major River", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Major River"},
+        {"const": "minor_river", "title": "Minor River", "x-source-ref": "docs/CNAv2.1.0/images/TEC.png#8.37/Minor River"},
+        {"const": "coast", "title": "Coast", "x-source-ref": "docs/CNAv2.1.0/Rules_Air&Logistics_07-2021.pdf#36.3", "description": "Supplemental coastal-domain feature, not a TEC row or movement cost."},
+        {"const": "sea", "title": "Sea", "x-source-ref": "docs/CNAv2.1.0/Rules_Land_07-2021.pdf#5/Commonwealth Fleet Phase", "description": "Supplemental sea-domain feature, not a TEC row or movement cost."},
+        {"const": "pipeline", "title": "Pipeline", "x-source-ref": "docs/CNAv2.1.0/Rules_Air&Logistics_07-2021.pdf#52.2", "description": "Supplemental logistics feature, not a TEC row."}
+      ]
+    },
+    "point": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["type"], "properties": {"type": {"enum": ["major_city", "village", "bir", "oasis", "well", "airfield", "landing_strip", "flying_boat_basin"]}}},
+        {"type": "object", "additionalProperties": false, "required": ["type", "level"], "properties": {"type": {"const": "fortification"}, "level": {"enum": ["one", "two", "three"]}}},
+        {"type": "object", "additionalProperties": false, "required": ["type", "efficiency_ref"], "properties": {"type": {"const": "port"}, "efficiency_ref": {"enum": ["tripoli", "bizerta", "alexandria", "tobruk", "benghazi", "mersa_matruh", "bardia", "sollum", "derna", "all_others"]}}, "x-source-ref": "docs/CNAv2.1.0/images/55.3 Port Capacity and Efficiency Level Chart.png#55.3"}
+      ]
+    },
+    "terrainRecord": {
+      "type": "object", "additionalProperties": false, "required": ["kind", "hex", "record"],
+      "properties": {
+        "kind": {"const": "terrain"}, "hex": {"$ref": "#/$defs/hex"},
+        "record": {"allOf": [{"$ref": "#/$defs/record"}, {"properties": {"observation": {"properties": {"value": {"$ref": "#/$defs/terrain"}}}}}]}
+      }
+    },
+    "hexsideRecord": {
+      "type": "object", "additionalProperties": false, "required": ["kind", "side", "record"],
+      "properties": {
+        "kind": {"const": "hexside"}, "side": {"$ref": "#/$defs/side"},
+        "record": {"allOf": [{"$ref": "#/$defs/record"}, {"properties": {"observation": {"properties": {"value": {"$ref": "#/$defs/hexside"}}}}}]}
+      }
+    },
+    "pointRecord": {
+      "type": "object", "additionalProperties": false, "required": ["kind", "hex", "record"],
+      "properties": {
+        "kind": {"const": "point"}, "hex": {"$ref": "#/$defs/hex"},
+        "record": {"allOf": [{"$ref": "#/$defs/record"}, {"properties": {"observation": {"properties": {"value": {"$ref": "#/$defs/point"}}}}}]}
+      }
+    }
+  }
+}

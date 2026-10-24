@@ -1,0 +1,102 @@
+CAMPAIGN FOR NORTH AFRICA
+
+This is a VASSAL module for Campaign for North Africa, SPI's "super-detailed,
+intensive simulation specially designed for maximum realism.
+
+Map, counters, charts and rules have all known errata applied.
+
+See Changelog for details on versions.
+
+
+=================================================================
+
+CREDITS
+
+v2.1 Updated by Norman Harman September 2024, njharman@gmail.com
+
+v2 Created by Mitch Guthrie, September 2021 Based on the module created by Pete Phillipps, March 2020
+Note: the module is not 100% compatible with the Phillips module.
+
+Map created by Mitch Guthrie, 2021. The map corrects some misalignments and
+color variances in the original maps and scans. No changes in the map are
+intended. Charts for the most part have been removed as the charts are readily
+available in the various tabs.
+
+Counters created as SVGs using web safe colors by Mitch Guthrie, September 2021.
+
+
+=================================================================
+
+SIDES
+
+Selecting a side has no real effect on play, except when placing minefield counters (see below).
+
+You can play as the following sides:
+  GAMEMASTER
+  Solo
+  Axis
+  German
+  Italian
+  Allied
+  British
+  Australian
+  New Zealand
+  Indian
+  South African
+  Free French
+  Polish
+  Greek
+
+
+=================================================================
+
+SOME KEYBOARD SHORTCUTS
+
+  CTRL + Numeric +  - Increase main map size
+  CTRL + Numeric -  - Decrease main map size
+  CTRL+R            - Return unit to organization chart / map (shows or hides a minefield counter)
+  CLTR+L            - change label for marker that needs an ID change name for the German KG unit with no name
+  CLTR+C            - clone a marker (also applies to the German KG unit with no name)
+
+
+=================================================================
+
+PLACING UNITS
+
+When you have a game open, clicking on the Organization Charts (with units)
+button will bring up the unit organization charts with the counters for each
+formation on the chart.
+
+Units can be dragged from a chart to the main map and vice versa - you can
+also right click a unit on the main map and select Return to Organization
+Chart.
+
+If no game is loaded, then no charts and units are displayed so use the
+Organization Charts (with units) button to view the charts.
+
+
+=================================================================
+
+USING MINEFIELD COUNTERS
+
+To place Dummy or Real mines drag from the Markers tray then CTRL+R to hide
+- this shows the Unknown image to the other side, while displaying the Unknown
+image in the corner for the owning side.
+
+
+=================================================================
+
+LABELS
+
+The Markers window includes a Labels panel. This contains a set of labels
+which can be placed on a map and have their text set by the player. There are
+three different font sizes to choose from, and each one also has a version
+which adds a white background to the text entered by the player.
+
+When a label is on the map hold down the SHIFT key when clicking it to select it.
+
+Players can also use simple HTML when entering text to specify different
+colors, fonts and sizes, or more complex HTML to add tables and other
+formatting. See the article in View From The Trenches 101 (available from
+https://www.vftt.co.uk/indexs.asp) for a detailed tutorial on what can be done
+using HTML in labels.

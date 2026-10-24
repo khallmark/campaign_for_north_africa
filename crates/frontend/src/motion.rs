@@ -19,67 +19,128 @@ pub fn directional_frame(heading: f64, frame_count: usize) -> usize {
     (heading.rem_euclid(360.0) * frame_count as f64 / 360.0).round() as usize % frame_count
 }
 
-pub struct Motion {
+/// One accepted adjacent-hex step. Centers and the shared-edge normal bearing
+/// come from map geometry; playback never derives a bearing from pixel deltas.
+#[derive(Clone, Copy, Debug)]
+pub struct RouteLeg {
+    pub from: (f64, f64),
+    pub to: (f64, f64),
+    pub bearing: f64,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum PlaybackState {
+    Turning,
+    Translating,
+    Settled,
+}
+
+/// A timeline of turn-then-translate legs, independent of DOM and frame cadence.
+pub struct RoutePlayback {
+    legs: Vec<TimedLeg>,
+    target: Pose,
+    settled: bool,
+}
+
+impl RoutePlayback {
+    /// Legs must be contiguous, starting at start_pose's center. The caller owns
+    /// route validation; this model only schedules the supplied geometry.
+    pub fn new(start_pose: Pose, legs: Vec<RouteLeg>, now_ms: f64) -> Self {
+        let mut target = start_pose;
+        let mut started_ms = now_ms;
+        let legs = legs
+            .into_iter()
+            .map(|leg| {
+                let from = Pose {
+                    x: leg.from.0,
+                    y: leg.from.1,
+                    heading: target.heading,
+                };
+                target = Pose {
+                    x: leg.to.0,
+                    y: leg.to.1,
+                    heading: from.heading + shortest_turn(from.heading, leg.bearing),
+                };
+                let timed = TimedLeg::new(from, target, started_ms);
+                started_ms = timed.end_ms();
+                timed
+            })
+            .collect();
+        Self {
+            legs,
+            target,
+            settled: false,
+        }
+    }
+
+    /// Returns the visible pose, zero-based leg index, and phase. At a shared
+    /// center the next leg starts; settled routes retain their last leg index,
+    /// while empty routes have none. Reduced motion permanently finishes the
+    /// whole route, so disabling it cannot replay skipped legs.
+    pub fn sample(
+        &mut self,
+        now_ms: f64,
+        reduced_motion: bool,
+    ) -> (Pose, Option<usize>, PlaybackState) {
+        if !reduced_motion && !self.settled {
+            for (index, leg) in self.legs.iter().enumerate() {
+                if now_ms < leg.end_ms() {
+                    let state = if now_ms < leg.started_ms + leg.turn_duration_ms {
+                        PlaybackState::Turning
+                    } else {
+                        PlaybackState::Translating
+                    };
+                    return (leg.sample(now_ms), Some(index), state);
+                }
+            }
+        }
+        self.settled = true;
+        (
+            self.target,
+            self.legs.len().checked_sub(1),
+            PlaybackState::Settled,
+        )
+    }
+
+    pub fn is_active(&self, now_ms: f64) -> bool {
+        !self.settled && self.legs.last().is_some_and(|leg| now_ms < leg.end_ms())
+    }
+}
+
+struct TimedLeg {
     from: Pose,
     target: Pose,
     started_ms: f64,
     turn_duration_ms: f64,
     travel_duration_ms: f64,
-    animating: bool,
 }
 
-impl Motion {
-    /// New units appear at their destination without animating from the origin.
-    pub fn new(pose: Pose) -> Self {
-        Self {
-            from: pose,
-            target: pose,
-            started_ms: 0.0,
-            turn_duration_ms: 0.0,
-            travel_duration_ms: 0.0,
-            animating: false,
-        }
-    }
-
-    /// Change destination without jumping back when an order interrupts a turn.
-    /// Repeated renders of an unchanged destination do not restart the clock.
-    pub fn retarget(&mut self, pose: Pose, now_ms: f64) {
-        if pose.x == self.target.x
-            && pose.y == self.target.y
-            && shortest_turn(self.target.heading, pose.heading).abs() < 1e-9
-        {
-            return;
-        }
-        self.from = self.sample(now_ms, false);
-        self.target = Pose {
-            heading: self.from.heading + shortest_turn(self.from.heading, pose.heading),
-            ..pose
-        };
+impl TimedLeg {
+    fn new(from: Pose, target: Pose, started_ms: f64) -> Self {
         // Complete the turn in place before travelling. Each phase keeps its own
         // pacing; an already aligned unit starts moving without a turn delay.
-        let distance = (pose.x - self.from.x).hypot(pose.y - self.from.y);
-        let angle = (self.target.heading - self.from.heading).abs();
-        self.turn_duration_ms = if angle > 0.0 {
+        let distance = (target.x - from.x).hypot(target.y - from.y);
+        let angle = (target.heading - from.heading).abs();
+        let turn_duration_ms = if angle > 0.0 {
             (angle * 2.0).max(80.0)
         } else {
             0.0
         };
-        self.travel_duration_ms = if distance > 0.0 {
+        let travel_duration_ms = if distance > 0.0 {
             (distance / 0.36).clamp(MIN_DURATION_MS, 1800.0)
         } else {
             0.0
         };
-        self.started_ms = now_ms;
-        self.animating = self.from != self.target;
+        Self {
+            from,
+            target,
+            started_ms,
+            turn_duration_ms,
+            travel_duration_ms,
+        }
     }
 
-    /// Reduced motion finishes the current order permanently, including when the
-    /// preference changes mid-animation. Turning it off never replays old motion.
-    pub fn sample(&mut self, now_ms: f64, reduced_motion: bool) -> Pose {
-        if reduced_motion || !self.is_active(now_ms) {
-            self.animating = false;
-            return self.target;
-        }
+    fn sample(&self, now_ms: f64) -> Pose {
         let elapsed = now_ms - self.started_ms;
         let progress = |time: f64, duration: f64| {
             if duration == 0.0 {
@@ -100,8 +161,52 @@ impl Motion {
         }
     }
 
+    fn end_ms(&self) -> f64 {
+        self.started_ms + self.turn_duration_ms + self.travel_duration_ms
+    }
+}
+
+/// Compatibility API for the sandbox's single-destination orders.
+pub struct Motion {
+    playback: RoutePlayback,
+}
+
+impl Motion {
+    /// New units appear at their destination without animating from the origin.
+    pub fn new(pose: Pose) -> Self {
+        Self {
+            playback: RoutePlayback::new(pose, vec![], 0.0),
+        }
+    }
+
+    /// Change destination without jumping back when an order interrupts a turn.
+    /// Repeated renders of an unchanged destination do not restart the clock.
+    pub fn retarget(&mut self, pose: Pose, now_ms: f64) {
+        let target = self.playback.target;
+        if pose.x == target.x
+            && pose.y == target.y
+            && shortest_turn(target.heading, pose.heading).abs() < 1e-9
+        {
+            return;
+        }
+        let from = self.sample(now_ms, false);
+        self.playback = RoutePlayback::new(
+            from,
+            vec![RouteLeg {
+                from: (from.x, from.y),
+                to: (pose.x, pose.y),
+                bearing: pose.heading,
+            }],
+            now_ms,
+        );
+    }
+
+    pub fn sample(&mut self, now_ms: f64, reduced_motion: bool) -> Pose {
+        self.playback.sample(now_ms, reduced_motion).0
+    }
+
     pub fn is_active(&self, now_ms: f64) -> bool {
-        self.animating && now_ms < self.started_ms + self.turn_duration_ms + self.travel_duration_ms
+        self.playback.is_active(now_ms)
     }
 }
 
@@ -249,5 +354,102 @@ mod tests {
         assert_eq!(motion.sample(500.0, false), pose(180.0, 0.0, 0.0));
         assert!(motion.is_active(999.0));
         assert_eq!(motion.sample(1000.0, false), pose(360.0, 0.0, 0.0));
+    }
+
+    #[test]
+    fn route_visits_each_center_and_finishes_each_turn_before_translation() {
+        let legs = vec![
+            RouteLeg {
+                from: (10.0, 20.0),
+                to: (82.0, 20.0),
+                bearing: 0.0,
+            },
+            RouteLeg {
+                from: (82.0, 20.0),
+                to: (118.0, 82.0),
+                bearing: 60.0,
+            },
+            RouteLeg {
+                from: (118.0, 82.0),
+                to: (46.0, 82.0),
+                bearing: 180.0,
+            },
+        ];
+        let mut route = RoutePlayback::new(pose(10.0, 20.0, -90.0), legs.clone(), 100.0);
+        // Independent schedule: turns of 180, 120, 240 ms; each travel is 420 ms.
+        // The second bearing is supplied by geometry, not atan2(62, 36).
+        for (index, (start, turn_end, end)) in [
+            (100.0, 280.0, 700.0),
+            (700.0, 820.0, 1240.0),
+            (1240.0, 1480.0, 1900.0),
+        ]
+        .into_iter()
+        .enumerate()
+        {
+            let leg = legs[index];
+            for time in [
+                start,
+                start + 1.0,
+                (start + turn_end) / 2.0,
+                turn_end - 0.01,
+            ] {
+                let (visible, current, state) = route.sample(time, false);
+                assert_eq!(current, Some(index));
+                assert_eq!(state, PlaybackState::Turning);
+                assert_eq!((visible.x, visible.y), leg.from);
+                assert_ne!(visible.heading, leg.bearing);
+            }
+            for time in [turn_end, turn_end + 105.0, end - 0.01] {
+                let (visible, current, state) = route.sample(time, false);
+                assert_eq!(current, Some(index));
+                assert_eq!(state, PlaybackState::Translating);
+                assert_eq!(visible.heading, leg.bearing);
+            }
+            let (center, _, _) = route.sample(end, false);
+            assert_eq!((center.x, center.y), leg.to);
+        }
+        assert_eq!(
+            route.sample(1900.0, false),
+            (pose(46.0, 82.0, 180.0), Some(2), PlaybackState::Settled)
+        );
+        // A delayed frame uses the original schedule, not the time it was sampled.
+        let mut skipped = RoutePlayback::new(pose(10.0, 20.0, -90.0), legs, 100.0);
+        assert_eq!(
+            skipped.sample(1585.0, false),
+            (
+                pose(106.75, 82.0, 180.0),
+                Some(2),
+                PlaybackState::Translating
+            )
+        );
+    }
+
+    #[test]
+    fn empty_route_settles_and_reduced_motion_finishes_the_whole_route() {
+        let start = pose(12.0, 34.0, 350.0);
+        let mut empty = RoutePlayback::new(start, vec![], 100.0);
+        assert_eq!(
+            empty.sample(100.0, false),
+            (start, None, PlaybackState::Settled)
+        );
+        let mut route = RoutePlayback::new(
+            start,
+            vec![
+                RouteLeg {
+                    from: (12.0, 34.0),
+                    to: (84.0, 34.0),
+                    bearing: 10.0,
+                },
+                RouteLeg {
+                    from: (84.0, 34.0),
+                    to: (120.0, 96.0),
+                    bearing: 60.0,
+                },
+            ],
+            100.0,
+        );
+        let final_sample = (pose(120.0, 96.0, 420.0), Some(1), PlaybackState::Settled);
+        assert_eq!(route.sample(140.0, true), final_sample);
+        assert_eq!(route.sample(141.0, false), final_sample);
     }
 }

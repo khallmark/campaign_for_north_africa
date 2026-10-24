@@ -1,89 +1,17 @@
 use crate::view::escape;
-use serde::Deserialize;
-use std::collections::{BTreeMap, BTreeSet};
+use cna_catalog::catalog::{Record, Sprite};
+use std::collections::BTreeSet;
 
 const PAGE_SIZE: usize = 24;
 
-#[derive(Deserialize)]
-pub struct Catalog {
-    schema_version: u32,
-    coverage: Coverage,
-    entries: Vec<Record>,
-    profiles: Vec<Record>,
-    stat_definitions: Vec<StatDefinition>,
-    sources: Vec<Source>,
-    unit_types: Vec<UnitType>,
-    sprites: Vec<Sprite>,
-}
+pub struct Catalog(cna_catalog::catalog::Catalog);
 
-#[derive(Deserialize)]
-struct Coverage {
-    complete_historical_roster: bool,
-    summary: String,
-    gaps: Vec<String>,
-}
+impl std::ops::Deref for Catalog {
+    type Target = cna_catalog::catalog::Catalog;
 
-#[derive(Deserialize)]
-struct Record {
-    id: String,
-    name: String,
-    #[serde(default)]
-    kind: String,
-    #[serde(default)]
-    side: String,
-    nationality: String,
-    unit_type: String,
-    profile_id: Option<String>,
-    verification: String,
-    source_refs: Vec<String>,
-    stats: BTreeMap<String, Stat>,
-    sprite: Option<Sprite>,
-    #[serde(skip)]
-    artwork_note: String,
-    #[serde(default)]
-    note: String,
-}
-
-#[derive(Deserialize)]
-struct Stat {
-    value: Option<f64>,
-    status: String,
-    source_refs: Vec<String>,
-    note: String,
-    raw: Option<String>,
-    #[serde(default)]
-    conditional: bool,
-}
-
-#[derive(Deserialize)]
-struct StatDefinition {
-    id: String,
-    name: String,
-    unit: String,
-    description: String,
-}
-
-#[derive(Deserialize)]
-struct Source {
-    id: String,
-    title: String,
-    path: String,
-    section: Option<String>,
-    pdf_page: Option<u32>,
-    note: String,
-}
-
-#[derive(Clone, Deserialize)]
-struct Sprite {
-    #[serde(default)]
-    id: String,
-    path: String,
-}
-
-#[derive(Deserialize)]
-struct UnitType {
-    id: String,
-    sprite_id: String,
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }
 
 fn kind_name(kind: &str) -> &str {
@@ -103,7 +31,7 @@ fn kind_name(kind: &str) -> &str {
 
 impl Catalog {
     pub fn apply_identity_artwork(&mut self, inventory: &crate::inventory::Inventory) {
-        for record in self.entries.iter_mut().chain(&mut self.profiles) {
+        for record in self.0.entries.iter_mut().chain(&mut self.0.profiles) {
             let (path, note) = inventory
                 .source_art(&record.id)
                 .unwrap_or((None, "Shared role illustration — not unique unit artwork"));
@@ -118,28 +46,7 @@ impl Catalog {
     }
 
     pub fn parse(json: &str) -> Result<Self, String> {
-        let mut catalog: Self = serde_json::from_str(json).map_err(|e| e.to_string())?;
-        if catalog.schema_version != 1 {
-            return Err("Unsupported catalog schema".into());
-        }
-        // Profiles are reference records, not formations or deployable scenario units.
-        for profile in &mut catalog.profiles {
-            profile.kind = "profile".into();
-            if profile.sprite.is_none() {
-                profile.sprite = catalog
-                    .unit_types
-                    .iter()
-                    .find(|role| role.id == profile.unit_type)
-                    .and_then(|role| {
-                        catalog
-                            .sprites
-                            .iter()
-                            .find(|sprite| sprite.id == role.sprite_id)
-                    })
-                    .cloned();
-            }
-        }
-        Ok(catalog)
+        cna_catalog::catalog::Catalog::parse(json).map(Self)
     }
 
     pub fn panel(&self) -> String {

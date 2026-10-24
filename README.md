@@ -43,6 +43,32 @@ amp orb services ensure   # Starts the supervised Vite server and prints its por
 
 The development service is declared in `.amp/services.yaml`; setup does not start it. No resume hook is needed because there are no credentials, tunnels, or databases to refresh. Generated `.amp/portals/` state stays untracked. Setup changes must reach the project's default branch before future orbs can use them.
 
+### Authorized private full-map review
+
+The full-board research viewer can serve source-derived tiles in an explicitly
+authorized review orb without putting them in `public/` or `dist/`:
+
+```sh
+cargo run --locked --release -p cna-map --bin cna-map-tiles -- --output /tmp/cna-private-review-map
+# Set CNA_PRIVATE_REVIEW_TILES=/tmp/cna-private-review-map in ignored .env.local.
+npm run build
+amp orb service restart cna
+amp orb services ensure
+```
+
+Expand **Full-board map · research** below the teaching sandbox. The opt-in Vite
+development middleware serves only the manifest and numbered PNG tiles at
+`/tiles/map/`, with private/no-store responses. It is absent from production
+builds and previews. Remove the local environment setting and restart to disable
+it; regenerate the pyramid if the temporary directory is lost. Do not commit
+the opt-in or copy the tiles into release assets.
+
+Kevin authorized this source artwork for his existing review portal on
+2026-10-24. That is not a third-party redistribution grant or public-release
+authorization: `docs/map/distribution.json` remains pending, and the default
+build still rejects uncleared tiles in public assets. Historical seams, terrain,
+scenario identities and official rules remain unverified.
+
 ## Play
 
 - Select a Commonwealth formation on the map or in the order of battle.

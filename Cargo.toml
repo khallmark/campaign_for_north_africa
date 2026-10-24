@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/cna-sim", "crates/frontend"]
+members = ["crates/cna-sim", "crates/cna-map", "crates/cna-catalog", "crates/frontend"]
 resolver = "2"
 
 [profile.release]

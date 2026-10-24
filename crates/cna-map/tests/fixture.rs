@@ -95,8 +95,8 @@ fn fixture_corridor_is_connected_with_source_geometry_and_six_board_neighbours()
             assert!(ids.contains(&side.hex().neighbor(side.direction()).unwrap()));
         }
     }
-    // Source numbers evaluated independently: C grid col_base=63, dx=72.95.
-    for (id, x, y) in [("C3926", 7853.0, 1734.8), ("C4321", 7426.75, 1443.0)] {
+    // Source numbers plus the image-measured C translation of (+2.25, 0).
+    for (id, x, y) in [("C3926", 7855.25, 1734.8), ("C4321", 7429.0, 1443.0)] {
         let point = center(id.parse().unwrap());
         assert!((point.x - x).abs() < 1e-9);
         assert!((point.y - y).abs() < 1e-9);

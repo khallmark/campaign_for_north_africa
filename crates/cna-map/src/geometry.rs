@@ -1,4 +1,4 @@
-//! Continuous board-pixel geometry from the checked-in census, before anchor calibration.
+//! Continuous board-pixel geometry from the census and documented image calibration.
 
 use crate::hex::{Direction, HexId, HexsideId, MapSection};
 use serde_json::Value;
@@ -37,7 +37,12 @@ fn grids() -> &'static [Grid; 6] {
         let source: Value =
             serde_json::from_str(include_str!("../../../public/data/map/sources.json"))
                 .expect("checked-in source census must be valid JSON");
-        ["Malta", "Map A", "Map B", "Map C", "Map D", "Map E"].map(|name| {
+        MapSection::ALL.map(|section| {
+            let name = if section == MapSection::Malta {
+                "Malta".into()
+            } else {
+                format!("Map {section}")
+            };
             let zone = source["zones"]
                 .as_array()
                 .unwrap()
@@ -67,13 +72,14 @@ fn grids() -> &'static [Grid; 6] {
                 .map(|p| p.y)
                 .fold(f64::NEG_INFINITY, f64::max);
             let dx = number("dx");
+            let correction = crate::calibration::correction(section);
             Grid {
                 dx,
                 dy: number("dy"),
                 // Sideways exchanges VASSAL's raw x/y after applying its origin.
                 origin: BoardPoint {
-                    x: number("y0"),
-                    y: number("x0"),
+                    x: number("y0") + correction.x,
+                    y: number("x0") + correction.y,
                 },
                 col_base: ((max_y - min_y) / dx + 0.5).floor() as i32 + integer("hOff"),
                 row_offset: integer("vOff"),

@@ -1,5 +1,6 @@
 //! Canonical map identities and source-derived board geometry.
 
+pub mod calibration;
 pub mod fixture;
 pub mod geometry;
 pub mod hex;

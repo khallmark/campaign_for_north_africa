@@ -333,19 +333,79 @@ fn release_check(root: &Path, args: &[String]) -> Result<()> {
     Ok(())
 }
 
+fn anchor_crops(root: &Path) -> Result<()> {
+    use cna_map::{calibration, geometry, hex::HexId};
+    use image::{imageops, Rgb};
+    let bytes = fs::read(root.join("docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png"))?;
+    if format!("{:x}", Sha256::digest(&bytes)) != calibration::SOURCE_SHA256 {
+        return Err(
+            "anchor observations refer to a different source image; remeasure before calibration"
+                .into(),
+        );
+    }
+    let image = image::load_from_memory_with_format(&bytes, image::ImageFormat::Png)?.to_rgb8();
+    let output = root.join(".amp/in/artifacts/map-calibration");
+    fs::create_dir_all(&output)?;
+    let mut report = Vec::new();
+    for (id, observed) in calibration::ANCHORS {
+        let hex: HexId = id.parse()?;
+        let center = geometry::center(hex);
+        let left = (center.x.round() as u32).saturating_sub(90);
+        let top = (center.y.round() as u32).saturating_sub(90);
+        let mut crop = imageops::crop_imm(&image, left, top, 180, 180).to_image();
+        let vertices = geometry::corners(hex);
+        for i in 0..6 {
+            let (a, b) = (vertices[i], vertices[(i + 1) % 6]);
+            let steps = (a.x - b.x).abs().max((a.y - b.y).abs()).ceil() as u32;
+            for step in 0..=steps {
+                let t = f64::from(step) / f64::from(steps);
+                let x = (a.x + (b.x - a.x) * t - f64::from(left)).round() as u32;
+                let y = (a.y + (b.y - a.y) * t - f64::from(top)).round() as u32;
+                crop.put_pixel(x, y, Rgb([255, 0, 255]));
+            }
+        }
+        // Cyan cross is the independent observed center, magenta is computed outline.
+        let x = (observed[0] - f64::from(left)).round() as u32;
+        let y = (observed[1] - f64::from(top)).round() as u32;
+        for d in 0..7 {
+            crop.put_pixel(x - 3 + d, y, Rgb([0, 220, 255]));
+            crop.put_pixel(x, y - 3 + d, Rgb([0, 220, 255]));
+        }
+        let filename = format!("{}.png", id.replace(' ', "-"));
+        imageops::resize(&crop, 360, 360, imageops::FilterType::Nearest)
+            .save(output.join(&filename))?;
+        let residual = (center.x - observed[0]).hypot(center.y - observed[1]);
+        report.push(serde_json::json!({"hex":id,"observed":observed,"computed":[center.x,center.y],"residual_board_px":residual,"crop":filename}));
+        println!("{id}: {residual:.3} board px; {filename}");
+    }
+    fs::write(
+        output.join("anchors.json"),
+        serde_json::to_string_pretty(&report)? + "\n",
+    )?;
+    println!(
+        "30 calibration crops: {} (magenta outline, cyan observation; 2x display)",
+        output.display()
+    );
+    Ok(())
+}
+
 fn run() -> Result<()> {
     let args: Vec<_> = std::env::args().skip(1).collect();
     if args == ["--help"] || args == ["-h"] {
         println!("map-census — inventory the supplied VASSAL map sources\n\nUsage: map-census [--check | --write | --release-check [--bundle-dir DIR] [--local-only]]\n\n  --check          Compare source-derived JSON with public/data/map/sources.json; never write\n  --write          Regenerate public/data/map/sources.json deterministically\n  --release-check  Reject uncleared tiles under DIR/tiles using docs/map/distribution.json\n  --bundle-dir DIR Bundle to inspect (default: dist); relative to repository root\n  --local-only     Private research override; NOT permission to publish\n  --help           Show this help\n\nNo flag defaults to --check. Paths are relative to the build-time repository root.\n\nExamples:\n  cargo run -p cna-map --bin map-census -- --write\n  cargo run -p cna-map --bin map-census -- --check\n  cargo run -p cna-map --bin map-census -- --release-check\n  cargo run -p cna-map --bin map-census -- --release-check --bundle-dir public --local-only");
+        println!("\nCalibration: map-census --anchors\n  Writes 30 source crops with calibrated outlines and residuals under\n  .amp/in/artifacts/map-calibration; refuses a changed source image.\nExample:\n  cargo run -p cna-map --bin map-census -- --anchors");
         return Ok(());
     }
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..");
+    if args == ["--anchors"] {
+        return anchor_crops(&root);
+    }
     if args.first().is_some_and(|a| a == "--release-check") {
         return release_check(&root, &args[1..]);
     }
     if !args.is_empty() && args != ["--check"] && args != ["--write"] {
         return Err(
-            "expected --check, --write or --release-check; run map-census --help for examples"
+            "expected --check, --write, --anchors or --release-check; run map-census --help for examples"
                 .into(),
         );
     }

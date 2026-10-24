@@ -9,15 +9,16 @@ fn close(actual: f64, expected: f64) {
 
 #[test]
 fn geometry_centers_use_section_offsets_and_swapped_axes() {
-    // Independently evaluated from the source numbers, not from another API call.
+    // Source numbers plus the documented image-measured section corrections,
+    // evaluated independently rather than obtained from another API call.
     for (id, x, y) in [
-        ("Malta 0805", 558.125, 495.65),
-        ("A4829", 2520.25, 1076.3),
-        ("A4929", 2477.625, 1003.35),
-        ("B5925", 4951.5, 275.8),
-        ("C4218", 7213.625, 1515.95),
-        ("D3714", 9649.25, 1880.7),
-        ("E3815", 12593.625, 1806.75),
+        ("Malta 0805", 558.375, 495.65),
+        ("A4829", 2521.5, 1078.55),
+        ("A4929", 2478.875, 1005.6),
+        ("B5925", 4953.5, 276.3),
+        ("C4218", 7215.875, 1515.95),
+        ("D3714", 9648.5, 1880.45),
+        ("E3815", 12593.625, 1807.25),
     ] {
         let hex: HexId = id.parse().unwrap();
         let c = center(hex);

@@ -41,7 +41,7 @@ Corners start at the upper end of edge E and run clockwise.
 | Function/type | Contract |
 | --- | --- |
 | `BoardPoint { x, y }` | Continuous `f64` pixels in the full 14310 × 4632 source board; independent of screen zoom/DPR. |
-| `center(HexId)` | Lattice center from the section's recorded grid and numbering parameters, even for a syntactic ID outside its polygon. |
+| `center(HexId)` | Lattice center from the section's recorded grid and numbering parameters plus its documented image-calibration translation, even for a syntactic ID outside its polygon. |
 | `corners(HexId)` | Six clockwise Voronoi corners, beginning at the upper end of the east-facing edge. |
 | `edge(HexsideId)` | Endpoints of the canonical shared side; either incident hex constructs the same side ID. |
 | `edge_normal_bearing(HexId, Direction)` | Outward normal in degrees clockwise from screen east, toward that lattice neighbour. |
@@ -65,7 +65,10 @@ y = x0 + q * dx
 There is no translation by the zone's minimum coordinates: its polygon is already
 in board pixels. The polygon height affects numbering, not origin translation.
 Unlike VASSAL's Java integer pixel lookup, the contract retains fractional pixels;
-independent anchors/calibration are E3.I1.S1, not completed by this API.
+the formula above describes the raw census position. Add the section translation
+in [calibration](../map/calibration.md) for the calibrated position used by all
+geometry APIs, including inverse hit testing. Raw census data stays unchanged.
+The 30 measured anchors validate image alignment, not terrain or section seams.
 
 All six measured grids use `dx=72.95`, `dy=85.25`. These are not the spacings of an
 exact regular hexagon (`dx` would be about 73.829). Forcing 60° normals or using
@@ -146,8 +149,13 @@ uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/fix
 
 ## Changelog
 
+- **2026-10-24 / CNA-19:** measured section translations added consistently to
+  forward and inverse geometry. Consumers must use the geometry API rather than
+  cache pre-calibration centers. Identity, spacing and bearings are unchanged;
+  the original local `map-contract-v1` checkpoint tag is not moved.
 - **v1 (2026-10-24):** printed IDs and canonical sides, census geometry and
   bearings, CSS/DPR viewport transforms, source-labelled geography schema and
   the fixture-only corridor loader. Local tag `map-contract-v1` identifies this
   contract checkpoint; moving it or publishing it requires explicit approval.
-  Calibration, cross-section seams and reviewed terrain are future work.
+  At that checkpoint, calibration, cross-section seams and reviewed terrain
+  remained future work; see the subsequent entry above.

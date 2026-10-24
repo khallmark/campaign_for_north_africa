@@ -11,6 +11,7 @@
     "preview": "vite preview --host 0.0.0.0",
     "tiles": "cargo run --release -p cna-map --bin cna-map-tiles",
     "test:browser": "playwright test",
+    "pretest": "bash scripts/check-sources.sh && bash scripts/check-no-credentials.sh",
     "test": "PATH=\"$HOME/.cargo/bin:$PATH\" cargo test --workspace --locked"
   },
   "devDependencies": {

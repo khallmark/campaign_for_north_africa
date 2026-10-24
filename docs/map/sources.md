@@ -79,3 +79,44 @@ attribute against parsed XML, assert the six expected sections and category
 counts, and run the read-only source check. The independently measured image
 checksum and asymmetric Map A/E parameters guard against partial hashing and
 accidental reuse of one section's offsets.
+
+## Seam identity conflict (CNA-20, unresolved)
+
+The July 2021 Land Rules §4.1, printed page 7, says the **01xx hex-row** of
+each section overlays the **39xx hex-row** of its predecessor. The rendered PDF
+was inspected; this is not an OCR inference. Its SHA-256 is
+`78256d7dd4327216d75aaae0ce8b6980c052ceb81e04706bf1036f6d6546e270`.
+The original `docs/rules.txt` §4.1 agrees, with OCR spelling `0ixx`.
+The planning ticket's `xx01`/`xx39` paraphrase reverses the digit pairs and must
+not be used to generate a seam table.
+
+Neither that paraphrase nor a literal 39xx/01xx identification matches the
+current VASSAL numbering. Applying the documented census numbering and current
+calibration translations gives these **candidate co-located centers**, in board
+pixels, at the four section boundaries:
+
+| West identity / center | East identity / center | Separation |
+| --- | --- | ---: |
+| A3033 / (2862.500, 2391.650) | B3000 / (2864.875, 2391.850) | 2.383px |
+| B3033 / (5678.125, 2391.850) | C3000 / (5681.375, 2391.350) | 3.288px |
+| C3033 / (8494.625, 2391.350) | D3000 / (8497.625, 2391.100) | 3.010px |
+| D3033 / (11310.875, 2391.100) | E3000 / (11314.875, 2390.850) | 4.008px |
+
+These values follow from `max + hOff - col`, section `vOff`, the stagger flag,
+and the translations in [calibration](calibration.md); they are not independent
+survey measurements or approved printed aliases. As a counterexample, A3930 is
+at (2564.125, 1735.100), while B0130 is at (5379.750, 4507.400). A literal
+39xx/01xx alias would merge distant cells under the current identity contract.
+
+The calibrated image has no printed hex labels in the inspected anchor crops.
+Four additional 360×300px seam crops centered near y=2391, starting at x=2682,
+5498, 8314 and 11130, were inspected at 2× scale. They also have no readable
+numeric hex labels. Private review captures are
+`.amp/in/artifacts/map-seams/{AB,BC,CD,DE}.png`; these are source-derived research
+artifacts, never public portal assets. This sample is not a search of all scans.
+Image alignment alone cannot establish a conversion from these VASSAL names to
+the rulebook's printed names. CNA-20 therefore remains blocked on source-identity
+adjudication: either establish a reviewed printed-to-VASSAL mapping, or explicitly
+authorize a versioned VASSAL-only seam contract with original printed aliases
+unresolved. No guessed alias, occupancy merge or cross-section adjacency has
+been added. Malta remains separate; no land connection to A–E is implied.

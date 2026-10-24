@@ -2,6 +2,8 @@
 
 `public/data/unit-identities.json` separates source rows, unit identities, equipment models and artwork. It is **not a certified complete roster**. The earlier 24 shared role illustrations do not satisfy the requirement for unique artwork per distinct unit.
 
+**Delivery status at batch19:** 55 sets through batch17 are merged; six further sets in batches18–19 are available locally but await integration and gameplay checks. The inventory's `ready_unique_art` counts available reviewed files, **not merged or gameplay-verified sets**. Earlier batch paragraphs retain the delivery state at their handoff.
+
 ## Inventory boundary
 
 The 1,450 catalog rows contain 52 role descriptions, not individual units. The 124 characteristics profiles are also not identities. Of the remaining 1,398 rows, 102 aircraft load/configuration rows become 78 nationality-scoped aircraft model candidates. Eighteen source-backed alias/redesignation merges leave **1,356 candidates**:
@@ -47,7 +49,7 @@ The implementation owner reads the JSON directly with Rust/serde. `docs/unit-ide
 
 ## First unique-art batch
 
-**Forty-nine identities have reviewed illustrative artwork; 1,307 candidates still have none.** These incremental batches do not fulfill all-unit artwork coverage. The first batch contains:
+These incremental batches do not fulfill all-unit artwork coverage; current totals appear at the top of this document. The first batch contains:
 
 1. `unit-commonwealth-2nd-bays`: independently generated red-pennant cruiser tank, pale rear tarpaulin, sand/sage pattern.
 2. `unit-commonwealth-10th-royal-hussars`: independently generated blue-pennant cruiser tank, rear crate, spare tracks on the nose, ochre pattern.
@@ -287,9 +289,47 @@ The supplied scan was rechecked. 40th RTR lists **“1 × Matilda, 9 × Valentin
 
 The original tank sheet's front arc had a sideways barrel and unwanted white flash. New views replace zero-based 3–6; the corrective strip's fifth view was rejected for a rear-quarter hull inside the front-left arc. A separately generated front-left view replaces 7 and was re-inspected: 6→7→8 now stays front-left with no gross reversal or scale outlier. Each infantry set receives three corrective leftward views at 7–9. Processing retains real generated perspectives, alpha extraction, common final scale, center x128/bottom y240, 18 cells in a 6×3 grid, 256px cells and portrait from frame7. No flat rotation, mirroring or shared-role recoloring.
 
-All three final light/dark proofs were inspected: complete upright silhouettes, broad directional anchors, no obvious clipping, broad halos or cell bleed. Tank 4–5 remain near-identical head-on poses; rear spans repeat and 16→17 jumps to profile. 7th Rifle Brigade has a slight apparent rear-angle backtrack at 12–14 and stance changes; 11th KRRC repeats rear poses at 12–14 and narrows its stance through 7–9 before widening at 10. Gear, wheel and lighting details vary. **No calibrated-yaw, smoothness, exact historical equipment or walking-cycle certification.** These three await parent gameplay checks under turn-before-travel presentation.
+All three final light/dark proofs were inspected: complete upright silhouettes, broad directional anchors, no obvious clipping, broad halos or cell bleed. Tank 4–5 remain near-identical head-on poses; rear spans repeat and 16→17 jumps to profile. 7th Rifle Brigade has a slight apparent rear-angle backtrack at 12–14 and stance changes; 11th KRRC repeats rear poses at 12–14 and narrows its stance through 7–9 before widening at 10. Gear, wheel and lighting details vary. **No calibrated-yaw, smoothness, exact historical equipment or walking-cycle certification.**
+
+**Parent-reported batch17 verification:** all three searched deployments resolved canonical portrait/atlas paths after rebuild and passed 11,7→12,7 movement. Each showed 58 stationary turning samples followed by 27 distinct positions, exactly one heading and no blending while travelling, retained nodes, no rotation and zero rest blend. All three screenshots were inspected at `.amp/in/artifacts/batch17-unit-*.jpg`; only 40th RTR has inspected 30fps recording/5fps contact-sheet evidence at `.amp/in/artifacts/batch17-turn-then-move.mp4`. Schema/990-cell checks, 25 tests, build and diff-check passed; browser errors empty. Catalog hash, roles, IDs and mappings unchanged. Bounded evidence does not certify angle fidelity, walking or historical equipment.
 
 Coverage is **55 sets available / 1,301 missing among 1,356 provisional candidates**. Full coverage and identity reconciliation remain unfinished. Source catalog unchanged; local, uncommitted and unpushed.
+
+**Later parent-reported motion update:** Kevin requested faster, sharper turns. Presentation now selects exactly one opaque nearest view, with no crossfade, at a constant 2ms per degree and an 80ms minimum (a half-turn takes 360ms). Units still finish turning in place before travelling. Parent reports tests and browser checks pass; source-art angle/detail steps remain. Earlier batch evidence records the behavior tested at that time and is not retroactively evidence for this newer timing. Parent is cutting the authorized merge at verified batch17 / 55 sets; subsequent artwork batches are separate incremental work.
+
+**Merged baseline:** GitHub confirms PR1 merged at [41adbb6](https://github.com/khallmark/campaign_for_north_africa/commit/41adbb690bc4b395b53727cc77b91a89c87af5e1). Parent reports `origin/main` and its local `main` match that merge, containing verified work through batch17 / 55 sets. Parent reports 25 tests, build, Clippy, schema and browser tank/infantry/reduced-motion checks passed for faster single-view turns; `.amp/in/artifacts/sharp-turn.mp4` was inspected at 15fps after the 30fps encoder failed. No GitHub CI checks were configured/reported. Batch18 was checksum-verified and preserved by the parent but deliberately not extracted or merged. Application code remains parent-owned.
+
+## Eighteenth unique-art batch
+
+Three more identities from physical scan p.118 receive independent Painter sets:
+
+- `unit-commonwealth-46th-royal-tank-regt`: representative Matilda-style tank with deep side skirts, sand/gray patches, olive rear tool chest and cream tarp.
+- `unit-commonwealth-50th-royal-tank-regt`: representative Valentine-style tank with cream turret-front patch, green rear cylinder, blue-gray roll and brown toolbox.
+- `unit-commonwealth-2nd-derbyshire-yeomanry`: four-wheel armored car with twin lamps, rear spare tire, cream bundles, green side toolbox and brown turret panel.
+
+The supplied scan was rechecked: both tank regiments list **“1 × Matilda, 9 × Valentine”** TOE strength, not literal vehicle counts; 2nd Derbyshire Yeomanry lists **“N”**. The two tank illustrations select different representative equipment from that printed mix, not exhaustive equipment representations. All model geometry, paint and stowage remain illustrative. `crusader` is the existing sandbox capability mapping for the tank identities, not a claim of Crusader equipment. No roles, stats, IDs or mappings changed.
+
+Both tank sheets retain their original 18 views. The car initially reversed from rear-left at 8 to left-profile at 9 and reached rear-right too early at 11–12. Two new views and source-view reordering repair the broad sequence: original0–7, correction0, original9, original8, original10, correction1, original13–17. The corrected light/dark proof was re-inspected: front-left8 → side-left9 → rear-left10–12 → rear13 → rear-right14–16, without the prior clear backtracking. Processing remains alpha extraction, common final scale, x128/y240 anchor, 18 cells in a 6×3 grid with 256px cells, portrait7. No flat rotation, mirroring or shared-role recoloring.
+
+All final light/dark proofs were inspected. The tanks show broad upright direction order without clear turret/hull disagreement, major scale jumps, clipping or bleed; near-repeat spans and thin pale track/hull fringes remain. The car's new8/12 have sharper grainy contours and edge speckling; 8 is slightly compact, several views repeat and body presentation changes at the wrap despite all checked alpha bounds ending at y240. These are not calibrated 20-degree views, smooth3D or exact historical reconstructions. **New three await parent gameplay checks.** No application or motion code is included.
+
+Coverage is **58 sets available / 1,298 missing among 1,356 provisional candidates**. Full coverage and identity reconciliation remain unfinished. Source catalog unchanged. This batch is separate from the parent's batch17 merge cut and remains local, uncommitted and unpushed; no README, `map.rs` or `motion.rs` is included.
+
+## Nineteenth unique-art batch
+
+Three separate Queens battalion rows under 131st Infantry Brigade, 44th (Home Counties) Infantry Division on physical scan p.118 receive independent Painter sets:
+
+- `unit-commonwealth-1-5-queens`: banded helmet, shorts, dark brown pack, cream lower blanket and olive satchel.
+- `unit-commonwealth-1-6-queens`: netted helmet, green shirt, shorts, light canvas pack, dark top roll and gray-green canteen.
+- `unit-commonwealth-1-7-queens`: sidecap, long trousers, olive pack, vertical gray blanket, small green roll and brown hip pouch.
+
+The supplied scan was rechecked: **“1/5 Queens”, “1/6 Queens”, “1/7 Queens”** are separate rows with equipment **“N”**, not three aliases. Clothing and equipment differences are illustrative artistic choices, not sourced battalion uniform assignments. All retain their existing `infantry` role, canonical IDs and source mappings; no stats changed.
+
+1/5 and 1/7 receive new left-profile9 and rear-left12 views, replacing weak side views and premature rear-right poses. 1/6 retains its original18 views. Final light/dark proofs were inspected: broad upright facing order, complete silhouettes, no obvious clipping, cell bleed or broad bright halo. All preserve the 18-view, 6×3, 256px-cell contract, common scale, x128/y240 anchor and portrait7. No flat rotation, mirroring or shared-role recoloring.
+
+Repeated poses and unequal angle steps remain. 1/5 raises its rifle at frame12 and changes stance; 1/6 has nearly direct-rear12–14 and a narrow stance at9; 1/7's corrected9/12 alter limb/trouser rendering and gear proportions. These are static standing sprites, not walking cycles, calibrated 20-degree yaw, smooth3D or historically certified uniforms. **All three await gameplay checks.**
+
+Coverage is **61 sets available / 1,295 missing among 1,356 provisional candidates: 55 merged plus six pending from batches18–19**. The cumulative batch19 inventory requires batch18 assets; apply both batches in order when integration is authorized. Full coverage and identity reconciliation remain unfinished. Source catalog unchanged. Batch19 remains local, uncommitted and unpushed, with no README, application or motion-code changes.
 
 ## Validation
 

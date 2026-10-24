@@ -16,8 +16,8 @@
       "naval_unit": 20,
       "support_unit": 11
     },
-    "ready_unique_art": 55,
-    "missing_unique_art": 1301,
+    "ready_unique_art": 61,
+    "missing_unique_art": 1295,
     "potential_alias_groups": 1,
     "resolved_alias_groups": 18
   },
@@ -1531,7 +1531,8 @@
           "geometry": "Final light/dark proof rechecked after7 repair:6-8 now consistently front-left, no gross reversal or scale outlier. Broad right0/front4-5/left9/rear14/right17, complete silhouettes, no obvious halo/clipping/bleed or muzzle flash.",
           "limitations": "4-5 nearly identical front views; near repeats10-11,12-13,15-16; larger16-17 profile jump. Turret/wheels/stowage and lighting vary;6-8 angles similar. Not calibrated20-degree yaw, smooth3D or historical model certification.",
           "historical_fidelity": "illustrative",
-          "gameplay_verified": false
+          "gameplay_verified": true,
+          "gameplay_evidence": "Parent batch17: searched placement and canonical paths passed after rebuild.11,7->12,7 showed58 stationary turning samples then27 distinct travel positions, exactly one heading/no travel blend, retained nodes/no rotate/rest blend. Parent inspected this unit's30fps recording and5fps sheet at .amp/in/artifacts/batch17-turn-then-move.mp4; others have DOM/screenshots only.25tests/build/diff/schema/990cells passed, errors empty, source hash/roles/IDs/mappings unchanged. Bounded evidence, not calibrated yaw or historical equipment."
         }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
@@ -1552,9 +1553,21 @@
         "scan-118"
       ],
       "sprite": {
-        "portrait_path": null,
-        "atlas_path": null,
-        "status": "missing"
+        "portrait_path": "/sprites/units/unit-commonwealth-46th-royal-tank-regt/portrait.png",
+        "atlas_path": "/sprites/units/unit-commonwealth-46th-royal-tank-regt/atlas.png",
+        "status": "ready",
+        "provenance": {
+          "generator": "Painter",
+          "original_sheet": "https://ampcode.com/user-content/attachments/fdeaf72ff629cf628b00c8bfbf7199339333feed7eec24432d18700bb0a38131-file.png",
+          "note": "Representative Matilda-style tank with deep side skirts, sand/gray patches, olive rear tool chest and cream tarp. Scan118 lists1 xMatilda,9 xValentine TOE strength, not literal vehicle counts. Geometry and markings illustrative; crusader remains a sandbox capability mapping, not historical equipment assertion.",
+          "processing": "Original18 views retained. Alpha extraction,common scale,x128/y240 anchor,portrait7. No flat rotation,mirroring or recolored-role substitution."
+        },
+        "review": {
+          "geometry": "Final light/dark proofs inspected: broad upright right0/front4/left9/rear13/right17. No clear reversal,turret-hull disagreement,major size jump,clipping or cell bleed.",
+          "limitations": "Near repeats1-2,6-8,10-12,13-14; uneven angular steps and details. Thin light track/hull edge fringes on dark backgrounds. Not calibrated20-degree yaw,smooth3D or exact Matilda reconstruction.",
+          "historical_fidelity": "illustrative",
+          "gameplay_verified": false
+        }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
       "formation_context": "8th Armored Division"
@@ -1574,9 +1587,21 @@
         "scan-118"
       ],
       "sprite": {
-        "portrait_path": null,
-        "atlas_path": null,
-        "status": "missing"
+        "portrait_path": "/sprites/units/unit-commonwealth-50th-royal-tank-regt/portrait.png",
+        "atlas_path": "/sprites/units/unit-commonwealth-50th-royal-tank-regt/atlas.png",
+        "status": "ready",
+        "provenance": {
+          "generator": "Painter",
+          "original_sheet": "https://ampcode.com/user-content/attachments/4300c841110a1b8eb356df43b4799605e28fb54988039c36e22b20f7dcbfc4a4-file.png",
+          "note": "Representative Valentine-style sand tank with cream turret-front patch, green rear cylinder, blue-gray roll and brown toolbox. Scan118 lists1 xMatilda,9 xValentine TOE strength, not literal vehicle counts. Geometry and markings illustrative; crusader remains a sandbox capability mapping, not historical equipment assertion.",
+          "processing": "Original18 views retained. Alpha extraction,common scale,x128/y240 anchor,portrait7. No flat rotation,mirroring or recolored-role substitution."
+        },
+        "review": {
+          "geometry": "Final light/dark proofs inspected: broad upright right0/front4/left9/rear13/right17. No clear reversal,turret-hull disagreement,major size jump,clipping or cell bleed.",
+          "limitations": "Near repeats1-2,6-7,10-11,15-16 with larger intervening steps. Details vary and faint pale lower-track fringe visible on dark,especially0. Not calibrated20-degree yaw,smooth3D or exact Valentine reconstruction.",
+          "historical_fidelity": "illustrative",
+          "gameplay_verified": false
+        }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
       "formation_context": "8th Armored Division"
@@ -1610,7 +1635,8 @@
           "geometry": "Final light/dark proofs inspected: upright broad right0/front4/left9/rear13/right17, corrected7-9 leftward with no gross reversal. Complete silhouettes and no obvious halo/clipping/bleed.",
           "limitations": "Near repeats1-2,4-5,7-8,10-11,16-17. Rear12/14 similar around13, giving slight apparent backtrack;5-6 and8-9 stance/lean changes,helmet lower7-8. Not calibrated20-degree yaw,smooth3D,walking or historical uniform certification.",
           "historical_fidelity": "illustrative",
-          "gameplay_verified": false
+          "gameplay_verified": true,
+          "gameplay_evidence": "Parent batch17: searched placement and canonical paths passed after rebuild.11,7->12,7 showed58 stationary turning samples then27 distinct travel positions, exactly one heading/no travel blend, retained nodes/no rotate/rest blend. This identity has inspected screenshot/DOM evidence only; only40th RTR recorded.25tests/build/diff/schema/990cells passed, errors empty, source hash/roles/IDs/mappings unchanged. Bounded evidence, not calibrated yaw,walking or historical equipment."
         }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
@@ -1733,7 +1759,8 @@
           "geometry": "Final light/dark proofs inspected: upright broad right0/front4/left9/rear13/rightward17, corrected7-9 progress toward left profile. Complete figures,no obvious halo/clipping/bleed.",
           "limitations": "Near repeats0-3,6-7,10-11,12-14; abrupt3-4,5-6,9-10,14-15. Stance narrows7-9 then widens10;17 remains three-quarter rather than strict profile. Not calibrated20-degree yaw,smooth3D,walking or historical uniform certification.",
           "historical_fidelity": "illustrative",
-          "gameplay_verified": false
+          "gameplay_verified": true,
+          "gameplay_evidence": "Parent batch17: searched placement and canonical paths passed after rebuild.11,7->12,7 showed58 stationary turning samples then27 distinct travel positions, exactly one heading/no travel blend, retained nodes/no rotate/rest blend. This identity has inspected screenshot/DOM evidence only; only40th RTR recorded.25tests/build/diff/schema/990cells passed, errors empty, source hash/roles/IDs/mappings unchanged. Bounded evidence, not calibrated yaw,walking or historical equipment."
         }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
@@ -1754,9 +1781,22 @@
         "scan-118"
       ],
       "sprite": {
-        "portrait_path": null,
-        "atlas_path": null,
-        "status": "missing"
+        "portrait_path": "/sprites/units/unit-commonwealth-2nd-derbyshire-yeomanry/portrait.png",
+        "atlas_path": "/sprites/units/unit-commonwealth-2nd-derbyshire-yeomanry/atlas.png",
+        "status": "ready",
+        "provenance": {
+          "generator": "Painter",
+          "original_sheet": "https://ampcode.com/user-content/attachments/9fcab8bc9f60ea84d8ffc34dad408b2fb3e56dd20f82f5e47528025fd0154f86-file.png",
+          "replacement_strip": "https://ampcode.com/user-content/attachments/346747f721afdba14f892b904c2bbd4ac1a45fa918f3a31973b1da2e5064a134-file.png",
+          "note": "Representative four-wheel armored car with twin lamps,rear spare,cream bundles,green side toolbox and brown turret panel. Scan118 equipmentN; model,paint and stowage are illustrative,not sourced assignments.",
+          "processing": "Original8 was prematurely rear-left and11-12 prematurely rear-right. New front-left/rear-left views supply8/12. Final order original0-7,strip0,original9,original8,original10,strip1,original13-17. Alpha extraction,common final scale,x128/y240 anchor,portrait7. No flat rotation or mirroring."
+        },
+        "review": {
+          "geometry": "Corrected light/dark proofs re-inspected: hood/lamps lead front-left8,side-left9,rear spare progressively exposed10-12,straight rear13 then rear-right14-16. No clear backtracking,premature rear-right,clipping or cell bleed; transparent margins retained.",
+          "limitations": "Near repeats1-2,6-8,10-11; corrected8 slightly compact and8/12 show sharper grainy contours/edge speckling. Body presentation changes at17-0 despite common bottom240 anchor. Thin pale fringes remain. Not calibrated20-degree yaw,smooth3D or historical model certification.",
+          "historical_fidelity": "illustrative",
+          "gameplay_verified": false
+        }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
       "formation_context": "8th Armored Division"
@@ -1820,9 +1860,22 @@
         "scan-118"
       ],
       "sprite": {
-        "portrait_path": null,
-        "atlas_path": null,
-        "status": "missing"
+        "portrait_path": "/sprites/units/unit-commonwealth-1-5-queens/portrait.png",
+        "atlas_path": "/sprites/units/unit-commonwealth-1-5-queens/atlas.png",
+        "status": "ready",
+        "provenance": {
+          "generator": "Painter",
+          "original_sheet": "https://ampcode.com/user-content/attachments/62d3a2a74ffb2b9adac415b43456939eef7fef6f92849966cb89976f28ddaa05-file.png",
+          "replacement_strip": "https://ampcode.com/user-content/attachments/02b9a682433a30d392e32002fb31e5759f3bca58ed559aa850a27a2a52531afc-file.png",
+          "note": "Helmeted rifleman in shorts with dark brown pack, cream lower blanket and olive satchel. Scan118 lists this separate Queens battalion under131st Infantry Brigade, equipmentN. Uniform and gear illustrative, not sourced assignments.",
+          "processing": "New left-profile and rear-left views replace9/12, normalized to original rear-span height. Other16 views original. Alpha extraction,common scale,x128/y240 anchor,portrait7. No flat rotation,mirroring or shared-role recoloring."
+        },
+        "review": {
+          "geometry": "Final light/dark proofs inspected: upright right0/front4/left9/rear-left12/rear13/right17. Corrected9/12 remove earlier weak side view and premature rear-right. Complete silhouettes,no obvious clipping,bleed or broad bright halo.",
+          "limitations": "Near repeats1-3,4-5,6-8,10-11,14-15. At11-12 rifle rises from down-left to up-left and stance widens;9 narrows silhouette/pack. Not calibrated20-degree yaw,smooth3D,walking or historical uniform certification.",
+          "historical_fidelity": "illustrative",
+          "gameplay_verified": false
+        }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
       "formation_context": "44th (Home Counties) Infantry Division"
@@ -1842,9 +1895,21 @@
         "scan-118"
       ],
       "sprite": {
-        "portrait_path": null,
-        "atlas_path": null,
-        "status": "missing"
+        "portrait_path": "/sprites/units/unit-commonwealth-1-6-queens/portrait.png",
+        "atlas_path": "/sprites/units/unit-commonwealth-1-6-queens/atlas.png",
+        "status": "ready",
+        "provenance": {
+          "generator": "Painter",
+          "original_sheet": "https://ampcode.com/user-content/attachments/bcfefd52704c7f91a9051766a8d14ec890aaefab571b346c5e65a655df0f9281-file.png",
+          "note": "Netted-helmet rifleman in shorts with green shirt, light canvas pack, dark top roll and gray-green canteen. Scan118 lists this separate Queens battalion under131st Infantry Brigade, equipmentN. Uniform and gear illustrative, not sourced assignments.",
+          "processing": "Original18 views retained. Alpha extraction,common scale,x128/y240 anchor,portrait7. No flat rotation,mirroring or shared-role recoloring."
+        },
+        "review": {
+          "geometry": "Final light/dark proofs inspected: upright right0/front4/left9/rear13/right17. No clear broad-facing reversal;complete silhouettes,no obvious clipping,bleed or bright halo.",
+          "limitations": "Near repeats0-3,6-8,10-11,12-14,16-17;12 nearly straight rear rather than distinct rear-left. Frame9 narrows stance/feet; dark rifle/boots low contrast. Not calibrated20-degree yaw,smooth3D,walking or historical uniform certification.",
+          "historical_fidelity": "illustrative",
+          "gameplay_verified": false
+        }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
       "formation_context": "44th (Home Counties) Infantry Division"
@@ -1864,9 +1929,22 @@
         "scan-118"
       ],
       "sprite": {
-        "portrait_path": null,
-        "atlas_path": null,
-        "status": "missing"
+        "portrait_path": "/sprites/units/unit-commonwealth-1-7-queens/portrait.png",
+        "atlas_path": "/sprites/units/unit-commonwealth-1-7-queens/atlas.png",
+        "status": "ready",
+        "provenance": {
+          "generator": "Painter",
+          "original_sheet": "https://ampcode.com/user-content/attachments/1f3f9244d36786caa8cd2ade55ac8f6e0607c37966c18bb796b95377ab8f574e-file.png",
+          "replacement_strip": "https://ampcode.com/user-content/attachments/78d73d453805a001864ee1217f2b042ca0ab4c4425ce79be4886f48410e41737-file.png",
+          "note": "Side-capped rifleman in long trousers with olive pack, vertical gray blanket, small green roll and brown hip pouch. Scan118 lists this separate Queens battalion under131st Infantry Brigade, equipmentN. Uniform and gear illustrative, not sourced assignments.",
+          "processing": "New left-profile and rear-left views replace9/12, normalized to original rear-span height. Other16 views original. Alpha extraction,common scale,x128/y240 anchor,portrait7. No flat rotation,mirroring or shared-role recoloring."
+        },
+        "review": {
+          "geometry": "Final light/dark proofs inspected: upright right0/front4/left9/rear-left12/rear13/rightward17. Corrected9/12 show intended broad directions without opposite-facing reversal. Complete silhouettes,no obvious clipping,bleed or broad bright halo.",
+          "limitations": "Near repeats1-2,6-8,10-11,13-14,16-17. Corrected9/12 have slimmer limbs,changed trouser shading and weapon/foot placement. Gear shapes vary;17 more rearward than0. Not calibrated20-degree yaw,smooth3D,walking or historical uniform certification.",
+          "historical_fidelity": "illustrative",
+          "gameplay_verified": false
+        }
       },
       "note": "Source identity, not a unique-art or playable-state claim. Shared role illustrations do not satisfy per-identity artwork coverage.",
       "formation_context": "44th (Home Counties) Infantry Division"

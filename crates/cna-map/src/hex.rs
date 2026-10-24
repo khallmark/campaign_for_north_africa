@@ -1,6 +1,7 @@
 //! Printed identities and section-local lattice adjacency, not playable-map membership.
 //! See `docs/map/hex-identities.md` for the source-derived numbering convention.
 
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::{error::Error, fmt, str::FromStr};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
@@ -37,6 +38,20 @@ pub struct HexId {
     section: MapSection,
     col: u8,
     row: u8,
+}
+
+impl Serialize for HexId {
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        serializer.collect_str(self)
+    }
+}
+
+impl<'de> Deserialize<'de> for HexId {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        String::deserialize(deserializer)?
+            .parse()
+            .map_err(serde::de::Error::custom)
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -147,7 +162,8 @@ impl FromStr for HexId {
 }
 
 /// Edges clockwise from east in board-image coordinates (screen y increases down).
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum Direction {
     East,
     SouthEast,
@@ -181,10 +197,27 @@ impl Direction {
 
 /// Shared side stored at the lower-ordered endpoint (section, col, row).
 /// Private fields prevent constructing a second identity for the same side.
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize)]
 pub struct HexsideId {
     hex: HexId,
     direction: Direction,
+}
+
+impl<'de> Deserialize<'de> for HexsideId {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        #[derive(Deserialize)]
+        #[serde(deny_unknown_fields)]
+        struct Side {
+            hex: HexId,
+            direction: Direction,
+        }
+        let side = Side::deserialize(deserializer)?;
+        Self::new(side.hex, side.direction)
+            .filter(|canonical| canonical.hex == side.hex && canonical.direction == side.direction)
+            .ok_or_else(|| {
+                serde::de::Error::custom("expected canonical shared side at lower-ordered hex")
+            })
+    }
 }
 
 impl HexsideId {

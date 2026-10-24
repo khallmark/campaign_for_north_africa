@@ -1,8 +1,8 @@
 # Map v1 contract — identity and board geometry
 
-This is the developing E1 contract, **not yet the published map-contract-v1
-fixture/tag**. Serialization, terrain records, viewport transforms and the
-consumer fixture remain separate leaves. No source-art redistribution permission
+Contract identifier **map-contract-v1**, `cna_map::MAP_CONTRACT_VERSION = 1`.
+The versioned consumer fixture is available locally; no remote tag or release
+has been published. No source-art redistribution permission
 is implied: see [source census](../map/sources.md) and
 [licensing and release guard](../map/licensing.md).
 
@@ -80,3 +80,74 @@ Tests exercise both sides of every edge for asymmetric fixture IDs across all si
 sections, exact numeric centers, outward/perpendicular normals, shared endpoint
 identity, constant bearings, deterministic ties, and rejection of every non-hex
 zone's representative center. Run `cargo test --locked -p cna-map geometry`.
+
+## Viewport coordinates are CSS pixels, independent of DPR
+
+`viewport::Viewport::new(center, zoom, css_size, device_pixel_ratio)` accepts a
+board-pixel center, CSS pixels per board pixel, `[width, height]` in CSS pixels,
+and DPR. Coordinates must be finite; size, zoom and DPR must be positive.
+`to_screen(BoardPoint)` returns a distinct `ScreenPoint` in CSS pixels relative
+to the viewport's upper-left corner. `to_board(ScreenPoint)` is its inverse.
+The frontend must subtract the element's client-rectangle origin first. Multiply
+CSS pixels by DPR only when addressing a raster backing store, not for hit tests.
+
+`zoom_about(screen_point, new_zoom)` keeps the selected board point fixed under
+that CSS coordinate. It deliberately does not clamp: anchoring and boundary
+clamping conflict at a board edge. Call `clamp_to_board([width, height])`
+explicitly when boundary policy takes priority. Clamping keeps the visible span
+inside the board on each axis; an oversized span is centered with symmetric
+margins. No tiles, DOM inputs, resize observers or playback logic live here.
+
+Viewport checks cover the required 2458×1358 / 1280×800 sizes, zooms 0.05 / 1 / 4,
+and DPR 1 / 2; 10,000 generated asymmetric zoom-anchor cases; both board edges;
+and mixed-axis letterboxing. Run `cargo test --locked -p cna-map viewport`.
+
+## Geography records preserve evidence status
+
+`terrain::MapRecord` distinguishes terrain, canonical hexside and point-feature
+records. Each carries typed observation status, provenance and an optional
+adjudication ID. Hex IDs serialize as printed strings; sides serialize as
+`{"hex":"C3617","direction":"east"}` and must already be canonical.
+See [geography schema](../map/map-v1.schema.json) and
+[source vocabulary, errata and unresolved labels](../map/terrain-schema.md).
+Unknown observations have only `status=unresolved` and a source label, never an
+implicit Clear terrain value. The requested but currently unsourced Minor City
+category remains in that unresolved representation. No costs or real terrain
+assignments are supplied by the schema.
+
+## Corridor consumer fixture
+
+`cna_map::fixture::corridor() -> Vec<MapRecord>` loads the embedded
+`crates/cna-map/fixtures/corridor-fixture.json`. It contains 44 connected Map C
+identities in the C30xx–C43xx corridor, including C3926 and C4321, plus synthetic
+escarpment, road, track and coast sides. All 48 records carry `status=fixture`.
+The selected strip exercises the Sidi Barrani–Buq Buq–Sollum corridor contract;
+it is not a transcription of the towns, coastline or roads. Terrain choices
+(Clear/Desert/Rough) and all four side assignments are invented test inputs.
+Their provenance points here deliberately, not to a claim of historical review.
+
+Geometry comes exclusively from the source-derived S2 API above: call
+`geometry::center(hex)`, `corners(hex)` and `edge(side)` on the loaded identities.
+The JSON does not duplicate coordinates that could drift from that producer.
+Every sampled center and all six of its neighbours resolve inside the census
+section polygon. There are no board edges in this sample. A neighbour absent
+from this small fixture is **unknown geography**, not a board edge, impassable
+terrain, or an implied Clear cell. Section seams remain unimplemented.
+
+**Consumers must reject fixture observations when certifying a scenario.**
+Do not relabel them as reviewed, fill missing terrain with Clear, or derive
+historical movement costs from their invented assignments. This leaf defines
+neither a certified-scenario validator nor movement arithmetic.
+
+```sh
+cargo test --locked -p cna-map fixture
+uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/fixtures/corridor-fixture.json
+```
+
+## Changelog
+
+- **v1 (2026-10-24):** printed IDs and canonical sides, census geometry and
+  bearings, CSS/DPR viewport transforms, source-labelled geography schema and
+  the fixture-only corridor loader. Local tag `map-contract-v1` identifies this
+  contract checkpoint; moving it or publishing it requires explicit approval.
+  Calibration, cross-section seams and reviewed terrain are future work.

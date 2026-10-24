@@ -139,3 +139,51 @@ fn tiles_cli_rejects_bad_inputs_without_overwriting_unowned_output() {
     assert!(String::from_utf8_lossy(&help.stdout).contains("Examples:"));
     fs::remove_dir_all(root).unwrap();
 }
+
+#[test]
+#[ignore = "66-megapixel source regeneration: cargo test --release -p cna-map --test tiles -- --ignored"]
+fn tiles_full_source_manifest_stays_within_documented_byte_budget() {
+    let repo = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let source = repo.join("docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png");
+    let output = std::env::temp_dir().join(format!("cna-tiles-budget-{}", std::process::id()));
+    fs::create_dir(&output).unwrap();
+    let result = run(&source, &output);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let encoded = fs::read(output.join("manifest.json")).unwrap();
+    let manifest: Value = serde_json::from_slice(&encoded).unwrap();
+    let mut total = encoded.len() as u64;
+    for level in manifest["levels"].as_array().unwrap() {
+        let z = level["z"].as_u64().unwrap();
+        for tile in level["tiles"].as_array().unwrap() {
+            let x = tile["x"].as_u64().unwrap();
+            let y = tile["y"].as_u64().unwrap();
+            let bytes = tile["bytes"].as_u64().unwrap();
+            assert_eq!(
+                fs::metadata(output.join(format!("{z}/{x}_{y}.png")))
+                    .unwrap()
+                    .len(),
+                bytes
+            );
+            total += bytes;
+        }
+    }
+    let budget: u64 = include_str!("../../../docs/map/performance.md")
+        .lines()
+        .find_map(|line| line.strip_prefix("Tile byte budget: "))
+        .expect("performance.md must record the reviewed baseline")
+        .parse()
+        .unwrap();
+    fs::remove_dir_all(output).unwrap();
+    assert!(
+        total <= budget * 110 / 100,
+        "fresh pyramid is {total} bytes, exceeds 110% of {budget}; review docs/map/performance.md"
+    );
+    println!(
+        "fresh pyramid: {total} bytes; budget {budget}, limit {}",
+        budget * 110 / 100
+    );
+}

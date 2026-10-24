@@ -1,6 +1,8 @@
 use crate::App;
 use cna_sim::*;
 
+mod panel;
+
 pub fn escape(value: &str) -> String {
     value
         .replace('&', "&amp;")
@@ -40,193 +42,26 @@ pub fn icon(name: &str) -> String {
         r#"<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{path}</svg>"#
     )
 }
-fn button(action: &str, label: &str, symbol: &str, disabled: bool, class: &str) -> String {
+pub(crate) fn button(
+    action: &str,
+    label: &str,
+    symbol: &str,
+    disabled: bool,
+    class: &str,
+) -> String {
     format!(
         r#"<button data-action="{action}" aria-label="{label}" {} class="{class}">{}<span>{label}</span></button>"#,
         if disabled { "disabled" } else { "" },
         icon(symbol)
     )
 }
-fn side(unit: &Unit) -> &'static str {
-    if unit.side == "allied" {
-        "Commonwealth"
-    } else {
-        "Axis forces"
-    }
-}
-fn kind(unit: &Unit) -> &'static str {
-    unit.role().name
-}
-
-fn panel(app: &App) -> String {
-    let Some(u) = app.selected() else {
-        return "<div class=empty-panel><h2>No formation selected</h2><p>Select a surviving formation on the map or in the order of battle.</p></div>".into();
-    };
-    let friendly = u.side == "allied";
-    let source = supply_source(&app.game, Some(u)).is_some();
-    let active = friendly && app.game.outcome.is_none();
-    let enemies = app
-        .game
-        .units
-        .iter()
-        .any(|target| can_attack(&app.game, Some(u), Some(target)));
-    let cp: String = (0..u.max_cp)
-        .map(|i| {
-            format!(
-                r#"<i class="{}"></i>"#,
-                if i < u.cp { "available" } else { "" }
-            )
-        })
-        .collect();
-    let resources: String = [("fuel", "Fuel", u.fuel), ("water", "Water", u.water), ("ammo", "Ammunition", u.ammo)].iter().map(|(key, label, value)| {
-        format!(r#"<div class="resource-row {}">{}<span>{label}</span><div class="resource-track"><i style="width:{value}%"></i></div><strong>{}</strong></div>"#, if *value < 25 { "low" } else { "" }, icon(key), if !u.role().motorized && *key == "fuel" { "—".into() } else { format!("{value}%") })
-    }).collect();
-    let orders = if friendly {
-        format!(
-            r#"<div class="order-grid">{}{}{}{}{}</div><p class="order-hint">{}</p>"#,
-            button(
-                "move",
-                "Move",
-                "move",
-                !active || reachable(&app.game, Some(u)).is_empty(),
-                if app.mode == "move" { "active" } else { "" }
-            ),
-            button(
-                "attack",
-                if u.role().range > 1 {
-                    "Attack"
-                } else {
-                    "Assault"
-                },
-                "attack",
-                !active || !enemies,
-                if app.mode == "attack" {
-                    "active danger"
-                } else {
-                    ""
-                }
-            ),
-            button(
-                "digin",
-                if u.entrenched { "Dug in" } else { "Dig in" },
-                "shield",
-                !active || u.cp < 1 || u.entrenched || !u.role().can_capture(),
-                ""
-            ),
-            button(
-                "resupply",
-                "Resupply",
-                "box",
-                !active
-                    || u.cp < 1
-                    || !source
-                    || (u.fuel == 100 && u.water == 100 && u.ammo == 100),
-                ""
-            ),
-            if matches!(
-                u.role().support,
-                Support::Command | Support::Repair | Support::Fortify
-            ) {
-                button(
-                    "support",
-                    match u.role().support {
-                        Support::Command => "Rally",
-                        Support::Repair => "Repair",
-                        _ => "Fortify",
-                    },
-                    "shield",
-                    !active
-                        || !app
-                            .game
-                            .units
-                            .iter()
-                            .any(|target| can_support(&app.game, Some(u), Some(target))),
-                    if app.mode == "support" { "active" } else { "" },
-                )
-            } else {
-                String::new()
-            },
-            match app.mode {
-                "move" => "Click a highlighted hex to move. Numbers show CP cost.",
-                "attack" => "Choose a marked enemy in range to preview an attack.",
-                "support" => "Choose a marked adjacent friendly unit.",
-                _ => u.role().description,
-            }
-        )
-    } else {
-        "<p class=order-hint>Enemy formations act when you end the stage. Select a Commonwealth formation to issue orders.</p>".into()
-    };
-    format!(
-        r#"<div class="panel-heading"><span>Formation details</span><span class="hex-coordinate">{:02}:{:02}</span></div>
-    <section class="unit-detail"><div class="allegiance"><i class="faction-dot {}"></i>{}<span>{}</span></div>
-    <div class="unit-portrait"><div class="portrait-ring"></div><img src="{}" alt="{}"/><span class="unit-stamp">{}</span></div>
-    <h2>{}</h2><p class="unit-subtitle">{} · {} · range {}</p><p class="artwork-status">{}</p><div class="strength-line"><span>Sandbox strength</span><strong>{}<small>%</small></strong></div>
-    <div class="strength-track"><span style="width:{}%"></span></div><div class="capability"><span>Capability points</span><div aria-label="{} of {} capability points">{cp}<strong>{}/{}</strong></div></div>{}</section>
-    <section class="supplies-panel"><div class="section-title"><h3>Field supplies</h3><span class="supply-state {}">{}</span></div>{resources}{}</section>
-    <section class="orders-panel"><h3>{}</h3>{orders}</section>"#,
-        u.c + 1,
-        u.r + 1,
-        u.side,
-        side(u),
-        match u.unit_type.as_str() {
-            "tank" => "▱",
-            "infantry" => "×",
-            _ => "◇",
-        },
-        escape(&app.inventory.portrait(u)),
-        kind(u),
-        escape(&u.short),
-        escape(&u.name),
-        kind(u),
-        u.role().domain_name(),
-        u.role().range,
-        app.inventory.artwork_label(u),
-        u.hp,
-        u.hp,
-        u.cp,
-        u.max_cp,
-        u.cp,
-        u.max_cp,
-        if u.entrenched {
-            "<div class=dug-in>Dug in · 10 damage protection</div>"
-        } else {
-            ""
-        },
-        if source { "" } else { "isolated" },
-        if !friendly {
-            "Enemy stores"
-        } else if source {
-            "In supply range"
-        } else {
-            "Out of supply range"
-        },
-        if friendly {
-            format!(
-                "<p class=supply-note>{}</p>",
-                if u.role().support == Support::Supply {
-                    "Stocked trucks supply formations within 2 hexes. Refill at the frontier depot."
-                } else {
-                    "Keep your supply trucks close. The desert takes its share every stage."
-                }
-            )
-        } else {
-            String::new()
-        },
-        if friendly {
-            "Issue orders"
-        } else {
-            "Reconnaissance"
-        }
-    )
-}
-
 fn modal(app: &App) -> String {
     let Some(modal) = app.modal else {
         return String::new();
     };
     let body = match modal {
-        "catalog" => app.catalog.panel(),
-        "reinforcements" => app.inventory.panel(),
+        "catalog" => crate::catalog_view::catalog(app),
+        "reinforcements" => crate::catalog_view::reinforcements(app),
         "help" => format!(
             r#"<span class="eyebrow">Field manual / prototype 0.1</span><h2>A war of distance.<br>A battle for supplies.</h2><p>Lead the Commonwealth west to Tobruk. This is a small, fictional training scenario inspired by the land and logistics rules of <em>The Campaign for North Africa</em>, not a historical order of battle.</p>
         <div class="manual-grid"><section>{}<h3>Move with purpose</h3><p>Select a green formation, then Move. Desert costs 1 capability point (CP); ridges cost 2. Vehicles spend 8 fuel per CP. Entering an enemy’s adjacent hex ends that move.</p></section><section>{}<h3>Fight at close range</h3><p>Assault an adjacent enemy for 2 CP and 20 ammunition. Preview exact damage before committing. Dig in for 1 CP to reduce incoming damage by 10; moving or assaulting removes cover.</p></section><section>{}<h3>Mind the supply line</h3><p>Resupply for 1 CP within 2 hexes of a stocked truck or the depot. Trucks transfer up to 25 of each resource; the depot refills stores. Zero water prevents movement and assaults.</p></section><section>{}<h3>The desert takes a toll</h3><p>End stage activates the Axis, consumes 10 water and 2 vehicle fuel, then restores CP. Every third stage costs 18 water and 5 fuel instead. Zero water causes 10 strength loss.</p></section></div>
@@ -429,7 +264,7 @@ pub fn page(app: &App) -> String {
         error = if app.error { "error" } else { "" },
         status_icon = icon(if app.error { "flag" } else { "compass" }),
         message = escape(&app.message),
-        panel = panel(app),
+        panel = panel::panel(app),
         count = friendlies.iter().filter(|u| u.hp > 0).count(),
         modal = modal(app)
     )

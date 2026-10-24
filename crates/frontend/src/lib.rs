@@ -1,7 +1,10 @@
 mod catalog;
+mod catalog_view;
+mod inspect;
 mod inventory;
 mod map;
 mod motion;
+mod movement;
 mod view;
 
 use cna_sim::*;
@@ -63,13 +66,6 @@ impl App {
             error: false,
             motions: HashMap::new(),
         }
-    }
-
-    fn selected(&self) -> Option<&Unit> {
-        self.game
-            .units
-            .iter()
-            .find(|u| u.id == self.selected && u.hp > 0)
     }
 
     fn apply(&mut self, result: ActionResult) {

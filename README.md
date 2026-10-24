@@ -17,6 +17,21 @@ npm run build
 
 `npm run dev` builds Rust/Wasm before starting Vite, which prints the development URL. After editing Rust, run `npm run wasm` and reload the page. `npm run preview` serves the production build. No game account, backend, or API key is needed. Fonts use Google Fonts with local system fallbacks. Play is session-only: reloading starts again.
 
+## Browser tests
+
+```sh
+npx playwright install --with-deps chromium  # Also run by .agents/setup
+npm run test:browser -- tests/browser/smoke.spec.ts
+```
+
+The harness builds Rust/Wasm and serves a fresh production preview on port 4175,
+then stops it when the run ends. Keep that port free; it never reuses an existing
+server. Chromium runs at 2458×1358 and 1280×800, each at DPR 1 and 2.
+To select one project, append `--project=chromium-1280x800-dpr1`.
+Screenshot snapshots live under ignored `tests/browser/__screenshots__/`;
+failure screenshots, videos and traces go to ignored `test-results/`.
+Each lane owns its feature specs; the shared smoke test only checks startup.
+
 ## Amp orbs
 
 Amp runs `.agents/setup` when preparing a fresh or stale project snapshot. It installs the pinned Node.js release only when needed, checks the official download checksum, runs `npm ci`, and prepares Rust, the Wasm target, and the matching wasm-bindgen CLI. Matching snapshots skip setup and retain the installed dependencies. The build script makes Rust's user-local tools available to supervised services.

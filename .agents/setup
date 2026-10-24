@@ -37,6 +37,9 @@ time {
 echo '[setup] Installing locked dependencies (including development tools)'
 time npm ci --include=dev --prefer-offline --no-audit --no-fund
 
+echo '[setup] Preparing Chromium for browser tests'
+time npx playwright install --with-deps chromium
+
 echo '[setup] Preparing Rust and WebAssembly bindings'
 export PATH="$HOME/.cargo/bin:$PATH"
 time {

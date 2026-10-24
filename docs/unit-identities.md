@@ -2,7 +2,7 @@
 
 `public/data/unit-identities.json` separates source rows, unit identities, equipment models and artwork. It is **not a certified complete roster**. The earlier 24 shared role illustrations do not satisfy the requirement for unique artwork per distinct unit.
 
-**Delivery status at batch19:** 55 sets through batch17 are merged; six further sets in batches18–19 are available locally but await integration and gameplay checks. The inventory's `ready_unique_art` counts available reviewed files, **not merged or gameplay-verified sets**. Earlier batch paragraphs retain the delivery state at their handoff.
+**Private integration checkpoint (2026-10-24):** Kevin authorized including all work in the now-private repository. This integration branch includes all 61 sets: 55 through batch17 plus six from batches18–19. Main has not been updated by this checkpoint. The inventory's `ready_unique_art` counts available reviewed files, **not historically certified or gameplay-verified sets**. Earlier batch paragraphs retain the delivery state at their handoff; the six new sets retain their bounded-review caveats.
 
 ## Inventory boundary
 

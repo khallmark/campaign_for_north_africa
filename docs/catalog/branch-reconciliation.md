@@ -2,6 +2,8 @@
 
 Canonical leaf: `cna-catalog:E1.I1.S1`. Investigation date: 2026-10-24.
 
+**Later private integration checkpoint:** Kevin subsequently requested “Push EVERYTHING” to the now-private repository. The integration branch now includes all twelve batch18/19 PNGs and the 61-set inventory, preserving the newer implementation and source files. This supersedes the pending integration decision below, not its historical-fidelity or gameplay-review limitations. Main is unchanged; the following investigation records the earlier baseline.
+
 ## Decision requested
 
 Kevin: approve or decline merging **batch19 only**, which already contains batch18, into the integration baseline. This note prepares that decision; it does not authorize or perform the merge. Do not merge batch18 separately, replace the checkout with the old branch tree, or regenerate these six sets.

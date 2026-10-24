@@ -1,10 +1,13 @@
 //! Existing identity inventory, separate from simulation roles and game state.
 use serde::Deserialize;
+use std::collections::BTreeMap;
 
 #[derive(Deserialize)]
 pub struct Inventory {
     schema_version: u32,
     pub entries: Vec<Identity>,
+    #[serde(default, deserialize_with = "unique_redirects")]
+    identity_redirects: BTreeMap<String, String>,
 }
 
 #[derive(Deserialize)]
@@ -42,11 +45,29 @@ impl Inventory {
         if inventory.entries.iter().any(|entry| !ids.insert(&entry.id)) {
             return Err("Duplicate canonical identity ID".into());
         }
+        for retired in inventory.identity_redirects.keys() {
+            if ids.contains(retired) {
+                return Err(format!("Identity {retired} is both live and redirected"));
+            }
+            if inventory.find(retired).is_none() {
+                return Err(format!("Redirect {retired} has a cycle or missing target"));
+            }
+        }
         Ok(inventory)
     }
 
     pub fn find(&self, id: &str) -> Option<&Identity> {
-        self.entries.iter().find(|entry| entry.id == id)
+        let mut resolved = id;
+        // At most one edge per retired ID; exhausting this bound means a loop.
+        // Keep lookup bounded even if a caller deserialized without parse().
+        for _ in 0..=self.identity_redirects.len() {
+            if let Some(next) = self.identity_redirects.get(resolved) {
+                resolved = next;
+            } else {
+                return self.entries.iter().find(|entry| entry.id == resolved);
+            }
+        }
+        None
     }
 
     pub fn source_art(&self, source_id: &str) -> Option<(Option<&str>, &'static str)> {
@@ -63,4 +84,36 @@ impl Inventory {
             (None, "Unique art missing — shared role placeholder")
         })
     }
+}
+
+// BTreeMap's default deserializer silently keeps the last value for duplicate
+// JSON keys. A retired ID with two targets must fail, not depend on input order.
+fn unique_redirects<'de, D>(deserializer: D) -> Result<BTreeMap<String, String>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    struct RedirectVisitor;
+    impl<'de> serde::de::Visitor<'de> for RedirectVisitor {
+        type Value = BTreeMap<String, String>;
+
+        fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+            formatter.write_str("a redirect map with unique retired IDs")
+        }
+
+        fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
+        where
+            A: serde::de::MapAccess<'de>,
+        {
+            let mut redirects = BTreeMap::new();
+            while let Some((retired, target)) = map.next_entry::<String, String>()? {
+                if redirects.insert(retired.clone(), target).is_some() {
+                    return Err(serde::de::Error::custom(format!(
+                        "Duplicate redirect: {retired}"
+                    )));
+                }
+            }
+            Ok(redirects)
+        }
+    }
+    deserializer.deserialize_map(RedirectVisitor)
 }

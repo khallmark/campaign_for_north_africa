@@ -1,0 +1,9 @@
+{"status":"fixture","costs":"invented_non_certified","route":{
+  "command_id":"fixture-angle-seam","revision":13,"unit_ref":"fixture-unit-1",
+  "steps":[
+    {"hex":"C3626","cp":{"numerator":0,"denominator":1},"fuel":{"numerator":0,"denominator":1},"cumulative":{"cp":{"numerator":0,"denominator":1},"fuel":{"numerator":0,"denominator":1}}},
+    {"hex":"C3727","cp":{"numerator":1,"denominator":1},"fuel":{"numerator":2,"denominator":1},"cumulative":{"cp":{"numerator":1,"denominator":1},"fuel":{"numerator":2,"denominator":1}}},
+    {"hex":"C3728","cp":{"numerator":1,"denominator":2},"fuel":{"numerator":1,"denominator":1},"cumulative":{"cp":{"numerator":3,"denominator":2},"fuel":{"numerator":3,"denominator":1}}},
+    {"hex":"C3628","cp":{"numerator":1,"denominator":1},"fuel":{"numerator":2,"denominator":1},"cumulative":{"cp":{"numerator":5,"denominator":2},"fuel":{"numerator":5,"denominator":1}}}
+  ],"stop":{"kind":"completed","at_step":3},"reveals":[]
+}}

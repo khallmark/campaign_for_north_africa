@@ -1,0 +1,742 @@
+{
+  "version": 1,
+  "adapters": {
+    "linear": {
+      "project_id": "a86711dd-b1b9-4542-97b3-17d56753bc61",
+      "project_identifier": "P-CNA-20",
+      "project_url": "https://linear.app/littleblackhat/project/cna-catalog-and-unit-viewer-5262b3b8dae6",
+      "project_name": "CNA — Catalog and Unit Viewer",
+      "document_id": "fbdc91d3-d868-4b31-affd-fa354fb5905e",
+      "handoff_document_id": "b296b5ad-b092-42f3-b0b0-714d18f94f50",
+      "keys": {
+        "E1": {
+          "id": "510ff12e-1835-4f09-921d-d06c0fa3ae27",
+          "identifier": "CNA-134",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E1] Source census and identity/version contract",
+          "url": "https://linear.app/littleblackhat/issue/CNA-134/e1-source-census-and-identityversion-contract",
+          "execution_rank": 25,
+          "execution_wave": 5
+        },
+        "E1.I1": {
+          "id": "56c6ee1b-afbb-43ca-981b-7a3644e72eb4",
+          "identifier": "CNA-135",
+          "kind": "issue",
+          "parent_key": "E1",
+          "title": "[E1.I1] Branch and source census",
+          "url": "https://linear.app/littleblackhat/issue/CNA-135/e1i1-branch-and-source-census",
+          "execution_rank": 16,
+          "execution_wave": 3
+        },
+        "E1.I1.S1": {
+          "id": "b0a8d333-7baf-4f9c-824d-406b742b40cd",
+          "identifier": "CNA-139",
+          "kind": "subissue",
+          "parent_key": "E1.I1",
+          "title": "[E1.I1.S1] Reconcile identity-art branches 18 and 19",
+          "url": "https://linear.app/littleblackhat/issue/CNA-139/e1i1s1-reconcile-identity-art-branches-18-and-19",
+          "execution_rank": 1,
+          "execution_wave": 0
+        },
+        "E1.I1.S2": {
+          "id": "1e97f1fe-6558-48d0-ae33-dc3774949682",
+          "identifier": "CNA-137",
+          "kind": "subissue",
+          "parent_key": "E1.I1",
+          "title": "[E1.I1.S2] VASSAL piece census from buildFile.xml",
+          "url": "https://linear.app/littleblackhat/issue/CNA-137/e1i1s2-vassal-piece-census-from-buildfilexml",
+          "execution_rank": 4,
+          "execution_wave": 1
+        },
+        "E1.I1.S3": {
+          "id": "a42a4434-7d42-4c43-ae11-6f62389d0ba4",
+          "identifier": "CNA-138",
+          "kind": "subissue",
+          "parent_key": "E1.I1",
+          "title": "[E1.I1.S3] Cross-source identity matrix",
+          "url": "https://linear.app/littleblackhat/issue/CNA-138/e1i1s3-cross-source-identity-matrix",
+          "execution_rank": 10,
+          "execution_wave": 2
+        },
+        "E1.I1.S4": {
+          "id": "5d1bee7d-744d-4efd-9f71-98eee2c6c5c6",
+          "identifier": "CNA-136",
+          "kind": "subissue",
+          "parent_key": "E1.I1",
+          "title": "[E1.I1.S4] Record counter-art and generated-asset distribution status",
+          "url": "https://linear.app/littleblackhat/issue/CNA-136/e1i1s4-record-counter-art-and-generated-asset-distribution-status",
+          "execution_rank": 11,
+          "execution_wave": 2
+        },
+        "E1.I2": {
+          "id": "526eb9c1-7d2e-46ee-9b42-ddbece179df7",
+          "identifier": "CNA-140",
+          "kind": "issue",
+          "parent_key": "E1",
+          "title": "[E1.I2] cna-catalog v1 contract",
+          "url": "https://linear.app/littleblackhat/issue/CNA-140/e1i2-cna-catalog-v1-contract",
+          "execution_rank": 22,
+          "execution_wave": 4
+        },
+        "E1.I2.S1": {
+          "id": "df804905-ae35-4f5a-bf60-edfad9f74d34",
+          "identifier": "CNA-141",
+          "kind": "subissue",
+          "parent_key": "E1.I2",
+          "title": "[E1.I2.S1] Create cna-catalog crate with layered identity types",
+          "url": "https://linear.app/littleblackhat/issue/CNA-141/e1i2s1-create-cna-catalog-crate-with-layered-identity-types",
+          "execution_rank": 5,
+          "execution_wave": 1
+        },
+        "E1.I2.S2": {
+          "id": "6f2ef50f-ec54-4bd5-b1f9-d882bd22c938",
+          "identifier": "CNA-142",
+          "kind": "subissue",
+          "parent_key": "E1.I2",
+          "title": "[E1.I2.S2] Catalog v1 schema and contract docs",
+          "url": "https://linear.app/littleblackhat/issue/CNA-142/e1i2s2-catalog-v1-schema-and-contract-docs",
+          "execution_rank": 12,
+          "execution_wave": 2
+        },
+        "E1.I2.S3": {
+          "id": "d3f2f3a7-58d1-4e20-99e5-9b54ab9b0b59",
+          "identifier": "CNA-143",
+          "kind": "subissue",
+          "parent_key": "E1.I2",
+          "title": "[E1.I2.S3] Graziani consumer fixture",
+          "url": "https://linear.app/littleblackhat/issue/CNA-143/e1i2s3-graziani-consumer-fixture",
+          "execution_rank": 17,
+          "execution_wave": 3
+        },
+        "E2": {
+          "id": "751ae24f-0da8-4964-ab6b-d40768e07776",
+          "identifier": "CNA-144",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E2] Identity reconciliation and architecture report",
+          "url": "https://linear.app/littleblackhat/issue/CNA-144/e2-identity-reconciliation-and-architecture-report",
+          "execution_rank": 180,
+          "execution_wave": 11
+        },
+        "E2.I1": {
+          "id": "6d5f19f3-5816-4f56-b020-134feba0d904",
+          "identifier": "CNA-148",
+          "kind": "issue",
+          "parent_key": "E2",
+          "title": "[E2.I1] Identity adjudication waves",
+          "url": "https://linear.app/littleblackhat/issue/CNA-148/e2i1-identity-adjudication-waves",
+          "execution_rank": 44,
+          "execution_wave": 7
+        },
+        "E2.I1.S1": {
+          "id": "3c209bc3-ca04-48d0-ac4a-23ed9c36108b",
+          "identifier": "CNA-152",
+          "kind": "subissue",
+          "parent_key": "E2.I1",
+          "title": "[E2.I1.S1] Adjudicate Commonwealth formations (British, Indian, Australian, NZ, South African)",
+          "url": "https://linear.app/littleblackhat/issue/CNA-152/e2i1s1-adjudicate-commonwealth-formations-british-indian-australian-nz",
+          "execution_rank": 31,
+          "execution_wave": 6
+        },
+        "E2.I1.S2": {
+          "id": "49256591-c5b4-4c7b-a7f5-8b888516c79e",
+          "identifier": "CNA-149",
+          "kind": "subissue",
+          "parent_key": "E2.I1",
+          "title": "[E2.I1.S2] Adjudicate Italian formations including Sirte, Marmarica, Cirene and Catanzaro",
+          "url": "https://linear.app/littleblackhat/issue/CNA-149/e2i1s2-adjudicate-italian-formations-including-sirte-marmarica-cirene",
+          "execution_rank": 32,
+          "execution_wave": 6
+        },
+        "E2.I1.S3": {
+          "id": "1b9924e1-035f-4122-9ad0-be5061aeac24",
+          "identifier": "CNA-151",
+          "kind": "subissue",
+          "parent_key": "E2.I1",
+          "title": "[E2.I1.S3] Adjudicate German formations and other Allied contingents",
+          "url": "https://linear.app/littleblackhat/issue/CNA-151/e2i1s3-adjudicate-german-formations-and-other-allied-contingents",
+          "execution_rank": 33,
+          "execution_wave": 6
+        },
+        "E2.I1.S4": {
+          "id": "b5053eda-59ad-4c72-b1b2-b36e7da20d60",
+          "identifier": "CNA-150",
+          "kind": "subissue",
+          "parent_key": "E2.I1",
+          "title": "[E2.I1.S4] Adjudicate SGSUs, naval units, aircraft models, equipment rows and markers",
+          "url": "https://linear.app/littleblackhat/issue/CNA-150/e2i1s4-adjudicate-sgsus-naval-units-aircraft-models-equipment-rows-and",
+          "execution_rank": 34,
+          "execution_wave": 6
+        },
+        "E2.I2": {
+          "id": "e34a7917-2bb0-446b-8bf9-f6598781a1cc",
+          "identifier": "CNA-145",
+          "kind": "issue",
+          "parent_key": "E2",
+          "title": "[E2.I2] Architecture report and art requirements",
+          "url": "https://linear.app/littleblackhat/issue/CNA-145/e2i2-architecture-report-and-art-requirements",
+          "execution_rank": 163,
+          "execution_wave": 10
+        },
+        "E2.I2.S1": {
+          "id": "5f03fb5a-ea80-4f08-970f-bbb9213c64f6",
+          "identifier": "CNA-146",
+          "kind": "subissue",
+          "parent_key": "E2.I2",
+          "title": "[E2.I2.S1] Unit/permutation architecture and provenance report",
+          "url": "https://linear.app/littleblackhat/issue/CNA-146/e2i2s1-unitpermutation-architecture-and-provenance-report",
+          "execution_rank": 53,
+          "execution_wave": 8
+        },
+        "E2.I2.S2": {
+          "id": "ff038e03-fc2d-4d00-a014-ae5709d7222a",
+          "identifier": "CNA-147",
+          "kind": "subissue",
+          "parent_key": "E2.I2",
+          "title": "[E2.I2.S2] Art requirements and material-variant justifications",
+          "url": "https://linear.app/littleblackhat/issue/CNA-147/e2i2s2-art-requirements-and-material-variant-justifications",
+          "execution_rank": 137,
+          "execution_wave": 9
+        },
+        "E3": {
+          "id": "5c0781de-71e5-43e3-a21c-7b66fcb7115a",
+          "identifier": "CNA-91",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E3] Faction browser and unit detail modal",
+          "url": "https://linear.app/littleblackhat/issue/CNA-91/e3-faction-browser-and-unit-detail-modal",
+          "execution_rank": 185,
+          "execution_wave": 11
+        },
+        "E3.I1": {
+          "id": "d2ee71a8-ca87-45f0-9333-f8998c8ec4a3",
+          "identifier": "CNA-92",
+          "kind": "issue",
+          "parent_key": "E3",
+          "title": "[E3.I1] Faction browser and modal shell",
+          "url": "https://linear.app/littleblackhat/issue/CNA-92/e3i1-faction-browser-and-modal-shell",
+          "execution_rank": 130,
+          "execution_wave": 8
+        },
+        "E3.I1.S1": {
+          "id": "ab0194e7-59b0-4d6a-8269-47dc5dee00e4",
+          "identifier": "CNA-93",
+          "kind": "subissue",
+          "parent_key": "E3.I1",
+          "title": "[E3.I1.S1] Faction-separated catalog browser",
+          "url": "https://linear.app/littleblackhat/issue/CNA-93/e3i1s1-faction-separated-catalog-browser",
+          "execution_rank": 39,
+          "execution_wave": 6
+        },
+        "E3.I1.S2": {
+          "id": "edfb284f-7d86-4539-99cb-c81598d50085",
+          "identifier": "CNA-94",
+          "kind": "subissue",
+          "parent_key": "E3.I1",
+          "title": "[E3.I1.S2] Main-to-detail modal with left sidebar",
+          "url": "https://linear.app/littleblackhat/issue/CNA-94/e3i1s2-main-to-detail-modal-with-left-sidebar",
+          "execution_rank": 48,
+          "execution_wave": 7
+        },
+        "E3.I2": {
+          "id": "662be8db-5f80-48ba-9d3d-87b402f7855b",
+          "identifier": "CNA-95",
+          "kind": "issue",
+          "parent_key": "E3",
+          "title": "[E3.I2] Rotation, versions and reference boundary",
+          "url": "https://linear.app/littleblackhat/issue/CNA-95/e3i2-rotation-versions-and-reference-boundary",
+          "execution_rank": 171,
+          "execution_wave": 10
+        },
+        "E3.I2.S1": {
+          "id": "f12e6e9c-7bbc-4745-8664-35f2fea86fab",
+          "identifier": "CNA-96",
+          "kind": "subissue",
+          "parent_key": "E3.I2",
+          "title": "[E3.I2.S1] Rotatable 18-frame viewer",
+          "url": "https://linear.app/littleblackhat/issue/CNA-96/e3i2s1-rotatable-18-frame-viewer",
+          "execution_rank": 131,
+          "execution_wave": 8
+        },
+        "E3.I2.S2": {
+          "id": "66bbf60f-9002-40d8-8bfe-f88e230dd38c",
+          "identifier": "CNA-98",
+          "kind": "subissue",
+          "parent_key": "E3.I2",
+          "title": "[E3.I2.S2] Counter and symbol version inspector",
+          "url": "https://linear.app/littleblackhat/issue/CNA-98/e3i2s2-counter-and-symbol-version-inspector",
+          "execution_rank": 155,
+          "execution_wave": 9
+        },
+        "E3.I2.S3": {
+          "id": "4cb23192-ae18-40b8-ad43-0720e22f577a",
+          "identifier": "CNA-97",
+          "kind": "subissue",
+          "parent_key": "E3.I2",
+          "title": "[E3.I2.S3] Reference-versus-intelligence boundary test",
+          "url": "https://linear.app/littleblackhat/issue/CNA-97/e3i2s3-reference-versus-intelligence-boundary-test",
+          "execution_rank": 49,
+          "execution_wave": 7
+        },
+        "E4": {
+          "id": "22f39ba1-92e6-4812-81c1-2f5e8649cfbe",
+          "identifier": "CNA-86",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E4] Canonical simulation-facing data",
+          "url": "https://linear.app/littleblackhat/issue/CNA-86/e4-canonical-simulation-facing-data",
+          "execution_rank": 172,
+          "execution_wave": 10
+        },
+        "E4.I1": {
+          "id": "533cb230-a245-4ffa-9773-f95dcf0fc67d",
+          "identifier": "CNA-87",
+          "kind": "issue",
+          "parent_key": "E4",
+          "title": "[E4.I1] Graziani data first",
+          "url": "https://linear.app/littleblackhat/issue/CNA-87/e4i1-graziani-data-first",
+          "execution_rank": 156,
+          "execution_wave": 9
+        },
+        "E4.I1.S1": {
+          "id": "acdb5a52-3637-4e44-aac6-850358920962",
+          "identifier": "CNA-88",
+          "kind": "subissue",
+          "parent_key": "E4.I1",
+          "title": "[E4.I1.S1] TOE and organization for Graziani units",
+          "url": "https://linear.app/littleblackhat/issue/CNA-88/e4i1s1-toe-and-organization-for-graziani-units",
+          "execution_rank": 50,
+          "execution_wave": 7
+        },
+        "E4.I1.S2": {
+          "id": "9794be74-978f-4f9b-a1a8-a151a545006a",
+          "identifier": "CNA-89",
+          "kind": "subissue",
+          "parent_key": "E4.I1",
+          "title": "[E4.I1.S2] Morale, training and arrivals for the Graziani window",
+          "url": "https://linear.app/littleblackhat/issue/CNA-89/e4i1s2-morale-training-and-arrivals-for-the-graziani-window",
+          "execution_rank": 132,
+          "execution_wave": 8
+        },
+        "E4.I1.S3": {
+          "id": "f2cdd377-a8eb-417a-ad2d-31af27f5ab87",
+          "identifier": "CNA-90",
+          "kind": "subissue",
+          "parent_key": "E4.I1",
+          "title": "[E4.I1.S3] Equipment and aircraft characteristics with errata ledger",
+          "url": "https://linear.app/littleblackhat/issue/CNA-90/e4i1s3-equipment-and-aircraft-characteristics-with-errata-ledger",
+          "execution_rank": 40,
+          "execution_wave": 6
+        },
+        "E5": {
+          "id": "75029ee1-fa07-483f-b3b8-ab20358f246a",
+          "identifier": "CNA-99",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E5] Remaining order-of-battle data",
+          "url": "https://linear.app/littleblackhat/issue/CNA-99/e5-remaining-order-of-battle-data",
+          "execution_rank": 244,
+          "execution_wave": 15
+        },
+        "E5.I1": {
+          "id": "6c557f0b-eb7c-4357-9795-fdb4021ab940",
+          "identifier": "CNA-100",
+          "kind": "issue",
+          "parent_key": "E5",
+          "title": "[E5.I1] Remaining order of battle",
+          "url": "https://linear.app/littleblackhat/issue/CNA-100/e5i1-remaining-order-of-battle",
+          "execution_rank": 232,
+          "execution_wave": 14
+        },
+        "E5.I1.S1": {
+          "id": "1b3cc909-b739-4526-be00-3ce5953647f7",
+          "identifier": "CNA-103",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S1] Full land reinforcement and withdrawal schedules plus aircraft withdrawal",
+          "url": "https://linear.app/littleblackhat/issue/CNA-103/e5i1s1-full-land-reinforcement-and-withdrawal-schedules-plus-aircraft",
+          "execution_rank": 202,
+          "execution_wave": 11
+        },
+        "E5.I1.S2": {
+          "id": "4faa6310-568e-439b-97b2-4bd6d509bd8a",
+          "identifier": "CNA-102",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S2] Commonwealth TOE and morale for all reconciled units",
+          "url": "https://linear.app/littleblackhat/issue/CNA-102/e5i1s2-commonwealth-toe-and-morale-for-all-reconciled-units",
+          "execution_rank": 215,
+          "execution_wave": 12
+        },
+        "E5.I1.S3": {
+          "id": "b6147a0f-3275-4dba-b0c2-12c3d6856fde",
+          "identifier": "CNA-101",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S3] Axis TOE and morale for all reconciled units",
+          "url": "https://linear.app/littleblackhat/issue/CNA-101/e5i1s3-axis-toe-and-morale-for-all-reconciled-units",
+          "execution_rank": 216,
+          "execution_wave": 12
+        },
+        "E5.I1.S4": {
+          "id": "da56ced9-aaec-4054-856f-b34aa33d6819",
+          "identifier": "CNA-104",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S4] VASSAL counter-data conflict review",
+          "url": "https://linear.app/littleblackhat/issue/CNA-104/e5i1s4-vassal-counter-data-conflict-review",
+          "execution_rank": 227,
+          "execution_wave": 13
+        },
+        "E6": {
+          "id": "f622de88-0f69-4678-aa0a-2656006fcbff",
+          "identifier": "CNA-105",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E6] Unique-sprite production waves",
+          "url": "https://linear.app/littleblackhat/issue/CNA-105/e6-unique-sprite-production-waves",
+          "execution_rank": 292,
+          "execution_wave": 17
+        },
+        "E6.I1": {
+          "id": "9f1b814d-96a0-4da4-bf48-070156da04d5",
+          "identifier": "CNA-120",
+          "kind": "issue",
+          "parent_key": "E6",
+          "title": "[E6.I1] Wave freeze and production gates",
+          "url": "https://linear.app/littleblackhat/issue/CNA-120/e6i1-wave-freeze-and-production-gates",
+          "execution_rank": 233,
+          "execution_wave": 14
+        },
+        "E6.I1.S1": {
+          "id": "d599dda1-afb6-4636-8506-8b3eb66c37bb",
+          "identifier": "CNA-122",
+          "kind": "subissue",
+          "parent_key": "E6.I1",
+          "title": "[E6.I1.S1] Freeze wave membership",
+          "url": "https://linear.app/littleblackhat/issue/CNA-122/e6i1s1-freeze-wave-membership",
+          "execution_rank": 217,
+          "execution_wave": 12
+        },
+        "E6.I1.S2": {
+          "id": "89664a74-ffa6-421c-a572-0800c2c250bf",
+          "identifier": "CNA-121",
+          "kind": "subissue",
+          "parent_key": "E6.I1",
+          "title": "[E6.I1.S2] Sprite gate checker and proof sheets",
+          "url": "https://linear.app/littleblackhat/issue/CNA-121/e6i1s2-sprite-gate-checker-and-proof-sheets",
+          "execution_rank": 218,
+          "execution_wave": 12
+        },
+        "E6.I1.S3": {
+          "id": "608da34f-e7bd-4f56-ae50-b5a03726f407",
+          "identifier": "CNA-123",
+          "kind": "subissue",
+          "parent_key": "E6.I1",
+          "title": "[E6.I1.S3] Re-gate the existing ready sets",
+          "url": "https://linear.app/littleblackhat/issue/CNA-123/e6i1s3-re-gate-the-existing-ready-sets",
+          "execution_rank": 228,
+          "execution_wave": 13
+        },
+        "E6.I2": {
+          "id": "ce85fbb1-6f6b-430f-80f0-fa57bf76b972",
+          "identifier": "CNA-106",
+          "kind": "issue",
+          "parent_key": "E6",
+          "title": "[E6.I2] Wave A: Graziani's Offensive order of battle",
+          "url": "https://linear.app/littleblackhat/issue/CNA-106/e6i2-wave-a-grazianis-offensive-order-of-battle",
+          "execution_rank": 280,
+          "execution_wave": 16
+        },
+        "E6.I2.S1": {
+          "id": "c18a9cf1-6d34-44cb-9a0d-4d322b48228d",
+          "identifier": "CNA-112",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S1] Wave A sprites: Italian CCNN divisions and attached tank battalion",
+          "url": "https://linear.app/littleblackhat/issue/CNA-112/e6i2s1-wave-a-sprites-italian-ccnn-divisions-and-attached-tank",
+          "execution_rank": 245,
+          "execution_wave": 15
+        },
+        "E6.I2.S2": {
+          "id": "035bf9d7-ff79-4b03-a79e-89911b39f22e",
+          "identifier": "CNA-109",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S2] Wave A sprites: Libyan divisions, Maletti group and Libyan specialists",
+          "url": "https://linear.app/littleblackhat/issue/CNA-109/e6i2s2-wave-a-sprites-libyan-divisions-maletti-group-and-libyan",
+          "execution_rank": 250,
+          "execution_wave": 15
+        },
+        "E6.I2.S3": {
+          "id": "980fa44d-df95-40f2-956c-16984e5d877c",
+          "identifier": "CNA-110",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S3] Wave A sprites: Italian metropolitan divisions and attached tank battalions",
+          "url": "https://linear.app/littleblackhat/issue/CNA-110/e6i2s3-wave-a-sprites-italian-metropolitan-divisions-and-attached-tank",
+          "execution_rank": 251,
+          "execution_wave": 15
+        },
+        "E6.I2.S4": {
+          "id": "5b86b710-7e3e-42bb-ba40-dc73c41752b6",
+          "identifier": "CNA-116",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S4] Wave A sprites: Libyan Tank Command, regiments and coastal garrisons",
+          "url": "https://linear.app/littleblackhat/issue/CNA-116/e6i2s4-wave-a-sprites-libyan-tank-command-regiments-and-coastal",
+          "execution_rank": 252,
+          "execution_wave": 15
+        },
+        "E6.I2.S5": {
+          "id": "5962538c-d34c-4aaa-9fdb-cbb44aec7dd4",
+          "identifier": "CNA-117",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S5] Wave A sprites: Inland and airfield garrisons",
+          "url": "https://linear.app/littleblackhat/issue/CNA-117/e6i2s5-wave-a-sprites-inland-and-airfield-garrisons",
+          "execution_rank": 253,
+          "execution_wave": 15
+        },
+        "E6.I2.S6": {
+          "id": "c2b55234-9c69-460f-96fa-ee0f60f36b9c",
+          "identifier": "CNA-115",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S6] Wave A sprites: Italian corps artillery and army artillery regiments",
+          "url": "https://linear.app/littleblackhat/issue/CNA-115/e6i2s6-wave-a-sprites-italian-corps-artillery-and-army-artillery",
+          "execution_rank": 254,
+          "execution_wave": 15
+        },
+        "E6.I2.S7": {
+          "id": "6f84826e-00ac-472b-8d19-adafce637b5a",
+          "identifier": "CNA-118",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S7] Wave A sprites: Italian independent battalions, first group",
+          "url": "https://linear.app/littleblackhat/issue/CNA-118/e6i2s7-wave-a-sprites-italian-independent-battalions-first-group",
+          "execution_rank": 255,
+          "execution_wave": 15
+        },
+        "E6.I2.S8": {
+          "id": "0f8e74d2-5129-4608-aede-1b925f818e9a",
+          "identifier": "CNA-119",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S8] Wave A sprites: Italian independent battalions, second group",
+          "url": "https://linear.app/littleblackhat/issue/CNA-119/e6i2s8-wave-a-sprites-italian-independent-battalions-second-group",
+          "execution_rank": 256,
+          "execution_wave": 15
+        },
+        "E6.I2.S9": {
+          "id": "0def38f9-66a3-4844-b7b6-1474a65f7e65",
+          "identifier": "CNA-107",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S9] Wave A sprites: 7th Armoured Division forward units, first group",
+          "url": "https://linear.app/littleblackhat/issue/CNA-107/e6i2s9-wave-a-sprites-7th-armoured-division-forward-units-first-group",
+          "execution_rank": 257,
+          "execution_wave": 15
+        },
+        "E6.I2.S10": {
+          "id": "d8a5ae79-ea2d-42e7-ac99-19b5e6399e49",
+          "identifier": "CNA-111",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S10] Wave A sprites: 7th Armoured Division forward units and Matruh",
+          "url": "https://linear.app/littleblackhat/issue/CNA-111/e6i2s10-wave-a-sprites-7th-armoured-division-forward-units-and-matruh",
+          "execution_rank": 246,
+          "execution_wave": 15
+        },
+        "E6.I2.S11": {
+          "id": "b2547a1e-f193-4f61-b59b-22dd44a3d2d5",
+          "identifier": "CNA-108",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S11] Wave A sprites: Matruh attachments, 4th Indian, 16th Bde and 2nd NZ Division",
+          "url": "https://linear.app/littleblackhat/issue/CNA-108/e6i2s11-wave-a-sprites-matruh-attachments-4th-indian-16th-bde-and-2nd",
+          "execution_rank": 247,
+          "execution_wave": 15
+        },
+        "E6.I2.S12": {
+          "id": "83183cce-1ae5-4a75-a401-2b5440722091",
+          "identifier": "CNA-113",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S12] Wave A sprites: Alexandria/Cairo rear units",
+          "url": "https://linear.app/littleblackhat/issue/CNA-113/e6i2s12-wave-a-sprites-alexandriacairo-rear-units",
+          "execution_rank": 248,
+          "execution_wave": 15
+        },
+        "E6.I2.S13": {
+          "id": "413172d7-302f-4214-9b45-931b675ff151",
+          "identifier": "CNA-114",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S13] Wave A sprites: Commonwealth army-level artillery and AA",
+          "url": "https://linear.app/littleblackhat/issue/CNA-114/e6i2s13-wave-a-sprites-commonwealth-army-level-artillery-and-aa",
+          "execution_rank": 249,
+          "execution_wave": 15
+        },
+        "E6.I3": {
+          "id": "95a5f569-64a4-41d5-a6dd-2be6c05b31c5",
+          "identifier": "CNA-128",
+          "kind": "issue",
+          "parent_key": "E6",
+          "title": "[E6.I3] Wave B: 60.23 The Italian Campaign additions and GT1-20 reinforcements",
+          "url": "https://linear.app/littleblackhat/issue/CNA-128/e6i3-wave-b-6023-the-italian-campaign-additions-and-gt1-20",
+          "execution_rank": 281,
+          "execution_wave": 16
+        },
+        "E6.I3.S1": {
+          "id": "61d3c2aa-d174-4c01-ad3b-428c91056c04",
+          "identifier": "CNA-129",
+          "kind": "subissue",
+          "parent_key": "E6.I3",
+          "title": "[E6.I3.S1] Materialise wave B production leaves",
+          "url": "https://linear.app/littleblackhat/issue/CNA-129/e6i3s1-materialise-wave-b-production-leaves",
+          "execution_rank": 258,
+          "execution_wave": 15
+        },
+        "E6.I4": {
+          "id": "ad0ccd7c-982e-42e6-ba69-52115a868410",
+          "identifier": "CNA-124",
+          "kind": "issue",
+          "parent_key": "E6",
+          "title": "[E6.I4] Wave C: 61 The Desert Fox order of battle",
+          "url": "https://linear.app/littleblackhat/issue/CNA-124/e6i4-wave-c-61-the-desert-fox-order-of-battle",
+          "execution_rank": 282,
+          "execution_wave": 16
+        },
+        "E6.I4.S1": {
+          "id": "6edf1a2c-b97f-4930-923f-efcab14087d1",
+          "identifier": "CNA-125",
+          "kind": "subissue",
+          "parent_key": "E6.I4",
+          "title": "[E6.I4.S1] Materialise wave C production leaves",
+          "url": "https://linear.app/littleblackhat/issue/CNA-125/e6i4s1-materialise-wave-c-production-leaves",
+          "execution_rank": 259,
+          "execution_wave": 15
+        },
+        "E6.I5": {
+          "id": "e8e5f863-f082-4783-a622-6e9eab51531e",
+          "identifier": "CNA-130",
+          "kind": "issue",
+          "parent_key": "E6",
+          "title": "[E6.I5] Wave D: 62 Operation Crusader order of battle",
+          "url": "https://linear.app/littleblackhat/issue/CNA-130/e6i5-wave-d-62-operation-crusader-order-of-battle",
+          "execution_rank": 283,
+          "execution_wave": 16
+        },
+        "E6.I5.S1": {
+          "id": "b4eb83d2-67ab-4a1e-a353-e6c3a10189ca",
+          "identifier": "CNA-131",
+          "kind": "subissue",
+          "parent_key": "E6.I5",
+          "title": "[E6.I5.S1] Materialise wave D production leaves",
+          "url": "https://linear.app/littleblackhat/issue/CNA-131/e6i5s1-materialise-wave-d-production-leaves",
+          "execution_rank": 260,
+          "execution_wave": 15
+        },
+        "E6.I6": {
+          "id": "2a6fa911-efc8-46d3-a0e0-ad1732825ccb",
+          "identifier": "CNA-132",
+          "kind": "issue",
+          "parent_key": "E6",
+          "title": "[E6.I6] Wave E: 63 El Alamein order of battle",
+          "url": "https://linear.app/littleblackhat/issue/CNA-132/e6i6-wave-e-63-el-alamein-order-of-battle",
+          "execution_rank": 284,
+          "execution_wave": 16
+        },
+        "E6.I6.S1": {
+          "id": "533cb160-baf8-487e-9eea-f320be7b5762",
+          "identifier": "CNA-133",
+          "kind": "subissue",
+          "parent_key": "E6.I6",
+          "title": "[E6.I6.S1] Materialise wave E production leaves",
+          "url": "https://linear.app/littleblackhat/issue/CNA-133/e6i6s1-materialise-wave-e-production-leaves",
+          "execution_rank": 261,
+          "execution_wave": 15
+        },
+        "E6.I7": {
+          "id": "4af47243-effd-4063-ac30-aa8f5c633bf6",
+          "identifier": "CNA-126",
+          "kind": "issue",
+          "parent_key": "E6",
+          "title": "[E6.I7] Wave F: remaining 64 Campaign units",
+          "url": "https://linear.app/littleblackhat/issue/CNA-126/e6i7-wave-f-remaining-64-campaign-units",
+          "execution_rank": 285,
+          "execution_wave": 16
+        },
+        "E6.I7.S1": {
+          "id": "b29badc4-b072-448e-abbe-da3253e955af",
+          "identifier": "CNA-127",
+          "kind": "subissue",
+          "parent_key": "E6.I7",
+          "title": "[E6.I7.S1] Materialise wave F production leaves",
+          "url": "https://linear.app/littleblackhat/issue/CNA-127/e6i7s1-materialise-wave-f-production-leaves",
+          "execution_rank": 262,
+          "execution_wave": 15
+        },
+        "E7": {
+          "id": "6fea2159-a2d4-43f9-adaa-f4de00439d84",
+          "identifier": "CNA-153",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E7] Coverage acceptance and release",
+          "url": "https://linear.app/littleblackhat/issue/CNA-153/e7-coverage-acceptance-and-release",
+          "execution_rank": 326,
+          "execution_wave": 21
+        },
+        "E7.I1": {
+          "id": "c1ed74da-f088-4c59-ac9a-2851d8043f2b",
+          "identifier": "CNA-154",
+          "kind": "issue",
+          "parent_key": "E7",
+          "title": "[E7.I1] Acceptance and release",
+          "url": "https://linear.app/littleblackhat/issue/CNA-154/e7i1-acceptance-and-release",
+          "execution_rank": 317,
+          "execution_wave": 20
+        },
+        "E7.I1.S1": {
+          "id": "9c4b8b0b-b561-4781-bbc7-18f55ff7d537",
+          "identifier": "CNA-155",
+          "kind": "subissue",
+          "parent_key": "E7.I1",
+          "title": "[E7.I1.S1] Unique-art coverage gate",
+          "url": "https://linear.app/littleblackhat/issue/CNA-155/e7i1s1-unique-art-coverage-gate",
+          "execution_rank": 304,
+          "execution_wave": 18
+        },
+        "E7.I1.S2": {
+          "id": "0b372301-c507-414b-9bf8-6209756d7b28",
+          "identifier": "CNA-157",
+          "kind": "subissue",
+          "parent_key": "E7.I1",
+          "title": "[E7.I1.S2] Catalog browser acceptance",
+          "url": "https://linear.app/littleblackhat/issue/CNA-157/e7i1s2-catalog-browser-acceptance",
+          "execution_rank": 307,
+          "execution_wave": 19
+        },
+        "E7.I1.S3": {
+          "id": "8e8f4e8f-0cad-4800-bda4-3b162c6c74fe",
+          "identifier": "CNA-156",
+          "kind": "subissue",
+          "parent_key": "E7.I1",
+          "title": "[E7.I1.S3] catalog-v1.x release for simulation",
+          "url": "https://linear.app/littleblackhat/issue/CNA-156/e7i1s3-catalog-v1x-release-for-simulation",
+          "execution_rank": 308,
+          "execution_wave": 19
+        }
+      },
+      "cache": {
+        "teams": {
+          "CNA": "b51f72e9-2103-4bed-9f61-77d7f31e8277"
+        },
+        "labels": {},
+        "states": {}
+      }
+    }
+  }
+}

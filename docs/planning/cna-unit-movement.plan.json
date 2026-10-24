@@ -1,0 +1,691 @@
+{
+  "version": 1,
+  "meta": {
+    "name": "CNA — Unit Movement",
+    "slug": "cna-unit-movement",
+    "team": "DevKit"
+  },
+  "prd": {
+    "problem": "Movement and inspection must match the hex board: a unit turns to face the shared-edge normal before crossing each hexside, moves center to center through every hex of an accepted route, and selection uses the enclosing hex. Today motion.rs interpolates endpoint-to-endpoint with a single heading, and the frontend leaks opponent data: map.rs writes enemy hp into SVG <title>/aria-label text and view.rs renders any selected unit's supplies, CP and strength regardless of side.",
+    "why_now": "The prototype already finishes shortest-arc turns before travel with 18-view atlases (6x3 cells of 256 px, nominal 20 degree steps), but routed play needs per-edge legs, and L21 3.6 (Limited Intelligence, addition) makes privacy a rules requirement: 3.61 denies any knowledge of opposing counters except as expressly indicated, and 3.62 lists what is revealed (a stack may be examined on the map; combat reveals types/totals but not numbers; patrol, air recon, prisoners, construction, trucks/RPs and pilot ratings have specific limits). The four-orb split needs one route contract and one projection contract so animation and gameplay use the same steps and the same disclosed facts.",
+    "users": "Players issuing movement orders and inspecting friendly or enemy stacks on the campaign map.",
+    "value": "One movement orb owns route playback, orientation, selection/hover hex highlights and the inspection panel. Milestones: (E1) consumer fixtures and a pure route-playback model built on published map/simulation contracts; (E2) edge-normal turn-then-step playback; (E3) hex highlights and faction-safe inspection; (E4) integration with the simulation's real route results and viewer projections; (E5) browser acceptance with recordings and a DOM privacy scan. Owned files: crates/frontend/src/motion.rs, the movement/inspection modules created by the simulation scaffold split (crates/frontend/src/inspect.rs, crates/frontend/src/view/panel.rs) and src/styles/movement.css. map.rs internals and cna-map geometry stay map-owned (movement uses the MapOverlay API); catalog art loading stays catalog-owned; legality, costs, reveal timing and saves stay simulation-owned. Early fixtures let movement progress independently; final acceptance depends on upstream implementations, never the reverse.",
+    "success_metrics": [
+      "Every played route is an ordered list of adjacent HexIds from the simulation; for each leg the unit finishes turning to the cna-map shared-edge normal bearing, translates across that edge, stops at the next center and turns before the next leg (unit tests on the pure model, browser recording inspected).",
+      "Geometric facing and sprite frame are separate: facing is one of the six edge-normal bearings published by cna-map; the frame is the nearest of the 18 atlas views, and the test table documents the per-bearing error (up to 10 degrees) rather than claiming exact art.",
+      "Playback consumes the simulation's ordered route, per-step costs, interrupt and reveal events; it never derives a shortcut from endpoints and never charges CP/fuel itself.",
+      "Friendly and enemy hover/selection use cna-map hit testing; the selected hex has a prominent outline, hover is visually distinct, stacked units are reachable, and neighbouring controls do not steal hits during pan/zoom.",
+      "Enemy stacks can be examined as L21 3.62 allows but cannot be commanded; detail panels, tooltips, SVG titles, ARIA text, previews and logs render only fields present in the viewer projection; a sentinel-value DOM scan finds no hidden enemy data.",
+      "Recordings and screenshots cover all six headings, a multi-turn route, seam wraparound (e.g. 350 to 10 degrees), interrupted playback, reduced motion, and selected/hovered friendly/enemy states at 2458x1358.",
+      "Movement leaves have only earlier prerequisites in the global DAG; no movement leaf blocks map/catalog contracts or simulation rules correctness."
+    ],
+    "out_of_scope": [
+      "Creating historical unit identities or producing sprites (catalog).",
+      "Computing movement costs, legal paths, reaction windows, hidden information or saves in the frontend (simulation).",
+      "Generic fog-of-war hiding ordinary counters: L21 3.6 lets players examine any stack; limits apply to counter contents and specific events.",
+      "Claiming smooth walking animation from still direction frames, or synthesising missing headings.",
+      "Editing map.rs internals, cna-map, catalog modules or simulation crates; boundary changes go to the owning orb."
+    ],
+    "open_questions": [
+      "'Move through squares' is interpreted as traversing each adjacent hex of the accepted route, not introducing a square grid; this matches the supplied map and shared-edge requirement.",
+      "What exactly does an opponent see when examining a stack (L21 3.62 'Map: a Player may examine any stack ... what is in those counters is another story')? The simulation projection contract (cna-simulation E2.I1.S3) defines fields; movement renders only those.",
+      "Should stacks show counter backs/nationality colour only, or top counter faces? Pending simulation adjudication of 3.62 'Map'; fixtures carry both variants so UI work can proceed."
+    ]
+  },
+  "epics": [
+    {
+      "key": "E1",
+      "title": "Consumer fixtures and pure playback model",
+      "objective": "Build a fixture-driven playground and refactor motion.rs into a DOM-free route-step model using published contracts.",
+      "user_value": "Movement work starts immediately without waiting for the simulation's rules or the map's transcription.",
+      "acceptance_criteria": [
+        "Fixtures from cna-map and cna-simulation load in a dev-only playground.",
+        "motion.rs exposes a pure RouteLeg/PlaybackState model with unit tests; existing sandbox animation still works."
+      ],
+      "blocked_by": [],
+      "issues": [
+        {
+          "key": "E1.I1",
+          "title": "Fixture adapter and playground",
+          "summary": "Load the map corridor fixture, route fixtures and projection fixtures into a dev page.",
+          "systems": [
+            "frontend",
+            "fixtures"
+          ],
+          "approach": "Dev-only route `?dev=movement` renders the corridor fixture via the MapOverlay API placeholder (or the legacy SVG until map E2.I2.S3 lands) and plays fixture routes.",
+          "risks": [
+            "Fixtures may drift from contracts; pin contract versions and fail on mismatch."
+          ],
+          "acceptance_criteria": [
+            "Playground loads all fixtures and asserts contract versions."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E1.I1.S1",
+              "title": "Fixture adapter for map, route and projection contracts",
+              "goal": "Read upstream fixtures through typed contracts so later integration is a swap, not a rewrite.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 3.6; docs/contracts/map-v1.md; docs/contracts/sim-route-v1.md",
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-map:E1.I2.S5 (corridor fixture and map-contract-v1); cna-simulation:E2.I1.S2 (route result contract and fixtures); cna-simulation:E2.I1.S3 (viewer projection contract and fixtures); cna-simulation:E1.I1.S3 (frontend split assigns movement modules)",
+                "crates/frontend/src/movement/fixtures.rs: load cna_map::fixture::corridor(), cna-sim route fixtures (crates/cna-sim/fixtures/route-*.json) and projection fixtures (projection-*.json); check MAP_CONTRACT_VERSION and the sim contract version constants.",
+                "Expose a FixtureScenario {hexes, units, routes, projections} used by tests and the playground."
+              ],
+              "non_goals": [
+                "Rendering.",
+                "Legality checks."
+              ],
+              "acceptance_criteria": [
+                "Unit test loads every fixture and fails when a contract version constant changes.",
+                "No fixture field is reinterpreted (e.g. costs are displayed, not recomputed)."
+              ],
+              "verification": [
+                "cargo test -p cna-frontend movement::fixtures",
+                "cargo clippy --workspace --all-targets -- -D warnings"
+              ],
+              "files_hint": [
+                "crates/frontend/src/movement/fixtures.rs",
+                "crates/frontend/src/movement/mod.rs"
+              ],
+              "size": "M",
+              "blocked_by": []
+            },
+            {
+              "key": "E1.I1.S2",
+              "title": "Dev-only movement playground page",
+              "goal": "Exercise playback and inspection visually before integration.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Add a dev-only view (compiled only with a `dev-playground` cargo feature or debug build) listing fixture routes and units with play/step/interrupt buttons.",
+                "Ensure production build excludes it (check generated bundle for the playground marker)."
+              ],
+              "non_goals": [
+                "Production UI changes."
+              ],
+              "acceptance_criteria": [
+                "Playground renders in the browser test and is absent from `npm run build` output (grep check in the test)."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/movement-playground.spec.ts",
+                "npm run build"
+              ],
+              "files_hint": [
+                "crates/frontend/src/movement/playground.rs",
+                "tests/browser/movement-playground.spec.ts"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E1.I1.S1"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E1.I2",
+          "title": "Pure route-step playback model",
+          "summary": "Refactor motion.rs so playback is a deterministic function of route legs and time.",
+          "systems": [
+            "frontend (pure Rust)"
+          ],
+          "approach": "Keep existing Motion tests passing; add RouteLeg {from, to, bearing} and PlaybackState {Turning, Translating, Settled, Interrupted} sampled by time.",
+          "risks": [
+            "Changing timing constants would alter the existing sandbox feel; keep 2 ms/degree turn cadence and 420-1800 ms travel unless E2 changes them deliberately."
+          ],
+          "acceptance_criteria": [
+            "Model is DOM-free, deterministic and covered by unit tests."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E1.I2.S1",
+              "title": "RouteLeg and PlaybackState model in motion.rs",
+              "goal": "Represent multi-leg routes as turn-then-translate segments.",
+              "scope": [
+                "Add to crates/frontend/src/motion.rs: RoutePlayback::new(start_pose, legs, now) and sample(now, reduced_motion) -> Pose plus current leg index/state; legs take bearings as inputs (from cna-map), never compute them from pixel deltas.",
+                "Existing single-destination Motion API becomes a one-leg route; all current tests stay green."
+              ],
+              "non_goals": [
+                "Interrupt semantics (E2.I1.S3).",
+                "DOM rendering."
+              ],
+              "acceptance_criteria": [
+                "New tests: a three-leg route visits each center in order and never translates while |heading error| > 0.",
+                "All existing motion.rs tests pass unchanged."
+              ],
+              "verification": [
+                "cargo test -p cna-frontend motion",
+                "cargo clippy --workspace --all-targets -- -D warnings"
+              ],
+              "files_hint": [
+                "crates/frontend/src/motion.rs"
+              ],
+              "size": "M",
+              "blocked_by": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E2",
+      "title": "Edge-normal turn-then-step playback",
+      "objective": "Play accepted routes leg by leg, facing each shared-edge normal before crossing, with honest frame selection, interruptions and reduced motion.",
+      "user_value": "Units visibly drive through each hex of their route and face the hexside they cross.",
+      "acceptance_criteria": [
+        "All six bearings, multi-leg and wraparound behaviour tested.",
+        "Frame selection table documents nearest-view error.",
+        "Interrupted playback stops at the interrupting hex center."
+      ],
+      "blocked_by": [
+        "E1"
+      ],
+      "issues": [
+        {
+          "key": "E2.I1",
+          "title": "Bearings, frames and interruptions",
+          "summary": "Use cna-map bearings, select frames separately, handle interrupts and wraparound.",
+          "systems": [
+            "frontend (pure Rust)",
+            "browser"
+          ],
+          "approach": "Bearings from cna_map::geometry::edge_normal_bearing; frame = nearest of 18 views; interrupt = truncate route at the event's step index.",
+          "risks": [
+            "Sideways VASSAL grids put bearings at 0/60/120... or 30/90/150...; use the constant from cna-map, do not hard-code."
+          ],
+          "acceptance_criteria": [
+            "Tests cover six bearings, wraparound, interrupts and reduced motion."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E2.I1.S1",
+              "title": "Per-leg bearing from cna-map edge normals",
+              "goal": "Turn units to the true shared-edge normal for each step.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-map:E1.I2.S2 (edge-normal geometry)",
+                "Build legs from an ordered HexId route using cna_map geometry (center, edge_normal_bearing); reject non-adjacent consecutive hexes with an explicit error state (simulation bug, not silently skipped).",
+                "Cross-section seam steps use the canonical HexId and the shared edge from cna-map's seam table; check both center adjacency and that the travel segment crosses the shared edge perpendicularly."
+              ],
+              "non_goals": [
+                "Computing route legality."
+              ],
+              "acceptance_criteria": [
+                "Table test for all six directions from a fixture hex: leg bearing equals cna-map constant exactly.",
+                "Non-adjacent input produces an error and no animation."
+              ],
+              "verification": [
+                "cargo test -p cna-frontend motion::bearings"
+              ],
+              "files_hint": [
+                "crates/frontend/src/motion.rs"
+              ],
+              "size": "M",
+              "blocked_by": []
+            },
+            {
+              "key": "E2.I1.S2",
+              "title": "Nearest-frame selection decoupled from facing",
+              "goal": "Keep geometric facing exact while choosing the closest available artwork.",
+              "scope": [
+                "Use the existing directional_frame() with 18 frames; add a test table for the six travel bearings recording chosen frame and angular error; document in docs/movement/frames.md.",
+                "Atlas lookups go through the catalog inventory API (read-only); unknown atlas => fallback upright sprite."
+              ],
+              "non_goals": [
+                "Producing new frames.",
+                "Changing atlas layout."
+              ],
+              "acceptance_criteria": [
+                "Error ≤10 degrees for every bearing and the table is committed.",
+                "Facing state stores the exact bearing, not the frame angle (test)."
+              ],
+              "verification": [
+                "cargo test -p cna-frontend motion::frames"
+              ],
+              "files_hint": [
+                "crates/frontend/src/motion.rs",
+                "docs/movement/frames.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E2.I1.S1"
+              ]
+            },
+            {
+              "key": "E2.I1.S3",
+              "title": "Interruption, wraparound and reduced motion",
+              "goal": "Handle stops mid-route and seam angles correctly.",
+              "scope": [
+                "Interrupt at step k: finish the current translation to hex k's center, then settle (never stop mid-edge); re-targeting during a turn starts from the visible pose; 350->10 degrees turns 20 degrees; reduced motion snaps to final state per leg sequence end."
+              ],
+              "non_goals": [
+                "Deciding when interrupts happen (simulation)."
+              ],
+              "acceptance_criteria": [
+                "Tests: interrupt during turn and during translate end at the correct center; wraparound both directions; reduced motion produces no intermediate poses."
+              ],
+              "verification": [
+                "cargo test -p cna-frontend motion"
+              ],
+              "files_hint": [
+                "crates/frontend/src/motion.rs"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E2.I1.S1"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E2.I2",
+          "title": "Browser playback rendering",
+          "summary": "Render route playback on the map overlay.",
+          "systems": [
+            "frontend",
+            "browser"
+          ],
+          "approach": "Draw unit sprites in the MapOverlay units layer; sample RoutePlayback each animation frame; one opaque frame at a time (no crossfade).",
+          "risks": [
+            "Frame loop must stop when idle to avoid battery drain."
+          ],
+          "acceptance_criteria": [
+            "Playback renders correctly in the playground and is recorded."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E2.I2.S1",
+              "title": "Render route playback through MapOverlay",
+              "goal": "Show routed movement on the real map.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-map:E2.I2.S3 (MapOverlay API); cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Use map MapOverlay units layer for sprite nodes keyed by unit id; keep the existing no-rotate-transform, single-opaque-frame rules; stop requestAnimationFrame when no playback is active."
+              ],
+              "non_goals": [
+                "Hex highlights (E3)."
+              ],
+              "acceptance_criteria": [
+                "Browser test samples positions: unit passes through each route hex center (±2 px) in order; no CSS rotate transforms on unit nodes."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/movement-playback.spec.ts"
+              ],
+              "files_hint": [
+                "crates/frontend/src/movement/render.rs",
+                "src/styles/movement.css"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E2.I1.S2",
+                "E2.I1.S3"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E3",
+      "title": "Hex highlights and faction-safe inspection",
+      "objective": "Highlight selected/hovered hexes using map geometry and render inspection only from the viewer projection.",
+      "user_value": "Players see exactly which hex is selected and can inspect enemies without learning hidden information.",
+      "acceptance_criteria": [
+        "Selection/hover outlines drawn via MapOverlay and hit-tested with cna-map.",
+        "Inspection panel and every text surface use projection fields only; sentinel DOM scan passes."
+      ],
+      "blocked_by": [
+        "E1"
+      ],
+      "issues": [
+        {
+          "key": "E3.I1",
+          "title": "Selection and hover highlights",
+          "summary": "Prominent selected-hex outline, distinct hover, stack cycling.",
+          "systems": [
+            "frontend",
+            "browser"
+          ],
+          "approach": "Overlay selection/hover layers; Tab/Shift+Tab or click cycles units within a stack.",
+          "risks": [
+            "Neighbouring hex targets must not overlap; use geometry hit test, not DOM bounding boxes."
+          ],
+          "acceptance_criteria": [
+            "Highlights verified in screenshots and hit tests."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E3.I1.S1",
+              "title": "Selected and hover hex outlines with stack cycling",
+              "goal": "Make selection unmistakable for friendly and enemy stacks.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-map:E2.I2.S3 (MapOverlay layers); cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Draw selected hex outline (thicker, higher contrast) and hover outline (distinct dash/colour) in MapOverlay selection/hover layers; stacks expose a count badge and cycle selection with click/Tab.",
+                "Keyboard: Enter selects focused hex, Escape clears."
+              ],
+              "non_goals": [
+                "Inspection content (E3.I2)."
+              ],
+              "acceptance_criteria": [
+                "Screenshots at 2458x1358 of selected friendly, selected enemy, hovered friendly, hovered enemy inspected and distinct.",
+                "Stack of 3 units cycles through all three."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/movement-highlights.spec.ts"
+              ],
+              "files_hint": [
+                "crates/frontend/src/movement/highlight.rs",
+                "src/styles/movement.css"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E1.I1.S1"
+              ]
+            },
+            {
+              "key": "E3.I1.S2",
+              "title": "Geometry hit testing across neighbouring controls",
+              "goal": "Pointer movement between adjacent hexes and buttons resolves correctly.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Route pointer events through map hex_at; ensure overlay nodes have pointer-events none except focus targets; test moving the pointer across 6 neighbours and onto panel buttons."
+              ],
+              "non_goals": [
+                "Map viewport internals."
+              ],
+              "acceptance_criteria": [
+                "Browser test asserts hover hex sequence equals the geometric path; no hover flicker events between hexes."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/movement-hit-test.spec.ts"
+              ],
+              "files_hint": [
+                "crates/frontend/src/movement/highlight.rs"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E3.I1.S1"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E3.I2",
+          "title": "Projection-only inspection",
+          "summary": "Inspection panel and text surfaces consume the viewer projection only.",
+          "systems": [
+            "frontend",
+            "browser"
+          ],
+          "approach": "Panel takes a ProjectedStack/ProjectedUnit; friendly shows owner fields, enemy shows only fields L21 3.62 allows per the projection contract; commands disabled for non-owned units.",
+          "risks": [
+            "Old view.rs code paths read cna_sim::Unit directly; they must be removed for map/panel surfaces, not merely hidden with CSS."
+          ],
+          "acceptance_criteria": [
+            "Sentinel scan passes against fixtures."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E3.I2.S1",
+              "title": "Inspection panel driven by viewer projection",
+              "goal": "Let players inspect any stack within the rules' disclosure limits.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 3.61, 3.62",
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E2.I1.S3 (projection contract fixtures); cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "crates/frontend/src/inspect.rs and view/panel.rs render from the projection fixture types: owner view (full), opponent view (stack examination per 3.62 'Map').",
+                "Orders section hidden and actions rejected for non-owned units (activate() guard)."
+              ],
+              "non_goals": [
+                "Deciding disclosure rules."
+              ],
+              "acceptance_criteria": [
+                "Enemy inspection shows only projection fields; attempting an order on an enemy unit is a no-op with an explanatory status message (test)."
+              ],
+              "verification": [
+                "cargo test -p cna-frontend inspect",
+                "npm run test:browser -- tests/browser/movement-inspect.spec.ts"
+              ],
+              "files_hint": [
+                "crates/frontend/src/inspect.rs",
+                "crates/frontend/src/view/panel.rs"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E1.I1.S1"
+              ]
+            },
+            {
+              "key": "E3.I2.S2",
+              "title": "Remove hidden-data leaks and add sentinel DOM scan",
+              "goal": "Prove no enemy private value reaches any text surface.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-map:E2.I2.S3 (overlay label hook replaces map.rs title text); cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Remove hp/supply/CP from map.rs-produced titles/aria for non-owned units by passing projection labels through the overlay API (coordinate with map owner via the API, do not edit map.rs internals).",
+                "Fixture enemy units carry sentinel values (e.g. fuel 7331, hp 8642); browser test scans document text, attributes (title, aria-*, data-*), console logs and journal for sentinels."
+              ],
+              "non_goals": [
+                "Changing simulation log content (simulation-owned)."
+              ],
+              "acceptance_criteria": [
+                "Sentinel scan finds zero occurrences in owner=Allied view and positive control finds them in the Axis-owner view."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/movement-privacy.spec.ts"
+              ],
+              "files_hint": [
+                "tests/browser/movement-privacy.spec.ts",
+                "crates/frontend/src/inspect.rs"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E3.I2.S1"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E4",
+      "title": "Integration with authoritative routes and projections",
+      "objective": "Swap fixtures for the simulation's real route results and projection engine.",
+      "user_value": "Animation and inspection reflect actual rules outcomes, including interrupts and reveal timing.",
+      "acceptance_criteria": [
+        "Real route results drive playback including interrupts.",
+        "Real projection engine drives inspection; sentinel scan still passes.",
+        "Reveal events shown at the step where they occur."
+      ],
+      "blocked_by": [
+        "E2",
+        "E3"
+      ],
+      "issues": [
+        {
+          "key": "E4.I1",
+          "title": "Wire real simulation outputs",
+          "summary": "Replace fixture adapters with simulation APIs.",
+          "systems": [
+            "frontend",
+            "simulation API"
+          ],
+          "approach": "Keep fixture adapters for tests; production path uses cna-sim engine calls exposed by the shell.",
+          "risks": [
+            "Engine may emit routes with zero-length legs (e.g. reaction stops); handle explicitly."
+          ],
+          "acceptance_criteria": [
+            "Production playback and inspection use real engine outputs."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E4.I1.S1",
+              "title": "Play authoritative route results with interrupts",
+              "goal": "Animate exactly what the simulation accepted.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E4.I5.S2 (ZOC interrupts in route results); cna-simulation:E4.I3.S2 (land movement costs and route producer); cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Consume cna-sim RouteResult (command id, game revision, ordered hexes, per-step CP/fuel, interrupt event with step index, ZOC/reaction stop) from the move command response; show cost labels from the result only.",
+                "Track the last applied event cursor/revision: repeated renders never restart a route, duplicate events never duplicate playback, an unaccepted or unrevealed suffix is never played, and tab-resume or reduced motion preserves event order."
+              ],
+              "non_goals": [
+                "Changing route semantics."
+              ],
+              "acceptance_criteria": [
+                "Browser test on the sim test scenario: a route into an enemy ZOC stops at the reported hex; displayed costs equal RouteResult values."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/movement-integration.spec.ts",
+                "npm test"
+              ],
+              "files_hint": [
+                "crates/frontend/src/movement/integration.rs"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E2.I2.S1",
+                "E3.I2.S2"
+              ]
+            },
+            {
+              "key": "E4.I1.S2",
+              "title": "Inspection from the real projection engine",
+              "goal": "Use the engine's disclosure logic for every inspection.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E3.I3.S1 (projection engine); cna-simulation:E3.I3.S2 (3.6 disclosure points); cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Replace projection fixtures with cna-sim projection::view(state, viewer) in the panel and overlay labels; keep the sentinel test by injecting sentinel values through a test scenario."
+              ],
+              "non_goals": [
+                "Projection rules."
+              ],
+              "acceptance_criteria": [
+                "Sentinel scan passes against the real engine; owner view still shows owner fields."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/movement-privacy.spec.ts"
+              ],
+              "files_hint": [
+                "crates/frontend/src/inspect.rs"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E3.I2.S2"
+              ]
+            },
+            {
+              "key": "E4.I1.S3",
+              "title": "Reveal-timing playback",
+              "goal": "Show revealed facts when the route reaches the revealing step.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "RouteResult reveal events (e.g. enemy stack becomes known adjacent, minefield discovered) are displayed when playback reaches their step index, not at command time."
+              ],
+              "non_goals": [
+                "Deciding reveal rules."
+              ],
+              "acceptance_criteria": [
+                "Browser test: reveal badge appears only after the unit reaches the reported hex."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/movement-reveal.spec.ts"
+              ],
+              "files_hint": [
+                "crates/frontend/src/movement/integration.rs"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E4.I1.S1",
+                "E4.I1.S2"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E5",
+      "title": "Movement browser acceptance",
+      "objective": "Record and inspect final behaviour across headings, routes, interrupts and privacy states.",
+      "user_value": "Kevin can review recordings and screenshots proving the movement and inspection requirements.",
+      "acceptance_criteria": [
+        "Recordings inspected for all six headings, multi-turn, wraparound, interrupted routes.",
+        "Screenshots for selected/hovered friendly/enemy states inspected; privacy scan green."
+      ],
+      "blocked_by": [
+        "E4"
+      ],
+      "issues": [
+        {
+          "key": "E5.I1",
+          "title": "Acceptance recordings and screenshots",
+          "summary": "Produce reviewable visual evidence and final checks.",
+          "systems": [
+            "browser"
+          ],
+          "approach": "Playwright video recording at 2458x1358; inspected frames listed in docs/movement/acceptance.md.",
+          "risks": [
+            "Recordings can hide frame-level bleed; inspect stills too."
+          ],
+          "acceptance_criteria": [
+            "Evidence committed under tests/browser artifacts path ignored by git, referenced from docs."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E5.I1.S1",
+              "title": "Recordings for headings, routes, wraparound and interrupts",
+              "goal": "Show the movement requirements working on the real stack.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Record: six single-step headings; a 5-leg route with three turns; a 350->10 degree wraparound; an interrupted route; reduced motion on.",
+                "Inspect recordings and stills; note any near-repeated frames as artwork limitations, not motion bugs."
+              ],
+              "non_goals": [
+                "New features."
+              ],
+              "acceptance_criteria": [
+                "docs/movement/acceptance.md lists each recording with the observed result; all show turn-then-translate per leg."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/movement-acceptance.spec.ts"
+              ],
+              "files_hint": [
+                "tests/browser/movement-acceptance.spec.ts",
+                "docs/movement/acceptance.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S3"
+              ]
+            },
+            {
+              "key": "E5.I1.S2",
+              "title": "Selection/hover/privacy screenshots and final privacy scan",
+              "goal": "Close out inspection acceptance.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Capture selected and hovered friendly/enemy states at 2458x1358 and 1280x800; rerun sentinel privacy scan on the integrated build."
+              ],
+              "non_goals": [
+                "Changing styles beyond fixes found."
+              ],
+              "acceptance_criteria": [
+                "Screenshots inspected and embedded in acceptance doc; privacy scan passes."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/movement-privacy.spec.ts",
+                "npm run test:browser -- tests/browser/movement-highlights.spec.ts"
+              ],
+              "files_hint": [
+                "docs/movement/acceptance.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E5.I1.S1"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

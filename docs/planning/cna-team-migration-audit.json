@@ -1,0 +1,120 @@
+{
+  "ok": true,
+  "errors": [],
+  "team": "CNA",
+  "tickets": 521,
+  "blocker_edges": 1717,
+  "completion_edges": 494,
+  "combined_edges": 2211,
+  "cycles": 0,
+  "backward_stage_edges": 0,
+  "backward_execution_edges": 0,
+  "old_numbering_reversals": [
+    {
+      "producer": "cna-simulation:E2.I7.S11",
+      "consumer": "cna-simulation:E2.I3.S4"
+    },
+    {
+      "producer": "cna-simulation:E4.I6.S2",
+      "consumer": "cna-simulation:E4.I3.S2"
+    },
+    {
+      "producer": "cna-simulation:E2.I4.S4",
+      "consumer": "cna-simulation:E2.I3.S6"
+    },
+    {
+      "producer": "cna-simulation:E2.I5.S16",
+      "consumer": "cna-simulation:E2.I3.S7"
+    },
+    {
+      "producer": "cna-simulation:E2.I4.S5",
+      "consumer": "cna-simulation:E2.I3.S2"
+    },
+    {
+      "producer": "cna-simulation:E4.I16.S2",
+      "consumer": "cna-simulation:E4.I8.S2"
+    },
+    {
+      "producer": "cna-simulation:E2.I8.S1",
+      "consumer": "cna-simulation:E2.I3.S7"
+    },
+    {
+      "producer": "cna-simulation:E4.I8.S2",
+      "consumer": "cna-simulation:E4.I3.S2"
+    },
+    {
+      "producer": "cna-simulation:E2.I8.S2",
+      "consumer": "cna-simulation:E2.I3.S4"
+    },
+    {
+      "producer": "cna-simulation:E5.I7.S2",
+      "consumer": "cna-simulation:E5.I5.S2"
+    },
+    {
+      "producer": "cna-simulation:E2.I8.S2",
+      "consumer": "cna-simulation:E2.I3.S3"
+    },
+    {
+      "producer": "cna-simulation:E2.I5.S14",
+      "consumer": "cna-simulation:E2.I3.S2"
+    },
+    {
+      "producer": "cna-simulation:E2.I8.S11",
+      "consumer": "cna-simulation:E2.I3.S5"
+    },
+    {
+      "producer": "cna-simulation:E4.I4.S2",
+      "consumer": "cna-simulation:E4.I3.S2"
+    },
+    {
+      "producer": "cna-simulation:E2.I4.S11",
+      "consumer": "cna-simulation:E2.I3.S1"
+    },
+    {
+      "producer": "cna-simulation:E4.I6.S2",
+      "consumer": "cna-simulation:E4.I1.S2"
+    },
+    {
+      "producer": "cna-simulation:E2.I5.S3",
+      "consumer": "cna-simulation:E2.I3.S8"
+    },
+    {
+      "producer": "cna-simulation:E2.I7.S2",
+      "consumer": "cna-simulation:E2.I3.S2"
+    },
+    {
+      "producer": "cna-simulation:E2.I7.S12",
+      "consumer": "cna-simulation:E2.I3.S7"
+    },
+    {
+      "producer": "cna-simulation:E2.I8.S5",
+      "consumer": "cna-simulation:E2.I3.S5"
+    },
+    {
+      "producer": "cna-simulation:E2.I7.S10",
+      "consumer": "cna-simulation:E2.I3.S2"
+    },
+    {
+      "producer": "cna-simulation:E2.I7.S1",
+      "consumer": "cna-simulation:E2.I3.S7"
+    },
+    {
+      "producer": "cna-simulation:E2.I5.S14",
+      "consumer": "cna-simulation:E2.I3.S3"
+    },
+    {
+      "producer": "cna-simulation:E2.I5.S4",
+      "consumer": "cna-simulation:E2.I3.S8"
+    }
+  ],
+  "waves": 59,
+  "negative_controls": [
+    "cycle rejected",
+    "reversed execution rank rejected"
+  ],
+  "ready_leaves": [
+    "CNA-139",
+    "CNA-346",
+    "CNA-6"
+  ]
+}

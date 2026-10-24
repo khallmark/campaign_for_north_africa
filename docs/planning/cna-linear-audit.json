@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "errors": [],
+  "description_mismatches": [],
+  "tickets": 521,
+  "actual_blocker_edges": 1717,
+  "cross_project_edges": 80,
+  "tickets_per_project": {
+    "cna-map": 56,
+    "cna-unit-movement": 29,
+    "cna-catalog": 72,
+    "cna-simulation": 364
+  }
+}

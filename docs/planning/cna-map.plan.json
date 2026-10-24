@@ -1,0 +1,1559 @@
+{
+  "version": 1,
+  "meta": {
+    "name": "CNA — Map",
+    "slug": "cna-map",
+    "team": "DevKit"
+  },
+  "prd": {
+    "problem": "The prototype map is a 15-by-10 schematic SVG with invented terrain (crates/cna-sim/src/lib.rs COLS/ROWS/terrain()), not the Campaign for North Africa battlefield. Players need the supplied CNA map rendered as a draggable, zoomable tiled surface with calibrated hexes and source-backed gameplay geography; the simulation and movement builders need a stable, versioned geometry and terrain contract they can consume before the full map is finished.",
+    "why_now": "docs/CNAv2.1.0 now supplies 'CNA Map Vassal Mitch Guthrie 2021.png' (verified 14310x4632 px) and six VASSAL HexGrid definitions in buildFile.xml (Malta plus map sections A-E; dx 72.95, dy 85.25, sideways, per-section x0/y0 and numbering offsets hOff 2-21, vOff -1 to -133). Zone polygons imply roughly 71 Malta, 1001 A, 1974 B, 1534 C, 1254 D and 1306 E hex cells (about 7140 including sea). These are calibration evidence, not a terrain database. Graziani's Offensive (SC21 60.31/60.41) deploys units on all five sections (A4829 Benina through E3815 Aboukir), so the first certified scenario needs the whole board's geometry and a reviewed C/D/E corridor. Publishing the contract and a fixture first lets the other three orbs proceed in parallel.",
+    "users": "Campaign players; the simulation builder consuming hex IDs, adjacency, terrain and hexside features; the movement builder consuming hex centers, shared-edge normals, hit testing and screen transforms through a published overlay API; the catalog orb is not a consumer.",
+    "value": "One map orb owns map-source provenance, the new crates/cna-map contract crate, tile generation, crates/frontend/src/map.rs viewport rendering, the calibrated hex overlay and terrain/hexside transcription. Milestones in order: (E1) source census and geometry contract with a consumer fixture; (E2) tile pipeline and draggable viewport with an overlay API for movement; (E3) calibrated full-board hex overlay and seam/errata adjudication; (E4) transcription tooling, the certified-subset validator and the Graziani C/D/E corridor plus board-wide point features; (E5) remaining board, Malta and off-map boxes; (E6) gameplay-map acceptance including validation of every hex reference printed in the scenario rules and a checksummed release. No map leaf depends on simulation rules, movement playback or catalog work; the only upstream dependency is the simulation-owned shared scaffold leaf that adds crates/cna-map to the workspace and splits frontend files by owner. Shared entry points (Cargo.toml, package.json, crates/frontend/src/lib.rs, index.html, .agents/setup) are edited only by the simulation integration owner.",
+    "success_metrics": [
+      "crates/cna-map v1 defines HexId (section letter + printed XXYY, e.g. C3926), parse/display round trip, six-direction adjacency including cross-section seams, hex centers and corners in board pixels, shared-edge segments with outward-normal bearings, board-to-screen transforms and terrain/hexside record types; docs/contracts/map-v1.md and a fixture are published before any consumer integration leaf starts.",
+      "The full 14310x4632 battlefield pans and zooms through tiles with a recorded budget (decoded tiles, time to first tile, peak JS heap) measured in pinned Chromium at 2458x1358 and 1280x800; the full-resolution image is never decoded as a single bitmap in the browser.",
+      "All six source grids are reconciled against at least five printed anchor hexes per section and every seam; residuals are recorded in docs/map/calibration.md, and ambiguous cells plus the Sep 79 D2228/2328 escarpment correction have adjudication records.",
+      "Hex outlines are slightly more visible at gameplay zoom than today; outline and hit testing stay aligned during pan, zoom and resize at 2458x1358 (browser test samples centers and near-edge points).",
+      "Every playable cell and relevant hexside has a reviewed record or an explicit unresolved/provisional status; an integrity test fails if a certified scenario subset contains an unreviewed cell or untranscribed area defaults to clear desert.",
+      "Every hex reference printed on SC21 text pages resolves to a valid HexId or is listed as an unresolved source error; the subset validator (E4.I1.S3) is published for the simulation to call.",
+      "Map leaves have only earlier prerequisites; the combined manifest check (python3 docs/planning/cna-dag-check.py) passes with no cycles or backward stage edges."
+    ],
+    "out_of_scope": [
+      "Combat arithmetic, movement legality and costs, supply consumption and victory rules (simulation owns these; map supplies terrain facts only).",
+      "Unit facing animation and selected/hover unit styling (movement owns these through the overlay API).",
+      "Treating the VASSAL grid, zone polygons, v2.1 map labels or image colours as authoritative per-hex terrain; they are evidence reviewed against the rules' Terrain Effects Chart (L21 8.37) and the printed map.",
+      "Redistributing source map art or generated tiles in a public build without a recorded permission decision; local research use is not a redistribution grant.",
+      "Editing simulation-, catalog- or movement-owned files; boundary changes are requested from the owning orb."
+    ],
+    "open_questions": [
+      "BLOCKER for public distribution only: what permission covers redistribution of the SPI/White Box/VASSAL-derived map artwork ((c) 1979 SPI / (c) 2022 White Box Games per moduledata)? Until Kevin records a decision, tiles stay in ignored public/tiles and production builds exclude them.",
+      "Which printed/source discrepancies (seam duplicates, mismatched numbering, VASSAL v2.1 added dumps/fortification labels) need Kevin's adjudication? E3.I1.S3 produces the list; terrain work proceeds with provisional status meanwhile.",
+      "Global order: map E1 publishes contracts in stage 0, simulation and movement consume them, and the map never waits for a downstream consumer."
+    ]
+  },
+  "epics": [
+    {
+      "key": "E1",
+      "title": "Map source census and geometry contract",
+      "objective": "Record every map source with provenance and publish the versioned cna-map v1 geometry/terrain contract plus a consumer fixture.",
+      "user_value": "Simulation and movement can build against stable hex IDs, adjacency, edge normals and terrain records immediately, without waiting for tiles or transcription.",
+      "acceptance_criteria": [
+        "docs/map/sources.md and public/data/map/sources.json record image checksum and dimensions, all six grid definitions and off-map zones.",
+        "crates/cna-map v1 types, geometry and fixture are published with docs/contracts/map-v1.md and pass cargo test -p cna-map.",
+        "A distribution-permission record exists and production builds exclude source-derived tiles until it is resolved."
+      ],
+      "blocked_by": [],
+      "issues": [
+        {
+          "key": "E1.I1",
+          "title": "Map source provenance and permission record",
+          "summary": "Census the supplied map image, VASSAL grids and zones, and record redistribution status.",
+          "systems": [
+            "docs",
+            "data",
+            "build"
+          ],
+          "approach": "Parse buildFile.xml with a small Rust bin in crates/cna-map (no Python dependency) and emit a checked-in JSON census; record licensing status in prose plus a build-time guard.",
+          "risks": [
+            "The PNG is 14310x4632 and committed directly (not LFS); confusing it with a pointer would yield a 0-byte census.",
+            "Licensing ambiguity could leak source art into a public build."
+          ],
+          "acceptance_criteria": [
+            "Census and licensing records exist and are referenced by the contract docs."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E1.I1.S1",
+              "title": "Census VASSAL map grids, zones and image provenance",
+              "goal": "Produce a machine-readable census of the map image and all VASSAL grid/zone definitions so calibration and geometry derive from recorded numbers.",
+              "scope": [
+                "Sources: VBF (docs/CNAv2.1.0/buildFile.xml); docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S1 (adds crates/cna-map to the workspace)",
+                "Add crates/cna-map/src/bin/map-census.rs that reads docs/CNAv2.1.0/buildFile.xml and writes public/data/map/sources.json: image file name, SHA-256, pixel size, and for each of the six HexGrid/HexGridNumbering pairs (Malta, Map A-E) dx, dy, x0, y0, sideways, hOff, vOff, stagger, vDescend, plus each zone polygon and its hex-cell estimate.",
+                "Include the 30+ non-hex zones (holding boxes for Sicily, Italy, Benghazi, Derna, Crete, Bardia, Tobruk, two Alexandria boxes; Tunis/Gabes/Tripoli/Tripolitania tracks; weather and OpStage tracks; Game Track) with kind = off_map_box | track | ui_track.",
+                "Write docs/map/sources.md summarising the census and stating that grids are calibration evidence only."
+              ],
+              "non_goals": [
+                "Terrain classification.",
+                "Tile generation.",
+                "Editing buildFile.xml or the source PNG."
+              ],
+              "acceptance_criteria": [
+                "sources.json lists exactly six hex grids whose parameters equal buildFile.xml (unit test compares against the parsed XML).",
+                "Recorded image size is 14310x4632 and the checksum matches the committed file.",
+                "Every Zone in the Main Map is either mapped to a hex section or classified as off-map/track; none silently dropped (test counts them)."
+              ],
+              "verification": [
+                "cargo run -p cna-map --bin map-census -- --check",
+                "cargo test -p cna-map census",
+                "npm test"
+              ],
+              "files_hint": [
+                "crates/cna-map/src/bin/map-census.rs",
+                "public/data/map/sources.json",
+                "docs/map/sources.md"
+              ],
+              "size": "M",
+              "blocked_by": []
+            },
+            {
+              "key": "E1.I1.S2",
+              "title": "Record map distribution permission and add a production guard",
+              "goal": "Make the redistribution status of source-derived map art explicit and enforce it in builds.",
+              "scope": [
+                "Sources: docs/CNAv2.1.0/moduledata; VCL (docs/CNAv2.1.0/changelog.txt, playnotes.txt, Read me.txt)",
+                "Write docs/map/licensing.md: owners per moduledata ((c) 1979 SPI / (c) 2022 White Box Games), VASSAL module credits (Pete Phillipps 2020, Mitch Guthrie 2021, Norman Harman 2024), what is permitted locally, and status = pending Kevin decision.",
+                "Ensure generated tiles live in ignored public/tiles/ and add a check in crates/cna-map that fails `--release-check` when tiles would be bundled while status != granted.",
+                "List the decision Kevin must record (grant reference or keep local-only)."
+              ],
+              "non_goals": [
+                "Negotiating permission.",
+                "Removing the committed docs/CNAv2.1.0 image."
+              ],
+              "acceptance_criteria": [
+                "licensing.md names every rights holder and the pending decision.",
+                "With status pending, the release check exits non-zero if public/tiles is non-empty in the dist bundle; with the documented local flag it passes."
+              ],
+              "verification": [
+                "cargo run -p cna-map --bin map-census -- --release-check",
+                "git check-ignore -q public/tiles/map/probe.png"
+              ],
+              "files_hint": [
+                "docs/map/licensing.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E1.I1.S1"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E1.I2",
+          "title": "cna-map v1 geometry and terrain contract",
+          "summary": "Publish HexId, adjacency, geometry, transforms, terrain/hexside schemas and a consumer fixture.",
+          "systems": [
+            "rust crate",
+            "contract docs",
+            "fixtures"
+          ],
+          "approach": "Pure-Rust, dependency-light crate (serde only) shared by simulation and frontend. Geometry is computed from the census parameters so every consumer gets the same centers and edge normals.",
+          "risks": [
+            "VASSAL 'sideways' grids swap axes; an orientation mistake would rotate every edge normal by 30 degrees.",
+            "Seam hexes between sections may appear twice; IDs must be canonical before consumers persist them."
+          ],
+          "acceptance_criteria": [
+            "Contract docs, schema and fixture are tagged map-contract-v1 and consumed by at least the fixture tests."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E1.I2.S1",
+              "title": "HexId, sections and adjacency types",
+              "goal": "Give every consumer one canonical hex identity and neighbour relation.",
+              "scope": [
+                "Sources: VBF (docs/CNAv2.1.0/buildFile.xml); SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S1 (workspace member exists)",
+                "In crates/cna-map/src/hex.rs define MapSection {Malta, A, B, C, D, E}, HexId {section, col, row}, Direction (six, clockwise from the first edge), HexsideId (canonical lower-ordered hex + direction).",
+                "Parse/display printed IDs ('C3926', 'D2228', and the off-map box names) with errors for malformed input; OCR-style inputs such as '84827' are rejected, not guessed.",
+                "Implement neighbours within a section from the grid parity rules in sources.json; cross-section neighbours come from a seam table stub (filled in E3.I1.S2)."
+              ],
+              "non_goals": [
+                "Pixel geometry (E1.I2.S2).",
+                "Terrain."
+              ],
+              "acceptance_criteria": [
+                "Round trip parse(display(h)) == h for every hex in the fixture.",
+                "Neighbour relation is symmetric and each interior hex has exactly six neighbours (property test).",
+                "Known printed IDs from SC21 60.31/60.41 (C4218, C4120, C3617, D3714, D3612, E3815, B5925, A4829) parse to the expected section/col/row."
+              ],
+              "verification": [
+                "cargo test -p cna-map hex",
+                "cargo clippy --workspace --all-targets -- -D warnings"
+              ],
+              "files_hint": [
+                "crates/cna-map/src/hex.rs",
+                "crates/cna-map/src/lib.rs"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E1.I1.S1"
+              ]
+            },
+            {
+              "key": "E1.I2.S2",
+              "title": "Hex centers, corners, shared edges and normals",
+              "goal": "Compute board-pixel geometry that movement and hit testing share.",
+              "scope": [
+                "Sources: VBF (docs/CNAv2.1.0/buildFile.xml)",
+                "crates/cna-map/src/geometry.rs: center(HexId) -> BoardPoint, corners(HexId) -> [BoardPoint; 6], edge(HexsideId) -> (BoardPoint, BoardPoint), edge_normal_bearing(HexId, Direction) in degrees clockwise from screen east, hex_at(BoardPoint) -> Option<HexId>.",
+                "Derive from each section's dx/dy/x0/y0/sideways; document orientation (flat- vs pointy-top) with a diagram in docs/contracts/map-v1.md.",
+                "Expose the six possible travel bearings as constants so consumers never recompute them."
+              ],
+              "non_goals": [
+                "Viewport/zoom transforms (S3).",
+                "Sprite frame selection (movement owns)."
+              ],
+              "acceptance_criteria": [
+                "For every fixture hex, hex_at(center(h)) == h and points 1 px inside each edge midpoint resolve to h.",
+                "Edge normal of (h, d) is perpendicular (dot product < 1e-9) to the shared edge and points from h toward neighbour(h, d).",
+                "Adjacent centers differ by the same bearing as the shared-edge normal (tolerance 0.01 degrees)."
+              ],
+              "verification": [
+                "cargo test -p cna-map geometry",
+                "cargo clippy --workspace --all-targets -- -D warnings"
+              ],
+              "files_hint": [
+                "crates/cna-map/src/geometry.rs",
+                "docs/contracts/map-v1.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E1.I2.S1"
+              ]
+            },
+            {
+              "key": "E1.I2.S3",
+              "title": "Board-to-screen viewport transform",
+              "goal": "Provide a single tested transform so map rendering, hit testing and movement overlays agree at any zoom.",
+              "scope": [
+                "crates/cna-map/src/viewport.rs: Viewport {center, zoom, css_size, device_pixel_ratio} with to_screen/to_board, clamp to board bounds, zoom about a screen point.",
+                "No DOM dependency; frontend passes sizes in."
+              ],
+              "non_goals": [
+                "Rendering tiles.",
+                "Input handling."
+              ],
+              "acceptance_criteria": [
+                "to_board(to_screen(p)) == p within 1e-6 at zoom 0.05, 1 and 4 for 2458x1358 and 1280x800 CSS sizes with DPR 1 and 2.",
+                "Zooming about a screen point keeps that board point fixed (property test)."
+              ],
+              "verification": [
+                "cargo test -p cna-map viewport"
+              ],
+              "files_hint": [
+                "crates/cna-map/src/viewport.rs"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E1.I2.S2"
+              ]
+            },
+            {
+              "key": "E1.I2.S4",
+              "title": "Terrain, hexside and point-feature record schema",
+              "goal": "Define the data shape the simulation consumes for movement, combat and supply geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37 Terrain Effects Chart; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) [8.37]; AL21 (docs/CNAv2.1.0/Rules_Air&Logistics_07-2021.pdf) 55.3; VIMG (docs/CNAv2.1.0/images/) 55.3 Port Capacity and Efficiency Level Chart.png",
+                "crates/cna-map/src/terrain.rs and docs/map/map-v1.schema.json: Terrain enum taken from the L21 8.37 Terrain Effects Chart rows (record the chart's exact row names, not prototype desert/ridge); HexsideFeature enum (escarpment, slope/ridge types as printed, wadi, coast/sea hexside, road, track, railway, pipeline, as present in 8.37); PointFeature (major/minor city, village, port with efficiency reference to AL21 55.3, airfield/landing strip/flying-boat basin, oasis/well, fortification).",
+                "Every record carries status (reviewed | provisional | unresolved | fixture), provenance (source refs, reviewer, date) and an optional adjudication id.",
+                "Apply ERR 8.37 corrections in the schema docs: footnote (4) belongs to Major City, footnote (8) governs tracks (tracks halve terrain cost; they do not cost 1 CP)."
+              ],
+              "non_goals": [
+                "Assigning terrain to real hexes (E4).",
+                "Movement cost arithmetic (simulation)."
+              ],
+              "acceptance_criteria": [
+                "Schema enumerates every 8.37 terrain and hexside row with a source ref; a test fails if an enum variant lacks a ref.",
+                "Default/unknown terrain is unrepresentable except as status=unresolved (no implicit Clear).",
+                "Schema validates a hand-written example file covering every record kind and status."
+              ],
+              "verification": [
+                "cargo test -p cna-map terrain",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json docs/map/examples/terrain-example.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/src/terrain.rs",
+                "docs/map/map-v1.schema.json",
+                "docs/map/examples/terrain-example.json"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E1.I2.S1"
+              ]
+            },
+            {
+              "key": "E1.I2.S5",
+              "title": "Publish corridor consumer fixture and contract v1 tag",
+              "goal": "Let simulation and movement start against realistic geometry before transcription.",
+              "scope": [
+                "crates/cna-map/fixtures/corridor-fixture.json: about 40 real HexIds around Sidi Barrani-Buq Buq-Sollum (C30xx-C43xx incl. C3926, C4321) with geometry from S2 and clearly status=fixture terrain/hexsides including at least one escarpment hexside, one road, one track and one coastal hexside.",
+                "Loader cna_map::fixture::corridor() and docs/contracts/map-v1.md changelog section; record the contract version constant MAP_CONTRACT_VERSION = 1.",
+                "Announce consumer rules: consumers must not rely on fixture terrain values for certification."
+              ],
+              "non_goals": [
+                "Reviewed terrain.",
+                "Frontend rendering."
+              ],
+              "acceptance_criteria": [
+                "Fixture validates against the schema and every hex has six neighbours or a recorded board edge.",
+                "A test asserts every fixture record has status=fixture so it can never pass a certified-scenario check."
+              ],
+              "verification": [
+                "cargo test -p cna-map fixture",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/fixtures/corridor-fixture.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/fixtures/corridor-fixture.json",
+                "crates/cna-map/src/fixture.rs",
+                "docs/contracts/map-v1.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E1.I2.S2",
+                "E1.I2.S3",
+                "E1.I2.S4"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E2",
+      "title": "Tile pipeline and draggable viewport",
+      "objective": "Render the full supplied board through generated tiles with pan/zoom and publish an overlay API for movement.",
+      "user_value": "Players can explore the whole campaign map smoothly; movement can draw on it without editing map.rs.",
+      "acceptance_criteria": [
+        "Tiles generate deterministically from the source PNG into ignored public/tiles/map.",
+        "map.rs renders only visible tiles with pointer, wheel and keyboard pan/zoom; budgets are recorded.",
+        "MapOverlay API is documented and used by a test overlay."
+      ],
+      "blocked_by": [
+        "E1"
+      ],
+      "issues": [
+        {
+          "key": "E2.I1",
+          "title": "Deterministic tile generation",
+          "summary": "Cut the 14310x4632 PNG into a zoom pyramid with a manifest.",
+          "systems": [
+            "rust bin",
+            "build"
+          ],
+          "approach": "Rust bin using the image crate (added only to crates/cna-map), 512 px tiles, levels down to a single overview tile; skip when the source hash matches the manifest.",
+          "risks": [
+            "Full-size decode needs ~265 MB RGBA in the generator; acceptable offline but must not happen in the browser."
+          ],
+          "acceptance_criteria": [
+            "Tile manifest checksums are reproducible."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E2.I1.S1",
+              "title": "Tile generator binary",
+              "goal": "Generate the tile pyramid and manifest from the source image.",
+              "scope": [
+                "Sources: docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S1 (npm run tiles script hook and workspace member)",
+                "crates/cna-map/src/bin/cna-map-tiles.rs writes public/tiles/map/{z}/{x}_{y}.webp or .png plus public/tiles/map/manifest.json (levels, tile size, board size, source SHA-256).",
+                "Deterministic output (fixed encoder settings); incremental skip when unchanged."
+              ],
+              "non_goals": [
+                "Serving tiles in the UI.",
+                "Licensing decisions."
+              ],
+              "acceptance_criteria": [
+                "Two consecutive runs produce identical manifest checksums.",
+                "Top level covers 14310x4632 exactly; edge tiles are not stretched (test reads manifest)."
+              ],
+              "verification": [
+                "npm run tiles",
+                "cargo test -p cna-map tiles"
+              ],
+              "files_hint": [
+                "crates/cna-map/src/bin/cna-map-tiles.rs",
+                "crates/cna-map/Cargo.toml"
+              ],
+              "size": "M",
+              "blocked_by": []
+            },
+            {
+              "key": "E2.I1.S2",
+              "title": "Record tile size and load budget",
+              "goal": "Make memory and bandwidth budgets explicit before UI work.",
+              "scope": [
+                "docs/map/performance.md: tile count per level, total bytes, expected visible tiles at 2458x1358 and 1280x800. Initial targets to measure and revise (not claims): decoded visible-tile cache <=128 MiB, <=100 live tile nodes, p95 scripted-pan frame <=33 ms, at DPR 1 and 2. Record that a single full RGBA decode would be 265,135,680 bytes.",
+                "Add a manifest test that fails when total bytes exceed the recorded budget by >10%."
+              ],
+              "non_goals": [
+                "Browser measurements (E2.I2.S2)."
+              ],
+              "acceptance_criteria": [
+                "performance.md has numeric targets and the manifest test enforces the byte budget."
+              ],
+              "verification": [
+                "cargo test -p cna-map tiles"
+              ],
+              "files_hint": [
+                "docs/map/performance.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E2.I1.S1"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E2.I2",
+          "title": "Viewport rendering and overlay API in map.rs",
+          "summary": "Replace the schematic SVG background with the tiled board while keeping a unit overlay layer.",
+          "systems": [
+            "frontend (Rust/Wasm)",
+            "browser tests"
+          ],
+          "approach": "map.rs keeps a persistent container with a tile layer and named overlay layers; uses cna-map Viewport for transforms. The legacy sandbox map remains reachable behind the sandbox mode until simulation integration replaces it.",
+          "risks": [
+            "Re-rendering the whole SVG every frame (current pattern) would not scale to thousands of hexes.",
+            "Changing map.rs signatures could break the current sandbox; keep sandbox path compiling."
+          ],
+          "acceptance_criteria": [
+            "Pan/zoom works with pointer, wheel and keyboard and the overlay API is consumed by a test layer."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E2.I2.S1",
+              "title": "Tiled viewport with pointer, wheel and keyboard pan/zoom",
+              "goal": "Show the full board interactively.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S3 (frontend split gives map.rs and src/styles/map.css a single owner); cna-simulation:E1.I1.S2 (test:browser harness)",
+                "In crates/frontend/src/map.rs (map-owned after the split), render visible tiles only, using manifest levels; drag to pan, wheel/pinch to zoom about cursor, arrow keys/+/- for keyboard; clamp to board.",
+                "Loading placeholders for missing tiles; never request tiles outside the viewport+1 ring."
+              ],
+              "non_goals": [
+                "Hex overlay (E3).",
+                "Unit sprites/highlights (movement)."
+              ],
+              "acceptance_criteria": [
+                "Browser test drags 500 px and zooms 3 steps; viewport center moves by the expected board delta (±2 px).",
+                "Network log shows no tile requests outside the visible ring.",
+                "Screenshots at 2458x1358 of overview and gameplay zoom inspected for seams/gaps."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/map-viewport.spec.ts",
+                "npm run build"
+              ],
+              "files_hint": [
+                "crates/frontend/src/map.rs",
+                "src/styles/map.css"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E2.I1.S1"
+              ]
+            },
+            {
+              "key": "E2.I2.S2",
+              "title": "Measure browser budgets at named viewports",
+              "goal": "Verify the recorded budget in a real browser.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Browser test collects decoded tile count, time to first tile and performance.memory (Chromium) at 2458x1358 and 1280x800 after a scripted pan/zoom tour; write results into docs/map/performance.md."
+              ],
+              "non_goals": [
+                "Optimising beyond the budget."
+              ],
+              "acceptance_criteria": [
+                "Measured values are within the S2 budget; failures fail the test."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/map-budget.spec.ts"
+              ],
+              "files_hint": [
+                "tests/browser/map-budget.spec.ts",
+                "docs/map/performance.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E2.I2.S1",
+                "E2.I1.S2"
+              ]
+            },
+            {
+              "key": "E2.I2.S3",
+              "title": "Publish MapOverlay API for movement and highlights",
+              "goal": "Give movement a stable way to draw units, selection and routes without editing map internals.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Expose in map.rs a MapOverlay trait/struct: layer handles (units, selection, hover, route), current Viewport, hex_at(screen point), center_on(HexId), and a per-unit label provider hook so the owning consumer (movement) supplies all unit title/aria text; map.rs itself writes no unit statistics into the DOM. Document in docs/contracts/map-overlay-v1.md.",
+                "Add a test overlay that draws a marker at C3926 and follows pan/zoom."
+              ],
+              "non_goals": [
+                "Implementing movement highlights."
+              ],
+              "acceptance_criteria": [
+                "Browser test: marker stays on C3926 center (±1 px) through pan/zoom/resize.",
+                "API doc lists every function with ownership notes."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/map-overlay.spec.ts",
+                "npm test"
+              ],
+              "files_hint": [
+                "crates/frontend/src/map.rs",
+                "docs/contracts/map-overlay-v1.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E2.I2.S1"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E3",
+      "title": "Calibrated full-board hex overlay",
+      "objective": "Reconcile the six grids against printed numbering and seams, adjudicate errata, and draw a precise overlay.",
+      "user_value": "Every hex the player clicks is the hex printed on the map, across all five sections and Malta.",
+      "acceptance_criteria": [
+        "Residuals per anchor are recorded and below 3 board px.",
+        "Seam table complete; D2228/2328 escarpment adjudicated.",
+        "Outline/hit-test alignment verified at 2458x1358."
+      ],
+      "blocked_by": [
+        "E1"
+      ],
+      "issues": [
+        {
+          "key": "E3.I1",
+          "title": "Grid and seam reconciliation",
+          "summary": "Fix offsets and record how sections join.",
+          "systems": [
+            "data",
+            "docs"
+          ],
+          "approach": "Render debug crops (bin) of anchor hexes with the computed grid and compare to printed numbers; record residuals; seams resolved into a table used by adjacency.",
+          "risks": [
+            "Printed numbering may skip or repeat across seams.",
+            "VASSAL v2.0 map 'corrects misalignments' - geometry can differ from the 1979 sheets."
+          ],
+          "acceptance_criteria": [
+            "Calibration and seam tables exist and adjacency tests use them."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E3.I1.S1",
+              "title": "Anchor calibration for Malta and sections A-E",
+              "goal": "Prove each grid lands on the printed hex numbers.",
+              "scope": [
+                "Sources: VBF (docs/CNAv2.1.0/buildFile.xml); SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41 hex lists",
+                "Add `map-census --anchors` to crop the source PNG around ≥5 anchors per section (e.g. A4829 Benina, A4130 Soluch, B4827 Benghazi, B5925 Derna, B4921 Mechili, C3926 Buq Buq, C4321 Bardia, C4807 Tobruk, C1014 Giarabub, D3714 Matruh, D3612, D3615, E3815 Aboukir, E1829, E1430 Cairo/Helwan) with the computed outline overlaid into .amp/in-style ignored output, inspect them and record residuals in docs/map/calibration.md.",
+                "Adjust per-section offsets only via a documented correction table, never by editing sources.json raw values."
+              ],
+              "non_goals": [
+                "Terrain.",
+                "Seams (S2)."
+              ],
+              "acceptance_criteria": [
+                "Every anchor residual ≤3 board px, with crop images inspected and listed.",
+                "Test asserts calibrated centers for the anchor list."
+              ],
+              "verification": [
+                "cargo run -p cna-map --bin map-census -- --anchors",
+                "cargo test -p cna-map calibration"
+              ],
+              "files_hint": [
+                "docs/map/calibration.md",
+                "crates/cna-map/src/calibration.rs"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E1.I2.S2"
+              ]
+            },
+            {
+              "key": "E3.I1.S2",
+              "title": "Seam table and cross-section adjacency",
+              "goal": "Make adjacency correct across A/B, B/C, C/D, D/E and Malta.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 4.1; VBF (docs/CNAv2.1.0/buildFile.xml)",
+                "Enumerate seam hexes from zone polygons and the grids (L21 4.1: the five battlefield sections overlap where one section's xx39 column meets the next section's xx01 column); classify duplicate, half or offset hexes; write crates/cna-map/data/seams.json and use it in neighbours(). A physically duplicated seam cell is one canonical HexId with printed aliases {section,label}, so it never doubles adjacency, occupancy or movement cost.",
+                "Record seam crops for review."
+              ],
+              "non_goals": [
+                "Hexside features at seams (E4)."
+              ],
+              "acceptance_criteria": [
+                "Neighbour symmetry holds across all seams for every hex.",
+                "No hex has >6 neighbours; duplicated printed hexes resolve to one canonical HexId with an alias list."
+              ],
+              "verification": [
+                "cargo test -p cna-map seams"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/seams.json",
+                "crates/cna-map/src/hex.rs"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E3.I1.S1"
+              ]
+            },
+            {
+              "key": "E3.I1.S3",
+              "title": "Map errata and ambiguity adjudication register",
+              "goal": "Record every map-level discrepancy with a decision or pending status.",
+              "scope": [
+                "Sources: ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS; VCL (docs/CNAv2.1.0/changelog.txt, playnotes.txt, Read me.txt) v0.94, v2.1 Map",
+                "docs/map/adjudications.md + crates/cna-map/data/adjudications.json: ERR 'Map D hexside 2228/2328 escarpment' (VASSAL v0.94 applied it; verify on image), VASSAL v2.1 additions (starting dumps, city fortifications, port efficiency labels) as evidence, ambiguous cells from S1/S2.",
+                "Each entry: id, sources, observed, options, decision or 'pending Kevin', affected hexes."
+              ],
+              "non_goals": [
+                "Deciding gameplay effects of dumps/fortifications (simulation)."
+              ],
+              "acceptance_criteria": [
+                "Register contains the D2228/2328 entry with image evidence.",
+                "Every pending entry lists affected HexIds; test ensures referenced IDs parse."
+              ],
+              "verification": [
+                "cargo test -p cna-map adjudications"
+              ],
+              "files_hint": [
+                "docs/map/adjudications.md",
+                "crates/cna-map/data/adjudications.json"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E3.I1.S2"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E3.I2",
+          "title": "Hex overlay rendering and alignment checks",
+          "summary": "Draw the calibrated outlines and verify hit testing.",
+          "systems": [
+            "frontend",
+            "browser tests"
+          ],
+          "approach": "Outline layer drawn per visible hex from cna-map geometry; level-of-detail hides outlines at far zoom; contrast increased modestly.",
+          "risks": [
+            "Thousands of SVG paths can be slow; use a single path per visible region."
+          ],
+          "acceptance_criteria": [
+            "Overlay aligned and slightly more visible, verified by screenshots and hit tests."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E3.I2.S1",
+              "title": "Render calibrated outlines with improved visibility",
+              "goal": "Show the hex grid clearly at gameplay zoom.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Draw visible-hex outlines as one path per tile region in the map.rs grid layer; stroke opacity raised from the current value by a documented amount; hide below a zoom threshold; keep the existing grid toggle.",
+                "Screenshots over light desert and dark escarpment/sea areas."
+              ],
+              "non_goals": [
+                "Selected/hover unit hex styling (movement)."
+              ],
+              "acceptance_criteria": [
+                "Screenshots at 2458x1358 inspected: outlines visible but not obscuring terrain, no doubled lines at seams."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/map-grid.spec.ts",
+                "npm run build"
+              ],
+              "files_hint": [
+                "crates/frontend/src/map.rs",
+                "src/styles/map.css"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E3.I1.S2",
+                "E2.I2.S1"
+              ]
+            },
+            {
+              "key": "E3.I2.S2",
+              "title": "Hit-test alignment across pan, zoom and resize",
+              "goal": "Guarantee clicks land in the enclosing hex.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Browser test clicks each anchor hex center and points 2 screen px inside each edge midpoint at three zooms and after resizing between 1280x800 and 2458x1358; compares map.hex_at result to the expected HexId."
+              ],
+              "non_goals": [
+                "Unit hit targets (movement)."
+              ],
+              "acceptance_criteria": [
+                "All sampled points resolve to the expected HexId."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/map-hit-test.spec.ts"
+              ],
+              "files_hint": [
+                "tests/browser/map-hit-test.spec.ts"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E3.I2.S1"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E4",
+      "title": "Transcription tooling and Graziani corridor",
+      "objective": "Build the propose/review/integrity tooling and the certified-subset validator, then review terrain, hexsides and board-wide point features for the C/D/E corridor that Graziani's Offensive plays on.",
+      "user_value": "The simulation can test movement, supply and combat on real reviewed geography early; untranscribed areas never pretend to be clear desert.",
+      "acceptance_criteria": [
+        "Integrity tooling and subset validator enforce statuses.",
+        "Map C east, D and E cells and hexsides reviewed or explicitly unresolved.",
+        "Board-wide ports, cities, airfields, wells, dumps and fortifications recorded with sources."
+      ],
+      "blocked_by": [
+        "E1"
+      ],
+      "issues": [
+        {
+          "key": "E4.I1",
+          "title": "Transcription tooling, integrity checks and subset validator",
+          "summary": "Tools that propose but never certify terrain, integrity tests and the scenario-subset validator.",
+          "systems": [
+            "rust bin",
+            "data"
+          ],
+          "approach": "A proposer samples image colours per hex into provisional records; reviewers inspect crops and promote to reviewed with provenance. Integrity tests run in npm test.",
+          "risks": [
+            "Colour sampling misclassifies roads/tracks drawn over terrain; it is only a draft."
+          ],
+          "acceptance_criteria": [
+            "Tooling exists; integrity tests and the validator fail on missing, provisional or fixture records."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E4.I1.S1",
+              "title": "Provisional terrain proposer and review format",
+              "goal": "Speed up transcription without granting authority to colour sampling.",
+              "scope": [
+                "crates/cna-map/src/bin/terrain-propose.rs writes crates/cna-map/data/terrain/{section}.json records with status=provisional and a crop path per hex; a `review` subcommand promotes one record to reviewed with reviewer/date/source.",
+                "Data is split per section (A-E, Malta) to keep diffs reviewable."
+              ],
+              "non_goals": [
+                "Promoting anything automatically."
+              ],
+              "acceptance_criteria": [
+                "Proposer output validates against map-v1.schema.json and never emits status=reviewed (test)."
+              ],
+              "verification": [
+                "cargo test -p cna-map propose",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/C.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/src/bin/terrain-propose.rs",
+                "crates/cna-map/data/terrain/"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E1.I2.S4",
+                "E3.I1.S1"
+              ]
+            },
+            {
+              "key": "E4.I1.S2",
+              "title": "Terrain integrity tests and coverage report",
+              "goal": "Make gaps visible and block silent defaults.",
+              "scope": [
+                "crates/cna-map/tests/terrain_integrity.rs: every in-zone hex has a record; hexsides reference valid canonical hexes; reviewed records have provenance; write counts by section/status to docs/map/coverage.md."
+              ],
+              "non_goals": [
+                "Transcription itself."
+              ],
+              "acceptance_criteria": [
+                "Test fails when a hex in a zone lacks a record or when a reviewed record lacks provenance (mutation tests)."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity"
+              ],
+              "files_hint": [
+                "crates/cna-map/tests/terrain_integrity.rs",
+                "docs/map/coverage.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E4.I1.S1"
+              ]
+            },
+            {
+              "key": "E4.I1.S3",
+              "title": "Certified-subset validator API and CLI",
+              "goal": "Let the simulation validate a scenario's geography with one call.",
+              "scope": [
+                "cna_map::subset::validate(hexes, certified: bool) -> Report listing missing hexes, provisional/unresolved/fixture statuses and dangling hexsides; CLI `cna-map-validate --hexes FILE [--certified]`.",
+                "Document in docs/contracts/map-v1.md as contract version 1.1 (additive)."
+              ],
+              "non_goals": [
+                "Scenario data itself (simulation)."
+              ],
+              "acceptance_criteria": [
+                "With certified=true the validator rejects any subset containing fixture or provisional records (test using the corridor fixture).",
+                "Exit code is non-zero on rejection so CI can gate on it."
+              ],
+              "verification": [
+                "cargo test -p cna-map subset",
+                "cargo run -p cna-map --bin cna-map-validate -- --hexes crates/cna-map/fixtures/corridor-hexes.txt"
+              ],
+              "files_hint": [
+                "crates/cna-map/src/subset.rs",
+                "crates/cna-map/src/bin/cna-map-validate.rs",
+                "docs/contracts/map-v1.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E4.I1.S2"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E4.I2",
+          "title": "Graziani corridor transcription and board-wide point features",
+          "summary": "Review terrain and hexsides for the Sidi Barrani-Bardia-Tobruk-Matruh-Alexandria corridor used by SC21 60, plus every port, city and facility on the board.",
+          "systems": [
+            "data"
+          ],
+          "approach": "Section-sized waves of about 250-400 records; terrain and hexsides are separate leaves so each gets independent review.",
+          "risks": [
+            "Escarpment directionality (up/down) matters for movement and must be recorded per hexside side."
+          ],
+          "acceptance_criteria": [
+            "All corridor records reviewed or unresolved; point features complete."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E4.I2.S1",
+              "title": "Map C east terrain cells (columns 30-49)",
+              "goal": "Review Map C columns 30-49 including Sidi Barrani, Buq Buq C3926, Sollum/Capuzzo C4020, Bardia C4321, Tobruk C4807 so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section C as a draft, inspect the crop for each record, assign one Terrain value per cell from the L21 8.37 rows, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Hexside features"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/C.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/C.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E4.I2.S2",
+              "title": "Map C east hexsides (columns 30-49)",
+              "goal": "Review escarpments, coast, Via Balbia road, tracks and any rail/pipeline hexsides in Map C columns 30-49 so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section C as a draft, inspect the crop for each record, record each HexsideFeature once on the canonical HexsideId (seam duplicates resolve through the seam table, so an edge is never stored or costed twice); escarpments record which side is the upper level, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Cell terrain"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/C.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/C.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E4.I2.S3",
+              "title": "Map D terrain cells",
+              "goal": "Review all Map D cells including Matruh D3714 and the 7th Armoured/4th Indian setup hexes D3612/D3615 so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section D as a draft, inspect the crop for each record, assign one Terrain value per cell from the L21 8.37 rows, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Hexside features"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/D.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/D.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E4.I2.S4",
+              "title": "Map D hexsides including the D2228/2328 escarpment",
+              "goal": "Review Map D escarpments (one final record for the Sep 79 D2228/2328 addition; the v0.94+ raster already shows it, so it is not added twice), coast, roads, tracks and the railway to Matruh so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section D as a draft, inspect the crop for each record, record each HexsideFeature once on the canonical HexsideId (seam duplicates resolve through the seam table, so an edge is never stored or costed twice); escarpments record which side is the upper level, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Cell terrain"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/D.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/D.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2",
+                "E3.I1.S3"
+              ]
+            },
+            {
+              "key": "E4.I2.S5",
+              "title": "Map E terrain cells (Delta to Alexandria)",
+              "goal": "Review Map E cells including E1829, Cairo/Helwan E1430, Alexandria E3613/E3714 and Aboukir E3815 so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section E as a draft, inspect the crop for each record, assign one Terrain value per cell from the L21 8.37 rows, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Hexside features"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/E.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/E.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E4.I2.S6",
+              "title": "Map E hexsides",
+              "goal": "Review Map E coast, Nile/Delta water hexsides, roads, tracks, railway and pipeline hexsides so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section E as a draft, inspect the crop for each record, record each HexsideFeature once on the canonical HexsideId (seam duplicates resolve through the seam table, so an edge is never stored or costed twice); escarpments record which side is the upper level, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Cell terrain"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/E.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/E.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E4.I2.S7",
+              "title": "Board-wide point features: cities, ports, airfields, wells, dumps, fortifications",
+              "goal": "Give the simulation every point feature it needs for supply, air and scenario setup, across all sections.",
+              "scope": [
+                "Sources: AL21 (docs/CNAv2.1.0/Rules_Air&Logistics_07-2021.pdf) 55.3; SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.7, 61.6, 62.5, 63.7; VCL (docs/CNAv2.1.0/changelog.txt, playnotes.txt, Read me.txt) v2.1 Map; VIMG (docs/CNAv2.1.0/images/) 55.3 Port Capacity and Efficiency Level Chart.png",
+                "Record point features board-wide: city class (major/minor/village), ports with AL21 55.3 capacity/efficiency references, air facilities by type, wells/oases/pipeline heads, fortification levels and starting dumps.",
+                "VASSAL v2.1 added dumps, city fortifications and port-efficiency labels: record them as evidence and reconcile against the SC21 'construction on the map at start' cases (60.7, 61.6, 62.5, 63.7) instead of copying them."
+              ],
+              "non_goals": [
+                "Supply capacity arithmetic.",
+                "Scenario-specific construction state (simulation owns per-scenario setup)."
+              ],
+              "acceptance_criteria": [
+                "Every port named in SC21 and AL21 55.3 has a point feature with a source ref.",
+                "Each VASSAL-only label is either confirmed by a rules source or listed in adjudications as VASSAL-only."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "cargo test -p cna-map point_features"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/points.json",
+                "docs/map/adjudications.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S3"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E5",
+      "title": "Remaining board transcription",
+      "objective": "Review terrain and hexsides for Maps A, B, C west and Malta, plus off-map boxes and tracks.",
+      "user_value": "Every playable cell and hexside has a reviewed record or an honest unresolved status, so later scenarios and the campaign can certify.",
+      "acceptance_criteria": [
+        "Every remaining cell and hexside is reviewed or unresolved, with counts in docs/map/coverage.md.",
+        "Malta and every off-map box have records with rule references."
+      ],
+      "blocked_by": [
+        "E4"
+      ],
+      "issues": [
+        {
+          "key": "E5.I1",
+          "title": "Remaining sections, Malta and off-map boxes",
+          "summary": "Same review process as the corridor, per region.",
+          "systems": [
+            "data"
+          ],
+          "approach": "Separate terrain and hexside leaves per region; Map B (~1974 cells) is split in halves.",
+          "risks": [
+            "Western sections are less played; reviewers may be tempted to bulk-promote. Spot checks prevent that."
+          ],
+          "acceptance_criteria": [
+            "Every remaining record reviewed or unresolved."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E5.I1.S1",
+              "title": "Map C west terrain cells (columns 1-29)",
+              "goal": "Review Map C columns 1-29 including Giarabub C1014, el Grein C1715, Fort Maddalena C3019 and Bir Sceferzen C3419 so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section C as a draft, inspect the crop for each record, assign one Terrain value per cell from the L21 8.37 rows, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Hexside features"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/C.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/C.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E5.I1.S2",
+              "title": "Map C west hexsides (columns 1-29)",
+              "goal": "Review Map C columns 1-29 escarpments, tracks and depression edges so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section C as a draft, inspect the crop for each record, record each HexsideFeature once on the canonical HexsideId (seam duplicates resolve through the seam table, so an edge is never stored or costed twice); escarpments record which side is the upper level, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Cell terrain"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/C.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/C.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E5.I1.S3",
+              "title": "Map B east half terrain cells",
+              "goal": "Review Map B eastern half including Derna B5925, Barce B5504 and Mechili B4921 so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section B as a draft, inspect the crop for each record, assign one Terrain value per cell from the L21 8.37 rows, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Hexside features"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/B.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/B.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E5.I1.S4",
+              "title": "Map B east half hexsides",
+              "goal": "Review Map B eastern half Jebel escarpments, coast, roads and tracks so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section B as a draft, inspect the crop for each record, record each HexsideFeature once on the canonical HexsideId (seam duplicates resolve through the seam table, so an edge is never stored or costed twice); escarpments record which side is the upper level, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Cell terrain"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/B.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/B.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E5.I1.S5",
+              "title": "Map B west half terrain cells",
+              "goal": "Review Map B western half including Benghazi B4827 so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section B as a draft, inspect the crop for each record, assign one Terrain value per cell from the L21 8.37 rows, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Hexside features"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/B.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/B.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E5.I1.S6",
+              "title": "Map B west half hexsides",
+              "goal": "Review Map B western half coast, roads, tracks and escarpments so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section B as a draft, inspect the crop for each record, record each HexsideFeature once on the canonical HexsideId (seam duplicates resolve through the seam table, so an edge is never stored or costed twice); escarpments record which side is the upper level, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Cell terrain"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/B.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/B.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E5.I1.S7",
+              "title": "Map A terrain cells",
+              "goal": "Review Map A including Benina A4829 and Soluch A4130 so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section A as a draft, inspect the crop for each record, assign one Terrain value per cell from the L21 8.37 rows, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Hexside features"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/A.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/A.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E5.I1.S8",
+              "title": "Map A hexsides",
+              "goal": "Review Map A coast, Via Balbia, tracks and salt-marsh edges so the simulation can rely on real geography.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.37; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) MAPS / [8.37]; docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+                "Use terrain-propose output for section A as a draft, inspect the crop for each record, record each HexsideFeature once on the canonical HexsideId (seam duplicates resolve through the seam table, so an edge is never stored or costed twice); escarpments record which side is the upper level, and promote to reviewed with provenance (reviewer, date, source).",
+                "Record unresolved records with a reason instead of guessing; link an adjudication id where the image and printed rules disagree.",
+                "Update docs/map/coverage.md counts for the range."
+              ],
+              "non_goals": [
+                "Movement costs or combat effects.",
+                "Records outside the stated range.",
+                "Cell terrain"
+              ],
+              "acceptance_criteria": [
+                "Every record in the stated range is reviewed or unresolved (none provisional) in the terrain_integrity report.",
+                "An independent spot-check of 10% of promoted records is listed in the leaf PR with zero unexplained mismatches."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/data/terrain/A.json"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/A.json",
+                "docs/map/coverage.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E5.I1.S9",
+              "title": "Malta grid and off-map boxes",
+              "goal": "Give Malta (its own sixth grid, not an east-west board) and every off-map box/track a reviewed record.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 8.8; AL21 (docs/CNAv2.1.0/Rules_Air&Logistics_07-2021.pdf) 44; VBF (docs/CNAv2.1.0/buildFile.xml) Malta grid and holding-box zones",
+                "Review the ~71 Malta cells and their hexsides; record each off-map holding box and track from sources.json as an abstract location with its rule reference (L21 8.8 Tripoli and Tunisia; Sicily, Italy and Crete holding boxes; the Alexandria boxes for E3613 and E3714).",
+                "Off-map boxes have no adjacency except what the cited rule defines."
+              ],
+              "non_goals": [
+                "Air rules for Malta (simulation).",
+                "Board sections A-E."
+              ],
+              "acceptance_criteria": [
+                "Every Malta cell and off-map box is reviewed or unresolved; no off-map box has hex adjacency without a cited rule (test)."
+              ],
+              "verification": [
+                "cargo test -p cna-map --test terrain_integrity"
+              ],
+              "files_hint": [
+                "crates/cna-map/data/terrain/Malta.json",
+                "crates/cna-map/data/offmap.json"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S2",
+                "E3.I1.S2"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E6",
+      "title": "Gameplay-map acceptance and release",
+      "objective": "Validate every scenario hex reference, pass browser acceptance and publish a checksummed map-v1.1 data release.",
+      "user_value": "The simulation can certify scenarios knowing every referenced hex exists and its geography status is known.",
+      "acceptance_criteria": [
+        "All SC21 text-page hex references resolve or are recorded as source errors.",
+        "Browser acceptance screenshots inspected.",
+        "map-v1.1 release with checksums and honest unresolved counts."
+      ],
+      "blocked_by": [
+        "E3",
+        "E4",
+        "E5"
+      ],
+      "issues": [
+        {
+          "key": "E6.I1",
+          "title": "Scenario hex-reference validation",
+          "summary": "Extract every hex reference from the scenario rules and validate it.",
+          "systems": [
+            "rust bin",
+            "data"
+          ],
+          "approach": "Parse a checked-in `pdftotext -raw` extract of SC21 for [A-E]dddd patterns plus named locations; OCR-damaged IDs (e.g. '84827' for Benghazi B4827) are mapped only through reviewed correction entries.",
+          "risks": [
+            "Image-only scenario pages (SC21 pp.6, 9-10, 12-16) hide references; the simulation re-validates them through the published validator when it transcribes those pages."
+          ],
+          "acceptance_criteria": [
+            "Hex-reference report exists and is enforced by a test."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E6.I1.S1",
+              "title": "Extract and resolve every printed scenario hex reference",
+              "goal": "Prove no scenario text names a hex the map lacks.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60-64; L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 4.43 reinforcement schedules",
+                "crates/cna-map/src/bin/scenario-hexrefs.rs reads docs/map/scenario-hexrefs.txt (generated with `pdftotext -raw` from SC21 and checked in as a cited derived extract) and resolves each reference; writes docs/map/scenario-hexrefs.md with unresolved and OCR-corrected entries.",
+                "Named places (Bardia, Tobruk, Alexandria, Tripoli, Tripolitania, Cairo/Helwan) resolve through point features or off-map boxes."
+              ],
+              "non_goals": [
+                "Deciding unit placement legality (simulation).",
+                "Image-only pages (re-validated by simulation setup leaves)."
+              ],
+              "acceptance_criteria": [
+                "Every reference from SC21 text pages 3-5, 7-8, 11 and 17 resolves or is listed with a reason; the test fails on any new unresolved reference.",
+                "The report names the image-only pages it does not cover."
+              ],
+              "verification": [
+                "cargo run -p cna-map --bin scenario-hexrefs -- --check",
+                "cargo test -p cna-map scenario_hexrefs"
+              ],
+              "files_hint": [
+                "crates/cna-map/src/bin/scenario-hexrefs.rs",
+                "docs/map/scenario-hexrefs.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E3.I1.S2",
+                "E4.I2.S7",
+                "E5.I1.S9"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E6.I2",
+          "title": "Browser acceptance and versioned release",
+          "summary": "Final visual acceptance and data release for consumers.",
+          "systems": [
+            "frontend",
+            "release"
+          ],
+          "approach": "Screenshots and a checksummed data release; no simulation-rules dependency.",
+          "risks": [
+            "Unresolved counts must be shown honestly in the release notes."
+          ],
+          "acceptance_criteria": [
+            "Acceptance screenshots inspected and release published in-repo."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E6.I2.S1",
+              "title": "Map browser acceptance pass",
+              "goal": "Confirm the finished map experience visually and functionally.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Browser tour: full-board overview, gameplay zoom on Tobruk, Bardia, Matruh, Alexandria and Benghazi; grid toggle; a hex info panel showing only map facts and review status for the hovered hex.",
+                "Screenshots at 2458x1358 and 1280x800 saved under tests/browser/__screenshots__/map/ and inspected."
+              ],
+              "non_goals": [
+                "Unit or route rendering (movement)."
+              ],
+              "acceptance_criteria": [
+                "All tour steps pass; inspected screenshots show no seams, misaligned outlines or missing tiles."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/map-acceptance.spec.ts"
+              ],
+              "files_hint": [
+                "tests/browser/map-acceptance.spec.ts"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E3.I2.S2",
+                "E2.I2.S2",
+                "E6.I1.S1"
+              ]
+            },
+            {
+              "key": "E6.I2.S2",
+              "title": "map-v1.1 data release and uncertainty report",
+              "goal": "Hand consumers a versioned, checksummed geography release.",
+              "scope": [
+                "Write public/data/map/map-v1.json (or per-section files) with checksums in public/data/map/release.json; docs/map/release-notes.md lists reviewed/provisional/unresolved counts by section and open adjudications.",
+                "Tag contract version 1.1 in docs/contracts/map-v1.md."
+              ],
+              "non_goals": [
+                "Changing contract types (a breaking change needs a new major version and a forward simulation leaf)."
+              ],
+              "acceptance_criteria": [
+                "release.json checksums match files (test).",
+                "Release-note counts equal the terrain_integrity report."
+              ],
+              "verification": [
+                "cargo test -p cna-map release",
+                "uvx check-jsonschema --schemafile docs/map/map-v1.schema.json public/data/map/map-v1.json"
+              ],
+              "files_hint": [
+                "public/data/map/map-v1.json",
+                "public/data/map/release.json",
+                "docs/map/release-notes.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E4.I1.S3",
+                "E6.I1.S1",
+                "E4.I2.S7",
+                "E4.I2.S1",
+                "E4.I2.S2",
+                "E4.I2.S3",
+                "E4.I2.S4",
+                "E4.I2.S5",
+                "E4.I2.S6",
+                "E5.I1.S1",
+                "E5.I1.S2",
+                "E5.I1.S3",
+                "E5.I1.S4",
+                "E5.I1.S5",
+                "E5.I1.S6",
+                "E5.I1.S7",
+                "E5.I1.S8",
+                "E5.I1.S9"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

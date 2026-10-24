@@ -1,0 +1,1931 @@
+{
+  "version": 1,
+  "meta": {
+    "name": "CNA — Catalog and Unit Viewer",
+    "slug": "cna-catalog",
+    "team": "DevKit"
+  },
+  "prd": {
+    "problem": "The catalog mixes provisional identity candidates, graphics, counter versions and scenario instances. Players need faction-separated browsing and a large rotatable unit detail view; builders need a reconciled unit inventory, stable IDs and source-linked TOE/equipment data before treating the 1301 missing art sets (1356 candidates minus 55 on main) as confirmed unique units.",
+    "why_now": "The supplied VASSAL 2.1.0 module (buildFile.xml) adds organization charts, counter layers and scenario setups. Verified counts: 2468 PieceSlots with 2468 distinct GPIDs, 1307 distinct entry names, 1194 slots under 'Organisation Charts (with units)', 1164 in the hidden duplicate 'Units' palette, 102 markers and 8 on the main map; 83 OC chart boards in images/. None of these is an adjudicated unit count. The VASSAL org charts include the Sirte, Marmarica, Cirene and Catanzaro divisions whose Organization-at-Arrival sheets the catalog could not locate (errata 4.44b says they were omitted), and changelog v2.1 records counter corrections (LTC LX->LXI, Tobruk V Art CD symbol, 44 Inf 57th AT and 5 Ind 25th/31st symbols). Main has 55 unique art sets; origin/feat/identity-art-batch-19 (which contains batch-18) adds 6 more for 61. Graziani's Offensive is the first certified scenario, so its order of battle sets the first data and art wave.",
+    "users": "Players exploring factions and units; Kevin reviewing identity/art architecture; simulation builders consuming TOE, equipment, morale, arrivals and organization data through crates/cna-catalog; artists producing unique sprites.",
+    "value": "One catalog orb owns identity reconciliation, the new crates/cna-catalog contract crate, public/data/unit-catalog.json and unit-identities.json, provenance, sprite manifests and the catalog UI (crates/frontend/src/catalog.rs, inventory.rs, catalog_view.rs, src/styles/catalog.css). Milestones: (E1) source census, branch reconciliation and identity/version contract with a Graziani fixture; (E2) unit/permutation architecture report from adjudicated identities; (E3) faction browser and sidebar/detail modal with rotation and counter/symbol versions; (E4) canonical simulation-facing data, Graziani first; (E6) bounded unique-sprite production waves with fixed membership; (E7) coverage acceptance and release. Unique historical units get unique sprite sets; versions of one unit (reduced, reorganised, alternate counters, state layers) use counters/symbols; a separate art variant needs a recorded material-equipment justification. The catalog publishes stable IDs and schemas early and never depends on the finished simulation or movement; simulation alone interprets gameplay rules.",
+    "success_metrics": [
+      "crates/cna-catalog v1 distinguishes CanonicalUnit, CounterRepresentation (VASSAL GPID, printed counter, sheet), StateVersion (layer/level), ScenarioInstanceRef (ID only; instances belong to simulation) and AssetRef; source GPIDs, aliases, original labels and evidence links stay traceable.",
+      "Every one of the 2468 VASSAL slots is accounted for in a census (unit, marker, duplicate palette, label, chart) including conflicting labels/images and missing image references; identical names or image hashes alone never merge identities (mutation test).",
+      "docs/catalog/architecture.md reports reviewed canonical identities, unresolved candidates, versions, markers and asset coverage separately and describes state axes (TOE, attachment, reduction, morale, fuel/supply) as unbounded game state, not a finite permutation count.",
+      "The catalog separates Axis (German, Italian) and Allied (Commonwealth plus contingents) and opens a main-to-detail modal with a left sidebar and large detail area; users rotate through the actual 18 supplied views and inspect counter/symbol versions with keyboard and pointer.",
+      "The viewer labels static directional frames as frames (not animation), shows missing frames/assets honestly, and is verified on light and dark backgrounds without clipping or bleed.",
+      "Each confirmed unique unit has a distinct sprite set or is explicitly uncovered; generic role art never counts as coverage; every production leaf has fixed membership and passes provenance, alpha/geometry and light/dark inspection gates.",
+      "TOE, equipment, morale, arrivals, withdrawals and organization records consumed by simulation are source-linked with unresolved status handling; errata from ERR (4.43a, 4.44a-c, 4.49) are applied exactly once with a record; conflicting VASSAL values are reviewed, not copied.",
+      "No catalog leaf depends on simulation rules or movement; the only upstream dependency is the simulation-owned shared scaffold (workspace member and frontend split)."
+    ],
+    "out_of_scope": [
+      "Replacing unique-unit coverage with generic equipment-family art.",
+      "Treating all 1356 provisional candidates as distinct historical units, or committing to 1301 new art sets before reconciliation.",
+      "Authoritative combat, movement, logistics or per-game private state in the reference catalog.",
+      "Importing player names or passwords from VASSAL saves (all four supplied .vsav files contain PLAYER records with non-empty password fields) or assuming supplied artwork may be redistributed.",
+      "Editing simulation, map or movement files; boundary changes go to the owning orb."
+    ],
+    "open_questions": [
+      "Exact unique-unit and material equipment-variant totals are outputs of E2, not assumptions; pending identities stay visible until adjudicated.",
+      "Reference catalog information is distinct from enemy-instance intelligence: knowing a reference unit exists must not reveal an opponent's live strength, cargo, attachments or hidden composition (L21 3.61).",
+      "Record source copyright/redistribution permission before shipping source-derived counter imagery (VASSAL SVG counters by Mitch Guthrie, (c) 1979 SPI / (c) 2022 White Box Games); generated uniforms are illustrative, not certified historical uniforms.",
+      "Merge order for the unmerged art branches: batch-19 contains batch-18; E1.I1.S1 proposes merging batch-19 only, pending Kevin's approval of the branch."
+    ]
+  },
+  "epics": [
+    {
+      "key": "E1",
+      "title": "Source census and identity/version contract",
+      "objective": "Reconcile pending art branches, census every source (rules OA, 2021 rules, VASSAL pieces and org charts, current identities) and publish the cna-catalog v1 contract plus a Graziani fixture.",
+      "user_value": "Simulation and the catalog UI can rely on stable IDs and types immediately.",
+      "acceptance_criteria": [
+        "Batch-18/19 reconciliation note and a decision request exist; no local work overwritten.",
+        "VASSAL census accounts for all 2468 slots.",
+        "cna-catalog v1 crate, schema docs and fixture published."
+      ],
+      "blocked_by": [],
+      "issues": [
+        {
+          "key": "E1.I1",
+          "title": "Branch and source census",
+          "summary": "Account for every existing art set and every source slot before any merge.",
+          "systems": [
+            "git",
+            "rust bin",
+            "data"
+          ],
+          "approach": "Read-only inspection of origin/feat/identity-art-batch-18/19; Rust census bin in crates/cna-catalog parses buildFile.xml; cross-source matrix in data files.",
+          "risks": [
+            "Duplicating batch-18 when merging batch-19.",
+            "Overwriting uncommitted local identity edits in the main checkout."
+          ],
+          "acceptance_criteria": [
+            "Census files exist with counts reproducible from sources."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E1.I1.S1",
+              "title": "Reconcile identity-art branches 18 and 19",
+              "goal": "Bring the 6 pending art sets onto the planning baseline without duplicates.",
+              "scope": [
+                "Verify origin/feat/identity-art-batch-19 contains batch-18 (git merge-base --is-ancestor); diff unit-identities.json/doc changes; list the 6 identities and confirm no ID collisions with main's 55.",
+                "Write docs/catalog/branch-reconciliation.md with the proposed merge (batch-19 only) and request Kevin's approval; do not push or merge without it.",
+                "Never modify the main checkout's uncommitted files.",
+                "Correct the stale introductory count in docs/unit-identities.md (it says 49 ready while the JSON has 55)."
+              ],
+              "non_goals": [
+                "Generating new art.",
+                "Pushing branches."
+              ],
+              "acceptance_criteria": [
+                "Note lists 61 sets after merge with exact identity IDs and checks (unique IDs, assets exist, 1536x768 RGBA).",
+                "If merged with approval, schema validation passes and coverage text says 61 available."
+              ],
+              "verification": [
+                "git merge-base --is-ancestor origin/feat/identity-art-batch-18 origin/feat/identity-art-batch-19",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "docs/catalog/branch-reconciliation.md",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "S",
+              "blocked_by": []
+            },
+            {
+              "key": "E1.I1.S2",
+              "title": "VASSAL piece census from buildFile.xml",
+              "goal": "Account for every VASSAL slot before identity work.",
+              "scope": [
+                "Sources: VBF (docs/CNAv2.1.0/buildFile.xml); VIMG (docs/CNAv2.1.0/images/)",
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S1 (crates/cna-catalog workspace member)",
+                "crates/cna-catalog/src/bin/vassal-census.rs writes data/sources/vassal-2.1-pieces.json: for each of 2468 PieceSlots the GPID, entryName, palette path (OC charts 1194, Units 1164, Markers 102, Map 8), prototype refs, image file refs, layer/embellishment levels (state versions), side/nationality prefixes, and whether each referenced image exists in docs/CNAv2.1.0/images.",
+                "Classify slot kinds: unit counter, marker, label, chart decoration, duplicate palette entry (same GPID family in Units vs OC)."
+              ],
+              "non_goals": [
+                "Merging identities.",
+                "Reading .vsav saves."
+              ],
+              "acceptance_criteria": [
+                "Census totals equal 2468/1307/1194/1164/102/8 (test re-parses the XML).",
+                "Missing image references are listed, not dropped."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin vassal-census -- --check",
+                "cargo test -p cna-catalog census"
+              ],
+              "files_hint": [
+                "crates/cna-catalog/src/bin/vassal-census.rs",
+                "data/sources/vassal-2.1-pieces.json"
+              ],
+              "size": "M",
+              "blocked_by": []
+            },
+            {
+              "key": "E1.I1.S3",
+              "title": "Cross-source identity matrix",
+              "goal": "Line up every candidate with its evidence without merging.",
+              "scope": [
+                "Sources: R79 (docs/The Campaign for North Africa.pdf physical pages; docs/rules.txt OCR locator only) pp.116-166; L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 4.4; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) [4.44b]; VBF (docs/CNAv2.1.0/buildFile.xml); VIMG (docs/CNAv2.1.0/images/) OC *.png",
+                "data/sources/identity-matrix.json: rows = 1356 current candidates + VASSAL unit slots + 2021 rules OA references; columns = R79 OA page/row, L21 4.4x chart refs, VASSAL GPIDs (OC and Units palettes), OC chart board, current identity id, art status.",
+                "Flag VASSAL-only units (e.g. Sirte/Marmarica/Cirene/Catanzaro OC entries) and rules-only units; flag ERR 4.44b items (Sirte, Cirene, Marmarica omitted; 1st Buffs/1st Hampshires assigned to Matruh Garrison; French Motor Marine arrival 'D'; German 362 Artillery Battery ID 'x')."
+              ],
+              "non_goals": [
+                "Adjudicating identities (E2).",
+                "Changing unit-identities.json IDs."
+              ],
+              "acceptance_criteria": [
+                "Every current candidate and every VASSAL unit slot appears in exactly one matrix row group; counts reported in docs/catalog/census.md.",
+                "A mutation test proves equal names alone do not join rows."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog matrix"
+              ],
+              "files_hint": [
+                "data/sources/identity-matrix.json",
+                "docs/catalog/census.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E1.I1.S2"
+              ]
+            },
+            {
+              "key": "E1.I1.S4",
+              "title": "Record counter-art and generated-asset distribution status",
+              "goal": "Make source-derived counter imagery and generated sprite provenance explicit before any public build.",
+              "scope": [
+                "Sources: docs/CNAv2.1.0/moduledata; VCL (docs/CNAv2.1.0/changelog.txt, playnotes.txt, Read me.txt)",
+                "docs/catalog/licensing.md: VASSAL SVG counters (Mitch Guthrie 2021; module (c) 1979 SPI / (c) 2022 White Box Games), org-chart PNGs, scanned rulebook counters, and Painter-generated sprites (illustrative, not certified uniforms); status for each = local-only pending Kevin, or permitted.",
+                "Catalog UI may show VASSAL counter images only in local builds while status is pending (flag consumed by E3.I2.S2)."
+              ],
+              "non_goals": [
+                "Negotiating permission."
+              ],
+              "acceptance_criteria": [
+                "Every image class shipped or displayed by the catalog has a status row; the pending decision is named."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog licensing"
+              ],
+              "files_hint": [
+                "docs/catalog/licensing.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E1.I1.S2"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E1.I2",
+          "title": "cna-catalog v1 contract",
+          "summary": "Typed contract crate, schemas and a consumer fixture.",
+          "systems": [
+            "rust crate",
+            "contract docs"
+          ],
+          "approach": "Move JSON parsing types from crates/frontend/src/catalog.rs and inventory.rs into crates/cna-catalog (frontend re-exports); add layered types; keep existing JSON backward compatible.",
+          "risks": [
+            "Frontend embeds JSON via include_str!; moving parsers must keep the Wasm build unchanged."
+          ],
+          "acceptance_criteria": [
+            "Contract tagged catalog-contract-v1 with fixture."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E1.I2.S1",
+              "title": "Create cna-catalog crate with layered identity types",
+              "goal": "Define the canonical/counter/version/instance/asset layers in one crate.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S1 (workspace member)",
+                "crates/cna-catalog/src/lib.rs: CanonicalUnitId, CanonicalUnit {side, nationality, kind, names, aliases, source_refs, status}, CounterRepresentation {gpid, sheet, printed label, images}, StateVersion {axis, level, source}, ScenarioInstanceRef (opaque id), AssetRef {portrait, atlas, status}, Toe/Equipment record types with per-value status.",
+                "Move parse logic from frontend catalog.rs/inventory.rs; frontend calls cna_catalog; existing tests keep passing.",
+                "Fix redirect resolution: today Inventory::find does a direct lookup and ignores identity_redirects; resolve retired IDs through redirect chains, rejecting loops and ambiguous targets."
+              ],
+              "non_goals": [
+                "UI changes.",
+                "New data."
+              ],
+              "acceptance_criteria": [
+                "Existing frontend catalog/inventory tests pass unchanged; new tests parse both public/data JSON files through cna-catalog.",
+                "Every one of the 18 retired IDs in identity_redirects resolves to its target; a fixture with a redirect loop is rejected (tests).",
+                "A ScenarioInstanceRef cannot carry stats (type-level: no fields besides id)."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog",
+                "npm test",
+                "cargo clippy --workspace --all-targets -- -D warnings"
+              ],
+              "files_hint": [
+                "crates/cna-catalog/src/lib.rs",
+                "crates/frontend/src/catalog.rs",
+                "crates/frontend/src/inventory.rs"
+              ],
+              "size": "M",
+              "blocked_by": []
+            },
+            {
+              "key": "E1.I2.S2",
+              "title": "Catalog v1 schema and contract docs",
+              "goal": "Document the contract consumers rely on.",
+              "scope": [
+                "docs/contracts/catalog-v1.md and docs/catalog-v1.schema.json (extends unit-identities schema with layers and redirects); identity_redirects semantics; status vocabularies; reference-vs-instance rule (L21 3.61)."
+              ],
+              "non_goals": [
+                "Changing existing field types."
+              ],
+              "acceptance_criteria": [
+                "Both data files validate; docs list every type with an example."
+              ],
+              "verification": [
+                "uvx check-jsonschema --schemafile docs/catalog-v1.schema.json public/data/unit-identities.json",
+                "cargo test -p cna-catalog schema"
+              ],
+              "files_hint": [
+                "docs/contracts/catalog-v1.md",
+                "docs/catalog-v1.schema.json"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E1.I2.S1"
+              ]
+            },
+            {
+              "key": "E1.I2.S3",
+              "title": "Graziani consumer fixture",
+              "goal": "Give simulation a realistic, clearly-labelled sample.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "crates/cna-catalog/fixtures/graziani-sample.json: ~15 units from SC21 60.31/60.41 (1st CCNN Div with I(M) attached, 2 Libyan Div with IX(L), Maletti Div, Bardia Garrison, Tobruk Garrison, Libyan Tank Command HQ; 11th Hussars, 1st RTR, 2nd Rifle Bde, 4th RHA, Matruh Garrison with 1st Essex attached, 7th Armd Div HQ, 4th Indian Div HQ) with status=fixture TOE values marked unverified.",
+                "Loader cna_catalog::fixture::graziani(); CATALOG_CONTRACT_VERSION = 1."
+              ],
+              "non_goals": [
+                "Certified TOE (E4)."
+              ],
+              "acceptance_criteria": [
+                "Fixture validates; every fixture record has status=fixture (test) so it cannot certify a scenario."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog fixture",
+                "uvx check-jsonschema --schemafile docs/catalog-v1.schema.json crates/cna-catalog/fixtures/graziani-sample.json"
+              ],
+              "files_hint": [
+                "crates/cna-catalog/fixtures/graziani-sample.json",
+                "crates/cna-catalog/src/fixture.rs"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E1.I2.S2"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E2",
+      "title": "Identity reconciliation and architecture report",
+      "objective": "Adjudicate identities by nationality and kind and publish the architecture/provenance report and art-requirement list.",
+      "user_value": "Kevin can review exactly how many unique units, versions and markers exist and why.",
+      "acceptance_criteria": [
+        "Every matrix row group has a decision (merged, distinct, version-of, marker, unresolved) with evidence.",
+        "architecture.md and art-requirements.json published with counts that reproduce from data."
+      ],
+      "blocked_by": [
+        "E1"
+      ],
+      "issues": [
+        {
+          "key": "E2.I1",
+          "title": "Identity adjudication waves",
+          "summary": "Decide identities per nationality/kind with evidence records.",
+          "systems": [
+            "data",
+            "docs"
+          ],
+          "approach": "Each leaf processes one bounded group of matrix rows and writes adjudications to data/catalog/adjudications/*.json; unresolved stays visible.",
+          "risks": [
+            "Name-only merges; VASSAL editorial fixes treated as authority."
+          ],
+          "acceptance_criteria": [
+            "All row groups decided or explicitly unresolved."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E2.I1.S1",
+              "title": "Adjudicate Commonwealth formations (British, Indian, Australian, NZ, South African)",
+              "goal": "Decide identities for Commonwealth OA rows (R79 pp.116-132) against VASSAL BR/IN/AU/NZ/SA org charts and current candidates, including 22nd/200th Guards counter states and VASSAL v2.1 symbol fixes (44 Inf 57th AT, 5 Ind 25th/31st Field Arty, Tobruk V Art CD).",
+              "scope": [
+                "Sources: R79 (docs/The Campaign for North Africa.pdf physical pages; docs/rules.txt OCR locator only) pp.116-132; VIMG (docs/CNAv2.1.0/images/) OC BR/IN/AU/NZ/SA; VCL (docs/CNAv2.1.0/changelog.txt, playnotes.txt, Read me.txt) v2.1 Counters",
+                "For each matrix row group write a decision {merged | distinct | version_of | marker | unresolved} with evidence refs; keep identity_redirects for any retired ID.",
+                "Version-of decisions must name the state axis (reorganisation, reduction, alternate counter) so art uses counters/symbols, not new sprites."
+              ],
+              "non_goals": [
+                "Art generation.",
+                "Stats transcription."
+              ],
+              "acceptance_criteria": [
+                "Every row group in scope has a decision; unresolved ones list the missing evidence.",
+                "Redirects resolve; schema validation passes."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog adjudications",
+                "uvx check-jsonschema --schemafile docs/catalog-v1.schema.json public/data/unit-identities.json"
+              ],
+              "files_hint": [
+                "data/catalog/adjudications/",
+                "public/data/unit-identities.json"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E1.I1.S3",
+                "E1.I2.S2"
+              ]
+            },
+            {
+              "key": "E2.I1.S2",
+              "title": "Adjudicate Italian formations including Sirte, Marmarica, Cirene and Catanzaro",
+              "goal": "Decide identities for Italian OA rows (R79 pp.147-161) and the 41 counter-only rows against VASSAL IT org charts (OC IT 61st Sirte, 62nd Marmarica, 63rd Cirene, 64th Catanzaro and others), LTC LX/LXI designation and ERR 4.44b omissions.",
+              "scope": [
+                "Sources: R79 (docs/The Campaign for North Africa.pdf physical pages; docs/rules.txt OCR locator only) pp.147-161, 182; VIMG (docs/CNAv2.1.0/images/) OC IT *.png; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) [4.44b]; VCL (docs/CNAv2.1.0/changelog.txt, playnotes.txt, Read me.txt) v2.1 LTC LX/LXI",
+                "For each matrix row group write a decision {merged | distinct | version_of | marker | unresolved} with evidence refs; keep identity_redirects for any retired ID.",
+                "Version-of decisions must name the state axis (reorganisation, reduction, alternate counter) so art uses counters/symbols, not new sprites."
+              ],
+              "non_goals": [
+                "Art generation.",
+                "Stats transcription."
+              ],
+              "acceptance_criteria": [
+                "Every row group in scope has a decision; unresolved ones list the missing evidence.",
+                "Redirects resolve; schema validation passes."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog adjudications",
+                "uvx check-jsonschema --schemafile docs/catalog-v1.schema.json public/data/unit-identities.json"
+              ],
+              "files_hint": [
+                "data/catalog/adjudications/",
+                "public/data/unit-identities.json"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E1.I1.S3",
+                "E1.I2.S2"
+              ]
+            },
+            {
+              "key": "E2.I1.S3",
+              "title": "Adjudicate German formations and other Allied contingents",
+              "goal": "Decide identities for German OA rows (R79 pp.162-166, 5th Light/21st Panzer lineage, Kampfgruppe HQs, 200th Pioneer) and Free French, Polish, Greek contingents against VASSAL GE/AL charts.",
+              "scope": [
+                "Sources: R79 (docs/The Campaign for North Africa.pdf physical pages; docs/rules.txt OCR locator only) pp.162-166; VIMG (docs/CNAv2.1.0/images/) OC GE/AL *.png; VCL (docs/CNAv2.1.0/changelog.txt, playnotes.txt, Read me.txt) changelog 5th Leicht note",
+                "For each matrix row group write a decision {merged | distinct | version_of | marker | unresolved} with evidence refs; keep identity_redirects for any retired ID.",
+                "Version-of decisions must name the state axis (reorganisation, reduction, alternate counter) so art uses counters/symbols, not new sprites."
+              ],
+              "non_goals": [
+                "Art generation.",
+                "Stats transcription."
+              ],
+              "acceptance_criteria": [
+                "Every row group in scope has a decision; unresolved ones list the missing evidence.",
+                "Redirects resolve; schema validation passes."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog adjudications",
+                "uvx check-jsonschema --schemafile docs/catalog-v1.schema.json public/data/unit-identities.json"
+              ],
+              "files_hint": [
+                "data/catalog/adjudications/",
+                "public/data/unit-identities.json"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E1.I1.S3",
+                "E1.I2.S2"
+              ]
+            },
+            {
+              "key": "E2.I1.S4",
+              "title": "Adjudicate SGSUs, naval units, aircraft models, equipment rows and markers",
+              "goal": "Decide identities for 132 SGSUs, 20 naval units, 78 aircraft model candidates, 81 equipment rows and the 102 VASSAL markers, classifying markers/administrative pieces as non-units.",
+              "scope": [
+                "Sources: R79 (docs/The Campaign for North Africa.pdf physical pages; docs/rules.txt OCR locator only) pp.112-113, 138-145, 182-184; VBF (docs/CNAv2.1.0/buildFile.xml) Markers palette",
+                "For each matrix row group write a decision {merged | distinct | version_of | marker | unresolved} with evidence refs; keep identity_redirects for any retired ID.",
+                "Version-of decisions must name the state axis (reorganisation, reduction, alternate counter) so art uses counters/symbols, not new sprites."
+              ],
+              "non_goals": [
+                "Art generation.",
+                "Stats transcription."
+              ],
+              "acceptance_criteria": [
+                "Every row group in scope has a decision; unresolved ones list the missing evidence.",
+                "Redirects resolve; schema validation passes."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog adjudications",
+                "uvx check-jsonschema --schemafile docs/catalog-v1.schema.json public/data/unit-identities.json"
+              ],
+              "files_hint": [
+                "data/catalog/adjudications/",
+                "public/data/unit-identities.json"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E1.I1.S3",
+                "E1.I2.S2"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E2.I2",
+          "title": "Architecture report and art requirements",
+          "summary": "Publish counts and the derived list of required unique sprite sets.",
+          "systems": [
+            "docs",
+            "data"
+          ],
+          "approach": "Generated from adjudications by a bin so counts are reproducible.",
+          "risks": [
+            "Reporting state space as a finite permutation count."
+          ],
+          "acceptance_criteria": [
+            "Report and requirements list published."
+          ],
+          "blocked_by": [
+            "E2.I1"
+          ],
+          "subissues": [
+            {
+              "key": "E2.I2.S1",
+              "title": "Unit/permutation architecture and provenance report",
+              "goal": "Explain identities, versions, markers and asset coverage separately.",
+              "scope": [
+                "crates/cna-catalog/src/bin/catalog-report.rs generates docs/catalog/architecture.md: canonical units by side/nationality/kind, counter representations, state versions by axis, markers, unresolved, asset coverage; describe gameplay state axes qualitatively (unbounded)."
+              ],
+              "non_goals": [
+                "UI."
+              ],
+              "acceptance_criteria": [
+                "Report regenerates byte-identically (check mode); counts equal adjudication data."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin catalog-report -- --check"
+              ],
+              "files_hint": [
+                "crates/cna-catalog/src/bin/catalog-report.rs",
+                "docs/catalog/architecture.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E2.I1.S1",
+                "E2.I1.S2",
+                "E2.I1.S3",
+                "E2.I1.S4"
+              ]
+            },
+            {
+              "key": "E2.I2.S2",
+              "title": "Art requirements and material-variant justifications",
+              "goal": "Derive exactly which identities need unique sprite sets.",
+              "scope": [
+                "public/data/art-requirements.json: one entry per confirmed unique unit (required), per justified material equipment variant (with justification text and source), and version-of entries mapped to counter/symbol treatment (no sprite).",
+                "Fields for wave id and status, left empty for E6.I1.S1."
+              ],
+              "non_goals": [
+                "Assigning waves."
+              ],
+              "acceptance_criteria": [
+                "Every confirmed unique unit has exactly one required entry; generic role ids are rejected as coverage (test)."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog art_requirements"
+              ],
+              "files_hint": [
+                "public/data/art-requirements.json"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E2.I2.S1"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E3",
+      "title": "Faction browser and unit detail modal",
+      "objective": "Build the faction-separated browser and a main-to-detail modal with a left sidebar, large rotatable view and counter/symbol versions.",
+      "user_value": "Players explore Axis and Allied units in a large, keyboard-accessible viewer showing real supplied frames.",
+      "acceptance_criteria": [
+        "Faction tabs and filters work; modal sidebar/detail layout verified at 2458x1358 and 1280x800.",
+        "Rotation steps through actual frames with pointer and keyboard; versions inspector shows counter layers with sources.",
+        "Catalog view has no access to live game state."
+      ],
+      "blocked_by": [
+        "E1"
+      ],
+      "issues": [
+        {
+          "key": "E3.I1",
+          "title": "Faction browser and modal shell",
+          "summary": "Faction separation, search/filter, modal with sidebar and detail area.",
+          "systems": [
+            "frontend",
+            "browser"
+          ],
+          "approach": "New crates/frontend/src/catalog_view.rs (catalog-owned) renders from cna-catalog; reuse existing search/pagination logic.",
+          "risks": [
+            "Focus management in nested dialogs."
+          ],
+          "acceptance_criteria": [
+            "Browser tests pass and screenshots inspected."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E3.I1.S1",
+              "title": "Faction-separated catalog browser",
+              "goal": "Let players browse Axis and Allied units separately.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S3 (frontend split creates catalog_view.rs and catalog.css); cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Tabs: Axis (German, Italian) and Allied (British/Commonwealth, Australian, NZ, Indian, South African, Free French, Polish, Greek); search, kind filter and pagination reused from catalog.rs.",
+                "Each result shows status badges (verified/provisional, art ready/missing)."
+              ],
+              "non_goals": [
+                "Detail modal (S2)."
+              ],
+              "acceptance_criteria": [
+                "Browser test: Axis tab never lists Allied identities and vice versa; counts match data per nationality."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/catalog-browser.spec.ts",
+                "npm test"
+              ],
+              "files_hint": [
+                "crates/frontend/src/catalog_view.rs",
+                "src/styles/catalog.css"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E1.I2.S1"
+              ]
+            },
+            {
+              "key": "E3.I1.S2",
+              "title": "Main-to-detail modal with left sidebar",
+              "goal": "Open a large detail view from any result.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Modal: left sidebar list of the current filtered results, large detail area (portrait, atlas viewer slot, identity/source panel); Arrow Up/Down moves selection, Home/End, Escape closes, focus returns to the opener."
+              ],
+              "non_goals": [
+                "Rotation controls (E3.I2)."
+              ],
+              "acceptance_criteria": [
+                "Keyboard-only test opens, navigates 5 units and closes with focus restored; screenshots at both viewports inspected."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/catalog-modal.spec.ts"
+              ],
+              "files_hint": [
+                "crates/frontend/src/catalog_view.rs",
+                "src/styles/catalog.css"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E3.I1.S1"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E3.I2",
+          "title": "Rotation, versions and reference boundary",
+          "summary": "Rotatable frames, counter/symbol versions and the reference-vs-instance rule.",
+          "systems": [
+            "frontend",
+            "browser"
+          ],
+          "approach": "Frame viewer crops the 6x3 atlas cells; versions inspector shows VASSAL layers and printed counters with sources.",
+          "risks": [
+            "Implying animation from static frames."
+          ],
+          "acceptance_criteria": [
+            "Viewer verified on light/dark backgrounds."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E3.I2.S1",
+              "title": "Rotatable 18-frame viewer",
+              "goal": "Rotate through the actual supplied views.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Pointer drag and Left/Right keys step frames (20 degree nominal), play/pause stepping labelled 'static directional frames'; missing atlas shows an explicit 'no unique artwork' state with the fallback clearly labelled.",
+                "Light/dark background toggle."
+              ],
+              "non_goals": [
+                "Generating frames.",
+                "Smooth animation claims."
+              ],
+              "acceptance_criteria": [
+                "Browser test steps 18 frames and wraps; screenshots on light and dark backgrounds show no cell bleed or clipping (inspected)."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/catalog-rotation.spec.ts"
+              ],
+              "files_hint": [
+                "crates/frontend/src/catalog_view.rs"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E3.I1.S2"
+              ]
+            },
+            {
+              "key": "E3.I2.S2",
+              "title": "Counter and symbol version inspector",
+              "goal": "Show versions of one unit through counters and symbols.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "List CounterRepresentations and StateVersions for the unit with source refs; render VASSAL counter images from docs/CNAv2.1.0/images only in local builds per the licensing record, else show metadata only."
+              ],
+              "non_goals": [
+                "Simulation state."
+              ],
+              "acceptance_criteria": [
+                "For a unit with multiple counter states (e.g. 22nd/200th Guards Brigade, 5th Light/21st Panzer HQ) all states display with sources."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/catalog-versions.spec.ts"
+              ],
+              "files_hint": [
+                "crates/frontend/src/catalog_view.rs"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E3.I2.S1",
+                "E2.I1.S1",
+                "E2.I1.S3"
+              ]
+            },
+            {
+              "key": "E3.I2.S3",
+              "title": "Reference-versus-intelligence boundary test",
+              "goal": "Guarantee the catalog never displays live opponent data.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 3.61",
+                "catalog_view.rs depends only on cna-catalog types; add a compile-time guard (module has no cna_sim import) and a test that catalog markup is identical regardless of game state."
+              ],
+              "non_goals": [
+                "Projection logic (simulation)."
+              ],
+              "acceptance_criteria": [
+                "Test fails if catalog_view imports cna_sim or output changes with game state."
+              ],
+              "verification": [
+                "cargo test -p cna-frontend catalog_view::boundary"
+              ],
+              "files_hint": [
+                "crates/frontend/src/catalog_view.rs"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E3.I1.S1"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E4",
+      "title": "Canonical simulation-facing data",
+      "objective": "Transcribe TOE, morale, organization and arrivals for the Graziani order of battle and the equipment/aircraft characteristics with errata applied once.",
+      "user_value": "The simulation can certify scenarios on source-linked unit data.",
+      "acceptance_criteria": [
+        "Graziani OOB data complete or explicitly unresolved.",
+        "Equipment/aircraft characteristics with an errata ledger applied exactly once."
+      ],
+      "blocked_by": [
+        "E1"
+      ],
+      "issues": [
+        {
+          "key": "E4.I1",
+          "title": "Graziani data first",
+          "summary": "Units deployed in SC21 60.31/60.41 and the characteristics they reference.",
+          "systems": [
+            "data"
+          ],
+          "approach": "Transcribe from R79 scans (numeric authority) and L21 2021 text; VASSAL values only as comparison evidence.",
+          "risks": [
+            "OCR damage in tables; use scans."
+          ],
+          "acceptance_criteria": [
+            "Graziani data passes completeness checks."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E4.I1.S1",
+              "title": "TOE and organization for Graziani units",
+              "goal": "Provide TOE, assignment and attachment for every unit in the Graziani setup.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41; R79 (docs/The Campaign for North Africa.pdf physical pages; docs/rules.txt OCR locator only) OA pages; L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 4.4, 19",
+                "For every unit listed in SC21 60.31/60.41 (Sirte/Cirene/Marmarica OA sheets are missing per ERR 4.44b; use VASSAL OC charts only as evidence and mark values unresolved where no rules source exists, which quarantines certification for those units) (incl. attachments such as I(M) to 1st CCNN, LXIII(L) to Cirene, IX(L) to 2nd Libyan, II(M) to Maletti, 1st Essex/1st DLI/1st South Staffords to Matruh Garrison), record TOE by weapon system with status and source refs in public/data/unit-catalog.json (catalog-owned)."
+              ],
+              "non_goals": [
+                "Morale (S2).",
+                "Combat use."
+              ],
+              "acceptance_criteria": [
+                "cargo test -p cna-catalog graziani_coverage lists zero units without TOE status."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog graziani_coverage",
+                "uvx check-jsonschema --schemafile docs/unit-catalog.schema.json public/data/unit-catalog.json"
+              ],
+              "files_hint": [
+                "public/data/unit-catalog.json",
+                "crates/cna-catalog/tests/graziani_coverage.rs"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E2.I1.S1",
+                "E2.I1.S2"
+              ]
+            },
+            {
+              "key": "E4.I1.S2",
+              "title": "Morale, training and arrivals for the Graziani window",
+              "goal": "Provide morale and timing data for Game-Turns 1-6.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 17.4, 17.6, 4.43; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) [4.43a]; VIMG (docs/CNAv2.1.0/images/) Allied/Axis Land Unit Reinf Schedule.png",
+                "Basic morale/training per unit (L21 17.x charts), arrivals and withdrawals GT1-6 from reinforcement schedules incl. ERR 4.43a omissions; in-training status (6th Australian Division)."
+              ],
+              "non_goals": [
+                "Morale rules logic."
+              ],
+              "acceptance_criteria": [
+                "Coverage test passes for morale and arrival fields; ERR application recorded."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog graziani_coverage"
+              ],
+              "files_hint": [
+                "public/data/unit-catalog.json"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E4.I1.S1"
+              ]
+            },
+            {
+              "key": "E4.I1.S3",
+              "title": "Equipment and aircraft characteristics with errata ledger",
+              "goal": "Publish the tank/gun and aircraft characteristics the simulation computes with.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 4.44, 4.49; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) [4.4b], [4.44a-c], [4.49]; VIMG (docs/CNAv2.1.0/images/) 4.44A/4.44b/4.44c, Allied/German Tank and Gun Characteristics Chart.png",
+                "Tank/gun charts (L21 4.49 / R79 pp.138-140) and aircraft charts 4.44a-c with ERR applied once: Z506 range 110; Gladiator fuel 1; Bf.109E no 'D'; Bf.110 maneuver 30 (32 night); 7.62cm Pak(R) CPA 15; Marder CPA 25; PzIIIE '25 1 - 4 - 3 4/4 3 0'; Re.2000 flagged not in any scenario.",
+                "docs/catalog/errata-ledger.md records each application with source; a test fails if a value differs from ledger or ledger lists an unapplied item."
+              ],
+              "non_goals": [
+                "Combat arithmetic."
+              ],
+              "acceptance_criteria": [
+                "Ledger test passes; previously unresolved CPA/range/fuel cells in docs/unit-catalog.md are now sourced or still explicitly unresolved with reason."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog errata_ledger"
+              ],
+              "files_hint": [
+                "public/data/unit-catalog.json",
+                "docs/catalog/errata-ledger.md"
+              ],
+              "size": "M",
+              "blocked_by": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E5",
+      "title": "Remaining order-of-battle data",
+      "objective": "Transcribe campaign-wide reinforcement/withdrawal schedules and TOE/morale for every reconciled unit, then review VASSAL counter-data conflicts.",
+      "user_value": "Later scenarios and the campaign can certify on source-linked unit data.",
+      "acceptance_criteria": [
+        "Every schedule row source-linked; every reconciled unit has TOE/morale status.",
+        "Every VASSAL changelog counter fix has a decision entry."
+      ],
+      "blocked_by": [
+        "E4"
+      ],
+      "issues": [
+        {
+          "key": "E5.I1",
+          "title": "Remaining order of battle",
+          "summary": "Full campaign schedules and TOE/morale for all reconciled units.",
+          "systems": [
+            "data"
+          ],
+          "approach": "Same process as E4.I1, split by side.",
+          "risks": [
+            "Volume; keep leaves bounded by side and chart."
+          ],
+          "acceptance_criteria": [
+            "All reconciled units have TOE/morale status."
+          ],
+          "blocked_by": [
+            "E4.I1"
+          ],
+          "subissues": [
+            {
+              "key": "E5.I1.S1",
+              "title": "Full land reinforcement and withdrawal schedules plus aircraft withdrawal",
+              "goal": "Provide arrival/withdrawal timing for the campaign.",
+              "scope": [
+                "Sources: L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 4.43; ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda) [4.43a], [4.44b]; VIMG (docs/CNAv2.1.0/images/) *Reinf Schedule.png, *Aircraft Withdrawal Schedule.png; VCL (docs/CNAv2.1.0/changelog.txt, playnotes.txt, Read me.txt)",
+                "Transcribe Allied and Axis land reinforcement schedules and aircraft withdrawal schedules for all Game-Turns with ERR 4.43a (28/2 42d RTR; 64/2 WD 32nd Army Tank Bde; ignore 76/2 reference to 2/68) and 4.44b items.",
+                "Compare to VASSAL 'Allied/Axis Land Unit Reinf Schedule' and record the v2.1 note that reinforcement listings and org charts disagree (5th Leicht) without copying VASSAL's choice."
+              ],
+              "non_goals": [
+                "Scenario-specific setup."
+              ],
+              "acceptance_criteria": [
+                "Every schedule row has a source ref; VASSAL differences listed in docs/catalog/vassal-conflicts.md."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog schedules"
+              ],
+              "files_hint": [
+                "public/data/unit-catalog.json",
+                "docs/catalog/vassal-conflicts.md"
+              ],
+              "size": "M",
+              "blocked_by": []
+            },
+            {
+              "key": "E5.I1.S2",
+              "title": "Commonwealth TOE and morale for all reconciled units",
+              "goal": "Complete Allied unit data.",
+              "scope": [
+                "Sources: R79 (docs/The Campaign for North Africa.pdf physical pages; docs/rules.txt OCR locator only) pp.116-134; L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 4.4, 17, 19",
+                "TOE, morale, organization for all reconciled Commonwealth and Allied units not covered by E4.I1."
+              ],
+              "non_goals": [
+                "Axis units."
+              ],
+              "acceptance_criteria": [
+                "Coverage test reports zero Allied units without TOE/morale status."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog coverage -- --side allied"
+              ],
+              "files_hint": [
+                "public/data/unit-catalog.json"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E5.I1.S1"
+              ]
+            },
+            {
+              "key": "E5.I1.S3",
+              "title": "Axis TOE and morale for all reconciled units",
+              "goal": "Complete Axis unit data.",
+              "scope": [
+                "Sources: R79 (docs/The Campaign for North Africa.pdf physical pages; docs/rules.txt OCR locator only) pp.135-170; L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 4.4, 17, 19",
+                "TOE, morale, organization for all reconciled German and Italian units not covered by E4.I1."
+              ],
+              "non_goals": [
+                "Allied units."
+              ],
+              "acceptance_criteria": [
+                "Coverage test reports zero Axis units without TOE/morale status."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog coverage -- --side axis"
+              ],
+              "files_hint": [
+                "public/data/unit-catalog.json"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E5.I1.S1"
+              ]
+            },
+            {
+              "key": "E5.I1.S4",
+              "title": "VASSAL counter-data conflict review",
+              "goal": "Review every VASSAL counter value that differs from rules data.",
+              "scope": [
+                "Sources: VCL (docs/CNAv2.1.0/changelog.txt, playnotes.txt, Read me.txt); ERR (docs/CNAv2.1.0/incorporated errata.txt, Sep 79 addenda); VBF (docs/CNAv2.1.0/buildFile.xml)",
+                "Compare VASSAL counter properties/labels to transcribed data; adjudicate changelog fixes (LTC LX vs LXI, Tobruk V Art CD symbol, 44 Inf 57th AT, 5 Ind 25th/31st, Land p45-46 counter corrections) against R79/L21; record decisions."
+              ],
+              "non_goals": [
+                "Changing VASSAL files."
+              ],
+              "acceptance_criteria": [
+                "Every listed changelog counter fix has a decision entry with sources."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog vassal_conflicts"
+              ],
+              "files_hint": [
+                "docs/catalog/vassal-conflicts.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E5.I1.S2",
+                "E5.I1.S3"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E6",
+      "title": "Unique-sprite production waves",
+      "objective": "Produce unique sprite sets in bounded waves with fixed membership and enforced gates.",
+      "user_value": "Each confirmed unique unit gets its own sprite set, prioritised by scenario.",
+      "acceptance_criteria": [
+        "Wave membership frozen in art-waves.json before production.",
+        "Every production leaf passes provenance, alpha/geometry and light/dark gates.",
+        "Waves B-F are materialised as appended S/M leaves before any of their art is produced."
+      ],
+      "blocked_by": [
+        "E2"
+      ],
+      "issues": [
+        {
+          "key": "E6.I1",
+          "title": "Wave freeze and production gates",
+          "summary": "Freeze membership and automate gates.",
+          "systems": [
+            "data",
+            "rust bin"
+          ],
+          "approach": "Membership by scenario priority; gate checks automated where possible, visual inspection recorded.",
+          "risks": [
+            "Membership drift during production."
+          ],
+          "acceptance_criteria": [
+            "Freeze file and gate tool exist."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E6.I1.S1",
+              "title": "Freeze wave membership",
+              "goal": "Assign every required sprite set to exactly one wave.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60-64",
+                "public/data/art-waves.json: Wave A = units in SC21 60.31/60.41; B = 60.23 Italian Campaign additions and GT1-20 reinforcements; C = 61 Desert Fox; D = 62 Crusader; E = 63 El Alamein; F = remaining 64 Campaign units; within waves, chunks of ≤8 identities.",
+                "A test asserts every required entry appears exactly once and membership is append-only after freeze."
+              ],
+              "non_goals": [
+                "Producing art."
+              ],
+              "acceptance_criteria": [
+                "Freeze test passes; counts per wave in docs/catalog/art-waves.md."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog art_waves"
+              ],
+              "files_hint": [
+                "public/data/art-waves.json",
+                "docs/catalog/art-waves.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E2.I2.S2"
+              ]
+            },
+            {
+              "key": "E6.I1.S2",
+              "title": "Sprite gate checker and proof sheets",
+              "goal": "Automate the checks every batch must pass.",
+              "scope": [
+                "crates/cna-catalog/src/bin/sprite-check.rs: 1536x768 RGBA atlas, 18 non-empty distinct 256 px cells, transparent margins, portrait matches a frame, unique files across identities, manifest provenance (Painter attachment URLs/prompt summary), light/dark proof sheet output for inspection."
+              ],
+              "non_goals": [
+                "Generating art."
+              ],
+              "acceptance_criteria": [
+                "Checker rejects a shared-role atlas and a duplicated atlas (mutation tests)."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --all",
+                "cargo test -p cna-catalog sprite_check"
+              ],
+              "files_hint": [
+                "crates/cna-catalog/src/bin/sprite-check.rs"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E1.I2.S1"
+              ]
+            },
+            {
+              "key": "E6.I1.S3",
+              "title": "Re-gate the existing ready sets",
+              "goal": "Check the already-produced unique sets with the same gates before counting them as coverage.",
+              "scope": [
+                "Membership is fixed: the 55 ready identities on main plus the 6 batch-19 identities if E1.I1.S1 was approved and merged (61 total); run sprite-check and inspect light/dark proofs; downgrade any failing set to candidate with a recorded reason."
+              ],
+              "non_goals": [
+                "Generating replacement art.",
+                "Promoting provisional historical identities."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready-and-passing or downgraded with a reason; counts recorded in docs/unit-identities.md."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --all",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json"
+              ],
+              "files_hint": [
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E6.I1.S2",
+                "E1.I1.S1"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E6.I2",
+          "title": "Wave A: Graziani's Offensive order of battle",
+          "summary": "Unique sprites for every unit deployed in SC21 60.31/60.41.",
+          "systems": [
+            "art",
+            "data"
+          ],
+          "approach": "Painter generation per identity, corrected strips as needed, sprite-check, light/dark inspection, manifest update; each leaf has fixed membership by setup hex.",
+          "risks": [
+            "Painter refusals (e.g. a past 76th Anti-tank request) must be recorded as blockers, not substituted."
+          ],
+          "acceptance_criteria": [
+            "All Wave A identities ready or explicitly blocked."
+          ],
+          "blocked_by": [
+            "E6.I1"
+          ],
+          "subissues": [
+            {
+              "key": "E6.I2.S1",
+              "title": "Wave A sprites: Italian CCNN divisions and attached tank battalion",
+              "goal": "Produce unique sprite sets for: 1st CCNN Div HQ (C4218); I(M) tank bn attached to it; 4th CCNN Div HQ (C4507); 2nd and 3rd CCNN Div HQs (Tripoli).",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Membership is exactly the canonical units E2 maps to these SC21 setup entries, as frozen in art-waves.json; members already ready (e.g. 11th Hussars, 1st KRRC, 2nd Rifle Brigade on main) are skipped and listed; members adjudicated version_of or marker drop out with a note; unresolved identities are recorded as blocked, not drawn.",
+                "Per identity: Painter 18-view sheet, corrective strips if needed, pack to 6x3 256 px cells (bottom y=240, centre x=128), portrait from a real frame, manifest provenance (attachment URLs, prompt summary); inspect light/dark proofs.",
+                "Equipment, uniforms and insignia are illustrative unless sourced; record that in the manifest. A Painter refusal is recorded as a blocker, never replaced by a shared-role image."
+              ],
+              "non_goals": [
+                "Units outside the listed membership.",
+                "Shared-role or recoloured substitutes.",
+                "Promoting provisional historical identity metadata."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready (passing sprite-check) or has a recorded blocker; proofs inspected and listed in docs/unit-identities.md with updated coverage counts."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --wave A",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "public/sprites/units/",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            },
+            {
+              "key": "E6.I2.S2",
+              "title": "Wave A sprites: Libyan divisions, Maletti group and Libyan specialists",
+              "goal": "Produce unique sprite sets for: 1st Libyan Div HQ (C4020); 2nd Libyan Div HQ and attached IX(L) (C3920); Maletti Div HQ and attached II(M) (C3617); Libyan Parachute Regt (Barce B5504); Saharan Det (within 3 hexes of C0716).",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Membership is exactly the canonical units E2 maps to these SC21 setup entries, as frozen in art-waves.json; members already ready (e.g. 11th Hussars, 1st KRRC, 2nd Rifle Brigade on main) are skipped and listed; members adjudicated version_of or marker drop out with a note; unresolved identities are recorded as blocked, not drawn.",
+                "Per identity: Painter 18-view sheet, corrective strips if needed, pack to 6x3 256 px cells (bottom y=240, centre x=128), portrait from a real frame, manifest provenance (attachment URLs, prompt summary); inspect light/dark proofs.",
+                "Equipment, uniforms and insignia are illustrative unless sourced; record that in the manifest. A Painter refusal is recorded as a blocker, never replaced by a shared-role image."
+              ],
+              "non_goals": [
+                "Units outside the listed membership.",
+                "Shared-role or recoloured substitutes.",
+                "Promoting provisional historical identity metadata."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready (passing sprite-check) or has a recorded blocker; proofs inspected and listed in docs/unit-identities.md with updated coverage counts."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --wave A",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "public/sprites/units/",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            },
+            {
+              "key": "E6.I2.S3",
+              "title": "Wave A sprites: Italian metropolitan divisions and attached tank battalions",
+              "goal": "Produce unique sprite sets for: 63rd Cirene Div HQ and LXIII(L) (C4120); 62nd Marmarica Div HQ and LXII(L) (C3918); 64th Catanzaro Div HQ (C4707); 4/10 Army (Tripolitania); XVII and XXXII Libyan battalions (Map A/B).",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Membership is exactly the canonical units E2 maps to these SC21 setup entries, as frozen in art-waves.json; members already ready (e.g. 11th Hussars, 1st KRRC, 2nd Rifle Brigade on main) are skipped and listed; members adjudicated version_of or marker drop out with a note; unresolved identities are recorded as blocked, not drawn.",
+                "Per identity: Painter 18-view sheet, corrective strips if needed, pack to 6x3 256 px cells (bottom y=240, centre x=128), portrait from a real frame, manifest provenance (attachment URLs, prompt summary); inspect light/dark proofs.",
+                "Equipment, uniforms and insignia are illustrative unless sourced; record that in the manifest. A Painter refusal is recorded as a blocker, never replaced by a shared-role image."
+              ],
+              "non_goals": [
+                "Units outside the listed membership.",
+                "Shared-role or recoloured substitutes.",
+                "Promoting provisional historical identity metadata."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready (passing sprite-check) or has a recorded blocker; proofs inspected and listed in docs/unit-identities.md with updated coverage counts."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --wave A",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "public/sprites/units/",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            },
+            {
+              "key": "E6.I2.S4",
+              "title": "Wave A sprites: Libyan Tank Command, regiments and coastal garrisons",
+              "goal": "Produce unique sprite sets for: Aresca Regt (C3919); Trivoli Regt (Bardia C4321); Libyan Tank Command HQ (Tobruk C4807); Bardia, Tobruk, Benghazi and Derna garrisons.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Membership is exactly the canonical units E2 maps to these SC21 setup entries, as frozen in art-waves.json; members already ready (e.g. 11th Hussars, 1st KRRC, 2nd Rifle Brigade on main) are skipped and listed; members adjudicated version_of or marker drop out with a note; unresolved identities are recorded as blocked, not drawn.",
+                "Per identity: Painter 18-view sheet, corrective strips if needed, pack to 6x3 256 px cells (bottom y=240, centre x=128), portrait from a real frame, manifest provenance (attachment URLs, prompt summary); inspect light/dark proofs.",
+                "Equipment, uniforms and insignia are illustrative unless sourced; record that in the manifest. A Painter refusal is recorded as a blocker, never replaced by a shared-role image."
+              ],
+              "non_goals": [
+                "Units outside the listed membership.",
+                "Shared-role or recoloured substitutes.",
+                "Promoting provisional historical identity metadata."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready (passing sprite-check) or has a recorded blocker; proofs inspected and listed in docs/unit-identities.md with updated coverage counts."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --wave A",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "public/sprites/units/",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            },
+            {
+              "key": "E6.I2.S5",
+              "title": "Wave A sprites: Inland and airfield garrisons",
+              "goal": "Produce unique sprite sets for: Mechili (B4921), Giarabub (C1014), Scheferzen (C3419), Fort Maddalena (C3019), el Grein (C1715), Benina (A4829) and Soluch (A4130) garrisons.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Membership is exactly the canonical units E2 maps to these SC21 setup entries, as frozen in art-waves.json; members already ready (e.g. 11th Hussars, 1st KRRC, 2nd Rifle Brigade on main) are skipped and listed; members adjudicated version_of or marker drop out with a note; unresolved identities are recorded as blocked, not drawn.",
+                "Per identity: Painter 18-view sheet, corrective strips if needed, pack to 6x3 256 px cells (bottom y=240, centre x=128), portrait from a real frame, manifest provenance (attachment URLs, prompt summary); inspect light/dark proofs.",
+                "Equipment, uniforms and insignia are illustrative unless sourced; record that in the manifest. A Painter refusal is recorded as a blocker, never replaced by a shared-role image."
+              ],
+              "non_goals": [
+                "Units outside the listed membership.",
+                "Shared-role or recoloured substitutes.",
+                "Promoting provisional historical identity metadata."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready (passing sprite-check) or has a recorded blocker; proofs inspected and listed in docs/unit-identities.md with updated coverage counts."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --wave A",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "public/sprites/units/",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            },
+            {
+              "key": "E6.I2.S6",
+              "title": "Wave A sprites: Italian corps artillery and army artillery regiments",
+              "goal": "Produce unique sprite sets for: X, XXI, XXII, XXIII and XXVI corps artillery; 1/1AR, 2/1AR, 3/1AR.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Membership is exactly the canonical units E2 maps to these SC21 setup entries, as frozen in art-waves.json; members already ready (e.g. 11th Hussars, 1st KRRC, 2nd Rifle Brigade on main) are skipped and listed; members adjudicated version_of or marker drop out with a note; unresolved identities are recorded as blocked, not drawn.",
+                "Per identity: Painter 18-view sheet, corrective strips if needed, pack to 6x3 256 px cells (bottom y=240, centre x=128), portrait from a real frame, manifest provenance (attachment URLs, prompt summary); inspect light/dark proofs.",
+                "Equipment, uniforms and insignia are illustrative unless sourced; record that in the manifest. A Painter refusal is recorded as a blocker, never replaced by a shared-role image."
+              ],
+              "non_goals": [
+                "Units outside the listed membership.",
+                "Shared-role or recoloured substitutes.",
+                "Promoting provisional historical identity metadata."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready (passing sprite-check) or has a recorded blocker; proofs inspected and listed in docs/unit-identities.md with updated coverage counts."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --wave A",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "public/sprites/units/",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            },
+            {
+              "key": "E6.I2.S7",
+              "title": "Wave A sprites: Italian independent battalions, first group",
+              "goal": "Produce unique sprite sets for: 4/1AR; 147; 131; 2/24; 5/1; 6 GaF; 16 GaF; 22 GaF.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Membership is exactly the canonical units E2 maps to these SC21 setup entries, as frozen in art-waves.json; members already ready (e.g. 11th Hussars, 1st KRRC, 2nd Rifle Brigade on main) are skipped and listed; members adjudicated version_of or marker drop out with a note; unresolved identities are recorded as blocked, not drawn.",
+                "Per identity: Painter 18-view sheet, corrective strips if needed, pack to 6x3 256 px cells (bottom y=240, centre x=128), portrait from a real frame, manifest provenance (attachment URLs, prompt summary); inspect light/dark proofs.",
+                "Equipment, uniforms and insignia are illustrative unless sourced; record that in the manifest. A Painter refusal is recorded as a blocker, never replaced by a shared-role image."
+              ],
+              "non_goals": [
+                "Units outside the listed membership.",
+                "Shared-role or recoloured substitutes.",
+                "Promoting provisional historical identity metadata."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready (passing sprite-check) or has a recorded blocker; proofs inspected and listed in docs/unit-identities.md with updated coverage counts."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --wave A",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "public/sprites/units/",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            },
+            {
+              "key": "E6.I2.S8",
+              "title": "Wave A sprites: Italian independent battalions, second group",
+              "goal": "Produce unique sprite sets for: 42 GaF; 350 GaF.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Membership is exactly the canonical units E2 maps to these SC21 setup entries, as frozen in art-waves.json; members already ready (e.g. 11th Hussars, 1st KRRC, 2nd Rifle Brigade on main) are skipped and listed; members adjudicated version_of or marker drop out with a note; unresolved identities are recorded as blocked, not drawn.",
+                "Per identity: Painter 18-view sheet, corrective strips if needed, pack to 6x3 256 px cells (bottom y=240, centre x=128), portrait from a real frame, manifest provenance (attachment URLs, prompt summary); inspect light/dark proofs.",
+                "Equipment, uniforms and insignia are illustrative unless sourced; record that in the manifest. A Painter refusal is recorded as a blocker, never replaced by a shared-role image."
+              ],
+              "non_goals": [
+                "Units outside the listed membership.",
+                "Shared-role or recoloured substitutes.",
+                "Promoting provisional historical identity metadata."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready (passing sprite-check) or has a recorded blocker; proofs inspected and listed in docs/unit-identities.md with updated coverage counts."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --wave A",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "public/sprites/units/",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            },
+            {
+              "key": "E6.I2.S9",
+              "title": "Wave A sprites: 7th Armoured Division forward units, first group",
+              "goal": "Produce unique sprite sets for: 2nd Scots Guards and 31st Field Arty (C4131); 1st Coy French Motor Marines (C3926); 3rd Coldstream Gds, 1st KRRC, 4th RHA and 7th Medium Arty (C3922).",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Membership is exactly the canonical units E2 maps to these SC21 setup entries, as frozen in art-waves.json; members already ready (e.g. 11th Hussars, 1st KRRC, 2nd Rifle Brigade on main) are skipped and listed; members adjudicated version_of or marker drop out with a note; unresolved identities are recorded as blocked, not drawn.",
+                "Per identity: Painter 18-view sheet, corrective strips if needed, pack to 6x3 256 px cells (bottom y=240, centre x=128), portrait from a real frame, manifest provenance (attachment URLs, prompt summary); inspect light/dark proofs.",
+                "Equipment, uniforms and insignia are illustrative unless sourced; record that in the manifest. A Painter refusal is recorded as a blocker, never replaced by a shared-role image."
+              ],
+              "non_goals": [
+                "Units outside the listed membership.",
+                "Shared-role or recoloured substitutes.",
+                "Promoting provisional historical identity metadata."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready (passing sprite-check) or has a recorded blocker; proofs inspected and listed in docs/unit-identities.md with updated coverage counts."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --wave A",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "public/sprites/units/",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            },
+            {
+              "key": "E6.I2.S10",
+              "title": "Wave A sprites: 7th Armoured Division forward units and Matruh",
+              "goal": "Produce unique sprite sets for: 1st Royal Northumberland Fusiliers and 3rd RHA (C3721); 1st RTR (C3520); 2nd Rifle Bde (C3320); 11th Hussars (C3020); 7th Armd Div HQ (D3612); Matruh Garrison and attached 1st Essex (D3714).",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Membership is exactly the canonical units E2 maps to these SC21 setup entries, as frozen in art-waves.json; members already ready (e.g. 11th Hussars, 1st KRRC, 2nd Rifle Brigade on main) are skipped and listed; members adjudicated version_of or marker drop out with a note; unresolved identities are recorded as blocked, not drawn.",
+                "Per identity: Painter 18-view sheet, corrective strips if needed, pack to 6x3 256 px cells (bottom y=240, centre x=128), portrait from a real frame, manifest provenance (attachment URLs, prompt summary); inspect light/dark proofs.",
+                "Equipment, uniforms and insignia are illustrative unless sourced; record that in the manifest. A Painter refusal is recorded as a blocker, never replaced by a shared-role image."
+              ],
+              "non_goals": [
+                "Units outside the listed membership.",
+                "Shared-role or recoloured substitutes.",
+                "Promoting provisional historical identity metadata."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready (passing sprite-check) or has a recorded blocker; proofs inspected and listed in docs/unit-identities.md with updated coverage counts."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --wave A",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "public/sprites/units/",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            },
+            {
+              "key": "E6.I2.S11",
+              "title": "Wave A sprites: Matruh attachments, 4th Indian, 16th Bde and 2nd NZ Division",
+              "goal": "Produce unique sprite sets for: 1st DLI and 1st South Staffords (D3714); 4th Indian Div HQ (D3615); 16th Inf Bde (E1829); 2nd NZ Div HQ, 4th NZ Bde, 27th NZ MG Bn and 2nd NZ Cavalry (Alexandria).",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Membership is exactly the canonical units E2 maps to these SC21 setup entries, as frozen in art-waves.json; members already ready (e.g. 11th Hussars, 1st KRRC, 2nd Rifle Brigade on main) are skipped and listed; members adjudicated version_of or marker drop out with a note; unresolved identities are recorded as blocked, not drawn.",
+                "Per identity: Painter 18-view sheet, corrective strips if needed, pack to 6x3 256 px cells (bottom y=240, centre x=128), portrait from a real frame, manifest provenance (attachment URLs, prompt summary); inspect light/dark proofs.",
+                "Equipment, uniforms and insignia are illustrative unless sourced; record that in the manifest. A Painter refusal is recorded as a blocker, never replaced by a shared-role image."
+              ],
+              "non_goals": [
+                "Units outside the listed membership.",
+                "Shared-role or recoloured substitutes.",
+                "Promoting provisional historical identity metadata."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready (passing sprite-check) or has a recorded blocker; proofs inspected and listed in docs/unit-identities.md with updated coverage counts."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --wave A",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "public/sprites/units/",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            },
+            {
+              "key": "E6.I2.S12",
+              "title": "Wave A sprites: Alexandria/Cairo rear units",
+              "goal": "Produce unique sprite sets for: 4th NZ Field Arty (Alexandria); 6th Australian Div HQ (in training, Cairo/Helwan); 8th Field Arty, 1st Welch, 1st Cheshire MG Bn and 2nd King's Own (Cairo).",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Membership is exactly the canonical units E2 maps to these SC21 setup entries, as frozen in art-waves.json; members already ready (e.g. 11th Hussars, 1st KRRC, 2nd Rifle Brigade on main) are skipped and listed; members adjudicated version_of or marker drop out with a note; unresolved identities are recorded as blocked, not drawn.",
+                "Per identity: Painter 18-view sheet, corrective strips if needed, pack to 6x3 256 px cells (bottom y=240, centre x=128), portrait from a real frame, manifest provenance (attachment URLs, prompt summary); inspect light/dark proofs.",
+                "Equipment, uniforms and insignia are illustrative unless sourced; record that in the manifest. A Painter refusal is recorded as a blocker, never replaced by a shared-role image."
+              ],
+              "non_goals": [
+                "Units outside the listed membership.",
+                "Shared-role or recoloured substitutes.",
+                "Promoting provisional historical identity metadata."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready (passing sprite-check) or has a recorded blocker; proofs inspected and listed in docs/unit-identities.md with updated coverage counts."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --wave A",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "public/sprites/units/",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            },
+            {
+              "key": "E6.I2.S13",
+              "title": "Wave A sprites: Commonwealth army-level artillery and AA",
+              "goal": "Produce unique sprite sets for: 8th Medium Arty, 65th and 149th Anti-Tank, 9th Heavy AA, 15th and 57th Light AA (anywhere on Map D or E).",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.31, 60.41",
+                "Membership is exactly the canonical units E2 maps to these SC21 setup entries, as frozen in art-waves.json; members already ready (e.g. 11th Hussars, 1st KRRC, 2nd Rifle Brigade on main) are skipped and listed; members adjudicated version_of or marker drop out with a note; unresolved identities are recorded as blocked, not drawn.",
+                "Per identity: Painter 18-view sheet, corrective strips if needed, pack to 6x3 256 px cells (bottom y=240, centre x=128), portrait from a real frame, manifest provenance (attachment URLs, prompt summary); inspect light/dark proofs.",
+                "Equipment, uniforms and insignia are illustrative unless sourced; record that in the manifest. A Painter refusal is recorded as a blocker, never replaced by a shared-role image."
+              ],
+              "non_goals": [
+                "Units outside the listed membership.",
+                "Shared-role or recoloured substitutes.",
+                "Promoting provisional historical identity metadata."
+              ],
+              "acceptance_criteria": [
+                "Every member is ready (passing sprite-check) or has a recorded blocker; proofs inspected and listed in docs/unit-identities.md with updated coverage counts."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin sprite-check -- --wave A",
+                "uvx check-jsonschema --schemafile docs/unit-identities.schema.json public/data/unit-identities.json",
+                "npm test"
+              ],
+              "files_hint": [
+                "public/sprites/units/",
+                "public/data/unit-identities.json",
+                "docs/unit-identities.md"
+              ],
+              "size": "M",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E6.I3",
+          "title": "Wave B: 60.23 The Italian Campaign additions and GT1-20 reinforcements",
+          "summary": "Unique sprites for frozen wave B membership.",
+          "systems": [
+            "art",
+            "planning"
+          ],
+          "approach": "After E6.I1.S1 freezes wave B, its chunks of ≤8 identities are appended as S/M leaves E6.I3.S2 onward (append-only keys) by the materialisation leaf, each mirroring the Wave A leaf template. No art is produced under the materialisation leaf itself.",
+          "risks": [
+            "Open-ended 'generate all' tickets; leaves must list fixed members."
+          ],
+          "acceptance_criteria": [
+            "Every wave B chunk leaf is materialised and complete or blocked with a recorded reason."
+          ],
+          "blocked_by": [
+            "E6.I1"
+          ],
+          "subissues": [
+            {
+              "key": "E6.I3.S1",
+              "title": "Materialise wave B production leaves",
+              "goal": "Turn frozen wave B membership into bounded production subtickets.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 60.23; L21 (docs/CNAv2.1.0/Rules_Land_07-2021.pdf) 4.43",
+                "Read wave B chunks from art-waves.json; append one leaf per chunk under E6.I3 in docs/planning/cna-catalog.plan.json with the Wave A template (membership listed by identity id), run devkit validation and sync through the parent's Linear publication process.",
+                "Record chunk count in docs/catalog/art-waves.md."
+              ],
+              "non_goals": [
+                "Producing art.",
+                "Changing wave membership."
+              ],
+              "acceptance_criteria": [
+                "Plan validates with E6.I3.S2.. leaves, each listing ≤8 identity ids; manifest DAG check passes.",
+                "E7.I1.S1 blocked_by is extended with every appended production leaf in the same change, so the coverage gate cannot close before them."
+              ],
+              "verification": [
+                "devkit pipeline validate --stage full --plan docs/planning/cna-catalog.plan.json",
+                "python3 docs/planning/cna-dag-check.py"
+              ],
+              "files_hint": [
+                "docs/planning/cna-catalog.plan.json",
+                "docs/catalog/art-waves.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E6.I4",
+          "title": "Wave C: 61 The Desert Fox order of battle",
+          "summary": "Unique sprites for frozen wave C membership.",
+          "systems": [
+            "art",
+            "planning"
+          ],
+          "approach": "After E6.I1.S1 freezes wave C, its chunks of ≤8 identities are appended as S/M leaves E6.I4.S2 onward (append-only keys) by the materialisation leaf, each mirroring the Wave A leaf template. No art is produced under the materialisation leaf itself.",
+          "risks": [
+            "Open-ended 'generate all' tickets; leaves must list fixed members."
+          ],
+          "acceptance_criteria": [
+            "Every wave C chunk leaf is materialised and complete or blocked with a recorded reason."
+          ],
+          "blocked_by": [
+            "E6.I1"
+          ],
+          "subissues": [
+            {
+              "key": "E6.I4.S1",
+              "title": "Materialise wave C production leaves",
+              "goal": "Turn frozen wave C membership into bounded production subtickets.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 61",
+                "Read wave C chunks from art-waves.json; append one leaf per chunk under E6.I4 in docs/planning/cna-catalog.plan.json with the Wave A template (membership listed by identity id), run devkit validation and sync through the parent's Linear publication process.",
+                "Record chunk count in docs/catalog/art-waves.md."
+              ],
+              "non_goals": [
+                "Producing art.",
+                "Changing wave membership."
+              ],
+              "acceptance_criteria": [
+                "Plan validates with E6.I4.S2.. leaves, each listing ≤8 identity ids; manifest DAG check passes.",
+                "E7.I1.S1 blocked_by is extended with every appended production leaf in the same change, so the coverage gate cannot close before them."
+              ],
+              "verification": [
+                "devkit pipeline validate --stage full --plan docs/planning/cna-catalog.plan.json",
+                "python3 docs/planning/cna-dag-check.py"
+              ],
+              "files_hint": [
+                "docs/planning/cna-catalog.plan.json",
+                "docs/catalog/art-waves.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E6.I5",
+          "title": "Wave D: 62 Operation Crusader order of battle",
+          "summary": "Unique sprites for frozen wave D membership.",
+          "systems": [
+            "art",
+            "planning"
+          ],
+          "approach": "After E6.I1.S1 freezes wave D, its chunks of ≤8 identities are appended as S/M leaves E6.I5.S2 onward (append-only keys) by the materialisation leaf, each mirroring the Wave A leaf template. No art is produced under the materialisation leaf itself.",
+          "risks": [
+            "Open-ended 'generate all' tickets; leaves must list fixed members."
+          ],
+          "acceptance_criteria": [
+            "Every wave D chunk leaf is materialised and complete or blocked with a recorded reason."
+          ],
+          "blocked_by": [
+            "E6.I1"
+          ],
+          "subissues": [
+            {
+              "key": "E6.I5.S1",
+              "title": "Materialise wave D production leaves",
+              "goal": "Turn frozen wave D membership into bounded production subtickets.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 62",
+                "Read wave D chunks from art-waves.json; append one leaf per chunk under E6.I5 in docs/planning/cna-catalog.plan.json with the Wave A template (membership listed by identity id), run devkit validation and sync through the parent's Linear publication process.",
+                "Record chunk count in docs/catalog/art-waves.md."
+              ],
+              "non_goals": [
+                "Producing art.",
+                "Changing wave membership."
+              ],
+              "acceptance_criteria": [
+                "Plan validates with E6.I5.S2.. leaves, each listing ≤8 identity ids; manifest DAG check passes.",
+                "E7.I1.S1 blocked_by is extended with every appended production leaf in the same change, so the coverage gate cannot close before them."
+              ],
+              "verification": [
+                "devkit pipeline validate --stage full --plan docs/planning/cna-catalog.plan.json",
+                "python3 docs/planning/cna-dag-check.py"
+              ],
+              "files_hint": [
+                "docs/planning/cna-catalog.plan.json",
+                "docs/catalog/art-waves.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E6.I6",
+          "title": "Wave E: 63 El Alamein order of battle",
+          "summary": "Unique sprites for frozen wave E membership.",
+          "systems": [
+            "art",
+            "planning"
+          ],
+          "approach": "After E6.I1.S1 freezes wave E, its chunks of ≤8 identities are appended as S/M leaves E6.I6.S2 onward (append-only keys) by the materialisation leaf, each mirroring the Wave A leaf template. No art is produced under the materialisation leaf itself.",
+          "risks": [
+            "Open-ended 'generate all' tickets; leaves must list fixed members."
+          ],
+          "acceptance_criteria": [
+            "Every wave E chunk leaf is materialised and complete or blocked with a recorded reason."
+          ],
+          "blocked_by": [
+            "E6.I1"
+          ],
+          "subissues": [
+            {
+              "key": "E6.I6.S1",
+              "title": "Materialise wave E production leaves",
+              "goal": "Turn frozen wave E membership into bounded production subtickets.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 63",
+                "Read wave E chunks from art-waves.json; append one leaf per chunk under E6.I6 in docs/planning/cna-catalog.plan.json with the Wave A template (membership listed by identity id), run devkit validation and sync through the parent's Linear publication process.",
+                "Record chunk count in docs/catalog/art-waves.md."
+              ],
+              "non_goals": [
+                "Producing art.",
+                "Changing wave membership."
+              ],
+              "acceptance_criteria": [
+                "Plan validates with E6.I6.S2.. leaves, each listing ≤8 identity ids; manifest DAG check passes.",
+                "E7.I1.S1 blocked_by is extended with every appended production leaf in the same change, so the coverage gate cannot close before them."
+              ],
+              "verification": [
+                "devkit pipeline validate --stage full --plan docs/planning/cna-catalog.plan.json",
+                "python3 docs/planning/cna-dag-check.py"
+              ],
+              "files_hint": [
+                "docs/planning/cna-catalog.plan.json",
+                "docs/catalog/art-waves.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "E6.I7",
+          "title": "Wave F: remaining 64 Campaign units",
+          "summary": "Unique sprites for frozen wave F membership.",
+          "systems": [
+            "art",
+            "planning"
+          ],
+          "approach": "After E6.I1.S1 freezes wave F, its chunks of ≤8 identities are appended as S/M leaves E6.I7.S2 onward (append-only keys) by the materialisation leaf, each mirroring the Wave A leaf template. No art is produced under the materialisation leaf itself.",
+          "risks": [
+            "Open-ended 'generate all' tickets; leaves must list fixed members."
+          ],
+          "acceptance_criteria": [
+            "Every wave F chunk leaf is materialised and complete or blocked with a recorded reason."
+          ],
+          "blocked_by": [
+            "E6.I1"
+          ],
+          "subissues": [
+            {
+              "key": "E6.I7.S1",
+              "title": "Materialise wave F production leaves",
+              "goal": "Turn frozen wave F membership into bounded production subtickets.",
+              "scope": [
+                "Sources: SC21 (docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf) 64",
+                "Read wave F chunks from art-waves.json; append one leaf per chunk under E6.I7 in docs/planning/cna-catalog.plan.json with the Wave A template (membership listed by identity id), run devkit validation and sync through the parent's Linear publication process.",
+                "Record chunk count in docs/catalog/art-waves.md."
+              ],
+              "non_goals": [
+                "Producing art.",
+                "Changing wave membership."
+              ],
+              "acceptance_criteria": [
+                "Plan validates with E6.I7.S2.. leaves, each listing ≤8 identity ids; manifest DAG check passes.",
+                "E7.I1.S1 blocked_by is extended with every appended production leaf in the same change, so the coverage gate cannot close before them."
+              ],
+              "verification": [
+                "devkit pipeline validate --stage full --plan docs/planning/cna-catalog.plan.json",
+                "python3 docs/planning/cna-dag-check.py"
+              ],
+              "files_hint": [
+                "docs/planning/cna-catalog.plan.json",
+                "docs/catalog/art-waves.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E6.I1.S1",
+                "E6.I1.S2"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "E7",
+      "title": "Coverage acceptance and release",
+      "objective": "Gate completion on honest coverage, browser acceptance and a versioned data release.",
+      "user_value": "Kevin and the simulation get a trustworthy catalog with explicit gaps.",
+      "acceptance_criteria": [
+        "Coverage report: each confirmed unique unit ready or explicitly uncovered.",
+        "Browser acceptance screenshots inspected.",
+        "catalog-v1.x release with checksums consumed by simulation integration."
+      ],
+      "blocked_by": [
+        "E3",
+        "E4",
+        "E5",
+        "E6"
+      ],
+      "issues": [
+        {
+          "key": "E7.I1",
+          "title": "Acceptance and release",
+          "summary": "Final checks.",
+          "systems": [
+            "docs",
+            "browser",
+            "release"
+          ],
+          "approach": "Generated coverage report; screenshots; release manifest.",
+          "risks": [
+            "Inflated coverage from generic art."
+          ],
+          "acceptance_criteria": [
+            "All three leaves complete."
+          ],
+          "blocked_by": [],
+          "subissues": [
+            {
+              "key": "E7.I1.S1",
+              "title": "Unique-art coverage gate",
+              "goal": "Prove coverage claims.",
+              "scope": [
+                "catalog-report --coverage: required vs ready vs blocked per wave/side; fails if any ready entry uses a shared-role path or duplicate file."
+              ],
+              "non_goals": [
+                "New art."
+              ],
+              "acceptance_criteria": [
+                "Report regenerated; zero generic-art coverage; blocked list explicit."
+              ],
+              "verification": [
+                "cargo run -p cna-catalog --bin catalog-report -- --coverage --check"
+              ],
+              "files_hint": [
+                "docs/catalog/coverage.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E2.I2.S1",
+                "E6.I1.S3",
+                "E6.I2.S1",
+                "E6.I2.S2",
+                "E6.I2.S3",
+                "E6.I2.S4",
+                "E6.I2.S5",
+                "E6.I2.S6",
+                "E6.I2.S7",
+                "E6.I2.S8",
+                "E6.I2.S9",
+                "E6.I2.S10",
+                "E6.I2.S11",
+                "E6.I2.S12",
+                "E6.I2.S13",
+                "E6.I3.S1",
+                "E6.I4.S1",
+                "E6.I5.S1",
+                "E6.I6.S1",
+                "E6.I7.S1"
+              ]
+            },
+            {
+              "key": "E7.I1.S2",
+              "title": "Catalog browser acceptance",
+              "goal": "Final visual review of browser, modal, rotation and versions.",
+              "scope": [
+                "Cross-project prerequisites (enforced by docs/planning/cna-dag.manifest.json): cna-simulation:E1.I1.S2 (npm run test:browser harness)",
+                "Screenshots at 2458x1358 and 1280x800 for Axis/Allied tabs, modal, three rotation frames, versions inspector, light/dark backgrounds; inspect and embed in docs/catalog/acceptance.md."
+              ],
+              "non_goals": [
+                "New features."
+              ],
+              "acceptance_criteria": [
+                "All screenshots inspected; no clipping/bleed."
+              ],
+              "verification": [
+                "npm run test:browser -- tests/browser/catalog-acceptance.spec.ts"
+              ],
+              "files_hint": [
+                "docs/catalog/acceptance.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E7.I1.S1"
+              ]
+            },
+            {
+              "key": "E7.I1.S3",
+              "title": "catalog-v1.x release for simulation",
+              "goal": "Publish versioned, checksummed catalog data.",
+              "scope": [
+                "public/data/catalog-release.json with checksums of unit-catalog.json, unit-identities.json, art-requirements.json, art-waves.json; contract version bump notes."
+              ],
+              "non_goals": [
+                "Contract type changes."
+              ],
+              "acceptance_criteria": [
+                "Checksums verify; simulation can pin the release version."
+              ],
+              "verification": [
+                "cargo test -p cna-catalog release"
+              ],
+              "files_hint": [
+                "public/data/catalog-release.json",
+                "docs/contracts/catalog-v1.md"
+              ],
+              "size": "S",
+              "blocked_by": [
+                "E7.I1.S1"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

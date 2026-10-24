@@ -1,0 +1,703 @@
+{
+  "version": 1,
+  "description": "Combined cross-project dependency and ownership manifest for the four CNA plans. The devkit plan schema only supports plan-local blocked_by keys; cross-project prerequisites live here (and are restated in each consumer leaf's scope). Validate with: python3 docs/planning/cna-dag-check.py",
+  "projects": [
+    {
+      "slug": "cna-map",
+      "plan": "docs/planning/cna-map.plan.json",
+      "builder_orb": "map",
+      "epics": {
+        "E1": {
+          "stage": 0,
+          "title": "Map source census and geometry contract"
+        },
+        "E2": {
+          "stage": 1,
+          "title": "Tile pipeline and draggable viewport"
+        },
+        "E3": {
+          "stage": 1,
+          "title": "Calibrated full-board hex overlay"
+        },
+        "E4": {
+          "stage": 2,
+          "title": "Transcription tooling and Graziani corridor"
+        },
+        "E5": {
+          "stage": 3,
+          "title": "Remaining board transcription"
+        },
+        "E6": {
+          "stage": 4,
+          "title": "Gameplay-map acceptance and release"
+        }
+      }
+    },
+    {
+      "slug": "cna-unit-movement",
+      "plan": "docs/planning/cna-unit-movement.plan.json",
+      "builder_orb": "unit-movement",
+      "epics": {
+        "E1": {
+          "stage": 1,
+          "title": "Consumer fixtures and pure playback model"
+        },
+        "E2": {
+          "stage": 2,
+          "title": "Edge-normal turn-then-step playback"
+        },
+        "E3": {
+          "stage": 2,
+          "title": "Hex highlights and faction-safe inspection"
+        },
+        "E4": {
+          "stage": 4,
+          "title": "Integration with authoritative routes and projections"
+        },
+        "E5": {
+          "stage": 5,
+          "title": "Movement browser acceptance"
+        }
+      }
+    },
+    {
+      "slug": "cna-catalog",
+      "plan": "docs/planning/cna-catalog.plan.json",
+      "builder_orb": "catalog-viewer",
+      "epics": {
+        "E1": {
+          "stage": 0,
+          "title": "Source census and identity/version contract"
+        },
+        "E2": {
+          "stage": 1,
+          "title": "Identity reconciliation and architecture report"
+        },
+        "E3": {
+          "stage": 2,
+          "title": "Faction browser and unit detail modal"
+        },
+        "E4": {
+          "stage": 2,
+          "title": "Canonical simulation-facing data"
+        },
+        "E5": {
+          "stage": 3,
+          "title": "Remaining order-of-battle data"
+        },
+        "E6": {
+          "stage": 3,
+          "title": "Unique-sprite production waves"
+        },
+        "E7": {
+          "stage": 5,
+          "title": "Coverage acceptance and release"
+        }
+      }
+    },
+    {
+      "slug": "cna-simulation",
+      "plan": "docs/planning/cna-simulation.plan.json",
+      "builder_orb": "simulation",
+      "epics": {
+        "E1": {
+          "stage": 0,
+          "title": "Shared scaffold and source baseline"
+        },
+        "E2": {
+          "stage": 1,
+          "title": "Contracts, rules ledger, adjudications and source comparisons"
+        },
+        "E3": {
+          "stage": 2,
+          "title": "Deterministic foundation: state, phases, projection, saves, import and modes"
+        },
+        "E4": {
+          "stage": 3,
+          "title": "Detailed logistics with maneuver"
+        },
+        "E5": {
+          "stage": 4,
+          "title": "Land combat and remaining land rules"
+        },
+        "E6": {
+          "stage": 5,
+          "title": "Graziani's Offensive bounded acceptance"
+        },
+        "E7": {
+          "stage": 6,
+          "title": "Detailed air game and alternative abstract modes"
+        },
+        "E8": {
+          "stage": 7,
+          "title": "Remaining scenarios and the campaign"
+        },
+        "E9": {
+          "stage": 8,
+          "title": "Final integration and certification"
+        }
+      }
+    }
+  ],
+  "rules": {
+    "edges": "consumer depends on producer. Local blocked_by at every level; a container is complete only when all its children are; a child cannot start before its containers' blockers are complete; cross_project_edges are leaf-to-leaf.",
+    "stage_order": "For every dependency u->v resolved to epics eu, ev: stage(ev) <= stage(eu); within one project also epic number(ev) <= epic number(eu). Stages are ordinals, not dates.",
+    "corrections": "Defects found downstream become new forward producer leaves with new content versions; never new blockers on completed upstream milestones.",
+    "ownership": "Each path has exactly one owning project. A leaf's files_hint must be owned by its project unless listed in scaffold_exceptions.",
+    "tools": "A verification command must only use harnesses that exist in the repo or are produced by the leaf itself or a transitive prerequisite (tool_prerequisites plus generic bin/test/schema rules in the validator)."
+  },
+  "cross_project_edges": [
+    {
+      "consumer": "cna-catalog:E1.I1.S2",
+      "producer": "cna-simulation:E1.I1.S1",
+      "reason": "crates/cna-catalog workspace member"
+    },
+    {
+      "consumer": "cna-catalog:E1.I2.S1",
+      "producer": "cna-simulation:E1.I1.S1",
+      "reason": "workspace member"
+    },
+    {
+      "consumer": "cna-catalog:E3.I1.S1",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-catalog:E3.I1.S1",
+      "producer": "cna-simulation:E1.I1.S3",
+      "reason": "frontend split creates catalog_view.rs and catalog.css"
+    },
+    {
+      "consumer": "cna-catalog:E3.I1.S2",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-catalog:E3.I2.S1",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-catalog:E3.I2.S2",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-catalog:E7.I1.S2",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-map:E1.I1.S1",
+      "producer": "cna-simulation:E1.I1.S1",
+      "reason": "adds crates/cna-map to the workspace"
+    },
+    {
+      "consumer": "cna-map:E1.I2.S1",
+      "producer": "cna-simulation:E1.I1.S1",
+      "reason": "workspace member exists"
+    },
+    {
+      "consumer": "cna-map:E2.I1.S1",
+      "producer": "cna-simulation:E1.I1.S1",
+      "reason": "npm run tiles script hook and workspace member"
+    },
+    {
+      "consumer": "cna-map:E2.I2.S1",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "test:browser harness"
+    },
+    {
+      "consumer": "cna-map:E2.I2.S1",
+      "producer": "cna-simulation:E1.I1.S3",
+      "reason": "frontend split gives map.rs and src/styles/map.css a single owner"
+    },
+    {
+      "consumer": "cna-map:E2.I2.S2",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-map:E2.I2.S3",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-map:E3.I2.S1",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-map:E3.I2.S2",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-map:E6.I2.S1",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-simulation:E2.I1.S2",
+      "producer": "cna-map:E1.I2.S5",
+      "reason": "corridor fixture and HexId types"
+    },
+    {
+      "consumer": "cna-simulation:E2.I1.S3",
+      "producer": "cna-catalog:E1.I2.S3",
+      "reason": "catalog Graziani fixture ids"
+    },
+    {
+      "consumer": "cna-simulation:E3.I5.S2",
+      "producer": "cna-catalog:E1.I1.S2",
+      "reason": "VASSAL piece census"
+    },
+    {
+      "consumer": "cna-simulation:E3.I5.S2",
+      "producer": "cna-map:E1.I2.S2",
+      "reason": "board pixel to HexId geometry"
+    },
+    {
+      "consumer": "cna-simulation:E3.I8.S2",
+      "producer": "cna-catalog:E1.I2.S1",
+      "reason": "canonical unit and TOE types"
+    },
+    {
+      "consumer": "cna-simulation:E3.I8.S2",
+      "producer": "cna-map:E1.I2.S1",
+      "reason": "HexId/adjacency types"
+    },
+    {
+      "consumer": "cna-simulation:E4.I11.S2",
+      "producer": "cna-map:E4.I2.S7",
+      "reason": "wells, oases and pipeline point features"
+    },
+    {
+      "consumer": "cna-simulation:E4.I12.S2",
+      "producer": "cna-map:E4.I2.S7",
+      "reason": "port point features"
+    },
+    {
+      "consumer": "cna-simulation:E4.I2.S2",
+      "producer": "cna-map:E4.I2.S7",
+      "reason": "dump and railway point features"
+    },
+    {
+      "consumer": "cna-simulation:E4.I3.S2",
+      "producer": "cna-map:E1.I2.S4",
+      "reason": "terrain/hexside record schema"
+    },
+    {
+      "consumer": "cna-simulation:E4.I3.S2",
+      "producer": "cna-map:E1.I2.S5",
+      "reason": "corridor fixture"
+    },
+    {
+      "consumer": "cna-simulation:E5.I10.S2",
+      "producer": "cna-catalog:E5.I1.S1",
+      "reason": "campaign reinforcement/withdrawal schedules"
+    },
+    {
+      "consumer": "cna-simulation:E6.I3.S1",
+      "producer": "cna-catalog:E4.I1.S1",
+      "reason": "source-linked unit data"
+    },
+    {
+      "consumer": "cna-simulation:E6.I3.S2",
+      "producer": "cna-catalog:E4.I1.S1",
+      "reason": "source-linked unit data"
+    },
+    {
+      "consumer": "cna-simulation:E6.I3.S2",
+      "producer": "cna-catalog:E4.I1.S2",
+      "reason": "source-linked unit data"
+    },
+    {
+      "consumer": "cna-simulation:E6.I3.S3",
+      "producer": "cna-catalog:E4.I1.S3",
+      "reason": "source-linked unit data"
+    },
+    {
+      "consumer": "cna-simulation:E6.I4.S1",
+      "producer": "cna-catalog:E4.I1.S3",
+      "reason": "equipment characteristics"
+    },
+    {
+      "consumer": "cna-simulation:E6.I4.S1",
+      "producer": "cna-map:E4.I1.S3",
+      "reason": "subset validator"
+    },
+    {
+      "consumer": "cna-simulation:E6.I4.S1",
+      "producer": "cna-map:E6.I2.S2",
+      "reason": "map-v1.1 release with reviewed geography"
+    },
+    {
+      "consumer": "cna-simulation:E7.I1.S2",
+      "producer": "cna-catalog:E4.I1.S3",
+      "reason": "aircraft characteristics with errata ledger"
+    },
+    {
+      "consumer": "cna-simulation:E7.I11.S2",
+      "producer": "cna-map:E5.I1.S9",
+      "reason": "Malta grid and off-map boxes"
+    },
+    {
+      "consumer": "cna-simulation:E8.I1.S1",
+      "producer": "cna-catalog:E5.I1.S1",
+      "reason": "order-of-battle data"
+    },
+    {
+      "consumer": "cna-simulation:E8.I1.S1",
+      "producer": "cna-map:E6.I2.S2",
+      "reason": "map release"
+    },
+    {
+      "consumer": "cna-simulation:E8.I2.S1",
+      "producer": "cna-catalog:E5.I1.S2",
+      "reason": "order-of-battle data"
+    },
+    {
+      "consumer": "cna-simulation:E8.I2.S1",
+      "producer": "cna-catalog:E5.I1.S3",
+      "reason": "order-of-battle data"
+    },
+    {
+      "consumer": "cna-simulation:E8.I2.S1",
+      "producer": "cna-map:E6.I2.S2",
+      "reason": "map release"
+    },
+    {
+      "consumer": "cna-simulation:E8.I3.S1",
+      "producer": "cna-catalog:E5.I1.S4",
+      "reason": "order-of-battle data"
+    },
+    {
+      "consumer": "cna-simulation:E8.I3.S1",
+      "producer": "cna-map:E6.I2.S2",
+      "reason": "map release"
+    },
+    {
+      "consumer": "cna-simulation:E8.I4.S1",
+      "producer": "cna-catalog:E5.I1.S4",
+      "reason": "order-of-battle data"
+    },
+    {
+      "consumer": "cna-simulation:E8.I4.S1",
+      "producer": "cna-map:E6.I2.S2",
+      "reason": "map release"
+    },
+    {
+      "consumer": "cna-simulation:E8.I5.S1",
+      "producer": "cna-catalog:E5.I1.S4",
+      "reason": "order-of-battle data"
+    },
+    {
+      "consumer": "cna-simulation:E8.I5.S1",
+      "producer": "cna-map:E6.I2.S2",
+      "reason": "map release"
+    },
+    {
+      "consumer": "cna-simulation:E9.I1.S2",
+      "producer": "cna-catalog:E7.I1.S3",
+      "reason": "catalog release"
+    },
+    {
+      "consumer": "cna-simulation:E9.I1.S2",
+      "producer": "cna-map:E6.I2.S2",
+      "reason": "map-v1.1 release"
+    },
+    {
+      "consumer": "cna-simulation:E9.I1.S3",
+      "producer": "cna-catalog:E7.I1.S2",
+      "reason": "catalog browser acceptance"
+    },
+    {
+      "consumer": "cna-simulation:E9.I1.S3",
+      "producer": "cna-unit-movement:E5.I1.S2",
+      "reason": "movement acceptance"
+    },
+    {
+      "consumer": "cna-simulation:E9.I2.S2",
+      "producer": "cna-catalog:E7.I1.S1",
+      "reason": "unique-art coverage gate"
+    },
+    {
+      "consumer": "cna-simulation:E9.I2.S2",
+      "producer": "cna-map:E6.I2.S2",
+      "reason": "map release"
+    },
+    {
+      "consumer": "cna-unit-movement:E1.I1.S1",
+      "producer": "cna-map:E1.I2.S5",
+      "reason": "corridor fixture and map-contract-v1"
+    },
+    {
+      "consumer": "cna-unit-movement:E1.I1.S1",
+      "producer": "cna-simulation:E1.I1.S3",
+      "reason": "frontend split assigns movement modules"
+    },
+    {
+      "consumer": "cna-unit-movement:E1.I1.S1",
+      "producer": "cna-simulation:E2.I1.S2",
+      "reason": "route result contract and fixtures"
+    },
+    {
+      "consumer": "cna-unit-movement:E1.I1.S1",
+      "producer": "cna-simulation:E2.I1.S3",
+      "reason": "viewer projection contract and fixtures"
+    },
+    {
+      "consumer": "cna-unit-movement:E1.I1.S2",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-unit-movement:E2.I1.S1",
+      "producer": "cna-map:E1.I2.S2",
+      "reason": "edge-normal geometry"
+    },
+    {
+      "consumer": "cna-unit-movement:E2.I2.S1",
+      "producer": "cna-map:E2.I2.S3",
+      "reason": "MapOverlay API"
+    },
+    {
+      "consumer": "cna-unit-movement:E2.I2.S1",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-unit-movement:E3.I1.S1",
+      "producer": "cna-map:E2.I2.S3",
+      "reason": "MapOverlay layers"
+    },
+    {
+      "consumer": "cna-unit-movement:E3.I1.S1",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-unit-movement:E3.I1.S2",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-unit-movement:E3.I2.S1",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-unit-movement:E3.I2.S1",
+      "producer": "cna-simulation:E2.I1.S3",
+      "reason": "projection contract fixtures"
+    },
+    {
+      "consumer": "cna-unit-movement:E3.I2.S2",
+      "producer": "cna-map:E2.I2.S3",
+      "reason": "overlay label hook replaces map.rs title text"
+    },
+    {
+      "consumer": "cna-unit-movement:E3.I2.S2",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-unit-movement:E4.I1.S1",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-unit-movement:E4.I1.S1",
+      "producer": "cna-simulation:E4.I3.S2",
+      "reason": "land movement costs and route producer"
+    },
+    {
+      "consumer": "cna-unit-movement:E4.I1.S1",
+      "producer": "cna-simulation:E4.I5.S2",
+      "reason": "ZOC interrupts in route results"
+    },
+    {
+      "consumer": "cna-unit-movement:E4.I1.S2",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-unit-movement:E4.I1.S2",
+      "producer": "cna-simulation:E3.I3.S1",
+      "reason": "projection engine"
+    },
+    {
+      "consumer": "cna-unit-movement:E4.I1.S2",
+      "producer": "cna-simulation:E3.I3.S2",
+      "reason": "3.6 disclosure points"
+    },
+    {
+      "consumer": "cna-unit-movement:E4.I1.S3",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-unit-movement:E5.I1.S1",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    },
+    {
+      "consumer": "cna-unit-movement:E5.I1.S2",
+      "producer": "cna-simulation:E1.I1.S2",
+      "reason": "npm run test:browser harness"
+    }
+  ],
+  "ownership": [
+    {
+      "owner": "cna-simulation",
+      "patterns": [
+        "Cargo.toml",
+        "Cargo.lock",
+        "package.json",
+        "package-lock.json",
+        "playwright.config.ts",
+        ".agents/setup",
+        ".gitignore",
+        "README.md",
+        "index.html",
+        "src/style.css",
+        "scripts/check-sources.sh",
+        "scripts/check-no-credentials.sh",
+        "docs/sources.lock.json",
+        "docs/planning/OWNERSHIP.md",
+        "docs/planning/cna-simulation.plan.json",
+        "crates/cna-sim/**",
+        "crates/frontend/src/lib.rs",
+        "crates/frontend/src/view.rs",
+        "data/rules/**",
+        "data/scenarios/**",
+        "data/vassal/**",
+        "docs/rules/**",
+        "docs/contracts/sim-*",
+        "tests/browser/smoke.spec.ts",
+        "tests/browser/integration-*"
+      ]
+    },
+    {
+      "owner": "cna-map",
+      "patterns": [
+        "crates/cna-map/**",
+        "public/data/map/**",
+        "public/tiles/**",
+        "docs/map/**",
+        "docs/contracts/map-*",
+        "crates/frontend/src/map.rs",
+        "src/styles/map.css",
+        "tests/browser/map-*",
+        "docs/planning/cna-map.plan.json"
+      ]
+    },
+    {
+      "owner": "cna-unit-movement",
+      "patterns": [
+        "crates/frontend/src/motion.rs",
+        "crates/frontend/src/movement/**",
+        "crates/frontend/src/inspect.rs",
+        "crates/frontend/src/view/panel.rs",
+        "src/styles/movement.css",
+        "docs/movement/**",
+        "tests/browser/movement-*",
+        "docs/planning/cna-unit-movement.plan.json"
+      ]
+    },
+    {
+      "owner": "cna-catalog",
+      "patterns": [
+        "crates/cna-catalog/**",
+        "crates/frontend/src/catalog.rs",
+        "crates/frontend/src/inventory.rs",
+        "crates/frontend/src/catalog_view.rs",
+        "src/styles/catalog.css",
+        "public/data/unit-catalog.json",
+        "public/data/unit-identities.json",
+        "public/data/directional-sprites.json",
+        "public/data/art-*.json",
+        "public/data/catalog-release.json",
+        "public/sprites/**",
+        "docs/unit-*",
+        "docs/catalog/**",
+        "docs/catalog-v1.schema.json",
+        "docs/contracts/catalog-*",
+        "data/sources/**",
+        "data/catalog/**",
+        "tests/browser/catalog-*",
+        "docs/planning/cna-catalog.plan.json"
+      ]
+    }
+  ],
+  "scaffold_exceptions": [
+    {
+      "key": "cna-simulation:E1.I1.S1",
+      "paths": [
+        "crates/cna-map/Cargo.toml",
+        "crates/cna-catalog/Cargo.toml"
+      ],
+      "reason": "creates the empty crates, then ownership passes to map/catalog"
+    },
+    {
+      "key": "cna-simulation:E1.I1.S3",
+      "paths": [
+        "crates/frontend/src/view/panel.rs",
+        "crates/frontend/src/inspect.rs",
+        "crates/frontend/src/movement/mod.rs",
+        "crates/frontend/src/catalog_view.rs",
+        "src/styles/map.css",
+        "src/styles/movement.css",
+        "src/styles/catalog.css"
+      ],
+      "reason": "behaviour-preserving split that creates owner files once"
+    }
+  ],
+  "tool_prerequisites": [
+    {
+      "pattern": "npm run test:browser",
+      "producer": "cna-simulation:E1.I1.S2"
+    },
+    {
+      "pattern": "-p cna-map\\b",
+      "producer": "cna-simulation:E1.I1.S1"
+    },
+    {
+      "pattern": "-p cna-catalog\\b",
+      "producer": "cna-simulation:E1.I1.S1"
+    },
+    {
+      "pattern": "scripts/check-(sources|no-credentials)\\.sh",
+      "producer": "cna-simulation:E1.I1.S4"
+    },
+    {
+      "pattern": "npm run tiles",
+      "producer": "cna-map:E2.I1.S1"
+    }
+  ],
+  "source_abbreviations": {
+    "L21": "docs/CNAv2.1.0/Rules_Land_07-2021.pdf",
+    "AL21": "docs/CNAv2.1.0/Rules_Air&Logistics_07-2021.pdf",
+    "SC21": "docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf",
+    "R79": "docs/The Campaign for North Africa.pdf (physical pages; docs/rules.txt is an OCR locator only)",
+    "ERR": "docs/CNAv2.1.0/incorporated errata.txt",
+    "VBF": "docs/CNAv2.1.0/buildFile.xml",
+    "VSV": "docs/CNAv2.1.0/*.vsav (allowlisted in-memory import only)",
+    "VCL": "docs/CNAv2.1.0/changelog.txt, playnotes.txt, Read me.txt",
+    "VIMG": "docs/CNAv2.1.0/images/"
+  },
+  "decisions_for_kevin": [
+    "cna-simulation:E2.I3.S1 ADJ-11.32 strength formula (divide by ten per 11.34/11.35 vs literal x10) and 11.37 AA exception",
+    "cna-simulation:E2.I3.S2 ADJ-SHIP tactical shipping/convoy cadence",
+    "cna-simulation:E2.I3.S3 ADJ-60.45 Commonwealth fleet inventory and release",
+    "cna-simulation:E2.I3.S4 ADJ-57 Cairo vs Cairo/Alexandria supply base",
+    "cna-simulation:E2.I3.S5 ADJ-63.2 El Alamein duration",
+    "cna-simulation:E2.I3.S6 ADJ-ERR authority classes and errata idempotence",
+    "cna-simulation:E2.I3.S7 ADJ-MODES abstraction mode matrix",
+    "cna-simulation:E2.I3.S8 ADJ-OOB VASSAL editorial OOB / first-line truck choices",
+    "cna-map:E1.I1.S2 map artwork redistribution permission",
+    "cna-catalog:E1.I1.S4 counter-art and generated-asset distribution status",
+    "cna-catalog:E1.I1.S1 approve merging origin/feat/identity-art-batch-19 (contains batch-18)"
+  ]
+}

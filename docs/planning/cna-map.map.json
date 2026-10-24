@@ -1,0 +1,582 @@
+{
+  "version": 1,
+  "adapters": {
+    "linear": {
+      "project_id": "137f2906-7a68-46ef-bcb9-6dfe50106349",
+      "project_identifier": "P-CNA-18",
+      "project_url": "https://linear.app/littleblackhat/project/cna-map-af655b8ee559",
+      "project_name": "CNA — Map",
+      "document_id": "c8940d6b-8f9a-426f-8bf0-853a3e697d0f",
+      "handoff_document_id": "21170eb1-9650-42e1-b2f0-1c5182902b67",
+      "keys": {
+        "E1": {
+          "id": "36fb74b6-5eff-443d-ba44-556780862f58",
+          "identifier": "CNA-7",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E1] Map source census and geometry contract",
+          "url": "https://linear.app/littleblackhat/issue/CNA-7/e1-map-source-census-and-geometry-contract",
+          "execution_rank": 43,
+          "execution_wave": 7
+        },
+        "E1.I1": {
+          "id": "b616a55f-2cb0-4c53-bd22-d4afcc42b346",
+          "identifier": "CNA-8",
+          "kind": "issue",
+          "parent_key": "E1",
+          "title": "[E1.I1] Map source provenance and permission record",
+          "url": "https://linear.app/littleblackhat/issue/CNA-8/e1i1-map-source-provenance-and-permission-record",
+          "execution_rank": 18,
+          "execution_wave": 3
+        },
+        "E1.I1.S1": {
+          "id": "ee42d93b-062c-4b62-8b65-5129184717e2",
+          "identifier": "CNA-10",
+          "kind": "subissue",
+          "parent_key": "E1.I1",
+          "title": "[E1.I1.S1] Census VASSAL map grids, zones and image provenance",
+          "url": "https://linear.app/littleblackhat/issue/CNA-10/e1i1s1-census-vassal-map-grids-zones-and-image-provenance",
+          "execution_rank": 6,
+          "execution_wave": 1
+        },
+        "E1.I1.S2": {
+          "id": "5e1c4364-1e23-4e11-8feb-a3bbc827a51e",
+          "identifier": "CNA-9",
+          "kind": "subissue",
+          "parent_key": "E1.I1",
+          "title": "[E1.I1.S2] Record map distribution permission and add a production guard",
+          "url": "https://linear.app/littleblackhat/issue/CNA-9/e1i1s2-record-map-distribution-permission-and-add-a-production-guard",
+          "execution_rank": 13,
+          "execution_wave": 2
+        },
+        "E1.I2": {
+          "id": "0a5d8311-6581-426d-b47d-862f3d45d353",
+          "identifier": "CNA-11",
+          "kind": "issue",
+          "parent_key": "E1",
+          "title": "[E1.I2] cna-map v1 geometry and terrain contract",
+          "url": "https://linear.app/littleblackhat/issue/CNA-11/e1i2-cna-map-v1-geometry-and-terrain-contract",
+          "execution_rank": 30,
+          "execution_wave": 6
+        },
+        "E1.I2.S1": {
+          "id": "03220be0-a93a-4e1f-8a9a-b0c2565dfb95",
+          "identifier": "CNA-12",
+          "kind": "subissue",
+          "parent_key": "E1.I2",
+          "title": "[E1.I2.S1] HexId, sections and adjacency types",
+          "url": "https://linear.app/littleblackhat/issue/CNA-12/e1i2s1-hexid-sections-and-adjacency-types",
+          "execution_rank": 14,
+          "execution_wave": 2
+        },
+        "E1.I2.S2": {
+          "id": "3f826f2b-010e-4590-a422-186850ce04d1",
+          "identifier": "CNA-13",
+          "kind": "subissue",
+          "parent_key": "E1.I2",
+          "title": "[E1.I2.S2] Hex centers, corners, shared edges and normals",
+          "url": "https://linear.app/littleblackhat/issue/CNA-13/e1i2s2-hex-centers-corners-shared-edges-and-normals",
+          "execution_rank": 19,
+          "execution_wave": 3
+        },
+        "E1.I2.S3": {
+          "id": "3ab1a056-8e83-4c67-9a31-a59707b3ea61",
+          "identifier": "CNA-14",
+          "kind": "subissue",
+          "parent_key": "E1.I2",
+          "title": "[E1.I2.S3] Board-to-screen viewport transform",
+          "url": "https://linear.app/littleblackhat/issue/CNA-14/e1i2s3-board-to-screen-viewport-transform",
+          "execution_rank": 23,
+          "execution_wave": 4
+        },
+        "E1.I2.S4": {
+          "id": "84cec8d4-975e-4d69-86b8-cbf871a07ef5",
+          "identifier": "CNA-15",
+          "kind": "subissue",
+          "parent_key": "E1.I2",
+          "title": "[E1.I2.S4] Terrain, hexside and point-feature record schema",
+          "url": "https://linear.app/littleblackhat/issue/CNA-15/e1i2s4-terrain-hexside-and-point-feature-record-schema",
+          "execution_rank": 20,
+          "execution_wave": 3
+        },
+        "E1.I2.S5": {
+          "id": "1505a4c2-97ef-4a8d-897c-d63ff50c132b",
+          "identifier": "CNA-16",
+          "kind": "subissue",
+          "parent_key": "E1.I2",
+          "title": "[E1.I2.S5] Publish corridor consumer fixture and contract v1 tag",
+          "url": "https://linear.app/littleblackhat/issue/CNA-16/e1i2s5-publish-corridor-consumer-fixture-and-contract-v1-tag",
+          "execution_rank": 26,
+          "execution_wave": 5
+        },
+        "E2": {
+          "id": "32b07a2f-a50a-40bd-b7a3-3415d73cc843",
+          "identifier": "CNA-55",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E2] Tile pipeline and draggable viewport",
+          "url": "https://linear.app/littleblackhat/issue/CNA-55/e2-tile-pipeline-and-draggable-viewport",
+          "execution_rank": 203,
+          "execution_wave": 12
+        },
+        "E2.I1": {
+          "id": "4e7d947b-8f3b-4a40-95c4-7693c6a6c45b",
+          "identifier": "CNA-60",
+          "kind": "issue",
+          "parent_key": "E2",
+          "title": "[E2.I1] Deterministic tile generation",
+          "url": "https://linear.app/littleblackhat/issue/CNA-60/e2i1-deterministic-tile-generation",
+          "execution_rank": 164,
+          "execution_wave": 10
+        },
+        "E2.I1.S1": {
+          "id": "6420c3ba-8ef6-49b7-b0ea-352f3615f3dc",
+          "identifier": "CNA-61",
+          "kind": "subissue",
+          "parent_key": "E2.I1",
+          "title": "[E2.I1.S1] Tile generator binary",
+          "url": "https://linear.app/littleblackhat/issue/CNA-61/e2i1s1-tile-generator-binary",
+          "execution_rank": 54,
+          "execution_wave": 8
+        },
+        "E2.I1.S2": {
+          "id": "5f802ccb-761c-4104-afa7-2c4964eb2469",
+          "identifier": "CNA-62",
+          "kind": "subissue",
+          "parent_key": "E2.I1",
+          "title": "[E2.I1.S2] Record tile size and load budget",
+          "url": "https://linear.app/littleblackhat/issue/CNA-62/e2i1s2-record-tile-size-and-load-budget",
+          "execution_rank": 138,
+          "execution_wave": 9
+        },
+        "E2.I2": {
+          "id": "32e410d5-220a-4c75-ac6c-3705a488db27",
+          "identifier": "CNA-56",
+          "kind": "issue",
+          "parent_key": "E2",
+          "title": "[E2.I2] Viewport rendering and overlay API in map.rs",
+          "url": "https://linear.app/littleblackhat/issue/CNA-56/e2i2-viewport-rendering-and-overlay-api-in-maprs",
+          "execution_rank": 181,
+          "execution_wave": 11
+        },
+        "E2.I2.S1": {
+          "id": "3db725c9-1d88-4315-a839-1c8326e26005",
+          "identifier": "CNA-57",
+          "kind": "subissue",
+          "parent_key": "E2.I2",
+          "title": "[E2.I2.S1] Tiled viewport with pointer, wheel and keyboard pan/zoom",
+          "url": "https://linear.app/littleblackhat/issue/CNA-57/e2i2s1-tiled-viewport-with-pointer-wheel-and-keyboard-panzoom",
+          "execution_rank": 139,
+          "execution_wave": 9
+        },
+        "E2.I2.S2": {
+          "id": "820f5198-e36d-4bf0-8898-9c03588cfe3e",
+          "identifier": "CNA-58",
+          "kind": "subissue",
+          "parent_key": "E2.I2",
+          "title": "[E2.I2.S2] Measure browser budgets at named viewports",
+          "url": "https://linear.app/littleblackhat/issue/CNA-58/e2i2s2-measure-browser-budgets-at-named-viewports",
+          "execution_rank": 165,
+          "execution_wave": 10
+        },
+        "E2.I2.S3": {
+          "id": "d26d8c9d-53fc-4288-bb76-9fcab79062b2",
+          "identifier": "CNA-59",
+          "kind": "subissue",
+          "parent_key": "E2.I2",
+          "title": "[E2.I2.S3] Publish MapOverlay API for movement and highlights",
+          "url": "https://linear.app/littleblackhat/issue/CNA-59/e2i2s3-publish-mapoverlay-api-for-movement-and-highlights",
+          "execution_rank": 166,
+          "execution_wave": 10
+        },
+        "E3": {
+          "id": "167e41d1-d64b-4469-be82-af99d96ab15a",
+          "identifier": "CNA-17",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E3] Calibrated full-board hex overlay",
+          "url": "https://linear.app/littleblackhat/issue/CNA-17/e3-calibrated-full-board-hex-overlay",
+          "execution_rank": 219,
+          "execution_wave": 13
+        },
+        "E3.I1": {
+          "id": "442ac218-fa69-4e00-9d82-b557f69f26ba",
+          "identifier": "CNA-18",
+          "kind": "issue",
+          "parent_key": "E3",
+          "title": "[E3.I1] Grid and seam reconciliation",
+          "url": "https://linear.app/littleblackhat/issue/CNA-18/e3i1-grid-and-seam-reconciliation",
+          "execution_rank": 182,
+          "execution_wave": 11
+        },
+        "E3.I1.S1": {
+          "id": "90de2aa9-1183-4699-92f5-b47e5240212f",
+          "identifier": "CNA-19",
+          "kind": "subissue",
+          "parent_key": "E3.I1",
+          "title": "[E3.I1.S1] Anchor calibration for Malta and sections A-E",
+          "url": "https://linear.app/littleblackhat/issue/CNA-19/e3i1s1-anchor-calibration-for-malta-and-sections-a-e",
+          "execution_rank": 55,
+          "execution_wave": 8
+        },
+        "E3.I1.S2": {
+          "id": "abb9d46b-f02f-4e8f-aac9-3fb9be20176f",
+          "identifier": "CNA-20",
+          "kind": "subissue",
+          "parent_key": "E3.I1",
+          "title": "[E3.I1.S2] Seam table and cross-section adjacency",
+          "url": "https://linear.app/littleblackhat/issue/CNA-20/e3i1s2-seam-table-and-cross-section-adjacency",
+          "execution_rank": 140,
+          "execution_wave": 9
+        },
+        "E3.I1.S3": {
+          "id": "75bddb26-b263-47e1-b65e-eb59de02ba43",
+          "identifier": "CNA-21",
+          "kind": "subissue",
+          "parent_key": "E3.I1",
+          "title": "[E3.I1.S3] Map errata and ambiguity adjudication register",
+          "url": "https://linear.app/littleblackhat/issue/CNA-21/e3i1s3-map-errata-and-ambiguity-adjudication-register",
+          "execution_rank": 167,
+          "execution_wave": 10
+        },
+        "E3.I2": {
+          "id": "ff3ae8f4-4b1a-47dd-a480-8e44b766e8a7",
+          "identifier": "CNA-22",
+          "kind": "issue",
+          "parent_key": "E3",
+          "title": "[E3.I2] Hex overlay rendering and alignment checks",
+          "url": "https://linear.app/littleblackhat/issue/CNA-22/e3i2-hex-overlay-rendering-and-alignment-checks",
+          "execution_rank": 204,
+          "execution_wave": 12
+        },
+        "E3.I2.S1": {
+          "id": "7e6905bd-ec59-4776-b43e-6cdca1cc1555",
+          "identifier": "CNA-23",
+          "kind": "subissue",
+          "parent_key": "E3.I2",
+          "title": "[E3.I2.S1] Render calibrated outlines with improved visibility",
+          "url": "https://linear.app/littleblackhat/issue/CNA-23/e3i2s1-render-calibrated-outlines-with-improved-visibility",
+          "execution_rank": 168,
+          "execution_wave": 10
+        },
+        "E3.I2.S2": {
+          "id": "3e29604c-9f7b-4b11-a5eb-f7f4ea9f3646",
+          "identifier": "CNA-24",
+          "kind": "subissue",
+          "parent_key": "E3.I2",
+          "title": "[E3.I2.S2] Hit-test alignment across pan, zoom and resize",
+          "url": "https://linear.app/littleblackhat/issue/CNA-24/e3i2s2-hit-test-alignment-across-pan-zoom-and-resize",
+          "execution_rank": 183,
+          "execution_wave": 11
+        },
+        "E4": {
+          "id": "d6e3c8ad-55e7-4fdc-82e7-b3409f419f66",
+          "identifier": "CNA-25",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E4] Transcription tooling and Graziani corridor",
+          "url": "https://linear.app/littleblackhat/issue/CNA-25/e4-transcription-tooling-and-graziani-corridor",
+          "execution_rank": 220,
+          "execution_wave": 13
+        },
+        "E4.I1": {
+          "id": "1aa702de-3904-44f8-be61-7f15b11032ed",
+          "identifier": "CNA-26",
+          "kind": "issue",
+          "parent_key": "E4",
+          "title": "[E4.I1] Transcription tooling, integrity checks and subset validator",
+          "url": "https://linear.app/littleblackhat/issue/CNA-26/e4i1-transcription-tooling-integrity-checks-and-subset-validator",
+          "execution_rank": 205,
+          "execution_wave": 12
+        },
+        "E4.I1.S1": {
+          "id": "9ebc3170-3ca6-45b7-a61d-6e2cde3e3735",
+          "identifier": "CNA-27",
+          "kind": "subissue",
+          "parent_key": "E4.I1",
+          "title": "[E4.I1.S1] Provisional terrain proposer and review format",
+          "url": "https://linear.app/littleblackhat/issue/CNA-27/e4i1s1-provisional-terrain-proposer-and-review-format",
+          "execution_rank": 157,
+          "execution_wave": 9
+        },
+        "E4.I1.S2": {
+          "id": "c2312e63-651c-4ec1-890c-a0c2c10f10a4",
+          "identifier": "CNA-28",
+          "kind": "subissue",
+          "parent_key": "E4.I1",
+          "title": "[E4.I1.S2] Terrain integrity tests and coverage report",
+          "url": "https://linear.app/littleblackhat/issue/CNA-28/e4i1s2-terrain-integrity-tests-and-coverage-report",
+          "execution_rank": 173,
+          "execution_wave": 10
+        },
+        "E4.I1.S3": {
+          "id": "eea0d334-b282-4b0b-a473-75d69f8de779",
+          "identifier": "CNA-29",
+          "kind": "subissue",
+          "parent_key": "E4.I1",
+          "title": "[E4.I1.S3] Certified-subset validator API and CLI",
+          "url": "https://linear.app/littleblackhat/issue/CNA-29/e4i1s3-certified-subset-validator-api-and-cli",
+          "execution_rank": 186,
+          "execution_wave": 11
+        },
+        "E4.I2": {
+          "id": "609dd4bf-3131-45e0-84d7-1a453dcfa624",
+          "identifier": "CNA-30",
+          "kind": "issue",
+          "parent_key": "E4",
+          "title": "[E4.I2] Graziani corridor transcription and board-wide point features",
+          "url": "https://linear.app/littleblackhat/issue/CNA-30/e4i2-graziani-corridor-transcription-and-board-wide-point-features",
+          "execution_rank": 206,
+          "execution_wave": 12
+        },
+        "E4.I2.S1": {
+          "id": "62861a7c-2b44-49ae-9d79-eb49e30d7e74",
+          "identifier": "CNA-31",
+          "kind": "subissue",
+          "parent_key": "E4.I2",
+          "title": "[E4.I2.S1] Map C east terrain cells (columns 30-49)",
+          "url": "https://linear.app/littleblackhat/issue/CNA-31/e4i2s1-map-c-east-terrain-cells-columns-30-49",
+          "execution_rank": 187,
+          "execution_wave": 11
+        },
+        "E4.I2.S2": {
+          "id": "47fc2c6c-fafc-4b4b-b0fd-424a87986781",
+          "identifier": "CNA-35",
+          "kind": "subissue",
+          "parent_key": "E4.I2",
+          "title": "[E4.I2.S2] Map C east hexsides (columns 30-49)",
+          "url": "https://linear.app/littleblackhat/issue/CNA-35/e4i2s2-map-c-east-hexsides-columns-30-49",
+          "execution_rank": 188,
+          "execution_wave": 11
+        },
+        "E4.I2.S3": {
+          "id": "ebebc8fd-63ba-4fd8-8e67-69864b3fc936",
+          "identifier": "CNA-34",
+          "kind": "subissue",
+          "parent_key": "E4.I2",
+          "title": "[E4.I2.S3] Map D terrain cells",
+          "url": "https://linear.app/littleblackhat/issue/CNA-34/e4i2s3-map-d-terrain-cells",
+          "execution_rank": 189,
+          "execution_wave": 11
+        },
+        "E4.I2.S4": {
+          "id": "12866d8a-27ce-4e6a-95d1-69d91c4891a0",
+          "identifier": "CNA-33",
+          "kind": "subissue",
+          "parent_key": "E4.I2",
+          "title": "[E4.I2.S4] Map D hexsides including the D2228/2328 escarpment",
+          "url": "https://linear.app/littleblackhat/issue/CNA-33/e4i2s4-map-d-hexsides-including-the-d22282328-escarpment",
+          "execution_rank": 190,
+          "execution_wave": 11
+        },
+        "E4.I2.S5": {
+          "id": "29df5327-19f6-41ac-a963-8fa1f7fbdaf2",
+          "identifier": "CNA-37",
+          "kind": "subissue",
+          "parent_key": "E4.I2",
+          "title": "[E4.I2.S5] Map E terrain cells (Delta to Alexandria)",
+          "url": "https://linear.app/littleblackhat/issue/CNA-37/e4i2s5-map-e-terrain-cells-delta-to-alexandria",
+          "execution_rank": 191,
+          "execution_wave": 11
+        },
+        "E4.I2.S6": {
+          "id": "219caa6e-4e89-44eb-a61b-1ba3107e8d06",
+          "identifier": "CNA-36",
+          "kind": "subissue",
+          "parent_key": "E4.I2",
+          "title": "[E4.I2.S6] Map E hexsides",
+          "url": "https://linear.app/littleblackhat/issue/CNA-36/e4i2s6-map-e-hexsides",
+          "execution_rank": 192,
+          "execution_wave": 11
+        },
+        "E4.I2.S7": {
+          "id": "a0234310-6146-43fa-b2b6-5af44293329f",
+          "identifier": "CNA-32",
+          "kind": "subissue",
+          "parent_key": "E4.I2",
+          "title": "[E4.I2.S7] Board-wide point features: cities, ports, airfields, wells, dumps, fortifications",
+          "url": "https://linear.app/littleblackhat/issue/CNA-32/e4i2s7-board-wide-point-features-cities-ports-airfields-wells-dumps",
+          "execution_rank": 193,
+          "execution_wave": 11
+        },
+        "E5": {
+          "id": "f133d459-95da-492a-8f15-93a3b52f2580",
+          "identifier": "CNA-38",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E5] Remaining board transcription",
+          "url": "https://linear.app/littleblackhat/issue/CNA-38/e5-remaining-board-transcription",
+          "execution_rank": 286,
+          "execution_wave": 16
+        },
+        "E5.I1": {
+          "id": "d2bdf16f-fa0c-49b0-83c6-ab4ad33bde9d",
+          "identifier": "CNA-39",
+          "kind": "issue",
+          "parent_key": "E5",
+          "title": "[E5.I1] Remaining sections, Malta and off-map boxes",
+          "url": "https://linear.app/littleblackhat/issue/CNA-39/e5i1-remaining-sections-malta-and-off-map-boxes",
+          "execution_rank": 263,
+          "execution_wave": 15
+        },
+        "E5.I1.S1": {
+          "id": "06fae029-30ba-4e08-8cc0-16de1999d055",
+          "identifier": "CNA-42",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S1] Map C west terrain cells (columns 1-29)",
+          "url": "https://linear.app/littleblackhat/issue/CNA-42/e5i1s1-map-c-west-terrain-cells-columns-1-29",
+          "execution_rank": 234,
+          "execution_wave": 14
+        },
+        "E5.I1.S2": {
+          "id": "f0b30b2b-1725-449e-83f9-b57d691654b6",
+          "identifier": "CNA-44",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S2] Map C west hexsides (columns 1-29)",
+          "url": "https://linear.app/littleblackhat/issue/CNA-44/e5i1s2-map-c-west-hexsides-columns-1-29",
+          "execution_rank": 235,
+          "execution_wave": 14
+        },
+        "E5.I1.S3": {
+          "id": "2d5c218f-4361-4d48-be5d-2a7b56516a2f",
+          "identifier": "CNA-41",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S3] Map B east half terrain cells",
+          "url": "https://linear.app/littleblackhat/issue/CNA-41/e5i1s3-map-b-east-half-terrain-cells",
+          "execution_rank": 236,
+          "execution_wave": 14
+        },
+        "E5.I1.S4": {
+          "id": "31095265-1113-47b9-99c1-160e77f9ce07",
+          "identifier": "CNA-43",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S4] Map B east half hexsides",
+          "url": "https://linear.app/littleblackhat/issue/CNA-43/e5i1s4-map-b-east-half-hexsides",
+          "execution_rank": 237,
+          "execution_wave": 14
+        },
+        "E5.I1.S5": {
+          "id": "4ef23333-73ad-4c9c-92c1-c9bb136876f5",
+          "identifier": "CNA-45",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S5] Map B west half terrain cells",
+          "url": "https://linear.app/littleblackhat/issue/CNA-45/e5i1s5-map-b-west-half-terrain-cells",
+          "execution_rank": 238,
+          "execution_wave": 14
+        },
+        "E5.I1.S6": {
+          "id": "df62a4a6-0833-42dc-b727-6c327e56e777",
+          "identifier": "CNA-46",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S6] Map B west half hexsides",
+          "url": "https://linear.app/littleblackhat/issue/CNA-46/e5i1s6-map-b-west-half-hexsides",
+          "execution_rank": 239,
+          "execution_wave": 14
+        },
+        "E5.I1.S7": {
+          "id": "d68e46f0-e525-4616-a427-3a46cb78e54e",
+          "identifier": "CNA-48",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S7] Map A terrain cells",
+          "url": "https://linear.app/littleblackhat/issue/CNA-48/e5i1s7-map-a-terrain-cells",
+          "execution_rank": 240,
+          "execution_wave": 14
+        },
+        "E5.I1.S8": {
+          "id": "2a0d5785-fdbf-4d6d-ab72-ffc57bb6a814",
+          "identifier": "CNA-47",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S8] Map A hexsides",
+          "url": "https://linear.app/littleblackhat/issue/CNA-47/e5i1s8-map-a-hexsides",
+          "execution_rank": 241,
+          "execution_wave": 14
+        },
+        "E5.I1.S9": {
+          "id": "5f268877-2410-475e-a91a-abc34c65af79",
+          "identifier": "CNA-40",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S9] Malta grid and off-map boxes",
+          "url": "https://linear.app/littleblackhat/issue/CNA-40/e5i1s9-malta-grid-and-off-map-boxes",
+          "execution_rank": 242,
+          "execution_wave": 14
+        },
+        "E6": {
+          "id": "3b4728a5-728e-4711-af12-4c6edd9f535f",
+          "identifier": "CNA-49",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E6] Gameplay-map acceptance and release",
+          "url": "https://linear.app/littleblackhat/issue/CNA-49/e6-gameplay-map-acceptance-and-release",
+          "execution_rank": 316,
+          "execution_wave": 20
+        },
+        "E6.I1": {
+          "id": "890580da-9137-45df-b7fa-c90c3f6a8e96",
+          "identifier": "CNA-50",
+          "kind": "issue",
+          "parent_key": "E6",
+          "title": "[E6.I1] Scenario hex-reference validation",
+          "url": "https://linear.app/littleblackhat/issue/CNA-50/e6i1-scenario-hex-reference-validation",
+          "execution_rank": 301,
+          "execution_wave": 18
+        },
+        "E6.I1.S1": {
+          "id": "b323c415-f701-456b-965f-d8c1221e05e4",
+          "identifier": "CNA-51",
+          "kind": "subissue",
+          "parent_key": "E6.I1",
+          "title": "[E6.I1.S1] Extract and resolve every printed scenario hex reference",
+          "url": "https://linear.app/littleblackhat/issue/CNA-51/e6i1s1-extract-and-resolve-every-printed-scenario-hex-reference",
+          "execution_rank": 298,
+          "execution_wave": 17
+        },
+        "E6.I2": {
+          "id": "62cf61fa-96e2-4657-90e0-87c614470031",
+          "identifier": "CNA-52",
+          "kind": "issue",
+          "parent_key": "E6",
+          "title": "[E6.I2] Browser acceptance and versioned release",
+          "url": "https://linear.app/littleblackhat/issue/CNA-52/e6i2-browser-acceptance-and-versioned-release",
+          "execution_rank": 306,
+          "execution_wave": 19
+        },
+        "E6.I2.S1": {
+          "id": "cbd6ceee-6e8b-4438-9cd0-9c94f47b1aa4",
+          "identifier": "CNA-53",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S1] Map browser acceptance pass",
+          "url": "https://linear.app/littleblackhat/issue/CNA-53/e6i2s1-map-browser-acceptance-pass",
+          "execution_rank": 302,
+          "execution_wave": 18
+        },
+        "E6.I2.S2": {
+          "id": "fcea643b-6f9e-4c1d-aa1c-cf83fd9547e3",
+          "identifier": "CNA-54",
+          "kind": "subissue",
+          "parent_key": "E6.I2",
+          "title": "[E6.I2.S2] map-v1.1 data release and uncertainty report",
+          "url": "https://linear.app/littleblackhat/issue/CNA-54/e6i2s2-map-v11-data-release-and-uncertainty-report",
+          "execution_rank": 303,
+          "execution_wave": 18
+        }
+      },
+      "cache": {
+        "teams": {
+          "CNA": "b51f72e9-2103-4bed-9f61-77d7f31e8277"
+        },
+        "labels": {},
+        "states": {}
+      }
+    }
+  }
+}

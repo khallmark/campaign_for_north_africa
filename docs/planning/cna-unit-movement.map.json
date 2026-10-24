@@ -1,0 +1,312 @@
+{
+  "version": 1,
+  "adapters": {
+    "linear": {
+      "project_id": "f77e9a92-a064-4e23-b6fc-dba7e55c1869",
+      "project_identifier": "P-CNA-19",
+      "project_url": "https://linear.app/littleblackhat/project/cna-unit-movement-8384a7c68199",
+      "project_name": "CNA — Unit Movement",
+      "document_id": "fb12ac5f-4c89-4d91-bada-37ba96ce6812",
+      "handoff_document_id": "5ef069df-ad04-4930-b8db-9ad6234a2213",
+      "keys": {
+        "E1": {
+          "id": "e16b6a7e-f508-42db-a091-8a070e212640",
+          "identifier": "CNA-1",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E1] Consumer fixtures and pure playback model",
+          "url": "https://linear.app/littleblackhat/issue/CNA-1/e1-consumer-fixtures-and-pure-playback-model",
+          "execution_rank": 170,
+          "execution_wave": 10
+        },
+        "E1.I1": {
+          "id": "cf8990a2-f869-4307-948c-9268242a60ca",
+          "identifier": "CNA-2",
+          "kind": "issue",
+          "parent_key": "E1",
+          "title": "[E1.I1] Fixture adapter and playground",
+          "url": "https://linear.app/littleblackhat/issue/CNA-2/e1i1-fixture-adapter-and-playground",
+          "execution_rank": 154,
+          "execution_wave": 9
+        },
+        "E1.I1.S1": {
+          "id": "19b67b97-9fd5-45ae-9b7a-fd3d175b1796",
+          "identifier": "CNA-4",
+          "kind": "subissue",
+          "parent_key": "E1.I1",
+          "title": "[E1.I1.S1] Fixture adapter for map, route and projection contracts",
+          "url": "https://linear.app/littleblackhat/issue/CNA-4/e1i1s1-fixture-adapter-for-map-route-and-projection-contracts",
+          "execution_rank": 47,
+          "execution_wave": 7
+        },
+        "E1.I1.S2": {
+          "id": "7bc1705f-38ae-47c1-8518-dcefbab01558",
+          "identifier": "CNA-3",
+          "kind": "subissue",
+          "parent_key": "E1.I1",
+          "title": "[E1.I1.S2] Dev-only movement playground page",
+          "url": "https://linear.app/littleblackhat/issue/CNA-3/e1i1s2-dev-only-movement-playground-page",
+          "execution_rank": 129,
+          "execution_wave": 8
+        },
+        "E1.I2": {
+          "id": "a1163446-2b6a-4e76-8589-08ef1ffd8071",
+          "identifier": "CNA-5",
+          "kind": "issue",
+          "parent_key": "E1",
+          "title": "[E1.I2] Pure route-step playback model",
+          "url": "https://linear.app/littleblackhat/issue/CNA-5/e1i2-pure-route-step-playback-model",
+          "execution_rank": 9,
+          "execution_wave": 1
+        },
+        "E1.I2.S1": {
+          "id": "77e8586f-aa5b-4727-b064-be5b80eb45fa",
+          "identifier": "CNA-6",
+          "kind": "subissue",
+          "parent_key": "E1.I2",
+          "title": "[E1.I2.S1] RouteLeg and PlaybackState model in motion.rs",
+          "url": "https://linear.app/littleblackhat/issue/CNA-6/e1i2s1-routeleg-and-playbackstate-model-in-motionrs",
+          "execution_rank": 3,
+          "execution_wave": 0
+        },
+        "E2": {
+          "id": "ffa32569-cda2-46f4-bb59-c5d3ed336294",
+          "identifier": "CNA-68",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E2] Edge-normal turn-then-step playback",
+          "url": "https://linear.app/littleblackhat/issue/CNA-68/e2-edge-normal-turn-then-step-playback",
+          "execution_rank": 243,
+          "execution_wave": 15
+        },
+        "E2.I1": {
+          "id": "bdcd32a7-10a9-4b87-8854-7150fef0c22a",
+          "identifier": "CNA-69",
+          "kind": "issue",
+          "parent_key": "E2",
+          "title": "[E2.I1] Bearings, frames and interruptions",
+          "url": "https://linear.app/littleblackhat/issue/CNA-69/e2i1-bearings-frames-and-interruptions",
+          "execution_rank": 223,
+          "execution_wave": 13
+        },
+        "E2.I1.S1": {
+          "id": "8ef15f8c-e0fa-499b-9b36-4d7a85150a43",
+          "identifier": "CNA-70",
+          "kind": "subissue",
+          "parent_key": "E2.I1",
+          "title": "[E2.I1.S1] Per-leg bearing from cna-map edge normals",
+          "url": "https://linear.app/littleblackhat/issue/CNA-70/e2i1s1-per-leg-bearing-from-cna-map-edge-normals",
+          "execution_rank": 199,
+          "execution_wave": 11
+        },
+        "E2.I1.S2": {
+          "id": "ce612ea1-fcd2-4471-96bc-92080e96d05d",
+          "identifier": "CNA-71",
+          "kind": "subissue",
+          "parent_key": "E2.I1",
+          "title": "[E2.I1.S2] Nearest-frame selection decoupled from facing",
+          "url": "https://linear.app/littleblackhat/issue/CNA-71/e2i1s2-nearest-frame-selection-decoupled-from-facing",
+          "execution_rank": 211,
+          "execution_wave": 12
+        },
+        "E2.I1.S3": {
+          "id": "5563d7cc-4d84-455c-bd7d-af10926e2c33",
+          "identifier": "CNA-72",
+          "kind": "subissue",
+          "parent_key": "E2.I1",
+          "title": "[E2.I1.S3] Interruption, wraparound and reduced motion",
+          "url": "https://linear.app/littleblackhat/issue/CNA-72/e2i1s3-interruption-wraparound-and-reduced-motion",
+          "execution_rank": 212,
+          "execution_wave": 12
+        },
+        "E2.I2": {
+          "id": "340c2051-1d75-429e-a23d-6e13a92cefd5",
+          "identifier": "CNA-73",
+          "kind": "issue",
+          "parent_key": "E2",
+          "title": "[E2.I2] Browser playback rendering",
+          "url": "https://linear.app/littleblackhat/issue/CNA-73/e2i2-browser-playback-rendering",
+          "execution_rank": 230,
+          "execution_wave": 14
+        },
+        "E2.I2.S1": {
+          "id": "ecace56f-de5a-4ad7-9290-07fbd5f19769",
+          "identifier": "CNA-74",
+          "kind": "subissue",
+          "parent_key": "E2.I2",
+          "title": "[E2.I2.S1] Render route playback through MapOverlay",
+          "url": "https://linear.app/littleblackhat/issue/CNA-74/e2i2s1-render-route-playback-through-mapoverlay",
+          "execution_rank": 224,
+          "execution_wave": 13
+        },
+        "E3": {
+          "id": "0b807cd8-95b7-4a9a-a452-76a130d582c7",
+          "identifier": "CNA-75",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E3] Hex highlights and faction-safe inspection",
+          "url": "https://linear.app/littleblackhat/issue/CNA-75/e3-hex-highlights-and-faction-safe-inspection",
+          "execution_rank": 231,
+          "execution_wave": 14
+        },
+        "E3.I1": {
+          "id": "d8dcd952-c3fb-429b-aec4-92c9d8f6bc7e",
+          "identifier": "CNA-76",
+          "kind": "issue",
+          "parent_key": "E3",
+          "title": "[E3.I1] Selection and hover highlights",
+          "url": "https://linear.app/littleblackhat/issue/CNA-76/e3i1-selection-and-hover-highlights",
+          "execution_rank": 225,
+          "execution_wave": 13
+        },
+        "E3.I1.S1": {
+          "id": "fcd85c86-1db4-4cd6-914c-81fddcac688a",
+          "identifier": "CNA-78",
+          "kind": "subissue",
+          "parent_key": "E3.I1",
+          "title": "[E3.I1.S1] Selected and hover hex outlines with stack cycling",
+          "url": "https://linear.app/littleblackhat/issue/CNA-78/e3i1s1-selected-and-hover-hex-outlines-with-stack-cycling",
+          "execution_rank": 200,
+          "execution_wave": 11
+        },
+        "E3.I1.S2": {
+          "id": "8326b8f3-61e9-452f-9401-a58eef167d96",
+          "identifier": "CNA-77",
+          "kind": "subissue",
+          "parent_key": "E3.I1",
+          "title": "[E3.I1.S2] Geometry hit testing across neighbouring controls",
+          "url": "https://linear.app/littleblackhat/issue/CNA-77/e3i1s2-geometry-hit-testing-across-neighbouring-controls",
+          "execution_rank": 213,
+          "execution_wave": 12
+        },
+        "E3.I2": {
+          "id": "5fe003a2-7dc5-481a-a8f3-ad984aca6fb2",
+          "identifier": "CNA-79",
+          "kind": "issue",
+          "parent_key": "E3",
+          "title": "[E3.I2] Projection-only inspection",
+          "url": "https://linear.app/littleblackhat/issue/CNA-79/e3i2-projection-only-inspection",
+          "execution_rank": 226,
+          "execution_wave": 13
+        },
+        "E3.I2.S1": {
+          "id": "b3771ccf-a58d-4ea9-bc39-4a3884120b3e",
+          "identifier": "CNA-80",
+          "kind": "subissue",
+          "parent_key": "E3.I2",
+          "title": "[E3.I2.S1] Inspection panel driven by viewer projection",
+          "url": "https://linear.app/littleblackhat/issue/CNA-80/e3i2s1-inspection-panel-driven-by-viewer-projection",
+          "execution_rank": 201,
+          "execution_wave": 11
+        },
+        "E3.I2.S2": {
+          "id": "61fdc8e8-4818-4f86-92e8-85dfac53c122",
+          "identifier": "CNA-81",
+          "kind": "subissue",
+          "parent_key": "E3.I2",
+          "title": "[E3.I2.S2] Remove hidden-data leaks and add sentinel DOM scan",
+          "url": "https://linear.app/littleblackhat/issue/CNA-81/e3i2s2-remove-hidden-data-leaks-and-add-sentinel-dom-scan",
+          "execution_rank": 214,
+          "execution_wave": 12
+        },
+        "E4": {
+          "id": "608e3fb2-d5f4-4f9b-8a76-8e987e30aab9",
+          "identifier": "CNA-63",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E4] Integration with authoritative routes and projections",
+          "url": "https://linear.app/littleblackhat/issue/CNA-63/e4-integration-with-authoritative-routes-and-projections",
+          "execution_rank": 364,
+          "execution_wave": 28
+        },
+        "E4.I1": {
+          "id": "5ecb1d08-f8dd-4d44-a379-2fc311bd23bc",
+          "identifier": "CNA-64",
+          "kind": "issue",
+          "parent_key": "E4",
+          "title": "[E4.I1] Wire real simulation outputs",
+          "url": "https://linear.app/littleblackhat/issue/CNA-64/e4i1-wire-real-simulation-outputs",
+          "execution_rank": 344,
+          "execution_wave": 27
+        },
+        "E4.I1.S1": {
+          "id": "ce8e56d2-c8e5-44d0-aed9-584c2482c862",
+          "identifier": "CNA-66",
+          "kind": "subissue",
+          "parent_key": "E4.I1",
+          "title": "[E4.I1.S1] Play authoritative route results with interrupts",
+          "url": "https://linear.app/littleblackhat/issue/CNA-66/e4i1s1-play-authoritative-route-results-with-interrupts",
+          "execution_rank": 340,
+          "execution_wave": 25
+        },
+        "E4.I1.S2": {
+          "id": "ea5ddb44-48b9-4d36-811f-913a1b5566ae",
+          "identifier": "CNA-65",
+          "kind": "subissue",
+          "parent_key": "E4.I1",
+          "title": "[E4.I1.S2] Inspection from the real projection engine",
+          "url": "https://linear.app/littleblackhat/issue/CNA-65/e4i1s2-inspection-from-the-real-projection-engine",
+          "execution_rank": 291,
+          "execution_wave": 16
+        },
+        "E4.I1.S3": {
+          "id": "4ea6865c-baf0-49e5-9ac1-5b42a260570f",
+          "identifier": "CNA-67",
+          "kind": "subissue",
+          "parent_key": "E4.I1",
+          "title": "[E4.I1.S3] Reveal-timing playback",
+          "url": "https://linear.app/littleblackhat/issue/CNA-67/e4i1s3-reveal-timing-playback",
+          "execution_rank": 342,
+          "execution_wave": 26
+        },
+        "E5": {
+          "id": "b8726998-fe7f-4455-b272-d7afaca601b5",
+          "identifier": "CNA-82",
+          "kind": "epic",
+          "parent_key": null,
+          "title": "[E5] Movement browser acceptance",
+          "url": "https://linear.app/littleblackhat/issue/CNA-82/e5-movement-browser-acceptance",
+          "execution_rank": 405,
+          "execution_wave": 32
+        },
+        "E5.I1": {
+          "id": "0f29c2cc-72aa-45e8-bb5c-110b71e39798",
+          "identifier": "CNA-83",
+          "kind": "issue",
+          "parent_key": "E5",
+          "title": "[E5.I1] Acceptance recordings and screenshots",
+          "url": "https://linear.app/littleblackhat/issue/CNA-83/e5i1-acceptance-recordings-and-screenshots",
+          "execution_rank": 397,
+          "execution_wave": 31
+        },
+        "E5.I1.S1": {
+          "id": "21961fb7-6750-4cff-9c5f-abb5a8e6fd7a",
+          "identifier": "CNA-84",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S1] Recordings for headings, routes, wraparound and interrupts",
+          "url": "https://linear.app/littleblackhat/issue/CNA-84/e5i1s1-recordings-for-headings-routes-wraparound-and-interrupts",
+          "execution_rank": 373,
+          "execution_wave": 29
+        },
+        "E5.I1.S2": {
+          "id": "699cca37-184e-4b71-8e0f-83d91b3631ae",
+          "identifier": "CNA-85",
+          "kind": "subissue",
+          "parent_key": "E5.I1",
+          "title": "[E5.I1.S2] Selection/hover/privacy screenshots and final privacy scan",
+          "url": "https://linear.app/littleblackhat/issue/CNA-85/e5i1s2-selectionhoverprivacy-screenshots-and-final-privacy-scan",
+          "execution_rank": 387,
+          "execution_wave": 30
+        }
+      },
+      "cache": {
+        "teams": {
+          "CNA": "b51f72e9-2103-4bed-9f61-77d7f31e8277"
+        },
+        "labels": {},
+        "states": {}
+      }
+    }
+  }
+}

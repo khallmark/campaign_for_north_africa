@@ -73,7 +73,7 @@ All 24 shared sprite roles have 18 upright directional views each in `public/spr
 
 ## Code
 
-- `crates/cna-sim/`: dependency-free game state, hex geometry, legal moves, combat, supply, AI, outcomes, and public-action regression tests.
+- `crates/cna-sim/`: sandbox game state, hex geometry, legal moves, combat, supply, AI, outcomes, and public-action regression tests. `contract/` defines versioned authoritative-engine envelopes, not implemented official rules; see [command boundary v1](docs/contracts/sim-command-v1.md).
 - `crates/frontend/src/lib.rs`: Rust browser input, dialogs, and session state.
 - `crates/frontend/src/view.rs`: interface markup, formation panel, and dialogs.
 - `crates/frontend/src/map.rs`: persistent keyed SVG map and sprite rendering.

@@ -2,6 +2,7 @@
 //! All state and rules live here; the browser is only an input/rendering adapter.
 
 use std::collections::HashMap;
+pub mod contract;
 mod roles;
 pub use roles::{role, Domain, Role, Support, ROLES};
 

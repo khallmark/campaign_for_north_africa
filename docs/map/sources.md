@@ -115,8 +115,13 @@ numeric hex labels. Private review captures are
 `.amp/in/artifacts/map-seams/{AB,BC,CD,DE}.png`; these are source-derived research
 artifacts, never public portal assets. This sample is not a search of all scans.
 Image alignment alone cannot establish a conversion from these VASSAL names to
-the rulebook's printed names. CNA-20 therefore remains blocked on source-identity
-adjudication: either establish a reviewed printed-to-VASSAL mapping, or explicitly
-authorize a versioned VASSAL-only seam contract with original printed aliases
-unresolved. No guessed alias, occupancy merge or cross-section adjacency has
-been added. Malta remains separate; no land connection to A–E is implied.
+the rulebook's printed names.
+
+The source-owner adjudication preserves existing section-local `HexId` and
+occupancy semantics. Separately versioned, source-hash-pinned VASSAL seam
+candidates may record residuals with original-rule numbering explicitly
+unresolved, but must not become official equivalences, deduplicate occupancy or
+enable official movement. CNA-20's official/canonical seam acceptance remains
+blocked on reviewed bridging evidence, not on permission to build a VASSAL-only
+candidate dataset. No guessed alias, occupancy merge or cross-section adjacency
+has been added. Malta remains separate; no land connection to A–E is implied.

@@ -9,13 +9,22 @@ is implied: see [source census](../map/sources.md) and
 ## Identity and direction
 
 Use `cna_map::hex::{HexId, MapSection, Direction, HexsideId, MapLocation,
-OffMapBox}`. The strict printed-ID grammar, offsets and section-local neighbour
-contract are in [hex identities](../map/hex-identities.md). IDs and lattice
-neighbours do not certify playable terrain. Cross-section seams are not inferred.
+OffMapBox}`. The strict VASSAL-derived ID grammar, offsets and section-local
+neighbour contract are in [hex identities](../map/hex-identities.md). These labels
+are not verified original printed aliases; no reviewed numbering bridge exists.
+IDs and lattice neighbours do not certify playable terrain. Cross-section seams
+are not inferred, and section-local `HexId` and occupancy semantics are unchanged.
+
+Source-image calibration proves alignment, not equivalence to the original
+rulebook's numbering. VASSAL seam candidates, if recorded, must be separately
+versioned and source-hash-pinned, with residuals and original-rule numbering
+explicitly unresolved. They must not deduplicate official occupancy or enable
+official movement. CNA-20's official/canonical seam acceptance remains gated on
+reviewed bridging evidence; a VASSAL-only candidate result cannot complete it.
 
 The sideways VASSAL grids are **pointy-top**, with six edge-normal directions
-clockwise from image east. Image x increases right and y increases down. Printed
-columns increase north, not right; printed rows increase east.
+clockwise from image east. Image x increases right and y increases down. VASSAL
+columns increase north, not right; VASSAL rows increase east.
 
 ```text
                   top corner
@@ -109,7 +118,7 @@ and mixed-axis letterboxing. Run `cargo test --locked -p cna-map viewport`.
 
 `terrain::MapRecord` distinguishes terrain, canonical hexside and point-feature
 records. Each carries typed observation status, provenance and an optional
-adjudication ID. Hex IDs serialize as printed strings; sides serialize as
+adjudication ID. Hex IDs serialize as VASSAL-derived label strings; sides serialize as
 `{"hex":"C3617","direction":"east"}` and must already be canonical.
 See [geography schema](../map/map-v1.schema.json) and
 [source vocabulary, errata and unresolved labels](../map/terrain-schema.md).
@@ -149,11 +158,14 @@ uvx check-jsonschema --schemafile docs/map/map-v1.schema.json crates/cna-map/fix
 
 ## Changelog
 
+- **2026-10-24 / CNA-20 adjudication:** clarified VASSAL-derived versus original
+  printed identities. No identity, occupancy, adjacency or serialization behavior
+  changed; the seam table stays empty pending reviewed bridging evidence.
 - **2026-10-24 / CNA-19:** measured section translations added consistently to
   forward and inverse geometry. Consumers must use the geometry API rather than
   cache pre-calibration centers. Identity, spacing and bearings are unchanged;
   the original local `map-contract-v1` checkpoint tag is not moved.
-- **v1 (2026-10-24):** printed IDs and canonical sides, census geometry and
+- **v1 (2026-10-24):** VASSAL-derived IDs and canonical sides, census geometry and
   bearings, CSS/DPR viewport transforms, source-labelled geography schema and
   the fixture-only corridor loader. Local tag `map-contract-v1` identifies this
   contract checkpoint; moving it or publishing it requires explicit approval.

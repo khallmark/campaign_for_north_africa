@@ -73,14 +73,15 @@ All 24 shared sprite roles have 18 upright directional views each in `public/spr
 
 ## Code
 
-- `crates/cna-sim/`: sandbox game state, hex geometry, legal moves, combat, supply, AI, outcomes, and public-action regression tests. `contract/` defines versioned authoritative-engine envelopes, not implemented official rules; see [command boundary v1](docs/contracts/sim-command-v1.md).
+- `crates/cna-sim/src/sandbox/`: unchanged teaching-game state, geometry, legal moves, combat, supply, AI and outcomes. The crate root re-exports this API for the existing browser. `tests/sandbox_behavior.rs` preserves the sandbox regression assertions. `contract/` defines versioned authoritative-engine envelopes, not implemented official rules; see [command boundary v1](docs/contracts/sim-command-v1.md).
+- `crates/cna-sim/build.rs`: conservative compile-time token lint rejects `sandbox` references anywhere under `src/official/`, including comments and unused source files. It is a direct-reference guard, not Rust name resolution; official modules must not use the crate-root compatibility re-exports either.
 - `crates/frontend/src/lib.rs`: Rust browser input, dialogs, and session state.
 - `crates/frontend/src/view.rs`: interface markup, formation panel, and dialogs.
 - `crates/frontend/src/map.rs`: persistent keyed SVG map and sprite rendering.
 - `crates/frontend/src/motion.rs`: shortest-arc sprite turns and movement interpolation, with reduced-motion support.
 - `crates/frontend/src/catalog.rs`: source catalog parsing, search, filters, and reference rendering.
 - `crates/frontend/src/inventory.rs`: candidate identity search, unique-art readiness and per-unit asset resolution.
-- `crates/cna-sim/src/roles.rs`: explicitly fictional sandbox capabilities for ground, air, naval and support roles.
+- `crates/cna-sim/src/sandbox/roles.rs`: explicitly fictional sandbox capabilities for ground, air, naval and support roles.
 - `public/data/unit-catalog.json`: versioned source records, stat verification, and sprite metadata; embedded in the Wasm build, so rebuild after changing it.
 - `src/style.css`: responsive field-map interface.
 - `scripts/build-wasm.sh`: builds the Rust frontend and generates browser bindings in ignored `public/wasm/`.

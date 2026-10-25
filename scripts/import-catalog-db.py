@@ -427,7 +427,7 @@ def project_stats(database, destination, *, check=False):
              original_value, original_status, original_raw, original_conditional, original_note, path, locator) = row
             record = records[record_id]
             require(stat_id in record["stats"], f"Corrected stat missing from compatibility record: {record_id}/{stat_id}")
-            require(status in ("sourced", "not_applicable"), f"Unsupported corrected status: {status}")
+            require(status in ("sourced", "not_applicable", "unresolved"), f"Unsupported corrected status: {status}")
             original = {"value": original_value, "status": original_status, "raw": original_raw,
                         "conditional": bool(original_conditional), "note": original_note,
                         "source_refs": json.loads(refs)}
@@ -449,10 +449,22 @@ def project_stats(database, destination, *, check=False):
             record['source_refs'] = [r[0] for r in db.execute(
                 'SELECT source_id FROM record_source WHERE record_id=? ORDER BY position', (record_id,))] + [evidence_id]
             add_citation(evidence_id, path, locator)
+        for record_id, note, evidence_id, path, locator in db.execute("""
+            SELECT r.id,r.note,e.id,e.source_path,e.locator FROM catalog_record r
+            JOIN correction_evidence e ON e.id='record-note:' || r.id ORDER BY r.id
+        """):
+            records[record_id]['note'] = note
+            if evidence_id not in records[record_id]['source_refs']:
+                records[record_id]['source_refs'].append(evidence_id)
+            add_citation(evidence_id, path, locator)
         coverage = db.execute("SELECT note FROM correction_evidence WHERE id='catalog-stat-coverage'").fetchone()
         if coverage:
-            document['coverage']['gaps'] = [coverage[0] if gap.startswith('Pz IIIE shifted chart cells,') else gap
+            document['coverage']['gaps'] = [coverage[0] if gap.startswith(('Pz IIIE shifted chart cells,', 'Reviewed errata and ')) else gap
                                             for gap in document['coverage']['gaps']]
+        schema_note = db.execute("SELECT note FROM correction_evidence WHERE id='catalog-stat-schema-note'").fetchone()
+        if schema_note:
+            document['schema_notes'] = [note.replace('Unresolved values are null, never zero.', schema_note[0])
+                                        for note in document['schema_notes']]
     changed = json_text(document) != before
     if check:
         require(not changed, "Stat projection drift: run python3 scripts/import-catalog-db.py --project-stats")
@@ -478,7 +490,18 @@ def project_formations(database, destination, *, check=False):
         references = formation_references(db)
         for record in document["entries"]:
             if record["id"] in references:
-                record["formation_reference"] = references[record["id"]]
+                reference = references[record["id"]]
+                record["formation_reference"] = reference
+                if reference['base_profile_id'] is None:
+                    record['note'] = reference['base_profile_note']
+                else:
+                    record['note'] = record['note'].replace(
+                        'Numeric initial TOE, morale, arrival/withdrawal, location, weapon mix and supply state are not transcribed; use the cited page.',
+                        'Historical TOE, morale, arrival and weapon assignments are in the cited arrival reference where printed. Current strength, withdrawal, location and supply state are not supplied by that reference.')
+        coverage_note = (f'Historical arrival references cover {len(references)} existing formation rows, including printed TOE, morale, arrival and weapon assignments. '
+                         'Source blanks, attachments and optional organizations may lack independent numeric quantities. Current strength, withdrawal, placement, readiness and supply inventories require scenario data; these rows are not playable scenario setups.')
+        document['coverage']['gaps'] = [coverage_note if gap.startswith(('Initial formation TOE, morale,', 'Historical arrival references cover ')) else gap
+                                        for gap in document['coverage']['gaps']]
         sources = {s["id"]: s for s in document["sources"]}
         for source_id, title, path, details in db.execute(
                 "SELECT id,title,path,details_json FROM source_citation WHERE id LIKE 'oa-arrival:%' OR id IN ('rules-oa-reference','rules-arrival-raw-strength','rules-arrival-aa-strength') ORDER BY id"):

@@ -15,7 +15,7 @@
     "test:e2e": "npm run check:guards && npm run test:browser --",
     "test:unit": "cargo test --workspace --locked --lib --bins",
     "test:integration": "cargo test --workspace --locked --test '*'",
-    "test:functional": "node --test tests/*.test.mjs && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts -p test_catalog_db.py",
+    "test:functional": "node --test tests/*.test.mjs && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts -p 'test_*_db.py'",
     "test:source-data": ".venv/bin/python -m unittest discover -s scripts -p test_unit_data.py -v && python3 scripts/import-catalog-db.py --check",
     "test:sources": "npm run check:sources && cargo test --workspace --locked --release -- --ignored && npm run test:source-data",
     "check:sources": "bash scripts/check-sources.sh",

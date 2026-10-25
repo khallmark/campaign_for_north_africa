@@ -752,19 +752,28 @@ footer i {
     grid-template-columns: 1fr;
     gap: 12px;
   }
-  .catalog-entry > summary {
+  .catalog-card,
+  .catalog-record-heading {
     flex-wrap: wrap;
     gap: 8px;
   }
   .catalog-entry img {
-    width: 45px;
-    height: 40px;
+    width: 80px;
+    height: 72px;
+  }
+  .catalog-record-heading img {
+    width: 160px;
+    height: 144px;
+  }
+  .catalog-token-image img {
+    width: 180px;
+    height: 180px;
   }
   .catalog-name {
-    flex-basis: calc(100% - 60px);
+    flex-basis: calc(100% - 90px);
   }
   .catalog-status {
-    margin-left: 53px;
+    margin-left: 88px;
     max-width: none;
     flex: 1;
   }

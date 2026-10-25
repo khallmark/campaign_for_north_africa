@@ -202,9 +202,18 @@ impl App {
                         .select_type(&element.get_attribute("data-type").unwrap());
                     return;
                 }
+                "catalog-record" => {
+                    self.catalog
+                        .open_record(&element.get_attribute("data-record").unwrap());
+                    return;
+                }
+                "catalog-list" => {
+                    self.catalog.back_to_list();
+                    return;
+                }
                 "catalog-page" => {
                     let page = element.get_attribute("data-page").unwrap().parse().unwrap();
-                    self.catalog.update_results(page);
+                    self.catalog.update_results(page, true);
                     let heading = document()
                         .query_selector(".catalog-count")
                         .unwrap()
@@ -426,7 +435,7 @@ fn mount_training() -> Result<(), JsValue> {
                     )
             })
         {
-            APP.with(|app| app.borrow().catalog.update_results(0));
+            APP.with(|app| app.borrow().catalog.update_results(0, false));
         }
     });
     root.add_event_listener_with_callback("input", input.as_ref().unchecked_ref())?;

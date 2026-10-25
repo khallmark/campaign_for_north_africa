@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { copyFile, mkdir, mkdtemp, rm, symlink, writeFile } from 'node:fs/promises';
+import { access, copyFile, mkdir, mkdtemp, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import test from 'node:test';
 
 async function repository(t) {
@@ -52,6 +53,41 @@ test('credential guard accepts clean sparse blobs but rejects missing files and 
   assert.equal(check('no-credentials').status, 1);
   await symlink('outside', path);
   assert.equal(check('no-credentials').status, 1);
+});
+
+test('partial sparse clones require fetched blobs and scan them without materializing source files', async t => {
+  const { root, git } = await repository(t);
+  await mkdir(join(root, 'private'));
+  await writeFile(join(root, 'private/clean.txt'), 'synthetic private source');
+  await writeFile(join(root, 'private/secret.txt'), 'pass' + 'word=synthetic-do-not-log');
+  git('add', '.');
+  git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'fixture');
+  git('config', 'uploadpack.allowFilter', 'true');
+  const clone = join(root, 'clone');
+  const remote = pathToFileURL(root).href;
+  git('clone', '--filter=blob:none', '--no-checkout', remote, clone);
+  const run = (...args) => execFileSync('git', args, { cwd: clone, stdio: 'pipe' });
+  run('sparse-checkout', 'set', '--no-cone', '/scripts/');
+  run('checkout');
+  assert.match(run('rev-list', '--objects', '--all', '--missing=print').toString(), /^\?/m);
+  run('remote', 'set-url', 'origin', pathToFileURL(join(root, 'unavailable')).href);
+  const scan = () => spawnSync('bash', ['scripts/check-no-credentials.sh'], { cwd: clone, encoding: 'utf8' });
+  const missing = scan();
+  assert.equal(missing.status, 1);
+  assert.match(missing.stderr, /private\/clean.txt/);
+  assert.match(missing.stderr, /private\/secret.txt/);
+  // Match CI's object-only refetch while the remote is accessible.
+  run('remote', 'set-url', 'origin', remote);
+  run('fetch', '--refetch', '--no-filter', '--depth=1', '--no-tags', 'origin', run('rev-parse', 'HEAD').toString().trim());
+  run('remote', 'set-url', 'origin', pathToFileURL(join(root, 'unavailable')).href);
+  const fetched = scan();
+  assert.equal(fetched.status, 1, 'fetched private credentials must still fail');
+  assert.doesNotMatch(fetched.stderr, /private\/clean.txt/);
+  assert.match(fetched.stderr, /private\/secret.txt/);
+  assert.ok(!fetched.stderr.includes('synthetic-do-not-log'));
+  await assert.rejects(access(join(clone, 'private')));
+  run('update-index', '--force-remove', 'private/secret.txt');
+  assert.equal(scan().status, 0, 'clean indexed blobs must scan with no remote access');
 });
 
 test('source guard checks inventory, hashes, missing sources and LFS hydration', async t => {

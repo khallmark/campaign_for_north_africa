@@ -73,6 +73,13 @@ npm run check:ci
 Tracked source text and source-lock metadata remain available. Sparse files are
 still credential-scanned from Git's indexed blobs, without materializing images;
 sparse exclusion is not a scanner bypass. Ordinary missing tracked files fail.
+Actions checkout implicitly fetches with `blob:none` when sparse paths are set.
+CI therefore refetches the current commit with `--refetch --no-filter --depth=1`
+using step-scoped read-only authentication before running checks. This fills Git's
+object store without checking out excluded files or hydrating LFS. Checkout does
+not persist credentials, and later tests do not need authenticated lazy fetches.
+For a partial developer clone, perform the same authenticated object-only fetch
+before running the scanner; a normal clone as shown above already has the blobs.
 The Git repository still contains source objects: this is an art-free working
 tree, not a sanitized redistributable clone.
 

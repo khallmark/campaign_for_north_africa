@@ -35,6 +35,17 @@ jobs:
             /*
             !/docs/CNAv2.1.0/images/
             !*.pdf
+      - name: Fetch indexed blobs for offline credential scanning
+        shell: bash
+        env:
+          CHECKOUT_TOKEN: ${{ github.token }}
+        run: |
+          # Sparse checkout implicitly uses blob:none. Fetch objects, not files,
+          # before scanning; credentials exist only in this command's environment.
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0=http.https://github.com/.extraheader
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$CHECKOUT_TOKEN" | base64 | tr -d '\n')"
+          git fetch --refetch --no-filter --depth=1 --no-tags origin "$(git rev-parse HEAD)"
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0, Node 24
         with:
           node-version-file: .node-version

@@ -246,6 +246,10 @@ impl Board {
                     .unchecked_ref::<HtmlElement>()
                     .focus();
             }
+            "catalog-type" => {
+                self.catalog
+                    .select_type(&element.get_attribute("data-type").unwrap());
+            }
             "catalog-page" => {
                 self.catalog
                     .update_results(element.get_attribute("data-page").unwrap().parse().unwrap());

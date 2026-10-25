@@ -1,8 +1,45 @@
 # Simulation command boundary v1
 
-Status: wire contract only (CNA-160). The sandbox is unchanged. The official
-reducer, state, rules kernels and replay verifier are later deliverables; this
-document states their obligations, not an assertion that they are implemented.
+Status: command wire contract (CNA-160), with state representation and calendar
+arithmetic in `cna_sim::official::state` (CNA-260). The sandbox is unchanged.
+The official reducer, rules kernels and replay verifier remain later deliverables;
+their obligations below are not assertions of implemented game behavior.
+
+## Authoritative state representation
+
+`GameState` stores stable instance IDs separately from catalog unit IDs, current
+TOE points by weapon-system reference, exact dimensional quantities for fuel,
+ammunition, stores, water and trucks, counter-state references, assignment and
+attachment, cargo batches, commitments, reference digests and the explicit RNG
+seed/cursor. Maps and sets have sorted iteration. No HP or percentage resource
+model is used. Unit supplies and separate cargo-batch contents are distinct
+stocks, not mirrored copies; later transfer rules must conserve their total.
+
+Deserialize, then call `GameState::validate` with the loaded catalog's ID set
+before installing state. This rejects dangling organization, cargo and commitment
+references, unknown catalog IDs, blank identifiers and malformed digest syntax.
+It does not certify equipment values, organizational legality, allegiance,
+occupancy, map membership, historical placement, or the contents behind digests.
+These require the relevant rules and loader checks. Diagnostics contain internal
+references and must not be returned as viewer-facing command errors.
+
+Calendar arithmetic follows L21 §5.1 (physical p12): three Operations Stages per
+weekly Game-Turn. The supplied printed track labels GT1 September III 1940 and
+GT111 January I 1943, with four labelled weeks per month, not Gregorian dates.
+Advancing from stage 3 reaches stage 1 of the next Game-Turn; the final stage of
+GT111 has no successor. This helper does not execute a phase or authorize an End
+Stage command. The future phase engine owns those transitions and scenario limits.
+
+Stored mode names identify the planned four profiles, not implemented kernels or
+an approved mode matrix. RNG fields preserve the command contract's ChaCha8
+stream-0 seed and word cursor, but do not yet draw words. Pending ADJ-SHIP and
+ADJ-MODES decisions are not resolved by storing these fields.
+
+`cargo test --locked -p cna-sim --test official_state` checks deterministic state
+round trips, exact fractional quantities, dangling references and all 333 calendar
+positions. `cargo test --locked -p cna-map --test hex` covers the additive string
+serialization of `MapLocation` through its existing strict parser, including
+off-map boxes; no aliases or adjacency semantics change.
 
 ## Envelopes and versioning
 

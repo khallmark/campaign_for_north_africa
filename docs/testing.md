@@ -30,7 +30,7 @@ needed. Do not start a review server to run tests. Keep TCP port 4175 free.
 | `npm test` | Credential and distribution guards, `cargo test --workspace --locked` (including doctests), then Node and fast SQLite functional tests. Source-dependent tests are explicitly ignored. |
 | `npm run test:unit` | Rust library and binary unit tests; focused developer command, not a substitute for the default guards. |
 | `npm run test:integration` | All Cargo integration targets under `crates/*/tests`; synthetic map/tile, catalog, contract and sandbox behavior. |
-| `npm run test:functional` | Node discovers `tests/*.test.mjs`, then Python stdlib runs `scripts/test_catalog_db.py`: disposable fixtures and committed DB contracts, with no source/art/JSON dependency. |
+| `npm run test:functional` | Node discovers `tests/*.test.mjs`, then Python stdlib runs `scripts/test_catalog_db.py`: disposable fixtures and committed DB/compatibility JSON contracts, with no original source/art dependency. |
 | `npm run test:private-review` | Focused alias for the existing synthetic HTTP route suite; already runs once through `test:functional`. |
 | `npm run test:e2e` | Guards, then the existing Playwright suite. Its webServer builds guarded production Wasm/Vite assets and starts/stops a fresh preview. |
 | `npm run test:browser -- ...` | Existing low-level Playwright entry point, retained for compatibility. Prefer `test:e2e` so credential guards also run. |

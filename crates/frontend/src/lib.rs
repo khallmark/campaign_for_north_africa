@@ -197,6 +197,11 @@ impl App {
                     }
                     return;
                 }
+                "catalog-type" => {
+                    self.catalog
+                        .select_type(&element.get_attribute("data-type").unwrap());
+                    return;
+                }
                 "catalog-page" => {
                     let page = element.get_attribute("data-page").unwrap().parse().unwrap();
                     self.catalog.update_results(page);

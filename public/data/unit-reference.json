@@ -33,8 +33,8 @@
     },
     {
       "source_path": "public/data/unit-catalog.json",
-      "sha256": "e163514f315e1393a9bc816dc532db0d7b755f49881e45b10f8d2172430ea6ac",
-      "size": 2628402
+      "sha256": "5ffe7cef7a48a8e4d3f5ff6f8e78df5b8ef99a6fe3dcf9e0e25a7bf2a3ff816a",
+      "size": 2628470
     },
     {
       "source_path": "public/data/unit-identities.json",
@@ -466,7 +466,7 @@
       "identity_status": "provisional",
       "formation_context": "1st Armored Division",
       "unit_type_ids": [
-        "infantry"
+        "motorized-infantry"
       ],
       "source_record_ids": [
         "oa-116-006-1st-rifle-brigade"
@@ -6129,7 +6129,7 @@
       "identity_status": "provisional",
       "formation_context": "Unassigned British Infantry-type Units",
       "unit_type_ids": [
-        "infantry"
+        "commandos"
       ],
       "source_record_ids": [
         "oa-122-066-a-bn-special-service-bde-layforce"
@@ -6159,7 +6159,7 @@
       "identity_status": "provisional",
       "formation_context": "Unassigned British Infantry-type Units",
       "unit_type_ids": [
-        "infantry"
+        "commandos"
       ],
       "source_record_ids": [
         "oa-122-067-special-air-service-bde"
@@ -12012,7 +12012,7 @@
       "identity_status": "provisional",
       "formation_context": "Unassigned South Africa Units",
       "unit_type_ids": [
-        "armored-recon"
+        "armored-car"
       ],
       "source_record_ids": [
         "oa-129-041-4th-sa-armored-car-regt"
@@ -12702,7 +12702,7 @@
       "identity_status": "provisional",
       "formation_context": "Unassigned New Zealand Units",
       "unit_type_ids": [
-        "road-construction"
+        "railroad-engineer"
       ],
       "source_record_ids": [
         "oa-130-064-10th-nz-rr-construction-coy"
@@ -12732,7 +12732,7 @@
       "identity_status": "provisional",
       "formation_context": "Unassigned New Zealand Units",
       "unit_type_ids": [
-        "road-construction"
+        "railroad-engineer"
       ],
       "source_record_ids": [
         "oa-130-065-13th-nz-rr-construction-coy"
@@ -14172,7 +14172,7 @@
       "identity_status": "provisional",
       "formation_context": "Unassigned Allied Units",
       "unit_type_ids": [
-        "infantry"
+        "motorized-marines"
       ],
       "source_record_ids": [
         "oa-132-113-1st-company-fr-mtr-marine"
@@ -21666,7 +21666,7 @@
       "identity_status": "provisional",
       "formation_context": "Tobruk Garrison",
       "unit_type_ids": [
-        "infantry"
+        "marines"
       ],
       "source_record_ids": [
         "oa-155-014-1st-marine-bn"
@@ -26637,7 +26637,7 @@
       "identity_status": "provisional",
       "formation_context": "5th Light Panzer Division (later 21st Panzer Division)",
       "unit_type_ids": [
-        "machinegun"
+        "motorized-machinegun"
       ],
       "source_record_ids": [
         "oa-162-088-2nd-machinegewehr-bn"
@@ -26956,7 +26956,7 @@
       "identity_status": "provisional",
       "formation_context": "Sonderverband 288",
       "unit_type_ids": [
-        "infantry"
+        "motorized-mountain-infantry"
       ],
       "source_record_ids": [
         "oa-162-098-2-288-gebergs-inf-bn"
@@ -26986,7 +26986,7 @@
       "identity_status": "provisional",
       "formation_context": "Sonderverband 288",
       "unit_type_ids": [
-        "heavy-weapons"
+        "motorized-heavy-weapons"
       ],
       "source_record_ids": [
         "oa-162-099-3-288-schwinf-bn"
@@ -27275,7 +27275,7 @@
       "identity_status": "provisional",
       "formation_context": "15th Panzer Division",
       "unit_type_ids": [
-        "infantry"
+        "motorcycle-infantry"
       ],
       "source_record_ids": [
         "oa-163-006-15th-kradschutzen-bn"
@@ -186006,7 +186006,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "infantry",
+      "unit_type": "motorized-infantry",
       "profile_id": "cw-l",
       "verification": "verified",
       "source_refs": [
@@ -191641,7 +191641,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "infantry",
+      "unit_type": "commandos",
       "profile_id": "cw-h",
       "verification": "verified",
       "source_refs": [
@@ -191676,7 +191676,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "infantry",
+      "unit_type": "commandos",
       "profile_id": "cw-j",
       "verification": "verified",
       "source_refs": [
@@ -198536,7 +198536,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "armored-recon",
+      "unit_type": "armored-car",
       "profile_id": "cw-rr",
       "verification": "verified",
       "source_refs": [
@@ -199341,7 +199341,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "road-construction",
+      "unit_type": "railroad-engineer",
       "profile_id": "cw-uu",
       "verification": "verified",
       "source_refs": [
@@ -199376,7 +199376,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "road-construction",
+      "unit_type": "railroad-engineer",
       "profile_id": "cw-uu",
       "verification": "verified",
       "source_refs": [
@@ -201056,7 +201056,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "infantry",
+      "unit_type": "motorized-marines",
       "profile_id": "cw-v",
       "verification": "verified",
       "source_refs": [
@@ -210051,7 +210051,7 @@
       "kind": "formation",
       "side": "axis",
       "nationality": "italian",
-      "unit_type": "infantry",
+      "unit_type": "marines",
       "profile_id": "it-x",
       "verification": "verified",
       "source_refs": [
@@ -215931,7 +215931,7 @@
       "kind": "formation",
       "side": "axis",
       "nationality": "german",
-      "unit_type": "machinegun",
+      "unit_type": "motorized-machinegun",
       "profile_id": "ge-n",
       "verification": "verified",
       "source_refs": [
@@ -216281,7 +216281,7 @@
       "kind": "formation",
       "side": "axis",
       "nationality": "german",
-      "unit_type": "infantry",
+      "unit_type": "motorized-mountain-infantry",
       "profile_id": "ge-m",
       "verification": "verified",
       "source_refs": [
@@ -216316,7 +216316,7 @@
       "kind": "formation",
       "side": "axis",
       "nationality": "german",
-      "unit_type": "heavy-weapons",
+      "unit_type": "motorized-heavy-weapons",
       "profile_id": "ge-p",
       "verification": "verified",
       "source_refs": [
@@ -216631,7 +216631,7 @@
       "kind": "formation",
       "side": "axis",
       "nationality": "german",
-      "unit_type": "infantry",
+      "unit_type": "motorcycle-infantry",
       "profile_id": "ge-g",
       "verification": "verified",
       "source_refs": [

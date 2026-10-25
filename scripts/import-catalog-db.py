@@ -6,6 +6,8 @@ Examples (from any directory):
   python3 scripts/import-catalog-db.py --check      # source-dependent, read-only drift check
   python3 scripts/import-catalog-db.py --patch-only # apply new SQL using committed source tables
   python3 scripts/import-catalog-db.py --bootstrap  # ONE-TIME legacy JSON migration; refuses overwrite
+  python3 scripts/import-catalog-db.py --project-types # project only classifications into existing JSON
+  python3 scripts/import-catalog-db.py --project-types --check # read-only projection parity check
 
 Python 3.11+, SQLite 3.37+ (STRICT tables) and Cargo are required for source import.
 --patch-only requires only Python/SQLite. Images and saves are never embedded.
@@ -289,16 +291,51 @@ def update_database(destination, schema, patches, prepare, *, bootstrap=False, c
         return before != after
 
 
+def project_unit_types(database, destination, *, check=False):
+    """Bounded compatibility projection; other JSON fields are not DB exports."""
+    document = read_json(destination)
+    require(document["schema_version"] == 1, "Unsupported catalog JSON version")
+    allowed_types = {t["id"] for t in document["unit_types"]}
+    changed = False
+    with closing(connect(database, readonly=True)) as db:
+        validate(db)
+        for collection in ("entries", "profiles"):
+            rows = db.execute("SELECT id,unit_type_id FROM catalog_record WHERE collection=? ORDER BY position", (collection,)).fetchall()
+            records = document[collection]
+            require([r["id"] for r in records] == [r[0] for r in rows],
+                    f"Catalog {collection} record order/IDs differ from DB; reconcile before projection")
+            for record, (_, unit_type) in zip(records, rows):
+                require(unit_type in allowed_types, f"Type missing from compatibility vocabulary: {unit_type}")
+                changed |= record["unit_type"] != unit_type
+                record["unit_type"] = unit_type
+    if check:
+        require(not changed, "Classification projection drift: run python3 scripts/import-catalog-db.py --project-types")
+    elif changed:
+        # Complete validation precedes replacement. Keep the existing file on failure.
+        with tempfile.TemporaryDirectory(prefix=".catalog-types-", dir=destination.parent) as directory:
+            candidate = Path(directory) / destination.name
+            candidate.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n")
+            os.replace(candidate, destination)
+    return changed
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--database", type=Path, default=DATABASE, help="Private database path (default data/catalog.sqlite)")
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument("--bootstrap", action="store_true", help="One-time transfer of reviewed JSON into a NEW database")
-    modes.add_argument("--check", action="store_true", help="Verify source import + patches cause no logical change; never write")
     modes.add_argument("--patch-only", action="store_true", help="Apply new SQL patches without source/Cargo prerequisites")
+    modes.add_argument("--project-types", action="store_true", help="Copy only DB unit_type values into existing public/data/unit-catalog.json; no sources needed")
+    parser.add_argument("--check", action="store_true", help="Verify the selected import/projection causes no change; never write")
     args = parser.parse_args()
+    if args.bootstrap and args.check:
+        parser.error("--bootstrap cannot be combined with --check")
     try:
         require(sqlite3.sqlite_version_info >= (3, 37), "SQLite 3.37+ required")
+        if args.project_types:
+            changed = project_unit_types(args.database, ROOT / "public/data/unit-catalog.json", check=args.check)
+            print(json.dumps({"projection": "unit_type_only", "changed": changed}))
+            return
         locks = verify_sources(ROOT) if not args.patch_only else None
 
         def prepare(db, temp):

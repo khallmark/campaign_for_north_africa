@@ -46,6 +46,50 @@ test('full-board workspace removes the scenario and restores modal keyboard focu
   expect(errors).toEqual([]);
 });
 
+test('keyboard restoration keeps roster and map controls in their originating region', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/');
+  await addCounter(page);
+  for (const [selector, key] of [
+    ['.board-roster-unit', 'Enter'],
+    ['.board-roster-unit', 'Escape'],
+    ['.add-counter', 'Escape'],
+    ['.counter-marker', 'Enter'],
+    ['.counter-marker', 'Escape'],
+    ['#board-top [data-action=reinforcements]', 'Escape'],
+  ]) {
+    const origin = page.locator(selector);
+    await origin.focus();
+    await page.keyboard.press(key);
+    await expect.soft(origin, `${selector} after ${key}`).toBeFocused({ timeout: 1000 });
+  }
+  await page.locator('.add-counter').focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('dialog', { name: 'Reinforcements', exact: true })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect.soft(page.locator('.add-counter')).toBeFocused({ timeout: 1000 });
+  expect(errors).toEqual([]);
+});
+
+test('an extremely narrow viewport does not trap action positioning', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/');
+  await addCounter(page);
+  await page.locator('.order-panel > summary').click();
+  await page.locator('.unit-panel > summary').click();
+  await page.setViewportSize({ width: 220, height: 800 });
+  const map = page.locator('.research-viewport');
+  await map.focus();
+  const before = await map.getAttribute('data-center-x');
+  await page.keyboard.press('ArrowRight');
+  await expect(map).not.toHaveAttribute('data-center-x', before!);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.getByRole('button', { name: 'Remove planning counter' }).click();
+  await expect(page.locator('.counter-marker')).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
 test('calendar exposes 111 weekly turns and three reference stages without executing a turn', async ({ page }) => {
   await page.goto('/');
   const calendar = page.getByRole('button', { name: 'Open campaign calendar' });

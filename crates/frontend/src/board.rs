@@ -399,7 +399,7 @@ pub(crate) fn overlay(viewport: Viewport) {
             }
             if let Some(free_left) = slots
                 .into_iter()
-                .map(|(start, end)| left.clamp(start, end - bar.width()))
+                .map(|(start, end)| left.clamp(start, (end - bar.width()).max(start)))
                 .min_by(|a, b| (a - left).abs().total_cmp(&(b - left).abs()))
             {
                 left = free_left;
@@ -444,6 +444,12 @@ pub(crate) fn overlay(viewport: Viewport) {
 fn focus_selector(element: &Element) -> Option<String> {
     for attr in ["data-counter", "data-action"] {
         if let Some(value) = element.get_attribute(attr) {
+            let region = element
+                .closest("#board-roster, #board-detail, #board-top")
+                .ok()
+                .flatten()
+                .map(|region| format!("#{} ", region.id()))
+                .unwrap_or_default();
             let scope = if element.matches(".counter-marker").unwrap() {
                 ".counter-marker"
             } else if element.closest(".counter-actions").ok().flatten().is_some() {
@@ -451,7 +457,7 @@ fn focus_selector(element: &Element) -> Option<String> {
             } else {
                 "button"
             };
-            return Some(format!("{scope}[{attr}=\"{value}\"]"));
+            return Some(format!("{region}{scope}[{attr}=\"{value}\"]"));
         }
     }
     None

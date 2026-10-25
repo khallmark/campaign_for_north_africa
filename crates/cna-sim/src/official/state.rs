@@ -206,8 +206,8 @@ pub struct Commitment {
     pub cargo_batches: BTreeSet<String>,
 }
 
-/// Serializable ChaCha8 stream-0 cursor per the command contract. This state
-/// representation does not draw random words; CNA-261 supplies that behavior.
+/// Serializable ChaCha8 stream-0 cursor per the command contract. Recorded
+/// draws are supplied by `official::rng`, not by this representation itself.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct RngState {

@@ -106,7 +106,7 @@ python3 scripts/import-catalog-db.py --project-stats --check
 ```
 
 This mode exports only `stat_correction` overlays, their public citation locators,
-and explicitly evidenced mission corrections. It preserves IDs, ordering, profile
+and explicitly evidenced mission/record-note corrections. It preserves IDs, ordering, profile
 links and all other cells. Each corrected cell retains its immutable original
 observation and correction ID; private source quotations/documents are not exported.
 The sidecar validates already projected errata instead of applying them twice or
@@ -132,9 +132,20 @@ the incorporated stat errata, and the special-unit rules. The VASSAL Pak/Marder
 rows visibly shift columns; explicit CPA errata take priority rather than copying
 the shifted cells. This is **not** an all-formation arrival-loadout transcription or
 an independently repeated visual audit of every aircraft/profile cell. The German
-profile v close-assault print and Italian pp aggregate TOE remain unresolved;
+profile v close-assault cell prints `*`; Italian pp prints `8AA`, an AA allowance
+rather than an aggregate maximum. Neither supplies a whole-unit numeric value;
 formation current CPA, assigned equipment, readiness and supply remain scenario data.
 The AA profile dash cannot be replaced with a Bofors rating or the maximum TOE.
+
+Patches 006–008 recover those three printed symbols without manufacturing numbers,
+and correct stale explanatory notes that predate the CPA/range errata. Patch 006
+migrates the correction overlay to allow `unresolved` with a null value and a
+cited raw symbol; the initial schema digest and original observations stay intact.
+Patch 008 supplies locked text witnesses for automated quote validation, retaining
+the visually checked chart/page in each locator.
+The machine status vocabulary is unchanged. Historical `original_observation`
+notes retain their old wording; current explanations state the actual source
+condition. No token metadata or identity links change.
 
 ### All catalogued formation arrival references
 
@@ -156,10 +167,11 @@ python3 scripts/import-catalog-db.py --project-formations --check
 Full import verifies locked chart hashes, complete/unique row coverage, existing
 formation membership and explicit profile agreement/overrides before atomic DB
 replacement. Reviewed arrival observations and exact equipment links live in
-`catalog_record.details_json.formation_arrival`; the initial schema and SQL ledger
-are unchanged. Patch-only still requires no original sources. The deterministic
-projection adds only `formation_reference` and allowlisted source locators to the
-compatibility catalog. It computes from DB effective stats, not frontend arithmetic
+`catalog_record.details_json.formation_arrival`; the arrival importer does not
+rewrite the initial schema or existing SQL ledger. Patch-only still requires no original sources. The deterministic
+projection adds `formation_reference` and allowlisted source locators to the
+compatibility catalog, and uses the actual OA explanation for records with no
+printed profile code. It computes from DB effective stats, not frontend arithmetic
 or manually edited JSON. The sidecar carries the same record field unchanged.
 
 The additive v1 contract is specified by `docs/unit-reference.schema.json`:
@@ -185,8 +197,13 @@ The additive v1 contract is specified by `docs/unit-reference.schema.json`:
   by ten and action-level rounding (11.31–11.38). `raw` is the arithmetic expression,
   not a claim of a printed total. Equipment-chart dashes contribute no points to
   a sum (legend: N/A or zero); original nullable cells remain unchanged. Missing,
-  unverified, date/target-dependent or parenthesized inputs yield null with a
-  reason, not a partial numeric total. Coastal restrictions are retained.
+  unverified, unapplied date/target-dependent or parenthesized inputs yield null
+  with a reason, not a partial numeric total. The explicit land-target TOE subsets
+  in Tobruk note b are applied: 2nd/4th/5th coastal groups have conditional barrage
+  totals of **32/18/30 raw points**, respectively. These are land-target historical
+  reference totals, not all-target/current strength. Other restrictions still block
+  numbers. Sourced morale has no missing-value caveat; missing TOE/profile/morale
+  explanations cite the particular row, profile symbol or attachment.
 
 Consumers should use the arrival notes/limitations instead of the legacy record
 note's old "not transcribed" paragraph, and avoid duplicating the ordinary linked

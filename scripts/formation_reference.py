@@ -202,19 +202,23 @@ def formation_references(db):
             quantity = item["toe"]
             quantity_refs = list(refs)
             conditional = False
+            quantity_note = "Printed TOE strength points; not vehicle count."
             if item["normal"]:
                 maximum = ratings.get("maximum_toe", {})
+                quantity_note = "Normal arrival uses profile maximum (4.45); not vehicle count."
                 if maximum.get("status") == "sourced":
                     quantity = maximum["value"]
                     conditional = maximum["conditional"]
                     quantity_refs += maximum["source_refs"]
+                else:
+                    quantity_note = f"Arrival prints N, but {item['record_id']} supplies no numeric whole-unit maximum (printed {maximum.get('raw') or 'blank'}). " + maximum.get('note', '')
             if options.get("calculation_note"):
                 quantity = None
             components.append({
                 "record_id": item["record_id"], "name": source["name"] if source else item["label"],
                 "label": item["label"], "kind": "equipment" if source and source["kind"] == "equipment" else "profile",
                 "toe": stat(quantity, item["label"] if item["normal"] else str(item["toe"]) if item["toe"] is not None else None,
-                            quantity_refs, options.get("calculation_note") or ("Normal arrival uses profile maximum (4.45); not vehicle count." if item["normal"] else "Printed TOE strength points; not vehicle count."),
+                            quantity_refs, options.get("calculation_note") or quantity_note,
                             conditional=conditional, unit="TOE strength points"),
                 "per_toe_stats": ratings, "land_barrage_toe": item["land_barrage_toe"],
             })
@@ -230,8 +234,9 @@ def formation_references(db):
                 reasons.append("Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings.")
             if components and (base.get("maximum_toe", {}).get("raw") or "").startswith("("):
                 conditions.append("Profile maximum is parenthesized: assigned TOE uses parenthesized combat ratings under 4.46/3.4.")
+                reasons.append(conditions[-1])
             if not components:
-                reasons.append("No independent quantified loadout is printed; see row notes and any related record. A profile maximum is not an assignment.")
+                reasons.append("No independent quantified loadout is printed. " + arrival['note'])
             for item in components:
                 rating = item["per_toe_stats"].get(key, {})
                 quantity = item["toe"]["value"]
@@ -245,23 +250,32 @@ def formation_references(db):
                 if item["kind"] == "equipment" and rating.get("status") == "not_applicable" and rating.get("raw") == "-":
                     value = 0
                 if quantity is None or value is None:
-                    reasons.append(f"{item['label']}: TOE or {key} rating is not numerically resolved.")
+                    if quantity is None:
+                        reasons.append(f"{item['label']}: {item['toe']['note']}")
+                    if value is None:
+                        reasons.append(f"{item['label']}: {key} prints {rating.get('raw') or 'no cell'}, not a single numeric rating. {rating.get('note', '')}")
                     continue
                 if rating.get("conditional") or item["toe"]["conditional"]:
                     conditions.append(f"{item['label']}: {rating.get('raw')}; {rating.get('note', '')}")
+                    reasons.append(conditions[-1])
                 terms.append(f"{quantity:g} × {value:g}")
                 total += quantity * value
-            # Conditional date/target/parenthesized values are not unconditional
-            # arrival totals. Expose the expression and reason, not a false total.
-            if conditions:
-                reasons.extend(conditions)
+            # Only the explicit land-target TOE subset has been applied here.
+            # Date/parenthesized ratings still block a numeric total; a partial
+            # sum never becomes a number just because another term is known.
             totals[key] = stat(total if not reasons else None, " + ".join(terms) or None, total_refs,
-                               " ".join(reasons) if reasons else "Sum of printed arrival TOE × rating. Equipment-chart dashes contribute no points without replacing their source cells. No combat modifiers or scenario losses applied.",
+                               " ".join(dict.fromkeys(reasons + conditions)) if reasons or conditions else "Sum of printed arrival TOE × rating. Equipment-chart dashes contribute no points without replacing their source cells. No combat modifiers or scenario losses applied.",
                                conditional=bool(conditions), unit="Actual AA points" if key == "anti_air" else "Raw combat points (before ÷10)")
         morale = arrival["morale_raw"]
         match = re.fullmatch(r"([+-]?\d+)(?: \((?:([+-]?\d+)|[a-z])\))?", morale or "")
         morale_value = int(match[2] or match[1]) if match else None
         quantity_values = [c["toe"]["value"] for c in components]
+        missing_toe_note = " ".join(c['toe']['note'] for c in components if c['toe']['value'] is None)
+        if not components:
+            missing_toe_note = "No independent TOE quantity is printed for this row. " + arrival['note']
+        missing_profile_note = "No characteristic ID code is printed on this OA row. " + arrival['note']
+        if arrival['related_record_id']:
+            missing_profile_note += " See the attachment record " + arrival['related_record_id'] + "."
         arrival_stats = {}
         if "arrival_cpa_raw" in options:
             require(options["arrival_cpa_raw"] == "0", "Unsupported reviewed arrival-CPA override")
@@ -269,7 +283,7 @@ def formation_references(db):
         result[record_id] = {
             "schema_version": 1, "scope": "historical_arrival_reference_not_current_state",
             "base_profile_id": profile_id, "base_profile_name": profile["name"] if profile else None,
-            "base_profile_note": profile["note"] if profile else "No ID code is printed; no profile inferred.",
+            "base_profile_note": profile["note"] if profile else missing_profile_note,
             "base_stats": base, "printed_profile_code": arrival["printed_profile_code"],
             "catalog_profile_id": arrival["previous_profile_id"],
             "arrival": {
@@ -278,9 +292,9 @@ def formation_references(db):
                 "source_refs": refs, "related_record_id": arrival["related_record_id"],
                 "toe_strength": stat(sum(quantity_values) if quantity_values and all(v is not None for v in quantity_values) else None,
                                      arrival["toe_raw"], list(dict.fromkeys(ref for c in components for ref in c["toe"]["source_refs"])) or refs,
-                                     options.get("calculation_note") or ("Sum of this row's printed components; excludes attachments listed in other rows." if quantity_values and all(v is not None for v in quantity_values) else "TOE is absent or its profile maximum is unresolved; consult the note/related record."),
+                                     options.get("calculation_note") or ("Sum of this row's printed components; excludes attachments listed in other rows." if quantity_values and all(v is not None for v in quantity_values) else missing_toe_note),
                                      conditional=any(c["toe"]["conditional"] for c in components), unit="TOE strength points"),
-                "morale": stat(morale_value, morale, refs, "Parentheses give untrained morale at arrival (4.45); the outer value is trained morale." if match and match[2] else "Printed sheet/row morale; attachment-dependent or absent values remain unresolved.",
+                "morale": stat(morale_value, morale, refs, "Parentheses give untrained morale at arrival (4.45); the outer value is trained morale." if match and match[2] else "Printed sheet/row morale." if match else "No independent numeric morale is printed for this row. " + arrival['note'],
                                unit="Morale rating"),
             },
             "components": components, "arrival_totals": totals,

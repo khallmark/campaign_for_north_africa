@@ -172,6 +172,14 @@ class ImportContracts(unittest.TestCase):
         self.assertFalse(catalog.project_stats(self.database, destination))
         self.assertEqual(destination.read_bytes(), after)
         self.assertEqual(self.database.read_bytes(), db_before)
+        collision = copy.deepcopy(projected)
+        collision['sources'][0]['section'] = 'different source locator'
+        destination.write_text(json.dumps(collision))
+        before = destination.read_bytes()
+        with self.assertRaisesRegex(ValueError, 'Correction citation collision'):
+            catalog.project_stats(self.database, destination)
+        self.assertEqual(destination.read_bytes(), before)
+        destination.write_bytes(after)
         with closing(catalog.connect(self.database)) as db:
             db.execute("UPDATE stat_correction SET value=NULL,status='not_applicable',raw='-',conditional=0")
             db.commit()
@@ -412,6 +420,8 @@ class CommittedDatabaseContracts(unittest.TestCase):
             references = catalog.formation_references(db)
         self.assertEqual(len(references), 1052)
         self.assertEqual(set(references), {k for k, r in records.items() if r['kind'] in ('formation', 'counter_formation')})
+        self.assertIn('1052 existing formation rows', document['coverage']['gaps'][0])
+        self.assertNotIn('unresolved', json.dumps(document['coverage']).lower())
         for record_id, reference in references.items():
             self.assertEqual(records[record_id]['formation_reference'], reference)
             self.assertEqual(sidecar[record_id]['formation_reference'], reference)
@@ -463,6 +473,19 @@ class CommittedDatabaseContracts(unittest.TestCase):
         self.assertEqual(coast['components'][0]['land_barrage_toe'], 4)
         self.assertEqual(coast['arrival']['stats']['capability_points']['value'], 0)
         self.assertIsNone(coast['arrival_totals']['close_assault_offensive']['value'])
+        # Note b limits land-target barrage to 4/2/2 artillery TOE, not all six.
+        for prefix, value, expression in (('oa-155-022-', 32, '4 × 8 + 6 × 0'),
+                                          ('oa-155-024-', 18, '2 × 9 + 4 × 0'),
+                                          ('oa-155-025-', 30, '2 × 15 + 2 × 0')):
+            barrage = ref(prefix)['arrival_totals']['barrage']
+            self.assertEqual((barrage['value'], barrage['raw']), (value, expression))
+            self.assertEqual(barrage['status'], 'sourced')
+            self.assertTrue(barrage['conditional'])
+            self.assertIn('land-target subset', barrage['note'])
+        self.assertIn('attachment', attached['base_profile_note'].lower())
+        stale_notes = [record_id for record_id, reference in references.items()
+                       if 'unresolved' in json.dumps(reference).lower().replace('"unresolved"', '')]
+        self.assertEqual(stale_notes, [])
         self.assertEqual(ref('oa-151-017-')['base_stats']['capability_points']['raw'], '10+')
         corrected = ref('oa-165-083-')
         self.assertEqual((corrected['catalog_profile_id'], corrected['base_profile_id']), ('ge-x', 'ge-w'))
@@ -508,6 +531,17 @@ class CommittedDatabaseContracts(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'record order/IDs'):
                 catalog.project_formations(database, target)
             self.assertEqual(target.read_bytes(), before)
+            # A known coastal subset cannot turn a missing second rating into
+            # zero or publish the remaining artillery term as a complete total.
+            with closing(catalog.connect(database)) as db:
+                db.execute("DELETE FROM stat_correction WHERE record_id='weapons-it-i-light-aa' AND stat_id='barrage'")
+                db.execute("UPDATE stat_observation SET value=NULL,status='unresolved',raw='?' WHERE record_id='weapons-it-i-light-aa' AND stat_id='barrage'")
+                reference = catalog.formation_references(db)['oa-155-022-2nd-tobruk-cd-arty-group']
+                barrage = reference['arrival_totals']['barrage']
+                self.assertIsNone(barrage['value'])
+                self.assertEqual(barrage['raw'], '4 × 8')
+                self.assertTrue(barrage['conditional'])
+                self.assertIn('not a single numeric rating', barrage['note'])
 
     def test_reviewed_patch_changes_only_twelve_types_and_rejects_wrong_baseline(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -642,6 +676,14 @@ class CommittedDatabaseContracts(unittest.TestCase):
         self.assertIn('not applicable or zero', bofors['barrage']['note'])
         self.assertNotIn('not numeric zero', bofors['barrage']['note'])
         self.assertIsNone(records['cw-ee']['stats']['anti_air']['value'])
+        for record, key, raw in (('ge-v', 'close_assault_offensive', '*'),
+                                 ('ge-v', 'close_assault_defensive', '*'),
+                                 ('it-pp', 'maximum_toe', '8AA')):
+            corrected = records[record]['stats'][key]
+            self.assertEqual((corrected['value'], corrected['status'], corrected['raw']),
+                             (None, 'unresolved', raw))
+            self.assertEqual(corrected['original_observation']['raw'], '?')
+            self.assertNotIn('unresolved', corrected['note'].lower())
         self.assertEqual(records['oa-124-002-13th-light-aa-regt']['stats']['capability_points']['status'], 'unresolved')
         self.assertFalse(catalog.project_stats(catalog.DATABASE, ROOT / 'public/data/unit-catalog.json', check=True))
 

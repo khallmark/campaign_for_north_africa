@@ -1,4 +1,4 @@
-"""Contract tests: python -m unittest discover -s scripts -p 'test_unit_data.py'."""
+"""Run with: uv run --with jsonschema python -m unittest discover -s scripts -p test_unit_data.py."""
 
 import copy
 import importlib.util
@@ -6,6 +6,8 @@ import subprocess
 import sys
 import unittest
 from pathlib import Path
+
+from jsonschema import Draft202012Validator
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,6 +25,56 @@ class UnitDataTests(unittest.TestCase):
         cls.evidence = importer.read_json(ROOT / importer.EVIDENCE)
         cls.reference, cls.matrix = importer.build(ROOT)
         cls.records = {r["id"]: r for r in cls.reference["records"] + cls.reference["profiles"]}
+        schema = importer.read_json(ROOT / "docs/unit-reference.schema.json")
+        Draft202012Validator.check_schema(schema)
+        cls.validator = Draft202012Validator(schema)
+
+    def test_schema_accepts_current_data_and_unresolved_cases(self):
+        self.validator.validate(self.reference)
+        unit = copy.deepcopy(next(u for u in self.reference["units"]
+                                  if u["token_link_status"] == "unresolved"
+                                  and u["generated_art"]["status"] == "missing"))
+        self.assertEqual(unit["counter_gpids"], [])
+        self.assertIsNone(unit["generated_art"]["portrait_path"])
+        self.assertIsNone(unit["generated_art"]["atlas_path"])
+        self.assertIsNone(unit["organization_at_arrival"])
+        self.assertIsNone(unit["description"])
+        counter = copy.deepcopy(next(c for c in self.reference["counters"]
+                                     if c["link_status"] == "unresolved"))
+        counter.update(layers=[], basic_image_id=None, image_ids=[])
+        self.assertIsNone(counter["canonical_unit_id"])
+        for status in ["missing", "candidate"]:
+            with self.subTest(status=status):
+                unit["generated_art"]["status"] = status
+                self.validator.validate({**self.reference, "units": [unit], "counters": [counter]})
+
+    def test_schema_rejects_ready_art_without_canonical_paths(self):
+        ready = next(u for u in self.reference["units"] if u["generated_art"]["status"] == "ready")
+        for field in ["portrait_path", "atlas_path"]:
+            for invalid in [None, "", "/__source-tokens/original.svg"]:
+                with self.subTest(field=field, invalid=invalid):
+                    unit = copy.deepcopy(ready)
+                    unit["generated_art"][field] = invalid
+                    self.assertFalse(self.validator.is_valid({**self.reference, "units": [unit]}))
+
+    def test_schema_rejects_malformed_counter_labels_and_layers(self):
+        for field, invalid in [("label", {}), ("layers", 42), ("layers", [42]),
+                               ("layers", [{"name": "incomplete"}])]:
+            with self.subTest(field=field, invalid=invalid):
+                counter = {**self.reference["counters"][0], field: invalid}
+                self.assertFalse(self.validator.is_valid({**self.reference, "counters": [counter]}))
+
+    def test_schema_requires_nonnegative_integer_coverage_counts(self):
+        for field in self.reference["coverage"]:
+            if field == "complete":
+                continue
+            with self.subTest(field=field):
+                coverage = dict(self.reference["coverage"])
+                del coverage[field]
+                self.assertFalse(self.validator.is_valid({**self.reference, "coverage": coverage}))
+                for invalid in [-1, True, "118"]:
+                    coverage[field] = invalid
+                    self.assertFalse(self.validator.is_valid({**self.reference, "coverage": coverage}))
 
     def test_every_identity_source_slot_and_artwork_is_preserved(self):
         units = {u["id"]: u for u in self.reference["units"]}

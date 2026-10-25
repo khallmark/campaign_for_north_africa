@@ -7,7 +7,12 @@
   "properties": {
     "schema_version": {"const": 1},
     "purpose": {"type": "string"},
-    "coverage": {"type": "object", "required": ["complete", "canonical_candidates", "vassal_slots", "linked_canonical_candidates", "unresolved_canonical_candidates"], "properties": {"complete": {"const": false}}, "additionalProperties": {"type": ["integer", "boolean"]}},
+    "coverage": {
+      "type": "object",
+      "required": ["complete", "canonical_candidates", "vassal_slots", "linked_canonical_candidates", "unresolved_canonical_candidates", "linked_vassal_slots", "unresolved_vassal_slots", "source_images", "missing_source_images", "generated_art_ready", "source_records", "characteristic_profiles", "profile_cpa_numeric_agreements", "organization_rows_cross_checked", "errata_applied_once", "indexed_documents", "extracted_documents"],
+      "properties": {"complete": {"const": false}},
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
     "input_sources": {"type": "array", "items": {"$ref": "#/$defs/source"}},
     "identity_redirects": {"type": "object", "additionalProperties": {"type": "string"}},
     "units": {"type": "array", "items": {"$ref": "#/$defs/unit"}},
@@ -49,14 +54,33 @@
         "source_record_ids": {"$ref": "#/$defs/strings"}, "characteristic_profile_ids": {"$ref": "#/$defs/strings"},
         "source_refs": {"$ref": "#/$defs/strings"}, "counter_gpids": {"$ref": "#/$defs/strings"},
         "token_link_status": {"enum": ["linked", "unresolved"]},
-        "generated_art": {"type": "object", "required": ["portrait_path", "atlas_path", "status"], "properties": {"portrait_path": {"type": ["string", "null"]}, "atlas_path": {"type": ["string", "null"]}, "status": {"enum": ["ready", "candidate", "missing"]}}},
+        "generated_art": {
+          "type": "object", "required": ["portrait_path", "atlas_path", "status"],
+          "properties": {"portrait_path": {"type": ["string", "null"]}, "atlas_path": {"type": ["string", "null"]}, "status": {"enum": ["ready", "candidate", "missing"]}},
+          "allOf": [
+            {"if": {"properties": {"status": {"const": "missing"}}}, "then": {"properties": {"portrait_path": {"type": "null"}, "atlas_path": {"type": "null"}}}},
+            {"if": {"properties": {"status": {"const": "ready"}}}, "then": {"properties": {"portrait_path": {"type": "string", "pattern": "^/sprites/units/"}, "atlas_path": {"type": "string", "pattern": "^/sprites/units/"}}}}
+          ]
+        },
         "organization_at_arrival": {"type": ["object", "null"], "required": ["context", "equipment_toe_raw", "arrival_raw", "basic_morale_raw", "status", "source", "manual_source", "scope", "disagreements"], "properties": {"context": {"const": "organization_at_arrival"}, "status": {"const": "visually_cross_checked"}}},
         "description": {"type": ["object", "null"], "required": ["text", "status", "scope", "source"]}
       }
     },
     "counter": {
       "type": "object", "required": ["gpid", "canonical_unit_id", "label", "kind", "side", "palette", "palette_path", "source_line", "basic_image_id", "image_ids", "layers", "duplicate_palette_candidates", "link_status"],
-      "properties": {"gpid": {"type": "string"}, "canonical_unit_id": {"type": ["string", "null"]}, "image_ids": {"$ref": "#/$defs/strings"}, "basic_image_id": {"type": ["string", "null"]}, "link_status": {"enum": ["reviewed_source_link", "evidenced_palette_copy", "unresolved"]}}
+      "properties": {"gpid": {"type": "string"}, "canonical_unit_id": {"type": ["string", "null"]}, "label": {"type": "string"}, "layers": {"type": "array", "items": {"$ref": "#/$defs/layer"}}, "image_ids": {"$ref": "#/$defs/strings"}, "basic_image_id": {"type": ["string", "null"]}, "link_status": {"enum": ["reviewed_source_link", "evidenced_palette_copy", "unresolved"]}}
+    },
+    "layer": {
+      "type": "object",
+      "required": ["origin", "name", "description", "initial_state", "first_level_value", "levels"],
+      "properties": {
+        "origin": {"type": "string"}, "name": {"type": "string"}, "description": {"type": "string"},
+        "initial_state": {"type": "string"}, "first_level_value": {"type": "string"},
+        "levels": {
+          "type": "array",
+          "items": {"type": "object", "required": ["index", "image", "label"], "properties": {"index": {"type": "integer", "minimum": 0}, "image": {"type": "string"}, "label": {"type": "string"}}}
+        }
+      }
     },
     "record": {
       "type": "object", "required": ["id", "name", "unit_type", "source_refs", "stats"],

@@ -38,12 +38,12 @@ Each `cpa_checks[]` item stores both VASSAL raw/scalar and original-catalog raw/
 
 ## Reproduction and validation
 
-Python 3.9+ is required. Source files must be hydrated, not Git LFS pointers.
+Python 3.9+ is required. Source files must be hydrated, not Git LFS pointers. The schema regression tests additionally use `jsonschema`; the `uv run --with` command below supplies it without changing importer runtime dependencies.
 
 ```sh
 python scripts/import-unit-data.py
 python scripts/import-unit-data.py --check
-PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s scripts -p test_unit_data.py
+PYTHONDONTWRITEBYTECODE=1 uv run --with jsonschema python -m unittest discover -s scripts -p test_unit_data.py
 uvx check-jsonschema --schemafile docs/unit-reference.schema.json public/data/unit-reference.json
 bash scripts/check-sources.sh
 bash scripts/check-no-credentials.sh
@@ -57,7 +57,7 @@ OMP_THREAD_LIMIT=1 python scripts/import-unit-data.py --ocr --workers 4
 
 OCR cache reuse requires the same source hash and tool version. Structured import is deterministic and `--check` is read-only. Original manual file hashes, module XML, token files, chart files, text sources and errata quotes are checked; a source change requires review, not silently updating source locks. The original catalog, census and identity inventory are inputs and remain byte-identical.
 
-Nine tests cover retained identities/redirects/artwork, every source slot, foreign keys, adversarial equal-name and wrong-board matches, palette image mismatch, one-time errata, zero/null/conditional distinctions, source-image gates, OA scope and deterministic CLI output. No new Rust or browser behavior is claimed by these tests. Cargo is unavailable in this data orb, so the application build/tests have not been rerun for this batch.
+Thirteen tests cover retained identities/redirects/artwork, every source slot, foreign keys, adversarial equal-name and wrong-board matches, palette image mismatch, one-time errata, zero/null/conditional distinctions, source-image gates, OA scope and deterministic CLI output. Negative schema tests reject ready artwork without canonical paths, malformed counter labels/layers and missing or invalid coverage counts; positive controls retain unresolved links, missing/candidate artwork and empty layer arrays. Ready/missing artwork constraints mirror the existing identity inventory contract, and layer shapes mirror the census rather than guessing numeric meanings for its raw strings. These checks tighten schema assurance without changing the dataset or certifying additional source coverage. No new Rust or browser behavior is claimed by these tests. Cargo is unavailable in this data orb, so the application build/tests have not been rerun for this batch.
 
 Parent-reported baseline evidence, not fresh data-side testing: batches18–19 passed six searched deployments and token-independent generated-art path/movement checks; 27–28 sampled travel positions, 16–18 stationary turning samples, one opaque heading during travel, retained nodes and no rotations. Six screenshots were inspected; only 1/7 Queens had inspected 15fps footage. Earlier parent tests/build/schema checks passed on that baseline. Timing comes from DOM samples, not the footage. Source-art angle/detail jumps and the Frontier depot label overlap remain. The parent now uses nearest opaque views at 2ms/degree, minimum80ms, turning in place before travel; this importer does not alter or validate that animation.
 

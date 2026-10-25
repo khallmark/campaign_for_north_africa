@@ -122,6 +122,16 @@ duplicate PR2's commits or include PR3. On combining:
   directly. That suite rebuilds from original images/PDFs, so it stays out of
   default CI. Its owner can add independent synthetic importer tests to the fast
   lane later; do not label the current full-source suite art-free.
+- **SQLite follow-up (separately owned, not integrated):** after its files land,
+  append `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts -p
+  'test_catalog_db.py'` to `test:functional`. The data owner supplies disposable
+  fixtures and committed `data/catalog.sqlite` integrity/identity/read-contract
+  tests using stdlib `sqlite3`; no new dependency or source hydration is needed.
+  Append `python3 scripts/import-catalog-db.py --check` to `test:source-data`
+  for normalized full-source rebuild comparison. Preserve `test_unit_data.py`.
+  Do not wire absent tests as a passing zero-test gate. Keep the full DB/private
+  source text out of `public/`, `dist/` and Wasm; the data owner owns those tests
+  and any safe consumer projection. The tooling is not tied to JSON storage.
 - Expect a `package.json` conflict with PR3's `test`/`pretest` edits and possibly
   README context overlap. Keep both feature documentation and this command
   contract. Do not import either worker's implementation into this setup PR.

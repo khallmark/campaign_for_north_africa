@@ -229,3 +229,42 @@ fn weekly_loss_changes_after_august_1941_and_hot_loss_uses_remaining_on_map_stoc
         assert_eq!(stock, FuelPoints::whole(quantity - expected_loss));
     }
 }
+
+#[test]
+fn fuel_being_consumed_is_exempt_from_hot_loss_but_not_weekly_spillage() {
+    // R79 p41 / L21 p43 §29.34 excludes gas actually being consumed in tanks
+    // from hot-weather loss. §49.3 weekly loss still applies regardless of storage.
+    for (storage, period, side, expected_loss) in [
+        (FuelStorage::OnMap, LossPeriod::HotWeather, Side::Axis, 5),
+        (
+            FuelStorage::OnMapBeingConsumed,
+            LossPeriod::HotWeather,
+            Side::Axis,
+            0,
+        ),
+        (
+            FuelStorage::OnMapBeingConsumed,
+            LossPeriod::Weekly,
+            Side::Axis,
+            6,
+        ),
+        (
+            FuelStorage::OnMapBeingConsumed,
+            LossPeriod::Weekly,
+            Side::Commonwealth,
+            9,
+        ),
+    ] {
+        let mut stock = FuelPoints::whole(101);
+        let lost = evaporate(
+            &mut stock,
+            side,
+            Calendar::new(1, 1).unwrap(),
+            period,
+            storage,
+        )
+        .unwrap();
+        assert_eq!(lost, FuelPoints::whole(expected_loss));
+        assert_eq!(stock, FuelPoints::whole(101 - expected_loss));
+    }
+}

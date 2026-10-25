@@ -87,7 +87,10 @@ pub enum LossPeriod {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum FuelStorage {
+    /// Stored fuel, including supply dumps and truck cargo.
     OnMap,
+    /// §29.34: gas actually being consumed in a unit's tanks, not its cargo.
+    OnMapBeingConsumed,
     ConvoyAtSea,
     OffMap,
 }
@@ -102,7 +105,9 @@ pub fn evaporate(
     period: LossPeriod,
     storage: FuelStorage,
 ) -> Result<FuelPoints, Unavailable> {
-    if storage != FuelStorage::OnMap {
+    if matches!(storage, FuelStorage::ConvoyAtSea | FuelStorage::OffMap)
+        || (storage == FuelStorage::OnMapBeingConsumed && period == LossPeriod::HotWeather)
+    {
         return Ok(FuelPoints::whole(0));
     }
     let date = at.date();

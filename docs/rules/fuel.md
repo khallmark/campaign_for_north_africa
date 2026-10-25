@@ -55,6 +55,14 @@ source conflict; the consumption decision does not change the capacity formula.
   sea convoys/off-map stocks. Applying the paragraph's rounding/exposure rule to
   its additional hot-weather loss is the current interpretation, not separate
   evidence of an explicit hot-weather rounding sentence.
+- R79 physical p41 (original scan visually checked) and L21 p43 §29.34:
+  “do not count the water/gas actually being consumed by a unit (in the radiators
+  and gas tanks, as it were.)” This specific hot-weather exemption is represented
+  by `FuelStorage::OnMapBeingConsumed`; it does **not** exempt the same fuel from
+  §49.3's weekly loss. Stored cargo in trucks and dumps remains `OnMap` and loses
+  5% in hot weather. The host must classify the quantity by its actual use, not
+  exempt everything held by a unit or everything carried by a truck. This source
+  correction does not approve the separate hot-weather rounding interpretation.
 - The caller must apply weekly loss once in Stores Expenditure and hot-weather
   loss once at weather determination. This module does not own the phase cursor,
   determine weather or prevent repeated calls. It must not be exposed directly
@@ -63,6 +71,11 @@ source conflict; the consumption decision does not change the capacity formula.
   The chart contains no evaporation procedure or capacity rule. The module's
   `incorporated errata.txt`, read in full, has no direct §49 correction; that is
   not evidence that all published addenda were examined.
+- VASSAL `buildFile.xml` provides manual weather markers and registers
+  `Weather.png`. The inspected chart determines weather and affected map sections;
+  it contains no fuel-exposure exemption. The incorporation list has no §29.34
+  correction. The exemption above comes from the original and July prose, not
+  from the VASSAL chart or a claimed executable VASSAL rule.
 
 Fuel transportation, emergency siphoning, capacity/access enforcement, vehicle
 exceptions, fuel-loss effects in combat and water's separate exposure rules
@@ -75,5 +88,9 @@ coverage, not certification of movement or logistics gameplay.
 fractional CP/TOE, zero movement and stationary actions, both sides of five-CP
 thresholds, exact debits, insufficient stock, representational overflow, weekly
 date boundaries, downward loss rounding and sequential weekly/hot losses.
+The §29.34 regression distinguishes stored cargo's hot loss from consumed fuel's
+exemption and confirms Axis/Commonwealth weekly losses still apply. With the new
+storage category but the old blanket exclusion it failed (0 loss instead of 6);
+the corrected period-specific rule passes.
 The initial run failed because the API did not exist. No ignored tests or
 claims based on indexed case counts are used.

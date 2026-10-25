@@ -136,6 +136,81 @@ profile v close-assault print and Italian pp aggregate TOE remain unresolved;
 formation current CPA, assigned equipment, readiness and supply remain scenario data.
 The AA profile dash cannot be replaced with a Bofors rating or the maximum TOE.
 
+### All catalogued formation arrival references
+
+`data/sources/formation-arrivals.json` transcribes **all 1,052 existing formation
+and counter-formation records across 87 visually inspected VASSAL OA charts**.
+These are source rows, not a new census of physical counters: attachments,
+replacement counters and optional organizations remain distinct, with explicit
+cross-references where the chart identifies the same unit elsewhere. No identity,
+nationality, artwork, token link, direct/current stat or shared profile is changed.
+
+```sh
+python3 scripts/import-catalog-db.py
+python3 scripts/import-catalog-db.py --project-stats
+python3 scripts/import-catalog-db.py --project-formations
+python3 scripts/import-unit-data.py
+python3 scripts/import-catalog-db.py --project-formations --check
+```
+
+Full import verifies locked chart hashes, complete/unique row coverage, existing
+formation membership and explicit profile agreement/overrides before atomic DB
+replacement. Reviewed arrival observations and exact equipment links live in
+`catalog_record.details_json.formation_arrival`; the initial schema and SQL ledger
+are unchanged. Patch-only still requires no original sources. The deterministic
+projection adds only `formation_reference` and allowlisted source locators to the
+compatibility catalog. It computes from DB effective stats, not frontend arithmetic
+or manually edited JSON. The sidecar carries the same record field unchanged.
+
+The additive v1 contract is specified by `docs/unit-reference.schema.json`:
+
+- `base_profile_id/name/note`, `base_stats`: attributed base chart characteristics.
+  The one reviewed chart/link disagreement (362 Artillery: printed `w`, existing
+  `ge-x`) uses `ge-w` **only in this arrival reference**, retaining `catalog_profile_id`.
+  Central India Horse uses the chart note's arrival infantry profile; its later
+  trained-profile disagreement remains explicit. Trieste/Trento row notes preserve `10+`.
+- `arrival`: original `toe_raw`, `arrives_raw` (stage/turn, `D`, text or null),
+  sourced `morale` and `toe_strength` Stats, row notes, citations and nullable
+  `related_record_id`. `arrival.stats` holds explicit coastal CPA overrides with
+  their restrictions; it is not current scenario state. Parenthesized morale is
+  the untrained value at arrival (4.45). Quantities are **TOE points, not vehicles**.
+- `components[]`: exact existing `record_id`, printed `label`, `name`, `kind`,
+  TOE Stat, `per_toe_stats` and nullable `land_barrage_toe`. The stat map contains
+  chart ratings and allowances with explicit units: CPA, armor and vulnerability
+  are **not** multiplied. An `N` component uses the profile maximum under 4.45;
+  `U@`/`O@` and printed weapon quantities override it. No equipment is inferred
+  from a unit name or a profile maximum.
+- `arrival_totals`: five Stat-shaped rule calculations. AA is Actual AA points
+  under 11.37/46.11; the four other combat sums are **Raw Points**, before division
+  by ten and action-level rounding (11.31–11.38). `raw` is the arithmetic expression,
+  not a claim of a printed total. Equipment-chart dashes contribute no points to
+  a sum (legend: N/A or zero); original nullable cells remain unchanged. Missing,
+  unverified, date/target-dependent or parenthesized inputs yield null with a
+  reason, not a partial numeric total. Coastal restrictions are retained.
+
+Consumers should use the arrival notes/limitations instead of the legacy record
+note's old "not transcribed" paragraph, and avoid duplicating the ordinary linked
+profile block. Do not infer assignments from `related_record_id` or sum parent
+formations: those links expressly prevent double counting. The private database,
+source document text and original image bytes are never exported by this mode.
+
+Representative contract fixtures (real catalog records; assertions in the fast tests):
+
+| Record | Expected distinction |
+| --- | --- |
+| `oa-124-002-13th-light-aa-regt` | 6 Bofors TOE × 1 = 6 AA points; profile AA dash stays null |
+| `oa-117-024-102nd-nh-light-anti-aircraft-anti-tank-regt` | 2 AT + 2 Bofors TOE; 2 AA points, conditional anti-armor withheld |
+| `oa-116-003-2nd-bays` | 8 Crusaders + 2 A13; 8 AA and 28 raw offensive assault points |
+| `oa-116-006-1st-rifle-brigade` | `10+` base CPA, 6 TOE, 12 raw offensive assault points |
+| `oa-165-065-gruppe-badde` | No printed loadout; profile maximum is not an assignment |
+| `oa-123-096-11th-royal-horse-arty-regt-bishop-refit-counter` | Optional conversion, not a new six-TOE arrival |
+| `oa-147-013-i-l-tank-bn-attached` | Blank local cells; related record, not another battalion |
+
+Coverage is complete **for those existing 1,052 source rows**, not for every
+possible scenario state. Blank codes/loadouts, optional refits, replacements,
+German profile v and Italian pp ambiguities remain explicit. No current strength,
+logistics state, historical vehicle census or unprinted arrival data is invented.
+
 Add `data/sql/patches/006-<description>.sql` (then 007, etc.). Filenames sort
 lexically, so keep the padded numbering. Use `counter_correction` for corrected
 counter labels, `stat_correction` for reviewed numeric/not-applicable overrides,

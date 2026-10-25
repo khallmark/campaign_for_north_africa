@@ -84,7 +84,49 @@
     },
     "record": {
       "type": "object", "required": ["id", "name", "unit_type", "source_refs", "stats"],
-      "properties": {"stats": {"type": "object", "additionalProperties": {"$ref": "#/$defs/stat"}}, "playable": {"const": false}}
+      "properties": {"stats": {"type": "object", "additionalProperties": {"$ref": "#/$defs/stat"}}, "playable": {"const": false}, "formation_reference": {"$ref": "#/$defs/formation_reference"}}
+    },
+    "stats": {"type": "object", "additionalProperties": {"$ref": "#/$defs/stat"}},
+    "formation_reference": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "scope", "base_profile_id", "base_profile_name", "base_profile_note", "base_stats", "printed_profile_code", "catalog_profile_id", "arrival", "components", "arrival_totals", "limitations"],
+      "properties": {
+        "schema_version": {"const": 1}, "scope": {"const": "historical_arrival_reference_not_current_state"},
+        "base_profile_id": {"type": ["string", "null"]}, "base_profile_name": {"type": ["string", "null"]},
+        "base_profile_note": {"type": "string"}, "base_stats": {"$ref": "#/$defs/stats"},
+        "printed_profile_code": {"type": ["string", "null"]}, "catalog_profile_id": {"type": ["string", "null"]},
+        "arrival": {
+          "type": "object", "additionalProperties": false,
+          "required": ["toe_raw", "arrives_raw", "note", "stats", "source_refs", "related_record_id", "toe_strength", "morale"],
+          "properties": {
+            "toe_raw": {"type": ["string", "null"]}, "arrives_raw": {"type": ["string", "null"]},
+            "note": {"type": "string"}, "stats": {"$ref": "#/$defs/stats"}, "source_refs": {"$ref": "#/$defs/strings"},
+            "related_record_id": {"type": ["string", "null"]},
+            "toe_strength": {"$ref": "#/$defs/stat"}, "morale": {"$ref": "#/$defs/stat"}
+          }
+        },
+        "components": {
+          "type": "array", "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["record_id", "name", "label", "kind", "toe", "per_toe_stats", "land_barrage_toe"],
+            "properties": {
+              "record_id": {"type": ["string", "null"]}, "name": {"type": "string"}, "label": {"type": "string"},
+              "kind": {"enum": ["equipment", "profile"]}, "toe": {"$ref": "#/$defs/stat"},
+              "per_toe_stats": {"$ref": "#/$defs/stats"}, "land_barrage_toe": {"type": ["integer", "null"], "minimum": 0}
+            }
+          }
+        },
+        "arrival_totals": {
+          "type": "object", "additionalProperties": false,
+          "required": ["anti_air", "barrage", "anti_armor", "close_assault_offensive", "close_assault_defensive"],
+          "properties": {
+            "anti_air": {"$ref": "#/$defs/stat"}, "barrage": {"$ref": "#/$defs/stat"},
+            "anti_armor": {"$ref": "#/$defs/stat"}, "close_assault_offensive": {"$ref": "#/$defs/stat"},
+            "close_assault_defensive": {"$ref": "#/$defs/stat"}
+          }
+        },
+        "limitations": {"type": "string"}
+      }
     },
     "stat": {
       "type": "object", "required": ["value", "status", "raw", "note", "source_refs", "conditional"],

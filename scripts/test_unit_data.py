@@ -48,6 +48,20 @@ class UnitDataTests(unittest.TestCase):
                 unit["generated_art"]["status"] = status
                 self.validator.validate({**self.reference, "units": [unit], "counters": [counter]})
 
+    def test_formation_reference_contract_rejects_partial_totals_and_private_fields(self):
+        record = self.records['oa-124-002-13th-light-aa-regt']
+        for mutation in ('unresolved-number', 'missing-unit-shape', 'private-field'):
+            changed = copy.deepcopy(record)
+            reference = changed['formation_reference']
+            if mutation == 'unresolved-number':
+                reference['arrival_totals']['anti_air']['status'] = 'unresolved'
+            elif mutation == 'missing-unit-shape':
+                reference['components'][0]['toe'] = 6
+            else:
+                reference['private_text'] = 'not an allowed projection field'
+            with self.subTest(mutation=mutation):
+                self.assertFalse(self.validator.is_valid({**self.reference, 'records': [changed]}))
+
     def test_schema_rejects_ready_art_without_canonical_paths(self):
         ready = next(u for u in self.reference["units"] if u["generated_art"]["status"] == "ready")
         for field in ["portrait_path", "atlas_path"]:

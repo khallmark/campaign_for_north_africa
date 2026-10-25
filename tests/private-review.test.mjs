@@ -131,6 +131,7 @@ for (const enabled of [false, true]) {
     const privateBytes = Buffer.from('SQLite format 3\0PRIVATE_DATABASE_FIXTURE');
     for (const suffix of ['', '-wal', '-shm', '-journal']) {
       await writeFile(join(root, `data/catalog.sqlite${suffix}`), privateBytes);
+      await writeFile(join(root, `data/map.sqlite${suffix}`), privateBytes);
     }
     await writeFile(join(root, 'public/data/safe.json'), '{"safe":true}');
     await writeFile(join(root, '.env'), 'PRIVATE_ENV_FIXTURE=1');
@@ -155,6 +156,8 @@ for (const enabled of [false, true]) {
       '/data/catalog.sqlite-wal', '/data/catalog.sqlite-shm', '/data/catalog.sqlite-journal',
       '/.env', '/secret.pem',
     ];
+    paths.push(...paths.filter(path => path.includes('catalog')).map(path => path.replaceAll('catalog', 'map')));
+    paths.push('/data/%6dap.sqlite', '/data/map%2esqlite');
     for (const name of Object.keys(assets)) {
       const image = '/docs/CNAv2.1.0/images/' + encodeURIComponent(name);
       for (const prefix of ['', `/@fs/${root}`]) {

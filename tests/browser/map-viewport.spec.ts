@@ -190,3 +190,79 @@ test('failed tiles retain placeholders and touch pinch preserves its midpoint', 
   expect((await state(page)).zoom).toBe(after.zoom);
   await cdp.detach();
 });
+
+test('source geometry and evidence remain inspectable without artwork or movement authority', async ({ page }) => {
+  await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'Unavailable' }));
+  await open(page);
+  await expect(page.locator('.geography-coverage')).toContainText('7180 source-grid hexes');
+  const input = page.getByRole('textbox', { name: 'Hex identity', exact: true });
+  const inspect = async (id: string) => {
+    await input.fill(id);
+    await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  };
+  await inspect('D3714');
+  await expect(page.locator('.geography-inspector')).toContainText('Mersa Matruh');
+  await expect(page.locator('.geography-inspector')).toContainText('Terrain unmapped — not Clear');
+  await expect(page.locator('.geography-inspector')).toContainText('printed identity and seams unresolved');
+  await page.locator('.geography-inspector summary').first().click();
+  await expect(page.locator('.geography-inspector')).toContainText('e82f995e213da486004d006e5b7fd1f6e49e7464fb7fd2db23f36bbbc57b14b4');
+  const s = await state(page);
+  const polygon = await page.locator('.geography-selected').getAttribute('points');
+  const vertices = polygon!.split(' ').map(p => p.split(',').map(Number));
+  expect(vertices.reduce((sum, p) => sum + p[0], 0) / 6).toBeCloseTo((9648.5 - s.x) * s.zoom + s.width / 2, 1);
+  expect(vertices.reduce((sum, p) => sum + p[1], 0) / 6).toBeCloseTo((1880.45 - s.y) * s.zoom + s.height / 2, 1);
+  expect(await page.locator('.geography-link.road').count()).toBeGreaterThan(0);
+  expect(await page.locator('.geography-link.railroad').count()).toBeGreaterThan(0);
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await expect(page.locator('.geography-link')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await page.getByRole('button', { name: 'Hex grid', exact: true }).click();
+  await expect(page.locator('.geography-hex')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Hex grid', exact: true }).click();
+  await inspect('D3814');
+  await expect(page.locator('.geography-inspector')).toContainText('operational hex association unresolved');
+  await inspect('A3033');
+  await expect(page.locator('.geography-hex[data-hex=A3033]')).toHaveCount(1);
+  await expect(page.locator('.geography-hex[data-hex=B3000]')).toHaveCount(1);
+  await expect(page.locator('.geography-inspector')).toContainText('A3033 · section-local identity');
+  const aLabel = (await page.locator('.geography-id').filter({ hasText: /^A3033$/ }).boundingBox())!;
+  const bLabel = (await page.locator('.geography-id').filter({ hasText: /^B3000$/ }).boundingBox())!;
+  expect(bLabel.y).toBeGreaterThanOrEqual(aLabel.y + aLabel.height);
+  await inspect('B3000');
+  await expect(page.locator('.geography-inspector')).toContainText('B3000 · section-local identity');
+  await inspect('D3033');
+  const dLabel = (await page.locator('.geography-id').filter({ hasText: /^D3033$/ }).boundingBox())!;
+  const eLabel = (await page.locator('.geography-id').filter({ hasText: /^E3000$/ }).boundingBox())!;
+  expect(eLabel.y).toBeGreaterThanOrEqual(dLabel.y + dLabel.height);
+  await inspect('C9999');
+  await expect(page.locator('.geography-inspector')).toContainText('No source-grid hex here');
+  await expect(page.locator('.geography-selected')).toHaveCount(0);
+  await expect(page.locator('.board-counter')).toHaveCount(0);
+});
+
+test('inspect mode selects a hex with pointer and keyboard, not a counter placement', async ({ page }) => {
+  await open(page);
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('D3714');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  await page.getByRole('button', { name: 'Inspect mode', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Inspect mode', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  // Close evidence to expose the whole center for keyboard inspection.
+  await page.locator('.geography-details > summary').click();
+  const bounds = (await page.locator('.research-viewport').boundingBox())!;
+  const selected = (await page.locator('.geography-selected').boundingBox())!;
+  await page.mouse.click(selected.x + selected.width / 2 + 85.25, selected.y + selected.height / 2);
+  await expect(page.locator('.geography-inspector')).toContainText('D3715 · section-local identity');
+  await page.locator('.geography-details > summary').click();
+  await page.locator('.research-viewport').focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.geography-inspector')).not.toContainText('D3715 · section-local identity');
+  await expect(page.locator('.geography-details')).toHaveAttribute('open', '');
+  await expect(page.locator('.board-counter')).toHaveCount(0);
+  // Drag still pans in inspect mode without selecting another cell.
+  const before = await state(page);
+  await page.mouse.move(bounds.x + bounds.width * .6, bounds.y + bounds.height * .8);
+  await page.mouse.down();
+  await page.mouse.move(bounds.x + bounds.width * .6 - 60, bounds.y + bounds.height * .8);
+  await page.mouse.up();
+  expect((await state(page)).x - before.x).toBeCloseTo(60, 3);
+});

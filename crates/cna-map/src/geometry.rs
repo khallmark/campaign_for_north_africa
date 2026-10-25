@@ -148,6 +148,27 @@ pub fn center(hex: HexId) -> BoardPoint {
     grids()[hex.section() as usize].center(hex)
 }
 
+/// Calibrated center membership in the source section polygon, not playable land.
+pub fn contains_hex(hex: HexId) -> bool {
+    grids()[hex.section() as usize].contains(center(hex))
+}
+
+/// Complete center-in-polygon inventory. Overlapping sections retain distinct IDs.
+pub fn hexes() -> &'static [HexId] {
+    static HEXES: OnceLock<Vec<HexId>> = OnceLock::new();
+    HEXES.get_or_init(|| {
+        MapSection::ALL
+            .into_iter()
+            .flat_map(|section| {
+                (0..100).flat_map(move |col| {
+                    (0..100).map(move |row| HexId::new(section, col, row).unwrap())
+                })
+            })
+            .filter(|&hex| contains_hex(hex))
+            .collect()
+    })
+}
+
 /// Pointy-top Voronoi corners clockwise, starting at the top of the east edge.
 /// This preserves the measured centers and perpendicular shared-edge normals.
 pub fn corners(hex: HexId) -> [BoardPoint; 6] {

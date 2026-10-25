@@ -394,6 +394,8 @@
 .geography-link.unresolved { stroke: #ac3c65; stroke-width: 2; stroke-dasharray: 2 5; opacity: 0.8; }
 .geography-location { fill: #f8e6a2; stroke: #24594f; stroke-width: 2; }
 .geography-location.unresolved { fill: none; stroke: #ac3c65; }
+.terrain-art-key { color: #4b5b58; margin: 8px 0; line-height: 1.45; }
+.geography-switches button:disabled { opacity: 0.4; cursor: default; }
 .research-board[data-source-visible=false] { visibility: hidden; }
 #map-research .geography-tools {
   position: absolute;

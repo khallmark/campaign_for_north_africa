@@ -21,11 +21,11 @@ async function open(page: Page) {
   await expect(page.getByRole('region', { name: 'Full-board map', exact: true })).toBeVisible();
 }
 
-test('missing artwork stays explicit and simulation actions do not alter the board', async ({ page }) => {
+test('bundled art replaces missing scans and simulation actions do not alter the board', async ({ page }) => {
   await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'Unavailable' }));
   await open(page);
-  await expect(page.locator('.research-status')).toContainText('Artwork unavailable');
-  await expect(page.locator('.research-unavailable')).toHaveText('Source artwork is not bundled');
+  await expect(page.locator('.research-status')).toContainText('Original terrain art');
+  await expect(page.locator('.research-unavailable')).toHaveCount(0);
   await expect(page.locator('.research-tile')).toHaveCount(0);
   await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
   const before = await state(page);
@@ -56,6 +56,7 @@ test('a small overview covers loading tiles until full detail arrives', async ({
   try {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('.research-board')).toHaveAttribute('data-ready', 'true');
+    await page.getByRole('button', { name: 'Source scan', exact: true }).click();
     await expect(page.locator('.research-overview')).toBeVisible();
     await expect(page.locator('.research-tile').first()).not.toHaveAttribute('data-ready', 'true');
     await expect(page.locator('.research-tile').first().locator('span')).toBeHidden();
@@ -68,6 +69,12 @@ test('a small overview covers loading tiles until full detail arrives', async ({
     await expect(page.locator('.research-tile').first().locator('span')).toBeVisible();
     await expect(page.locator('.research-tile').first()).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
     expect(overviewRequests).toBe(1);
+    await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Source scan', exact: true })).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.locator('.research-board')).toHaveAttribute('data-source-visible', 'false');
+    await page.getByRole('button', { name: 'Source scan', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Original terrain', exact: true })).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.locator('.research-board')).toHaveAttribute('data-source-visible', 'true');
   } finally {
     release();
   }
@@ -88,6 +95,7 @@ test('tiles follow drag, cursor zoom and a bounded visible ring', async ({ page 
     await route.fulfill({ contentType: 'image/svg+xml', body: `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="100%" height="100%" fill="#dce3d0"/><path d="M0 0H${width}V${height}H0Z" fill="none" stroke="#647653"/><text x="12" y="28" fill="#34422f" font-size="16">SYNTHETIC ${z}:${x}:${y}</text></svg>` });
   });
   await open(page);
+  await page.getByRole('button', { name: 'Source scan', exact: true }).click();
   await expect(page.locator('.research-status')).toContainText('Source map loaded');
   await expect(page.locator('.research-unavailable')).toBeHidden();
   await expect(page.locator('.research-tile[data-ready=true]').first()).toBeVisible();
@@ -155,6 +163,7 @@ test('failed tiles retain placeholders and touch pinch preserves its midpoint', 
   await page.route('**/tiles/map/manifest.json', route => route.fulfill({ json: manifest }));
   await page.route(/\/tiles\/map\/\d+\/\d+_\d+\.png$/, route => route.fulfill({ status: 404, body: 'Missing tile' }));
   await open(page);
+  await page.getByRole('button', { name: 'Source scan', exact: true }).click();
   await expect(page.locator('.research-tile[data-ready=false]').first()).toBeVisible();
   await expect(page.locator('.research-tile').first()).toContainText('loading or unavailable');
   await expect(page.locator('.research-tile').first().locator('img')).toBeHidden();

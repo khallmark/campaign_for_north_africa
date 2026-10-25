@@ -1,0 +1,1250 @@
+{
+  "version": 1,
+  "units": "normalized image coordinates; x right, y down",
+  "geometry_authority": "crates/cna-map/src/geometry.rs and calibration.rs",
+  "board_pixels": [
+    14310,
+    4632
+  ],
+  "per_hex_art_contract": false,
+  "rendering": "illustrative decals; not seamless textures or geographic centerlines",
+  "unknown": {
+    "fill": "#d8dcdf",
+    "asset": "unknown",
+    "label": "Unknown"
+  },
+  "construction_variants": {
+    "road": "road_unfinished",
+    "railroad": "railroad_unfinished"
+  },
+  "construction_policy": "explicit construction evidence only; provisional does not mean unfinished",
+  "recipes": {
+    "terrain": {
+      "clear": {
+        "surface": "clear",
+        "stamps": []
+      },
+      "gravel": {
+        "surface": "gravel",
+        "stamps": []
+      },
+      "salt_marsh": {
+        "surface": "salt_marsh",
+        "stamps": []
+      },
+      "heavy_vegetation": {
+        "surface": "heavy_vegetation",
+        "stamps": []
+      },
+      "rough": {
+        "surface": "rough",
+        "stamps": []
+      },
+      "mountain": {
+        "surface": "mountain",
+        "stamps": []
+      },
+      "delta": {
+        "surface": "delta",
+        "stamps": []
+      },
+      "desert": {
+        "surface": "desert",
+        "stamps": []
+      },
+      "swamp": {
+        "surface": "swamp",
+        "stamps": []
+      },
+      "major_city": {
+        "surface": null,
+        "stamps": [
+          "major_city"
+        ]
+      },
+      "village_bir_oasis": {
+        "surface": null,
+        "stamps": [
+          "village_bir_oasis"
+        ]
+      },
+      "fortification_level_one": {
+        "surface": null,
+        "stamps": [
+          "fortification_level_one"
+        ]
+      },
+      "fortification_level_two": {
+        "surface": null,
+        "stamps": [
+          "fortification_level_two"
+        ]
+      },
+      "fortification_level_three": {
+        "surface": null,
+        "stamps": [
+          "fortification_level_three"
+        ]
+      },
+      "friendly_minefield": {
+        "surface": null,
+        "stamps": [
+          "minefield",
+          "friendly_badge"
+        ],
+        "requires": "viewer-relative simulation state; not permanent geography"
+      },
+      "enemy_minefield": {
+        "surface": null,
+        "stamps": [
+          "minefield",
+          "enemy_badge"
+        ],
+        "requires": "viewer-relative simulation state; not permanent geography"
+      }
+    },
+    "hexside": {
+      "railroad": {
+        "asset": "railroad"
+      },
+      "road": {
+        "asset": "road"
+      },
+      "track": {
+        "asset": "track"
+      },
+      "ridge": {
+        "asset": "ridge"
+      },
+      "wadi": {
+        "asset": "wadi"
+      },
+      "major_river": {
+        "asset": "major_river"
+      },
+      "minor_river": {
+        "asset": "minor_river"
+      },
+      "coast": {
+        "asset": "coast"
+      },
+      "sea": {
+        "asset": "sea"
+      },
+      "pipeline": {
+        "asset": "pipeline"
+      },
+      "up_slope": {
+        "asset": "slope",
+        "high_side": "toward_neighbor"
+      },
+      "down_slope": {
+        "asset": "slope",
+        "high_side": "toward_canonical_hex"
+      },
+      "up_escarpment": {
+        "asset": "escarpment",
+        "high_side": "toward_neighbor"
+      },
+      "down_escarpment": {
+        "asset": "escarpment",
+        "high_side": "toward_canonical_hex"
+      }
+    },
+    "point": {
+      "major_city": {
+        "asset": "major_city"
+      },
+      "village": {
+        "asset": "village"
+      },
+      "bir": {
+        "asset": "bir"
+      },
+      "oasis": {
+        "asset": "oasis"
+      },
+      "well": {
+        "asset": "well"
+      },
+      "airfield": {
+        "asset": "airfield"
+      },
+      "landing_strip": {
+        "asset": "landing_strip"
+      },
+      "flying_boat_basin": {
+        "asset": "flying_boat_basin"
+      },
+      "port": {
+        "asset": "port",
+        "requires": "retain efficiency_ref; art implies no capacity"
+      },
+      "fortification": {
+        "level": {
+          "one": "fortification_level_one",
+          "two": "fortification_level_two",
+          "three": "fortification_level_three"
+        }
+      }
+    }
+  },
+  "assets": {
+    "clear": {
+      "path": "surfaces/clear.png",
+      "size": [
+        402,
+        402
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "surface",
+      "alpha": false,
+      "master": "surfaces",
+      "source_box": [
+        8,
+        8,
+        410,
+        410
+      ],
+      "padding": 0,
+      "sha256": "a25b220608bc7fa6a93f4834fb406c1e1458c74796cb54090c43a885316b6b44"
+    },
+    "gravel": {
+      "path": "surfaces/gravel.png",
+      "size": [
+        402,
+        402
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "surface",
+      "alpha": false,
+      "master": "surfaces",
+      "source_box": [
+        426,
+        8,
+        828,
+        410
+      ],
+      "padding": 0,
+      "sha256": "5fa7743ab42b8e97a3e23a16d0e2135dd20d6792578fda98ae2f1533597437b4"
+    },
+    "salt_marsh": {
+      "path": "surfaces/salt_marsh.png",
+      "size": [
+        402,
+        402
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "surface",
+      "alpha": false,
+      "master": "surfaces",
+      "source_box": [
+        844,
+        8,
+        1246,
+        410
+      ],
+      "padding": 0,
+      "sha256": "9f889686fe01d3bf16ee4785675174fbbe5b077ae915648a6ca4b5247dcb5e0e"
+    },
+    "heavy_vegetation": {
+      "path": "surfaces/heavy_vegetation.png",
+      "size": [
+        402,
+        402
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "surface",
+      "alpha": false,
+      "master": "surfaces",
+      "source_box": [
+        8,
+        426,
+        410,
+        828
+      ],
+      "padding": 0,
+      "sha256": "c49d7b416a44a8e3fd79900899d4a2f0582e0cca87768a329924a920eb2dc4d7"
+    },
+    "rough": {
+      "path": "surfaces/rough.png",
+      "size": [
+        402,
+        402
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "surface",
+      "alpha": false,
+      "master": "surfaces",
+      "source_box": [
+        426,
+        426,
+        828,
+        828
+      ],
+      "padding": 0,
+      "sha256": "4d83fa6051734f7bcfc395598cb48050902566e4caa64c37490d3bfcb1768b9a"
+    },
+    "mountain": {
+      "path": "surfaces/mountain.png",
+      "size": [
+        402,
+        402
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "surface",
+      "alpha": false,
+      "master": "surfaces",
+      "source_box": [
+        844,
+        426,
+        1246,
+        828
+      ],
+      "padding": 0,
+      "sha256": "3be53d2d3eaee96f1066cb425fa6d10cc91e43f8ad1c7f45f6d73d841eb37259"
+    },
+    "delta": {
+      "path": "surfaces/delta.png",
+      "size": [
+        402,
+        402
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "surface",
+      "alpha": false,
+      "master": "surfaces",
+      "source_box": [
+        8,
+        844,
+        410,
+        1246
+      ],
+      "padding": 0,
+      "sha256": "84c66dd7e41c2805e2cc1740b78520ce9a3bbc1aedd2c905e97adf45d4feddf5"
+    },
+    "desert": {
+      "path": "surfaces/desert.png",
+      "size": [
+        402,
+        402
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "surface",
+      "alpha": false,
+      "master": "surfaces",
+      "source_box": [
+        426,
+        844,
+        828,
+        1246
+      ],
+      "padding": 0,
+      "sha256": "a73e603928bea2d05fd22d554bcc6097d4362745f879fd7830aea47eb9b2cc0b"
+    },
+    "swamp": {
+      "path": "surfaces/swamp.png",
+      "size": [
+        402,
+        402
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "surface",
+      "alpha": false,
+      "master": "surfaces",
+      "source_box": [
+        844,
+        844,
+        1246,
+        1246
+      ],
+      "padding": 0,
+      "sha256": "51e656b7a807f132e6c70016626fec14cb9e0ace062660f3907a85428276d47b"
+    },
+    "road": {
+      "path": "overlays/road.png",
+      "size": [
+        571,
+        99
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "strip",
+      "alpha": true,
+      "master": "transport",
+      "source_box": [
+        38,
+        199,
+        593,
+        282
+      ],
+      "padding": 8,
+      "sha256": "602acbebb411e7c45ae493f84d8ef723ccb14f8b0653bf1dc71ace84b00cf5a7",
+      "anchors": [
+        [
+          0.063047,
+          0.47761
+        ],
+        [
+          0.935201,
+          0.500063
+        ]
+      ]
+    },
+    "road_unfinished": {
+      "path": "overlays/road_unfinished.png",
+      "size": [
+        560,
+        102
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "strip",
+      "alpha": true,
+      "master": "transport",
+      "source_box": [
+        669,
+        198,
+        1213,
+        284
+      ],
+      "padding": 8,
+      "sha256": "794399320baa4f82c64373d362241aa34a5ad11924693787988d89100ea04f44",
+      "anchors": [
+        [
+          0.0625,
+          0.487352
+        ],
+        [
+          0.935714,
+          0.48503
+        ]
+      ]
+    },
+    "railroad": {
+      "path": "overlays/railroad.png",
+      "size": [
+        561,
+        90
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "strip",
+      "alpha": true,
+      "master": "transport",
+      "source_box": [
+        46,
+        597,
+        591,
+        671
+      ],
+      "padding": 8,
+      "sha256": "65b52964d611e3d7bf7dca071c229fe60b8d577cee8b008794506b0245fe9f2b",
+      "anchors": [
+        [
+          0.062389,
+          0.503149
+        ],
+        [
+          0.935829,
+          0.501532
+        ]
+      ]
+    },
+    "railroad_unfinished": {
+      "path": "overlays/railroad_unfinished.png",
+      "size": [
+        550,
+        91
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "strip",
+      "alpha": true,
+      "master": "transport",
+      "source_box": [
+        676,
+        597,
+        1210,
+        672
+      ],
+      "padding": 8,
+      "sha256": "52805fa046b6cd4fed8f0210810724c8110b8678bd97861cb00a67295fa30366",
+      "anchors": [
+        [
+          0.063636,
+          0.491781
+        ],
+        [
+          0.934545,
+          0.488695
+        ]
+      ]
+    },
+    "major_river": {
+      "path": "overlays/major_river.png",
+      "size": [
+        572,
+        152
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "strip",
+      "alpha": true,
+      "master": "transport",
+      "source_box": [
+        38,
+        969,
+        594,
+        1105
+      ],
+      "padding": 8,
+      "sha256": "b736e488507bd043bff88b4d11ca96b03c6dd6c86d00a8803d51e3357227d11e",
+      "anchors": [
+        [
+          0.062937,
+          0.489471
+        ],
+        [
+          0.935315,
+          0.483341
+        ]
+      ]
+    },
+    "minor_river": {
+      "path": "overlays/minor_river.png",
+      "size": [
+        561,
+        72
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "strip",
+      "alpha": true,
+      "master": "transport",
+      "source_box": [
+        670,
+        1009,
+        1215,
+        1065
+      ],
+      "padding": 8,
+      "sha256": "520b35b1d1318081b69c0c35272a92937bc3ae93651a62844d7131386502b261",
+      "anchors": [
+        [
+          0.062389,
+          0.452808
+        ],
+        [
+          0.935829,
+          0.439793
+        ]
+      ]
+    },
+    "track": {
+      "path": "overlays/track.png",
+      "size": [
+        341,
+        124
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "strip",
+      "alpha": true,
+      "master": "features",
+      "source_box": [
+        50,
+        194,
+        375,
+        302
+      ],
+      "padding": 8,
+      "sha256": "e285cff7f6e6898a2c816dd848ba407779370efd882078d28f65f819ac94fb68",
+      "anchors": [
+        [
+          0.070381,
+          0.496683
+        ],
+        [
+          0.926686,
+          0.500249
+        ]
+      ]
+    },
+    "ridge": {
+      "path": "overlays/ridge.png",
+      "size": [
+        380,
+        137
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "strip",
+      "alpha": true,
+      "master": "features",
+      "source_box": [
+        445,
+        178,
+        809,
+        299
+      ],
+      "padding": 8,
+      "sha256": "cab46a421c0e1c21c22285e8226115f8ee1d51c1b49b152f63aa9ef5fc5139bd",
+      "anchors": [
+        [
+          0.068421,
+          0.468564
+        ],
+        [
+          0.928947,
+          0.466187
+        ]
+      ]
+    },
+    "slope": {
+      "path": "overlays/slope.png",
+      "size": [
+        342,
+        200
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "strip",
+      "alpha": true,
+      "master": "features",
+      "source_box": [
+        879,
+        142,
+        1205,
+        326
+      ],
+      "padding": 8,
+      "sha256": "fc255d559234e5fd7aa26421a34a785644b675a4d7218445c5f0c11cf4e2b48b",
+      "anchors": [
+        [
+          0.070175,
+          0.446904
+        ],
+        [
+          0.926901,
+          0.39033
+        ]
+      ],
+      "high_side_normal": [
+        0,
+        -1
+      ]
+    },
+    "escarpment": {
+      "path": "overlays/escarpment.png",
+      "size": [
+        345,
+        177
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "strip",
+      "alpha": true,
+      "master": "features",
+      "source_box": [
+        48,
+        557,
+        377,
+        718
+      ],
+      "padding": 8,
+      "sha256": "fe398ae7218c1394d09784ae919ddea1fcd10efeffbe05e4ef08e2d94ac667c5",
+      "anchors": [
+        [
+          0.069565,
+          0.309874
+        ],
+        [
+          0.927536,
+          0.355309
+        ]
+      ],
+      "high_side_normal": [
+        0,
+        -1
+      ]
+    },
+    "wadi": {
+      "path": "overlays/wadi.png",
+      "size": [
+        367,
+        272
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "strip",
+      "alpha": true,
+      "master": "features",
+      "source_box": [
+        453,
+        507,
+        804,
+        763
+      ],
+      "padding": 8,
+      "sha256": "27d3b6ec7e61b07e1754c35c79f62e713901a45230b72307b3e2dba5f2036027",
+      "anchors": [
+        [
+          0.070845,
+          0.50814
+        ],
+        [
+          0.926431,
+          0.513614
+        ]
+      ]
+    },
+    "coast": {
+      "path": "overlays/coast.png",
+      "size": [
+        353,
+        109
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "strip",
+      "alpha": true,
+      "master": "features",
+      "source_box": [
+        873,
+        587,
+        1210,
+        680
+      ],
+      "padding": 8,
+      "sha256": "dab4dceb806a672c3bb884b42d3787451866e29745dc650d463487a1c556dbb0",
+      "anchors": [
+        [
+          0.070822,
+          0.446768
+        ],
+        [
+          0.926346,
+          0.459569
+        ]
+      ],
+      "water_side_normal": [
+        0,
+        -1
+      ]
+    },
+    "pipeline": {
+      "path": "overlays/pipeline.png",
+      "size": [
+        347,
+        55
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "strip",
+      "alpha": true,
+      "master": "features",
+      "source_box": [
+        47,
+        1021,
+        378,
+        1060
+      ],
+      "padding": 8,
+      "sha256": "e450c50f4677b904fbbdd8ad88eea0c949f145e0d900d486eb99730842c90c25",
+      "anchors": [
+        [
+          0.069164,
+          0.491226
+        ],
+        [
+          0.927954,
+          0.490545
+        ]
+      ]
+    },
+    "sea": {
+      "path": "overlays/sea.png",
+      "size": [
+        292,
+        291
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "features",
+      "source_box": [
+        490,
+        900,
+        766,
+        1175
+      ],
+      "padding": 8,
+      "sha256": "58178adc12eacbb3433c8df4889a42abcd8fdab2c6f5293fa130d7f965ede741"
+    },
+    "unknown": {
+      "path": "overlays/unknown.png",
+      "size": [
+        271,
+        264
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "features",
+      "source_box": [
+        916,
+        913,
+        1171,
+        1161
+      ],
+      "padding": 8,
+      "sha256": "eca90ff74dce8df7df665b5a51e4b1bff6c631a841d1c43e784a98a645ba7b6f"
+    },
+    "major_city": {
+      "path": "overlays/major_city.png",
+      "size": [
+        265,
+        267
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        46,
+        52,
+        295,
+        303
+      ],
+      "padding": 8,
+      "sha256": "82a8606a55f716de90b566b1392d859c646916c5e142ed78a766740075f0dac7"
+    },
+    "village": {
+      "path": "overlays/village.png",
+      "size": [
+        239,
+        221
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        365,
+        80,
+        588,
+        285
+      ],
+      "padding": 8,
+      "sha256": "af06c3145d059d67b691cd4861f0c9a6a7e8bb498790850db2d9c5843744e1b9"
+    },
+    "bir": {
+      "path": "overlays/bir.png",
+      "size": [
+        207,
+        187
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        681,
+        98,
+        872,
+        269
+      ],
+      "padding": 8,
+      "sha256": "b63213b05fc258081203e9e17a2f9f0cbed3e691a6d59960e6ac22be4ad29fc8"
+    },
+    "oasis": {
+      "path": "overlays/oasis.png",
+      "size": [
+        264,
+        272
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        960,
+        43,
+        1208,
+        299
+      ],
+      "padding": 8,
+      "sha256": "05fc6d0d822d4c4e571a890eeda199b78aad3c0e833ff688af4ec0223ba11319"
+    },
+    "well": {
+      "path": "overlays/well.png",
+      "size": [
+        224,
+        211
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        64,
+        388,
+        272,
+        583
+      ],
+      "padding": 8,
+      "sha256": "0e4b12b4998fd2c187190cc846f03e8e123cb7049299d5ced214c59d217569c2"
+    },
+    "airfield": {
+      "path": "overlays/airfield.png",
+      "size": [
+        290,
+        270
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        351,
+        352,
+        625,
+        606
+      ],
+      "padding": 8,
+      "sha256": "7f4bd76b63bf5345b58e9a7087ab059abb48e528d26edf19313a757beb145eb9"
+    },
+    "landing_strip": {
+      "path": "overlays/landing_strip.png",
+      "size": [
+        116,
+        287
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        726,
+        336,
+        826,
+        607
+      ],
+      "padding": 8,
+      "sha256": "839f63e92ec92e30c269bc8bdbb0c1c5381b17571bc770c7ae34c0b4f3f7cc90"
+    },
+    "flying_boat_basin": {
+      "path": "overlays/flying_boat_basin.png",
+      "size": [
+        258,
+        242
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        957,
+        360,
+        1199,
+        586
+      ],
+      "padding": 8,
+      "sha256": "b9077f1c070f77faa61262b48f13f48f76af3987e905994851f322d288e6a4f7"
+    },
+    "port": {
+      "path": "overlays/port.png",
+      "size": [
+        268,
+        262
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        47,
+        654,
+        299,
+        900
+      ],
+      "padding": 8,
+      "sha256": "b7ef1e102a1f0e7a139ba8a6fb7aaa52b62e8d74e5fd3478e9dc1ad87e8421ec"
+    },
+    "fortification_level_one": {
+      "path": "overlays/fortification_level_one.png",
+      "size": [
+        271,
+        186
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        354,
+        693,
+        609,
+        863
+      ],
+      "padding": 8,
+      "sha256": "8d19087a9fdd29f5db6b82fe4bd63f490ac08dd7b7f385e967add1b9031ddcb9"
+    },
+    "fortification_level_two": {
+      "path": "overlays/fortification_level_two.png",
+      "size": [
+        288,
+        219
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        644,
+        673,
+        916,
+        876
+      ],
+      "padding": 8,
+      "sha256": "b6b9705e5cc1e413cfed740611467f0258058fcdd3decac6ed85b4025f1102ef"
+    },
+    "fortification_level_three": {
+      "path": "overlays/fortification_level_three.png",
+      "size": [
+        282,
+        244
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        951,
+        662,
+        1217,
+        890
+      ],
+      "padding": 8,
+      "sha256": "ce3f5a90b952f0ad390a957c1d81caf1db4c39e9dab944c426369a37b6c9c6ee"
+    },
+    "minefield": {
+      "path": "overlays/minefield.png",
+      "size": [
+        267,
+        260
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        39,
+        954,
+        290,
+        1198
+      ],
+      "padding": 8,
+      "sha256": "f34edb221da448a866f0e3ecc28c4e445d27ff070391cec083085a9e8e91bdcd"
+    },
+    "friendly_badge": {
+      "path": "overlays/friendly_badge.png",
+      "size": [
+        187,
+        184
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        389,
+        991,
+        560,
+        1159
+      ],
+      "padding": 8,
+      "sha256": "18fabfc2adffe06b0f03ce93cf20806f50d4af4021c32274cb5f2bdac842349b"
+    },
+    "enemy_badge": {
+      "path": "overlays/enemy_badge.png",
+      "size": [
+        203,
+        215
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        686,
+        975,
+        873,
+        1174
+      ],
+      "padding": 8,
+      "sha256": "04ef69b5f654912e2fbf79bc5060710141821433654829621595f30814fa77ec"
+    },
+    "village_bir_oasis": {
+      "path": "overlays/village_bir_oasis.png",
+      "size": [
+        249,
+        253
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "stamp",
+      "alpha": true,
+      "master": "points",
+      "source_box": [
+        969,
+        959,
+        1202,
+        1196
+      ],
+      "padding": 8,
+      "sha256": "cef8060a9c8a56aa16226122f5791e6fda1b974b05085da0e28f1428e4f0f4d8"
+    }
+  },
+  "masters": {
+    "surfaces": {
+      "path": "masters/surfaces.png",
+      "sha256": "197219c8b518bed37e0de3906586b801c49615d623211fe5f344ae6d3485b57a",
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "transport": {
+      "path": "masters/transport.png",
+      "sha256": "462dc6fb89bbcce65e66d3d4d92a65d11d37cc0eb66eed2dc167cf4b53f19457",
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "features": {
+      "path": "masters/features.png",
+      "sha256": "84a134d512ae7f31932478375564f400f51acfbc7c35b7cb7f181c548f962093",
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "points": {
+      "path": "masters/points.png",
+      "sha256": "fbe12a43a77ba4a8ea498b4983b4d4337fd22be65f9c7b6e72c30cfd05c8cea5",
+      "size": [
+        1254,
+        1254
+      ]
+    }
+  }
+}

@@ -128,14 +128,18 @@ impl Research {
                 self.geography.inspecting = !self.geography.inspecting;
                 Some(self.geography.inspecting)
             }
-            "source" => {
+            "art" => {
+                self.geography.original_art = !self.geography.original_art;
+                if self.geography.original_art {
+                    self.source_visible = false;
+                }
+                Some(self.geography.original_art)
+            }
+            "source" if self.manifest.is_some() => {
                 self.source_visible = !self.source_visible;
-                self.board
-                    .set_attribute(
-                        "data-source-visible",
-                        if self.source_visible { "true" } else { "false" },
-                    )
-                    .unwrap();
+                if self.source_visible {
+                    self.geography.original_art = false;
+                }
                 Some(self.source_visible)
             }
             _ => None,
@@ -207,6 +211,30 @@ impl Research {
         let Some(v) = self.viewport else {
             return;
         };
+        for (control, enabled) in [
+            ("art", self.geography.original_art),
+            ("source", self.source_visible),
+        ] {
+            self.root
+                .query_selector(&format!("[data-map-control={control}]"))
+                .unwrap()
+                .unwrap()
+                .set_attribute("aria-pressed", if enabled { "true" } else { "false" })
+                .unwrap();
+        }
+        self.board
+            .set_attribute(
+                "data-source-visible",
+                if self.source_visible { "true" } else { "false" },
+            )
+            .unwrap();
+        self.status.set_text_content(Some(if self.geography.original_art {
+            "Original terrain art · inset textures show presence, not extent · gray = unknown · routes schematic"
+        } else if self.source_visible {
+            "Source map loaded · terrain and seams unverified"
+        } else {
+            "Geography evidence · provisional observations · routes schematic"
+        }));
         let center = v.center();
         let origin = v.to_screen(BoardPoint { x: 0.0, y: 0.0 });
         self.board
@@ -370,19 +398,14 @@ fn request_manifest(state: Rc<RefCell<Research>>) -> Result<(), JsValue> {
             }
             state.manifest = Some(manifest);
             state
-                .surface
-                .query_selector(".research-unavailable")
+                .root
+                .query_selector("[data-map-control=source]")
                 .unwrap()
                 .unwrap()
-                .set_attribute("hidden", "")
+                .remove_attribute("disabled")
                 .unwrap();
-            state
-                .status
-                .set_text_content(Some("Source map loaded · terrain and seams unverified"));
-            state.render();
-        } else {
-            state.status.set_text_content(Some("Artwork unavailable · configure private-review tiles; public builds do not bundle source artwork."));
         }
+        state.render();
         // One request per page; release its callback after completion.
         request.set_onloadend(None);
     });
@@ -400,17 +423,18 @@ pub fn mount() -> Result<(), JsValue> {
     root.set_id("map-research");
     root.set_attribute("open", "")?;
     root.set_inner_html(r#"<div class="research-controls" aria-label="Map controls"><button data-map-control="overview" aria-label="Fit full board"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></svg></button><button data-map-control="gameplay" aria-label="Map detail scale">1:1</button><button data-map-control="out" aria-label="Zoom out map">−</button><button data-map-control="in" aria-label="Zoom in map">+</button></div>
-      <p class="research-status" role="status">Checking local tile manifest…</p>
+      <p class="research-status" role="status">Original terrain art</p>
       <div class="geography-tools">
-        <div class="geography-switches"><button data-map-control="grid" aria-pressed="true">Hex grid</button><button data-map-control="features" aria-pressed="true">Geography</button><button data-map-control="source" aria-pressed="true">Source scan</button><button data-map-control="inspect" aria-pressed="false">Inspect mode</button></div>
+        <div class="geography-switches"><button data-map-control="art" aria-pressed="true">Original terrain</button><button data-map-control="grid" aria-pressed="true">Hex grid</button><button data-map-control="features" aria-pressed="true">Geography</button><button data-map-control="source" aria-pressed="false" disabled>Source scan</button><button data-map-control="inspect" aria-pressed="false">Inspect mode</button></div>
         <form class="geography-search"><label for="geography-id">Hex identity</label><input id="geography-id" placeholder="D3714" maxlength="10" autocomplete="off"><button type="submit">Inspect hex</button></form>
         <p class="geography-coverage"></p>
         <details class="geography-details"><summary>Hex evidence</summary>
+          <p class="terrain-art-key">Inset art = presence, not extent. Gray = unknown. Try B0526 (desert) / B5614 (mountain).</p>
           <p class="geography-key">Terrain/water tint = provisional · orange road / dark railroad with ties / dotted track · blue hexside · magenta side/dot = unresolved · links show connectivity, not exact linework · raster examination is not complete transcription</p>
           <div class="geography-inspector" aria-live="polite">Enable Inspect mode and click a hex, or enter its section-local identity. Enter inspects the viewport center. Grid labels appear at detail scale.</div>
         </details>
       </div>
-      <div class="research-viewport" tabindex="0" role="region" aria-label="Full-board map" aria-describedby="research-help"><div class="research-board"></div><div id="board-counters"></div><span class="research-unavailable">Source artwork is not bundled</span></div>
+      <div class="research-viewport" tabindex="0" role="region" aria-label="Full-board map" aria-describedby="research-help"><div class="research-board" data-source-visible="false"></div><div id="board-counters"></div></div>
       <div class="research-footer"><p id="research-help">Drag to pan · scroll to zoom · arrows / + / − / Home</p><output class="research-readout"></output></div>"#);
     document()
         .query_selector(".board-workspace")?
@@ -436,7 +460,7 @@ pub fn mount() -> Result<(), JsValue> {
         press: None,
         dragged: false,
         geography: Geography::new(&root),
-        source_visible: true,
+        source_visible: false,
     }));
     RESEARCH.with(|current| *current.borrow_mut() = Some(state.clone()));
     state.borrow_mut().resize();

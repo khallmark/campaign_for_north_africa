@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "created": "2026-10-25",
+  "generator": "Amp Painter / ChatGPT image generation",
+  "model_revision": "not exposed by Painter",
+  "authoring_thread": "https://ampcode.com/threads/T-01a172b1-ed46-7248-a363-942c87768a59",
+  "alignment_confirmation_thread": "https://ampcode.com/threads/T-01a171f6-55e2-718a-9d49-75285f7c2cc5",
+  "reference_images": [],
+  "source_policy": "Original text-to-image artwork. No scanned board, source tile, rulebook image, published game art or private image was supplied to Painter. Terrain vocabulary came from code and schema text only. This is provenance, not a legal warranty or a new license grant.",
+  "prompt_record": "Summaries below; exact generation prompts and tool outputs are retained in authoring_thread. All four requests asked for original fictional North African strategy-map gouache artwork, no labels or game-map references. Generation is nondeterministic; the checked-in masters are the reproducible extraction input.",
+  "postprocessing": "Pillow 12.0.0: equal-grid crops; 8px inset for opaque swatches; remove near-invisible alpha dust (alpha <= 8 becomes 0), alpha-bounds trim plus 8px transparent padding for overlays; PNG encoding. No external background removal, scan sampling, recoloring, generated geometry or painted paths. Manifest records exact crop boxes and output hashes.",
+  "masters": {
+    "surfaces": {
+      "attachment": "https://ampcode.com/user-content/attachments/468a035018c60eb522b22c66d831d0ffce20291023eebc529e79ceac09b4568d-file.png",
+      "sha256": "197219c8b518bed37e0de3906586b801c49615d623211fe5f344ae6d3485b57a",
+      "background": "opaque",
+      "requested_size": [1536, 1536],
+      "actual_size": [1254, 1254],
+      "prompt_summary": "3x3 full-bleed equal cells without gutters. Clear pale hardpan; gravel pebbles; salt-marsh mineral crust; heavy olive vegetation; rough ochre rocks; arid mountain crags; delta alluvial patchwork without rivers; golden desert dune ripples; swamp reeds and standing-water patches. No roads, rails, rivers, coastlines, buildings, symbols or hex outlines. Flat overhead lighting, quiet edges."
+    },
+    "transport": {
+      "attachment": "https://ampcode.com/user-content/attachments/416bc048f6641aae926fb772e77184dc74ab2593cdd7a7254c19ec46afae25a7-file.png",
+      "sha256": "462dc6fb89bbcce65e66d3d4d92a65d11d37cc0eb66eed2dc167cf4b53f19457",
+      "background": "transparent",
+      "requested_size": [1536, 1536],
+      "actual_size": [1254, 1254],
+      "prompt_summary": "2 columns x 3 rows, isolated horizontal strips with transparent margins. Finished continuous pale road; unfinished road with disconnected earthworks; finished two-rail railroad with sleepers; unfinished railroad with disconnected track and sleeper-only sections; broad turquoise major river with ochre banks; narrow minor river. No background ground plane, letters, grids or extra symbols."
+    },
+    "features": {
+      "attachment": "https://ampcode.com/user-content/attachments/01ce2802baa5f6fcf316989d2d733fffec22438a8e5a0703408a3eb74dcf5962-file.png",
+      "sha256": "84a134d512ae7f31932478375564f400f51acfbc7c35b7cb7f181c548f962093",
+      "background": "transparent",
+      "requested_size": [1536, 1536],
+      "actual_size": [1254, 1254],
+      "prompt_summary": "3x3 isolated features. Track wheel ruts; rocky ridge; gentle slope with high side at top; escarpment lip with high side at top; branching dry wadi without blue water; coast fringe with water above/beach below; jointed metal pipeline; circular blue sea patch; neutral slate diagonal unknown hatch. Transparent margins, no labels, no ground square."
+    },
+    "points": {
+      "attachment": "https://ampcode.com/user-content/attachments/672f0e6b3c0ececb875fca780ca3e5b0f5ef64c768330a4d6af80f3103569824-file.png",
+      "sha256": "fbe12a43a77ba4a8ea498b4983b4d4337fd22be65f9c7b6e72c30cfd05c8cea5",
+      "background": "transparent",
+      "requested_size": [1536, 1536],
+      "actual_size": [1254, 1254],
+      "prompt_summary": "4x4 isolated miniature stamps. Major city, village, bir cistern, oasis; well, crossed-runway airfield, simple landing strip, flying-boat basin; port, one/two/three-level fortifications; neutral minefield sign, friendly blue circle badge, enemy red diamond badge, abstract combined village/bir/oasis legend symbol. No lettering, nationality insignia, ships, aircraft, cast shadows or ground backgrounds. Illustrative symbols rather than factual building plans."
+    }
+  }
+}

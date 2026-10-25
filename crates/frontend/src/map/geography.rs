@@ -1,4 +1,5 @@
 //! Research geometry and evidence overlay, independent of counter placement.
+use super::art::Artwork;
 use crate::{document, view::escape};
 use cna_map::{
     geometry::{center, corners, edge, hexes},
@@ -12,8 +13,13 @@ use web_sys::Element;
 
 pub(super) struct Geography {
     svg: Element,
+    ground: Element,
+    drawing: Element,
     inspector: Element,
     records: Vec<Vec<MapRecord>>,
+    artwork: Artwork,
+    last_render: Option<(Viewport, [bool; 3], Option<HexId>)>,
+    pub original_art: bool,
     pub grid: bool,
     pub features: bool,
     pub inspecting: bool,
@@ -43,13 +49,29 @@ impl Geography {
         root.query_selector(".geography-coverage").unwrap().unwrap().set_text_content(Some(&format!(
             "{} source-grid hexes · {} raster examinations · {terrain_count} terrain observations · transcription incomplete · seams unresolved", hexes().len(), model().examinations.len()
         )));
+        let records: Vec<_> = model()
+            .surveys
+            .iter()
+            .map(|survey| survey.records())
+            .collect();
+        let artwork = Artwork::new(&records);
+        let ground = document()
+            .create_element_ns(Some("http://www.w3.org/2000/svg"), "g")
+            .unwrap();
+        ground.set_inner_html(&artwork.render_ground());
+        svg.append_child(&ground).unwrap();
+        let drawing = document()
+            .create_element_ns(Some("http://www.w3.org/2000/svg"), "g")
+            .unwrap();
+        svg.append_child(&drawing).unwrap();
         Self {
             svg,
-            records: model()
-                .surveys
-                .iter()
-                .map(|survey| survey.records())
-                .collect(),
+            ground,
+            drawing,
+            artwork,
+            records,
+            last_render: None,
+            original_art: true,
             inspector: root
                 .query_selector(".geography-inspector")
                 .unwrap()
@@ -156,10 +178,34 @@ impl Geography {
         self.inspector.set_inner_html(&html);
     }
 
-    pub fn render(&self, viewport: Viewport) {
+    pub fn render(&mut self, viewport: Viewport) {
+        let state = (
+            viewport,
+            [self.original_art, self.grid, self.features],
+            self.selected,
+        );
+        // Dialog/counter refreshes must not rebuild thousands of unchanged map cells.
+        if self.last_render == Some(state) {
+            return;
+        }
         let [width, height] = viewport.css_size();
         self.svg
             .set_attribute("viewBox", &format!("0 0 {width} {height}"))
+            .unwrap();
+        let origin = viewport.to_screen(cna_map::geometry::BoardPoint { x: 0.0, y: 0.0 });
+        self.ground
+            .set_attribute(
+                "transform",
+                &format!(
+                    "translate({} {}) scale({})",
+                    origin.x,
+                    origin.y,
+                    viewport.zoom()
+                ),
+            )
+            .unwrap();
+        self.ground
+            .set_attribute("display", if self.original_art { "inline" } else { "none" })
             .unwrap();
         self.svg
             .set_attribute(
@@ -187,6 +233,11 @@ impl Geography {
                 .join(" ")
         };
         let mut html = String::new();
+        let art_locations = if self.original_art {
+            self.artwork.render_points(viewport)
+        } else {
+            String::new()
+        };
         if self.features {
             let mut links = String::new();
             let mut railroads = String::new();
@@ -207,7 +258,9 @@ impl Geography {
             for records in &self.records {
                 for assignment in records {
                     match assignment {
-                        MapRecord::Terrain { hex, record } if visible(*hex) => {
+                        MapRecord::Terrain { hex, record }
+                            if visible(*hex) && !self.original_art =>
+                        {
                             let color = match &record.observation {
                                 Observation::Provisional { value }
                                 | Observation::Reviewed { value } => match value {
@@ -271,6 +324,9 @@ impl Geography {
                             let c = viewport.to_screen(center(*hex));
                             let unresolved =
                                 matches!(record.observation, Observation::Unresolved { .. });
+                            if self.original_art && !unresolved {
+                                continue;
+                            }
                             write!(locations, "<circle class=\"geography-location{}\" cx=\"{:.2}\" cy=\"{:.2}\" r=\"4\"/>", if unresolved {" unresolved"} else {""}, c.x,c.y).unwrap();
                         }
                         _ => {}
@@ -282,6 +338,7 @@ impl Geography {
             html.push_str(&links);
             html.push_str(&railroads);
             html.push_str(&locations);
+            html.push_str(&art_locations);
         }
         // Fine grid/IDs appear only when readable; full inventory still exists at fit.
         if self.grid && viewport.zoom() >= 0.22 {
@@ -319,6 +376,7 @@ impl Geography {
             )
             .unwrap();
         }
-        self.svg.set_inner_html(&html);
+        self.drawing.set_inner_html(&html);
+        self.last_render = Some(state);
     }
 }

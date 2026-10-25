@@ -101,3 +101,72 @@ fn census_cli_check_verifies_checked_in_output_without_writing() {
     );
     assert!(String::from_utf8_lossy(&output.stdout).contains("2468 slots"));
 }
+
+#[test]
+fn census_cli_check_detects_drift_and_missing_output_without_writing() {
+    use std::{fs, process::Command};
+
+    let root = std::env::temp_dir().join(format!("cna-census-check-{}", std::process::id()));
+    fs::create_dir(&root).unwrap();
+    fs::create_dir(root.join("images")).unwrap();
+    let module = root.join("buildFile.xml");
+    let output = root.join("pieces.json");
+    fs::write(&module, r#"<VASSAL.build.GameModule>
+      <VASSAL.build.module.PieceWindow name="Markers">
+        <VASSAL.build.widget.PieceSlot gpid="42" entryName="Weather">+/null/piece;;;weather.svg;Weather/null;0;0;42;0</VASSAL.build.widget.PieceSlot>
+      </VASSAL.build.module.PieceWindow>
+    </VASSAL.build.GameModule>"#).unwrap();
+    let run = |check: bool| {
+        let mut command = Command::new(env!("CARGO_BIN_EXE_vassal-census"));
+        command
+            .arg("--module")
+            .arg(&module)
+            .arg("--output")
+            .arg(&output);
+        if check {
+            command.arg("--check");
+        }
+        command.output().unwrap()
+    };
+
+    assert!(!run(true).status.success());
+    assert!(!output.exists(), "check created absent output");
+    let generated = run(false);
+    assert!(
+        generated.status.success(),
+        "{}",
+        String::from_utf8_lossy(&generated.stderr)
+    );
+    let original = fs::read(&output).unwrap();
+    let census: serde_json::Value = serde_json::from_slice(&original).unwrap();
+    assert_eq!(census["slots"][0]["gpid"], "42");
+    assert_eq!(
+        census["summary"]["missing_images"],
+        serde_json::json!(["weather.svg"])
+    );
+    assert!(run(true).status.success());
+    assert_eq!(fs::read(&output).unwrap(), original);
+
+    // Restoring a referenced image makes the old census stale without changing XML.
+    fs::write(root.join("images/weather.svg"), "<svg/>").unwrap();
+    let stale = run(true);
+    assert!(
+        !stale.status.success(),
+        "check accepted stale image availability"
+    );
+    assert!(String::from_utf8_lossy(&stale.stderr).contains("stale"));
+    assert_eq!(
+        fs::read(&output).unwrap(),
+        original,
+        "check rewrote stale output"
+    );
+    assert!(run(false).status.success());
+    let refreshed: serde_json::Value = serde_json::from_slice(&fs::read(&output).unwrap()).unwrap();
+    assert_eq!(
+        refreshed["summary"]["missing_images"],
+        serde_json::json!([])
+    );
+    assert_eq!(refreshed["slots"][0]["images"][0]["exists"], true);
+    assert!(run(true).status.success());
+    fs::remove_dir_all(root).unwrap();
+}

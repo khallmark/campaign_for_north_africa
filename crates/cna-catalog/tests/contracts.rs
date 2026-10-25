@@ -63,6 +63,47 @@ fn redirects_follow_chains_and_reject_ambiguous_or_broken_graphs() {
 }
 
 #[test]
+fn source_art_requires_reviewed_complete_assets_and_matches_source_rows() {
+    let mut fixture = json!({
+        "schema_version": 1,
+        "entries": [{
+            "id": "canonical-unit", "name": "Unit", "role_id": null,
+            "side": "allied", "entity_kind": "formation_candidate",
+            "identity_status": "source_identified",
+            "source_entry_ids": ["oa-row", "counter-row"],
+            "sprite": {"status": "ready", "portrait_path": "/portrait.png", "atlas_path": "/atlas.png"}
+        }]
+    });
+    for (status, portrait, atlas, expected) in [
+        (
+            "ready",
+            Some("/portrait.png"),
+            Some("/atlas.png"),
+            Some("/portrait.png"),
+        ),
+        ("candidate", Some("/portrait.png"), Some("/atlas.png"), None),
+        ("ready", Some("/portrait.png"), None, None),
+        ("ready", None, Some("/atlas.png"), None),
+        ("missing", None, None, None),
+    ] {
+        fixture["entries"][0]["sprite"] = json!({
+            "status": status, "portrait_path": portrait, "atlas_path": atlas
+        });
+        let inventory = Inventory::parse(&fixture.to_string()).unwrap();
+        let note = if expected.is_some() {
+            "Unique identity artwork"
+        } else {
+            "Unique art missing — shared role placeholder"
+        };
+        for source in ["oa-row", "counter-row"] {
+            assert_eq!(inventory.source_art(source), Some((expected, note)));
+        }
+        assert_eq!(inventory.source_art("canonical-unit"), None);
+        assert_eq!(inventory.source_art("unknown-row"), None);
+    }
+}
+
+#[test]
 fn instance_references_reject_stats_instead_of_silently_discarding_them() {
     use cna_catalog::ScenarioInstanceRef;
     let reference: ScenarioInstanceRef =

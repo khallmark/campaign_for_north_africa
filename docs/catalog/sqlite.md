@@ -149,6 +149,6 @@ The fast suite covers patch ordering/once-only application, changed/deleted/earl
 history, failure atomicity/retry, re-import preservation, source-write rejection,
 missing linked GPIDs, redirect integrity, unknown versus zero, nullable
 corrections, token/generated-art separation, private-output rejection, and the committed DB read contract.
-There is no public projection to certify yet. On infrastructure integration,
-append the first command to `test:functional` and the second to `test:source-data`,
-retaining `test_unit_data.py`; do not silently treat absent tests as success.
+There is no public projection to certify yet. The first command is included in
+`test:functional` and the second in `test:source-data`, retaining `test_unit_data.py`.
+Run `npm run check`, `npm run test:e2e` and, with hydrated sources, `npm run test:sources`.

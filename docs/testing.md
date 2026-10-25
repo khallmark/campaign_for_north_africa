@@ -27,10 +27,10 @@ needed. Do not start a review server to run tests. Keep TCP port 4175 free.
 | Command | Scope and contract |
 | --- | --- |
 | `npm run check` | Fast default gate: format check, lint, then `npm test`. No browsers or source regeneration. Initial Rust compilation can still take minutes. |
-| `npm test` | Credential and distribution guards, `cargo test --workspace --locked` (including doctests), then Node functional tests. Source-dependent tests are explicitly ignored. |
+| `npm test` | Credential and distribution guards, `cargo test --workspace --locked` (including doctests), then Node and fast SQLite functional tests. Source-dependent tests are explicitly ignored. |
 | `npm run test:unit` | Rust library and binary unit tests; focused developer command, not a substitute for the default guards. |
 | `npm run test:integration` | All Cargo integration targets under `crates/*/tests`; synthetic map/tile, catalog, contract and sandbox behavior. |
-| `npm run test:functional` | Node's built-in runner discovers `tests/*.test.mjs`: synthetic guard and private-review HTTP route tests. No new framework. |
+| `npm run test:functional` | Node discovers `tests/*.test.mjs`, then Python stdlib runs `scripts/test_catalog_db.py`: disposable fixtures and committed DB contracts, with no source/art/JSON dependency. |
 | `npm run test:private-review` | Focused alias for the existing synthetic HTTP route suite; already runs once through `test:functional`. |
 | `npm run test:e2e` | Guards, then the existing Playwright suite. Its webServer builds guarded production Wasm/Vite assets and starts/stops a fresh preview. |
 | `npm run test:browser -- ...` | Existing low-level Playwright entry point, retained for compatibility. Prefer `test:e2e` so credential guards also run. |
@@ -41,7 +41,7 @@ needed. Do not start a review server to run tests. Keep TCP port 4175 free.
 | `npm run check:guards` | Scan tracked credential/save markers without logging contents; reject uncleared tiles, private source directories, symlinks and byte-identical locked sources in `public/` and `dist/`. |
 | `npm run check:sources` | Explicit full source inventory, size and SHA256 validation. Missing files, symlinks, drift and LFS pointers fail. No auto-regeneration. |
 | `npm run test:sources` | Full integrity preflight, all ignored Rust tests in release mode (including 66-megapixel tile regeneration), then `test:source-data`. Deliberately expensive and private-source-dependent. |
-| `npm run test:source-data` | Python unittest discovery of `scripts/test_unit_data.py` using `.venv`. Runs the integrated PR2 importer/schema suite, including its read-only regeneration check. Requires restored/hydrated sources. |
+| `npm run test:source-data` | Python unittest discovery of `scripts/test_unit_data.py` using `.venv`, then `python3 scripts/import-catalog-db.py --check`. Both rebuild checks are read-only and require restored/hydrated sources. |
 
 Focused examples:
 
@@ -108,7 +108,7 @@ after restoring sparse paths. Missing source inputs fail the integrity preflight
 do not suppress failures, refresh locks to hide drift, or run source extraction
 in default CI. Regenerated tiles belong outside `public/` and `dist/`.
 
-## Worker adoption and pending data wiring
+## Worker adoption and data checks
 
 Workers should adopt this setup after the integration owner merges it, rerun
 setup or `npm ci`, run `npm run check`, then `npm run test:e2e` before review.
@@ -129,16 +129,14 @@ without cherry-picking or duplicating either worker's implementation.
   directly. That suite rebuilds from original images/PDFs, so it stays out of
   default CI. Its owner can add independent synthetic importer tests to the fast
   lane later; do not label the current full-source suite art-free.
-- **SQLite follow-up (separately owned, not integrated):** after its files land,
-  append `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts -p
-  'test_catalog_db.py'` to `test:functional`. The data owner supplies disposable
-  fixtures and committed `data/catalog.sqlite` integrity/identity/read-contract
-  tests using stdlib `sqlite3`; no new dependency or source hydration is needed.
-  Append `python3 scripts/import-catalog-db.py --check` to `test:source-data`
-  for normalized full-source rebuild comparison. Preserve `test_unit_data.py`.
-  Do not wire absent tests as a passing zero-test gate. Keep the full DB/private
-  source text out of `public/`, `dist/` and Wasm; the data owner owns those tests
-  and any safe consumer projection. The tooling is not tied to JSON storage.
+- **SQLite:** `test:functional` runs `test_catalog_db.py` with stdlib `sqlite3`
+  (SQLite 3.37+); no new package or source hydration is needed. It requires the
+  committed database and tests disposable imports, SQL corrections, failure/re-run
+  behavior, identity/provenance and private-output boundaries. `test:source-data`
+  retains `test_unit_data.py` and adds `import-catalog-db.py --check` for normalized
+  full-source comparison. Keep the full DB/private source text out of `public/`,
+  `dist/` and Wasm. A safe consumer projection is not implemented by this slice;
+  existing JSON consumers remain unchanged. See [catalog/sqlite.md](catalog/sqlite.md).
 - PR3's `package.json` and README overlap has been reconciled. Preserve both
   feature documentation and this command contract in later integrations.
 

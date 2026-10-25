@@ -252,6 +252,8 @@ def bootstrap_curated(db, root):
 
 def update_database(destination, schema, patches, prepare, *, bootstrap=False, check=False, verify=None):
     """Validate a candidate, then atomically replace only if logical content changed."""
+    require(not any(destination.resolve().is_relative_to((ROOT / directory).resolve()) for directory in ("public", "dist")),
+            "The private database must stay outside public/ and dist/; use a separately reviewed consumer projection")
     require(not destination.is_symlink(), "Database destination must not be a symlink")
     require(not bootstrap or not destination.exists(), "--bootstrap refuses to overwrite an existing database")
     require(bootstrap or destination.is_file(), "Committed database missing; restore it from Git (or use --bootstrap for the one-time migration)")

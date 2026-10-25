@@ -11,6 +11,7 @@ from pathlib import Path
 import sqlite3
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location("catalog_db", ROOT / "scripts/import-catalog-db.py")
@@ -170,6 +171,17 @@ class ImportContracts(unittest.TestCase):
         self.assertEqual(before, self.database.read_bytes())
         with self.assertRaisesRegex(ValueError, "refuses to overwrite"):
             self.update(bootstrap=True)
+
+    def test_private_database_cannot_be_written_into_browser_outputs(self):
+        with patch.object(catalog, "ROOT", self.root):
+            for name in ("public", "dist"):
+                directory = self.root / name
+                directory.mkdir()
+                destination = directory / "catalog.sqlite"
+                with self.subTest(directory=name):
+                    with self.assertRaisesRegex(ValueError, "private database"):
+                        catalog.update_database(destination, SCHEMA, self.patches, seed, bootstrap=True)
+                    self.assertFalse(destination.exists())
 
     def test_missing_linked_gpid_fails_without_destroying_reviewed_identity(self):
         census, assets = source_fixture()

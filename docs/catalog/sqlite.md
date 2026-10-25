@@ -120,7 +120,9 @@ manual comparisons remain limited to the previously reported 124 CPA comparisons
 ## Distribution and frontend follow-up
 
 **Do not copy this database to `public/`/`dist/` or embed it in Wasm.** It contains
-private source text and quotations. See [licensing.md](licensing.md). Token records
+private source text and quotations. The importer rejects destinations inside
+`public/` or `dist/`, including resolved symlink paths; this does not prevent
+someone separately copying or embedding it. See [licensing.md](licensing.md). Token records
 retain `public_path = NULL`; private review paths are metadata for the existing
 opt-in dev route, not publication permission. Generated art is never substituted
 for an original source token.
@@ -146,7 +148,7 @@ python3 scripts/import-catalog-db.py --check
 The fast suite covers patch ordering/once-only application, changed/deleted/earlier
 history, failure atomicity/retry, re-import preservation, source-write rejection,
 missing linked GPIDs, redirect integrity, unknown versus zero, nullable
-corrections, token/generated-art separation, and the committed DB read contract.
+corrections, token/generated-art separation, private-output rejection, and the committed DB read contract.
 There is no public projection to certify yet. On infrastructure integration,
 append the first command to `test:functional` and the second to `test:source-data`,
 retaining `test_unit_data.py`; do not silently treat absent tests as success.

@@ -1,7 +1,9 @@
 # Geography records and source vocabulary
 
 `crates/cna-map/src/terrain.rs` and [map-v1.schema.json](map-v1.schema.json)
-define data, not costs. No terrain is assigned to the real map by this leaf.
+define data, not costs. The vocabulary itself assigns no terrain to the real map;
+the [regenerable research model](model.md) contains source-labelled transcriptions
+with explicit review status, complete source-grid geometry and a private SQLite export.
 Validate imported JSON with the schema **and** deserialize it as `Vec<MapRecord>`:
 the schema checks metadata and structure; Rust additionally checks canonical side
 identity. Record provenance requires source references, reviewer and date; an

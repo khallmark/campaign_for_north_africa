@@ -369,3 +369,56 @@
 .research-footer { font-size: 12px; color: var(--muted); }
 .research-footer p { margin: 0; }
 .research-readout { font-variant-numeric: tabular-nums; }
+
+.geography-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.geography-hex { fill: none; stroke: #21575b; stroke-width: 0.7; opacity: 0.55; }
+.geography-id { fill: #24484b; stroke: #fff9e8; stroke-width: 2.5; paint-order: stroke; text-anchor: middle; font: 10px monospace; }
+.geography-terrain { opacity: 0.35; stroke: #534b35; stroke-width: 1; stroke-dasharray: 3 2; }
+.geography-selected { fill: #fff8cf22; stroke: #ba452d; stroke-width: 3; }
+.geography-link { fill: none; stroke-width: 3; stroke: #34839a; }
+.geography-link.road { stroke: #bf741d; stroke-width: 5; }
+.geography-link.railroad { stroke: #293d3a; stroke-dasharray: 6 3; }
+.geography-link.track { stroke: #805a32; stroke-dasharray: 2 4; }
+.geography-location { fill: #f8e6a2; stroke: #24594f; stroke-width: 2; }
+.geography-location.unresolved { fill: none; stroke: #ac3c65; }
+.research-board[data-source-visible=false] { visibility: hidden; }
+#map-research .geography-tools {
+  position: absolute;
+  z-index: 2;
+  top: 104px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(420px, calc(100% - 580px));
+  padding: 12px;
+  border: 1px solid #c5bea5;
+  border-radius: 6px;
+  background: #fcf8ecef;
+  box-shadow: 0 3px 12px #2e372022;
+  font-size: 11px;
+}
+.geography-switches, .geography-search { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.geography-search { margin-top: 8px; }
+.geography-search input { width: 94px; min-width: 0; padding: 5px 7px; border: 1px solid #b6b49e; border-radius: 3px; background: #fffdf5; font: 12px monospace; }
+.geography-tools button { font-size: 11px; padding: 5px 8px; }
+.geography-switches button[aria-pressed=true] { background: #40594b; color: #fff9e8; border-color: #40594b; }
+.geography-coverage { color: #5f624c; margin: 9px 0 5px; line-height: 1.45; }
+.geography-key { color: #756c56; margin: 0 0 8px; line-height: 1.45; }
+.geography-details > summary { cursor: pointer; font-weight: 600; }
+.geography-inspector { max-height: min(260px, 32vh); overflow: auto; border-top: 1px solid #d7d0b9; margin-top: 8px; padding-top: 8px; line-height: 1.5; }
+.geography-inspector p { margin: 6px 0; }
+.geography-inspector details { border-top: 1px solid #ddd7c4; padding: 6px 0; }
+.geography-inspector summary { cursor: pointer; }
+.geography-source { overflow-wrap: anywhere; font: 10px monospace; }
+@media (max-width: 1000px) {
+  #map-research .geography-tools { top: auto; bottom: 145px; left: 10px; transform: none; padding: 8px; width: min(420px, calc(100% - 20px)); }
+  .geography-inspector { max-height: 18vh; }
+  .geography-key { display: none; }
+  .geography-tools button { padding: 4px 6px; font-size: 10px; }
+}

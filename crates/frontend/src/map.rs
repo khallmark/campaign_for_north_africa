@@ -9,6 +9,7 @@ use cna_sim::*;
 use wasm_bindgen::{closure::Closure, JsCast};
 use web_sys::Element;
 
+mod geography;
 mod research;
 pub use research::mount as mount_research;
 pub(crate) use research::{focus as focus_board, refresh as refresh_board};

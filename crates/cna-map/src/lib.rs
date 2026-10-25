@@ -4,6 +4,7 @@ pub mod calibration;
 pub mod fixture;
 pub mod geometry;
 pub mod hex;
+pub mod model;
 pub mod terrain;
 pub mod viewport;
 

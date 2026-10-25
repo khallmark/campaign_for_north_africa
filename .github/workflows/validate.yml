@@ -26,7 +26,7 @@ jobs:
     env:
       CNA_PRIVATE_REVIEW_TILES: ''
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, Node 24
         with:
           persist-credentials: false
           lfs: false
@@ -35,11 +35,11 @@ jobs:
             /*
             !/docs/CNAv2.1.0/images/
             !*.pdf
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0, Node 24
         with:
           node-version-file: .node-version
           cache: npm
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0, Node 24
         with:
           python-version: '3.11'
       - name: Install pinned Rust toolchain and Wasm bindings

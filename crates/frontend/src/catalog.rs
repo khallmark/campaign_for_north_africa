@@ -1,7 +1,8 @@
 use crate::view::escape;
 use cna_catalog::catalog::{Record, Sprite, Stat};
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
+mod formation;
 mod tokens;
 
 const PAGE_SIZE: usize = 24;
@@ -285,7 +286,7 @@ impl Catalog {
         match (stat.status.as_str(), stat.value) {
             ("sourced", Some(value)) => {
                 let printed = stat.raw.clone().unwrap_or_else(|| value.to_string());
-                let unit = self.stat_definitions.iter().find(|d| d.id == id).map(|d| d.unit.as_str()).unwrap_or("");
+                let unit = stat.unit.as_deref().or_else(|| self.stat_definitions.iter().find(|d| d.id == id).map(|d| d.unit.as_str())).unwrap_or("");
                 format!("<strong>{}</strong><small>{}</small>{}", escape(&printed), escape(unit), if stat.conditional { "<small><b>Conditional — see note</b></small>" } else { "" })
             },
             ("not_applicable", _) if stat.raw.as_deref() == Some("-") =>
@@ -296,8 +297,13 @@ impl Catalog {
         }
     }
 
-    fn characteristics(&self, record: &Record) -> String {
-        let mut stats: Vec<_> = record.stats.iter().collect();
+    fn characteristics(
+        &self,
+        stats: &BTreeMap<String, Stat>,
+        caption: &str,
+        reference: bool,
+    ) -> String {
+        let mut stats: Vec<_> = stats.iter().collect();
         stats.sort_by_key(|(id, _)| {
             self.stat_definitions
                 .iter()
@@ -307,14 +313,14 @@ impl Catalog {
         let stats: String = stats.into_iter().map(|(id, stat)| {
             let definition = self.stat_definitions.iter().find(|d| d.id == *id);
             let name = definition.map(|d| d.name.as_str()).unwrap_or(id);
-            let description = definition.map(|d| d.description.as_str()).unwrap_or("");
-            let value = self.stat_value(id, stat);
+            let description = if reference { "" } else { definition.map(|d| d.description.as_str()).unwrap_or("") };
+            let value = if reference { self.reference_value(stat) } else { self.stat_value(id, stat) };
             format!("<tr><th scope=\"row\">{}<small>{}</small><small>{}</small><small>{}</small></th><td>{value}</td></tr>", escape(name), escape(description), escape(&stat.note), self.citations(&stat.source_refs))
         }).collect();
         if stats.is_empty() {
             "<p>No numerical characteristics have been recorded for this entry.</p>".into()
         } else {
-            format!("<table><caption>Rulebook characteristics, not tutorial stats</caption><thead><tr><th scope=\"col\">Characteristic and source</th><th scope=\"col\">Value</th></tr></thead><tbody>{stats}</tbody></table>")
+            format!("<table><caption>{}</caption><thead><tr><th scope=\"col\">Characteristic and source</th><th scope=\"col\">Value</th></tr></thead><tbody>{stats}</tbody></table>", escape(caption))
         }
     }
 
@@ -398,27 +404,46 @@ impl Catalog {
             )
         };
         let equipment = self.aa_equipment_references(record);
-        let stats = self.characteristics(record);
-        let stats = if record.profile_id.is_some() {
+        let formation = record
+            .formation_reference
+            .as_ref()
+            .filter(|reference| reference.schema_version == 1);
+        let stats = self.characteristics(
+            &record.stats,
+            "Rulebook characteristics, not tutorial stats",
+            false,
+        );
+        let stats = if formation.is_some() {
+            format!("<section class=\"catalog-direct-stats\"><h4>Current / scenario characteristics</h4><p>Current effective CPA is not established by a base profile or arrival reference. Unknown values below do not mean that base CPA is missing.</p>{stats}</section>")
+        } else if record.profile_id.is_some() {
             format!("<section class=\"catalog-direct-stats\"><h4>Formation / scenario characteristics</h4>{stats}</section>")
         } else {
             stats
         };
-        let profile = record.profile_id.as_ref().map(|id| {
+        let profile = record.profile_id.as_ref().filter(|_| formation.is_none()).map(|id| {
             match self.profiles.iter().find(|profile| profile.id == *id) {
                 Some(profile) => format!(
                     "<section class=\"catalog-profile-stats\"><h4>Linked profile characteristics</h4><p><strong>{}</strong> · Profile {}</p><p>Base reference characteristics, not current effective CPA or initial formation/scenario state.</p><p>{}</p>{}<details class=\"catalog-citations\"><summary>Profile sources</summary>{}</details></section>",
                     escape(&profile.name), escape(&profile.id), escape(&profile.note),
-                    self.characteristics(profile), self.source_details(&profile.source_refs)
+                    self.characteristics(&profile.stats, "Base profile characteristics", false), self.source_details(&profile.source_refs)
                 ),
                 None => format!("<p>Characteristic profile {} is unavailable; linked values are unresolved.</p>", escape(id)),
             }
         }).unwrap_or_default();
+        let reference = formation
+            .map(|reference| self.formation_reference(reference, &tokens))
+            .unwrap_or_default();
+        let tokens = if formation.is_some() { "" } else { &tokens };
+        let note = if formation.is_some() {
+            "Historical source row, not a playable deployment. Arrival notes and limitations are shown below."
+        } else {
+            &record.note
+        };
         format!(
-            r#"<article class="catalog-entry"><h3 class="catalog-record-heading" tabindex="-1">{}</h3><div class="catalog-record">{tokens}<p class="catalog-id">Record {}</p><p>{}</p>{equipment}{stats}<details class="catalog-citations"><summary>Record sources</summary>{}</details>{profile}</div></article>"#,
+            r#"<article class="catalog-entry"><h3 class="catalog-record-heading" tabindex="-1">{}</h3><div class="catalog-record"><p class="catalog-id">Record {}</p><p>{}</p>{reference}{tokens}{equipment}{stats}<details class="catalog-citations"><summary>Record sources</summary>{}</details>{profile}</div></article>"#,
             self.record_heading(record),
             escape(&record.id),
-            escape(&record.note),
+            escape(note),
             self.source_details(&record.source_refs)
         )
     }
@@ -778,6 +803,33 @@ mod tests {
             .detail("oa-116-006-1st-rifle-brigade")
             .unwrap()
             .contains("Reference weapon ratings"));
+    }
+
+    #[test]
+    fn formation_reference_prioritizes_known_base_cpa_and_preserves_arrival_units() {
+        let catalog =
+            Catalog::parse(include_str!("../../../public/data/unit-catalog.json")).unwrap();
+        let machinegun = catalog.detail("oa-149-084-60th-machinegun-bn").unwrap();
+        assert!(machinegun.contains("Base capability point allowance"));
+        assert!(machinegun.contains("<strong>8</strong><small>CP</small>"));
+        assert!(
+            machinegun.find("Base capability point allowance").unwrap()
+                < machinegun
+                    .find("Current / scenario characteristics")
+                    .unwrap()
+        );
+        assert!(!machinegun.contains("not transcribed"));
+        assert!(!machinegun.contains("Linked profile characteristics"));
+        assert!(machinegun.contains("1/12"));
+        assert!(machinegun.contains("<strong>2</strong><small>TOE strength points</small>"));
+        let aa = catalog.detail("oa-124-002-13th-light-aa-regt").unwrap();
+        assert!(aa.contains("<strong>6</strong><small>Actual AA points</small>"));
+        assert!(aa.contains("6 × 1"));
+        let armor = catalog.detail("oa-116-003-2nd-bays").unwrap();
+        assert!(armor.contains("<strong>28</strong><small>Raw combat points (before ÷10)</small>"));
+        let missing = catalog.detail("oa-165-065-gruppe-badde").unwrap();
+        assert!(missing.contains("That of the attached units"));
+        assert!(missing.contains("No independent quantified loadout"));
     }
 
     #[test]

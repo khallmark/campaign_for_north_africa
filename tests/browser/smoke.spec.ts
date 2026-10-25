@@ -189,15 +189,15 @@ test('catalog controls wire search, selects and pagination into visible results'
   const rifle = page.locator('#catalog-detail');
   const direct = rifle.locator('.catalog-direct-stats');
   const profile = rifle.locator('.catalog-profile-stats');
-  await expect(direct).toContainText('Formation / scenario characteristics');
+  await expect(direct).toContainText('Current / scenario characteristics');
   await expect(direct.locator('td')).toHaveText('Unresolved');
   await expect(profile).toContainText('Commonwealth infantry profile l · Profile cw-l');
   await expect(profile).toContainText('not current effective CPA');
+  await profile.getByText('Base profile characteristics and sources', { exact: true }).click();
   await expect(profile.locator('td strong').first()).toHaveText('10+');
   await expect(profile).toContainText('Do not treat base as motorized allowance');
   await expect(profile).toContainText('Source dash');
-  await profile.getByText('Profile sources', { exact: true }).click();
-  await expect(profile.locator('.catalog-citations')).toContainText('PDF p. 133');
+  await expect(profile.locator('details')).toContainText('PDF p. 133');
   await page.getByRole('button', { name: 'Back to Motorized infantry', exact: true }).click();
   await nationality.selectOption({ label: 'German' });
   await expect(count).toContainText('No matching records');
@@ -242,7 +242,8 @@ test('anti-aircraft profile dashes remain distinct from equipment ratings', asyn
   await expect(equipment.getByRole('row', { name: /Light AA \(Bofors 40mm\)/ }).locator('td strong')).toHaveText('1');
   await expect(equipment.getByRole('row', { name: /Heavy AA \(3.7-inch\)/ }).locator('td strong')).toHaveText('4');
   await expect(equipment).toContainText('Current TOE and weapon mix are required for a unit total');
-  const rating = entry.getByRole('row').filter({ has: page.getByRole('rowheader', { name: /^Anti-aircraft rating/ }) });
+  await entry.getByText('Base profile characteristics and sources', { exact: true }).click();
+  const rating = entry.locator('.catalog-profile-stats').getByRole('row').filter({ has: page.getByRole('rowheader', { name: /^Anti-aircraft rating/ }) });
   await expect(rating.locator('td')).toContainText('Source dash');
   await expect(rating.locator('td')).not.toContainText('Not applicable');
   await expect(rating).toContainText('Weapon mix or attachments may supply ratings');
@@ -250,9 +251,57 @@ test('anti-aircraft profile dashes remain distinct from equipment ratings', asyn
   await search.fill('Bofors');
   await kind.selectOption('equipment');
   await page.locator('.catalog-list .catalog-entry').click();
-  await expect(rating.locator('td strong')).toHaveText('1');
-  await expect(rating.locator('td')).toContainText('rating per TOE point');
-  await expect(rating).toContainText('PDF p. 138');
+  const weaponRating = entry.getByRole('row').filter({ has: page.getByRole('rowheader', { name: /^Anti-aircraft rating/ }) });
+  await expect(weaponRating.locator('td strong')).toHaveText('1');
+  await expect(weaponRating.locator('td')).toContainText('rating per TOE point');
+  await expect(weaponRating).toContainText('PDF p. 138');
+});
+
+test('formation references distinguish base CPA, arrival totals, conditional and missing loadouts', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Unit catalog', exact: true }).click();
+  const detail = page.locator('#catalog-detail');
+  async function open(id: string, type: string) {
+    if (await detail.isVisible()) await page.getByRole('button', { name: 'Back to unit types', exact: true }).click();
+    await page.getByRole('combobox', { name: 'Unit type', exact: true }).selectOption(type);
+    await page.getByRole('searchbox', { name: 'Search records' }).fill(id);
+    await page.locator('.catalog-list .catalog-entry').click();
+  }
+  await open('oa-149-084-60th-machinegun-bn', 'heavy-weapons');
+  await expect(detail.locator('.catalog-base-cpa > strong')).toHaveText('8');
+  await expect(detail.locator('.catalog-base-cpa')).toContainText('CP');
+  await expect(detail.locator('.catalog-arrival-facts > div').nth(1).locator('strong')).toHaveText('2');
+  await expect(detail.locator('.catalog-arrival-facts > div').nth(2).locator('strong')).toHaveText('-1');
+  await expect(detail.locator('.catalog-arrival')).toContainText('1/12');
+  await expect(detail.locator('.catalog-direct-stats')).toContainText('Current effective CPA is not established');
+  await expect(detail).not.toContainText('not transcribed');
+  const totals = detail.locator('.catalog-arrival-totals');
+  const aa = totals.getByRole('row', { name: /^Anti-aircraft rating/ });
+  await open('oa-124-002-13th-light-aa-regt', 'anti-air');
+  await expect(aa.locator('td strong')).toHaveText('6');
+  await expect(aa.locator('td')).toContainText('Actual AA points');
+  await expect(aa.locator('td')).toContainText('6 × 1');
+  await detail.locator('.catalog-component summary').click();
+  await expect(detail.locator('.catalog-component')).toContainText('weapons-cw-light-aa-bofors-40mm');
+  await expect(detail.locator('.catalog-component').getByRole('row', { name: /^Anti-aircraft rating/ }).locator('td strong')).toHaveText('1');
+  await open('oa-117-024-102nd-nh-light-anti-aircraft-anti-tank-regt', 'anti-tank-anti-air');
+  await expect(aa.locator('td strong')).toHaveText('2');
+  const antiArmor = totals.getByRole('row', { name: /^Anti-armor/ });
+  await expect(antiArmor.locator('td strong')).toHaveCount(0);
+  await expect(antiArmor.locator('td')).toContainText('Conditional');
+  await open('oa-116-003-2nd-bays', 'tank');
+  const assault = totals.getByRole('row', { name: /^Offensive close assault/ });
+  await expect(assault.locator('td strong')).toHaveText('28');
+  await expect(assault.locator('td')).toContainText('Raw combat points (before ÷10)');
+  await open('oa-165-065-gruppe-badde', 'headquarters');
+  await expect(totals.locator('td strong')).toHaveCount(0);
+  await expect(detail.locator('.catalog-arrival')).toContainText('That of the attached units');
+  await expect(detail.locator('.catalog-arrival-components')).toContainText('A profile maximum is not an assignment');
+  await open('oa-123-096-11th-royal-horse-arty-regt-bishop-refit-counter', 'artillery');
+  await expect(detail.locator('.catalog-arrival')).toContainText(/optional/i);
+  await expect(totals.locator('td strong')).toHaveCount(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await detail.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
 });
 
 test('catalog breadcrumbs preserve the dialog, filters, page and focus through animated navigation', async ({ page }) => {
@@ -350,7 +399,7 @@ test('catalog original tokens follow reviewed links and survive late responses a
   await search.fill('oa-116-001-1st-armored-div-hq');
   await page.locator('.catalog-list .catalog-card').click();
   await expect(tokens.locator('[data-state="unavailable"]')).toContainText('private-review source assets are required');
-  await expect(page.locator('#catalog-detail .catalog-profile-stats')).toContainText('Linked profile characteristics');
+  await expect(page.locator('#catalog-detail .catalog-base-cpa > strong')).toHaveText('30*');
   await page.route('**/data/unit-reference.json', route => route.fulfill({ status: 503, body: 'Unavailable' }));
   await page.reload();
   await page.getByRole('button', { name: 'Unit catalog', exact: true }).click();
@@ -358,7 +407,7 @@ test('catalog original tokens follow reviewed links and survive late responses a
   await search.fill('oa-116-001-1st-armored-div-hq');
   await page.locator('.catalog-list .catalog-card').click();
   await expect(tokens).toContainText('Original-token references could not be loaded');
-  await expect(page.locator('#catalog-detail .catalog-profile-stats')).toContainText('Linked profile characteristics');
+  await expect(page.locator('#catalog-detail .catalog-base-cpa > strong')).toHaveText('30*');
 });
 
 test('full-board workspace removes the scenario and restores modal keyboard focus', async ({ page }) => {

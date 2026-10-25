@@ -264,6 +264,50 @@
 .catalog-id {
   color: #536048;
 }
+.catalog-formation-reference > section {
+  margin-block: 24px;
+}
+.catalog-base-cpa {
+  border-left: 4px solid var(--olive);
+  background: #e8ebdf;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+.catalog-base-cpa > strong {
+  font-size: 32px;
+  font-variant-numeric: tabular-nums;
+}
+.catalog-arrival-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 20px;
+  margin-block: 16px;
+}
+.catalog-arrival-facts > div {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  min-width: 0;
+}
+.catalog-arrival-facts strong {
+  font-size: 22px;
+}
+.catalog-formation-reference h5 {
+  font: inherit;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.catalog-component {
+  border-top: 1px solid var(--line);
+  padding-block: 12px;
+}
+.catalog-component > summary {
+  font-weight: 600;
+}
+.catalog-reference-limitations {
+  border-left: 3px solid #9a733b;
+  padding-left: 12px;
+  margin-bottom: 24px;
+}
 .catalog table {
   width: 100%;
   border-collapse: collapse;

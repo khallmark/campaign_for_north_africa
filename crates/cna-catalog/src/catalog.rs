@@ -36,10 +36,49 @@ pub struct Record {
     pub source_refs: Vec<String>,
     pub stats: BTreeMap<String, Stat>,
     pub sprite: Option<Sprite>,
+    pub formation_reference: Option<FormationReference>,
     #[serde(skip)]
     pub artwork_note: String,
     #[serde(default)]
     pub note: String,
+}
+
+#[derive(Deserialize)]
+pub struct FormationReference {
+    pub schema_version: u32,
+    pub base_profile_id: Option<String>,
+    pub base_profile_name: Option<String>,
+    pub base_profile_note: String,
+    pub base_stats: BTreeMap<String, Stat>,
+    pub printed_profile_code: Option<String>,
+    pub catalog_profile_id: Option<String>,
+    pub arrival: FormationArrival,
+    pub components: Vec<FormationComponent>,
+    pub arrival_totals: BTreeMap<String, Stat>,
+    pub limitations: String,
+}
+
+#[derive(Deserialize)]
+pub struct FormationArrival {
+    pub toe_raw: Option<String>,
+    pub arrives_raw: Option<String>,
+    pub note: String,
+    pub stats: BTreeMap<String, Stat>,
+    pub source_refs: Vec<String>,
+    pub related_record_id: Option<String>,
+    pub toe_strength: Stat,
+    pub morale: Stat,
+}
+
+#[derive(Deserialize)]
+pub struct FormationComponent {
+    pub record_id: Option<String>,
+    pub name: String,
+    pub label: String,
+    pub kind: String,
+    pub toe: Stat,
+    pub per_toe_stats: BTreeMap<String, Stat>,
+    pub land_barrage_toe: Option<u32>,
 }
 
 #[derive(Deserialize)]
@@ -51,6 +90,7 @@ pub struct Stat {
     pub raw: Option<String>,
     #[serde(default)]
     pub conditional: bool,
+    pub unit: Option<String>,
 }
 
 #[derive(Deserialize)]

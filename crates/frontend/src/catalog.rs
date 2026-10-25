@@ -277,24 +277,7 @@ impl Catalog {
         }
     }
 
-    fn record(&self, record: &Record) -> String {
-        let identity = match record.verification.as_str() {
-            "verified" if record.kind == "profile" => "Profile verified",
-            "verified" => "Identity verified",
-            "partial" => "Partially verified",
-            "unverified_ocr" => "OCR · unverified",
-            _ => "Provisional",
-        };
-        let sprite = record
-            .sprite
-            .as_ref()
-            .map(|sprite| {
-                format!(
-                    r#"<img src="{}" alt="" loading="lazy" />"#,
-                    escape(&sprite.path)
-                )
-            })
-            .unwrap_or_default();
+    fn characteristics(&self, record: &Record) -> String {
         let mut stats: Vec<_> = record.stats.iter().collect();
         stats.sort_by_key(|(id, _)| {
             self.stat_definitions
@@ -317,12 +300,47 @@ impl Catalog {
             };
             format!("<tr><th scope=\"row\">{}<small>{}</small><small>{}</small><small>{}</small></th><td>{value}</td></tr>", escape(name), escape(description), escape(&stat.note), self.citations(&stat.source_refs))
         }).collect();
-        let stats = if stats.is_empty() {
+        if stats.is_empty() {
             "<p>No numerical characteristics have been recorded for this entry.</p>".into()
         } else {
             format!("<table><caption>Rulebook characteristics, not tutorial stats</caption><thead><tr><th scope=\"col\">Characteristic and source</th><th scope=\"col\">Value</th></tr></thead><tbody>{stats}</tbody></table>")
+        }
+    }
+
+    fn record(&self, record: &Record) -> String {
+        let identity = match record.verification.as_str() {
+            "verified" if record.kind == "profile" => "Profile verified",
+            "verified" => "Identity verified",
+            "partial" => "Partially verified",
+            "unverified_ocr" => "OCR · unverified",
+            _ => "Provisional",
         };
-        let profile = record.profile_id.as_ref().map(|id| format!("<p>Characteristic profile: {}. Search this ID to inspect the profile separately.</p>", escape(id))).unwrap_or_default();
+        let sprite = record
+            .sprite
+            .as_ref()
+            .map(|sprite| {
+                format!(
+                    r#"<img src="{}" alt="" loading="lazy" />"#,
+                    escape(&sprite.path)
+                )
+            })
+            .unwrap_or_default();
+        let stats = self.characteristics(record);
+        let stats = if record.profile_id.is_some() {
+            format!("<section class=\"catalog-direct-stats\"><h4>Formation / scenario characteristics</h4>{stats}</section>")
+        } else {
+            stats
+        };
+        let profile = record.profile_id.as_ref().map(|id| {
+            match self.profiles.iter().find(|profile| profile.id == *id) {
+                Some(profile) => format!(
+                    "<section class=\"catalog-profile-stats\"><h4>Linked profile characteristics</h4><p><strong>{}</strong> · Profile {}</p><p>Base reference characteristics, not current effective CPA or initial formation/scenario state.</p><p>{}</p>{}<details class=\"catalog-citations\"><summary>Profile sources</summary>{}</details></section>",
+                    escape(&profile.name), escape(&profile.id), escape(&profile.note),
+                    self.characteristics(profile), self.source_details(&profile.source_refs)
+                ),
+                None => format!("<p>Characteristic profile {} is unavailable; linked values are unresolved.</p>", escape(id)),
+            }
+        }).unwrap_or_default();
         let affiliations: String = [&record.nationality, &record.side]
             .into_iter()
             .filter(|value| {
@@ -331,7 +349,7 @@ impl Catalog {
             .map(|value| format!(" · {}", escape(affiliation_name(value))))
             .collect();
         format!(
-            r#"<details class="catalog-entry"><summary>{sprite}<span class="catalog-name"><strong>{}</strong><span>{} · {}{affiliations}</span><small>{}</small></span><span class="catalog-status">{identity}</span></summary><div class="catalog-record"><p class="catalog-id">Record {}</p><p>{}</p>{profile}{stats}<details class="catalog-citations"><summary>Record sources</summary>{}</details></div></details>"#,
+            r#"<details class="catalog-entry"><summary>{sprite}<span class="catalog-name"><strong>{}</strong><span>{} · {}{affiliations}</span><small>{}</small></span><span class="catalog-status">{identity}</span></summary><div class="catalog-record"><p class="catalog-id">Record {}</p><p>{}</p>{stats}<details class="catalog-citations"><summary>Record sources</summary>{}</details>{profile}</div></details>"#,
             escape(&record.name),
             escape(
                 self.unit_type_name(&record.unit_type)
@@ -529,6 +547,55 @@ mod tests {
         assert!(catalog
             .results("german identity", "profile", "axis", "infantry", "", 0)
             .contains("No matching records"));
+    }
+
+    #[test]
+    fn linked_profile_stats_are_attributed_and_do_not_replace_formation_stats() {
+        let mut data: serde_json::Value =
+            serde_json::from_str(include_str!("../../../public/data/unit-catalog.json")).unwrap();
+        data["entries"] = serde_json::json!([{
+            "id": "test", "name": "Test formation", "kind": "formation",
+            "side": "allied", "nationality": "commonwealth", "unit_type": "infantry",
+            "verification": "verified", "source_refs": [], "profile_id": "base",
+            "stats": {"capability_points": {"value": null, "status": "unresolved", "note": "Effective CPA unknown", "source_refs": []}}
+        }]);
+        data["profiles"] = serde_json::json!([{
+            "id": "base", "name": "Base <profile>", "unit_type": "infantry",
+            "nationality": "commonwealth", "verification": "partial", "source_refs": ["scan-133"],
+            "note": "Base only, not deployment state",
+            "stats": {
+                "capability_points": {"value": 10, "raw": "10+", "status": "sourced", "conditional": true, "note": "Printed restriction", "source_refs": ["scan-133"]},
+                "zero": {"value": 0, "status": "sourced", "note": "", "source_refs": []},
+                "unknown": {"value": 9876, "status": "unresolved", "note": "", "source_refs": []},
+                "pending": {"value": 8765, "status": "provisional", "note": "", "source_refs": []},
+                "dash": {"value": null, "status": "not_applicable", "note": "", "source_refs": []}
+            }
+        }]);
+        let catalog = Catalog::parse(&data.to_string()).unwrap();
+        let html = catalog.results("test", "formation", "allied", "infantry", "", 0);
+        let (direct, linked) = html.split_once("Linked profile characteristics").unwrap();
+        assert!(direct.contains("Formation / scenario characteristics"));
+        assert!(direct.contains("Effective CPA unknown"));
+        assert!(direct.contains("Unresolved"));
+        assert!(!direct.contains("<strong>10+</strong>"));
+        for text in [
+            "Base &lt;profile&gt;",
+            "base",
+            "Base only, not deployment state",
+            "not current effective CPA",
+            "<strong>10+</strong>",
+            "<strong>0</strong>",
+            "Conditional — see note",
+            "Printed restriction",
+            "PDF p. 133",
+            "Unresolved",
+            "Provisional",
+            "Not applicable",
+        ] {
+            assert!(linked.contains(text), "Missing {text}");
+        }
+        assert!(!linked.contains("9876"));
+        assert!(!linked.contains("8765"));
     }
 
     #[test]

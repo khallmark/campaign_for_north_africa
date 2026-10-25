@@ -127,6 +127,15 @@ retain `public_path = NULL`; private review paths are metadata for the existing
 opt-in dev route, not publication permission. Generated art is never substituted
 for an original source token.
 
+Vite serves workspace files outside `public/` during development. Its always-on
+`server.fs.deny` rule blocks `catalog.sqlite` and its journal/WAL/SHM sidecars,
+including direct, `/@fs/` and raw/URL transform requests, whether private review
+is enabled or disabled. The normal Vite sensitive-file deny rules are retained.
+Encoded separators that are not file routes return 404 for binary requests;
+HTML navigation can receive the SPA page, not database contents. This is not
+authentication or a general sandbox for the repository. Vite's deny rule does
+not filter `public/`, so the no-copy/no-embed boundary above remains essential.
+
 No SQLite browser loader, HTTP endpoint or safe public projection is implemented
 here. The current UI still embeds catalog/inventory JSON at Wasm compile time;
 SQL corrections in this DB do **not** change that UI yet. A later coordinated
@@ -151,4 +160,6 @@ missing linked GPIDs, redirect integrity, unknown versus zero, nullable
 corrections, token/generated-art separation, private-output rejection, and the committed DB read contract.
 There is no public projection to certify yet. The first command is included in
 `test:functional` and the second in `test:source-data`, retaining `test_unit_data.py`.
+`tests/private-review.test.mjs` exercises HTTP denial with both opt-in states,
+encoded/query forms and SQLite sidecars, while checking safe assets and review routes.
 Run `npm run check`, `npm run test:e2e` and, with hydrated sources, `npm run test:sources`.

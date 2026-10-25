@@ -25,6 +25,15 @@ fn hex_scenario_ids_and_off_map_names_remain_distinct() {
         assert_eq!(text.parse::<HexId>(), Ok(id));
         assert_eq!(text.parse::<MapLocation>(), Ok(MapLocation::Hex(id)));
         assert_eq!(id.to_string(), text);
+        let encoded = serde_json::to_string(text).unwrap();
+        assert_eq!(
+            serde_json::to_string(&MapLocation::Hex(id)).unwrap(),
+            encoded
+        );
+        assert_eq!(
+            serde_json::from_str::<MapLocation>(&encoded).unwrap(),
+            MapLocation::Hex(id)
+        );
     }
     let sources = census();
     let names: BTreeSet<_> = sources["zones"]
@@ -46,6 +55,12 @@ fn hex_scenario_ids_and_off_map_names_remain_distinct() {
         assert!(matches!(location, MapLocation::OffMap(_)));
         assert_eq!(location.to_string(), name);
         assert!(name.parse::<HexId>().is_err());
+        let encoded = serde_json::to_string(name).unwrap();
+        assert_eq!(serde_json::to_string(&location).unwrap(), encoded);
+        assert_eq!(
+            serde_json::from_str::<MapLocation>(&encoded).unwrap(),
+            location
+        );
     }
     for invalid in [
         "",
@@ -68,6 +83,10 @@ fn hex_scenario_ids_and_off_map_names_remain_distinct() {
         "Unknown Box",
     ] {
         assert!(invalid.parse::<MapLocation>().is_err(), "{invalid:?}");
+        assert!(serde_json::from_value::<MapLocation>(Value::String(invalid.into())).is_err());
+    }
+    for invalid in ["null", "42", r#"{"Hex":"C4218"}"#, r#"["Tripoli"]"#] {
+        assert!(serde_json::from_str::<MapLocation>(invalid).is_err());
     }
     assert!(HexId::new(MapSection::A, 100, 1).is_err());
     assert!(HexId::new(MapSection::A, 1, 100).is_err());

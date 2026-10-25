@@ -684,6 +684,10 @@ class CommittedDatabaseContracts(unittest.TestCase):
                              (None, 'unresolved', raw))
             self.assertEqual(corrected['original_observation']['raw'], '?')
             self.assertNotIn('unresolved', corrected['note'].lower())
+            page = 137 if record == 'ge-v' else 170
+            self.assertIn(f'scan-{page}', corrected['source_refs'])
+            citation = next(s for s in document['sources'] if s['id'] == corrected['correction_id'])
+            self.assertIn(f'original PDF p.{page};', citation['section'])
         self.assertEqual(records['oa-124-002-13th-light-aa-regt']['stats']['capability_points']['status'], 'unresolved')
         self.assertFalse(catalog.project_stats(catalog.DATABASE, ROOT / 'public/data/unit-catalog.json', check=True))
 

@@ -249,7 +249,13 @@ test('inspect mode selects a hex with pointer and keyboard, not a counter placem
   // Close evidence to expose the whole center for keyboard inspection.
   await page.locator('.geography-details > summary').click();
   const bounds = (await page.locator('.research-viewport').boundingBox())!;
-  const selected = (await page.locator('.geography-selected').boundingBox())!;
+  await expect(page.locator('.geography-selected')).toBeVisible();
+  // The queued details toggle redraws SVG nodes. Resolve and measure in one
+  // browser task rather than retaining a node across boundingBox protocol calls.
+  const selected = await page.evaluate(() => {
+    const { x, y, width, height } = document.querySelector('.geography-selected')!.getBoundingClientRect();
+    return { x, y, width, height };
+  });
   await page.mouse.click(selected.x + selected.width / 2 + 85.25, selected.y + selected.height / 2);
   await expect(page.locator('.geography-inspector')).toContainText('D3715 · section-local identity');
   await page.locator('.geography-details > summary').click();

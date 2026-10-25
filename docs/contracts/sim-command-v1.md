@@ -2,9 +2,11 @@
 
 Status: command wire contract (CNA-160), with state representation and calendar
 arithmetic in `cna_sim::official::state` (CNA-260), and transactional execution in
-`cna_sim::official::reducer` (CNA-261). Only a no-op kernel ships; official game
-rules and the save/replay verifier remain later deliverables. The sandbox is
-unchanged. Protocol tests are not assertions of implemented game rules.
+`cna_sim::official::reducer` (CNA-261). `official::initiative` executes weekly
+initiative and per-stage player-order choices (§7); see the
+[source comparison and integration limits](../rules/initiative.md).
+Other game rules and the save/replay verifier remain later deliverables. The
+sandbox is unchanged. Protocol tests are not assertions of implemented game rules.
 
 ## Authoritative state representation
 
@@ -68,9 +70,10 @@ together, only after the kernel succeeds and reference validation passes. Direct
 kernel edits to revision, reference digests or the stored RNG reject. The kernel
 must not perform I/O or mutate anything outside the transaction.
 
-Only `Noop {}` and the `noop` kernel are provided. They acknowledge a command with
-one empty event and advance revision, but do not change calendar, resources or RNG.
-No browser consumer is migrated to this API. Synthetic test kernels exercise
+`Noop {}` and the `noop` diagnostic kernel acknowledge a command with one empty
+event and advance revision, but do not change calendar, resources or RNG.
+`InitiativeRules::execute` also runs through this transaction boundary. No browser
+consumer is migrated to this API. Synthetic test kernels separately exercise
 random draws and rejection after tentative mutations; they are not game orders.
 
 The implementation pins `rand_chacha = 0.3.1` with default features disabled

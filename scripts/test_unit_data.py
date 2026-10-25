@@ -149,6 +149,15 @@ class UnitDataTests(unittest.TestCase):
         self.assertTrue(pz["breakdown_shift"]["conditional"])
         self.assertEqual(pz["vulnerability"]["status"], "not_applicable")
         self.assertIsNone(pz["vulnerability"]["value"])
+        self.assertNotIn('original_observation', pak['original_observation'])
+        projected = copy.deepcopy(self.catalog)
+        projected_pak = next(r for r in projected['entries'] if r['id'] == 'weapons-ge-7-62cm-pak-r')
+        for field, bad_value in [('value', 16), ('raw', '16'), ('conditional', True), ('status', 'unresolved')]:
+            saved = projected_pak['stats']['capability_points'][field]
+            projected_pak['stats']['capability_points'][field] = bad_value
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, 'Projected stat disagrees'):
+                importer.apply_evidence(ROOT, projected, self.evidence, {})
+            projected_pak['stats']['capability_points'][field] = saved
         evidence = copy.deepcopy(self.evidence)
         evidence["errata"].append(evidence["errata"][0])
         with self.assertRaisesRegex(ValueError, "Repeated erratum"):

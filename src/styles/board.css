@@ -1,0 +1,165 @@
+/* Floating review controls; the map owns the viewport, not a dashboard grid. */
+.board-workspace {
+  position: fixed;
+  inset: 0;
+  padding: 0;
+  max-width: none;
+  isolation: isolate;
+}
+.board-workspace #map-research {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  z-index: -1;
+}
+.board-workspace .research-viewport { width: 100%; height: 100%; min-height: 0; }
+.board-workspace .research-board { background: #d8d4b5; }
+.calendar-chip, .board-tools, .floating-panel, .counter-actions, .board-workspace .research-controls {
+  background: var(--paper);
+  border: 1px solid #c9ccbf;
+  border-radius: 8px;
+  box-shadow: 0 3px 12px #26352224, 0 1px 2px #26352215;
+}
+#board-top { position: absolute; inset: 18px 18px auto; display: flex; justify-content: space-between; gap: 12px; pointer-events: none; z-index: 4; }
+#board-top > * { pointer-events: auto; }
+.calendar-chip { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; padding: 12px 16px; }
+.calendar-chip > span { font: 16px var(--serif); }
+.calendar-chip small { font-size: 12px; color: #606952; font-variant-numeric: tabular-nums; }
+.calendar-chip i { font-style: normal; padding: 0 5px; }
+.board-tools { display: flex; padding: 5px; align-self: flex-start; }
+.board-icon { position: relative; width: 42px; height: 42px; padding: 10px; border: 0; flex-shrink: 0; }
+.board-icon svg { width: 20px; height: 20px; }
+.board-tools .board-icon:last-child { margin-left: 6px; border-left: 1px solid var(--line); border-radius: 0 4px 4px 0; }
+.board-icon.unavailable-action { color: #777c6e; }
+.board-tooltip {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 220px;
+  background: #303a31;
+  color: #fffef4;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: center;
+  padding: 7px 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px #0002;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 20;
+  transition: opacity 0s, visibility 0s;
+}
+.board-icon:hover > .board-tooltip { opacity: 1; visibility: visible; transition-delay: 1s; }
+.board-icon:focus-visible > .board-tooltip { opacity: 1; visibility: visible; transition-delay: 0s; }
+.board-tools .board-icon:last-child .board-tooltip { left: auto; right: 0; transform: none; }
+.floating-panel { position: absolute; top: 104px; width: 248px; max-height: calc(100dvh - 200px); overflow: auto; }
+.order-panel { left: 18px; }
+.unit-panel { right: 18px; width: 280px; }
+.floating-panel > summary { padding: 16px; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 1px solid var(--line); }
+.floating-panel:not([open]) > summary { border: 0; }
+#board-roster, #board-detail { padding: 16px; }
+.panel-caption, .panel-footnote { font-size: 12px; line-height: 1.5; color: #67705d; }
+.panel-caption { margin-bottom: 12px; }
+.panel-footnote { margin-top: 14px; }
+.panel-empty { font-size: 14px; line-height: 1.55; color: #626c59; }
+.panel-empty p + p { margin-top: 12px; }
+.panel-empty h2 { margin: 16px 0 12px; }
+.empty-unit { padding: 16px 0; }
+.empty-unit > svg { width: 28px; height: 28px; color: var(--olive); }
+.add-counter { width: 100%; margin-top: 16px; font-size: 13px; }
+.board-roster-unit { display: flex; width: 100%; padding: 8px 6px; gap: 8px; border: 1px solid transparent; justify-content: flex-start; text-align: left; margin-bottom: 5px; }
+.board-roster-unit[aria-pressed=true] { background: #e5e9dc; border-color: #b5bfa5; }
+.board-roster-unit strong { display: block; font-size: 13px; font-weight: 500; }
+.board-roster-unit small { display: block; font-size: 10px; margin-top: 4px; color: #647058; }
+.roster-art { width: 36px; height: 36px; flex-shrink: 0; }
+.roster-art img { width: 100%; height: 100%; object-fit: contain; }
+.board-unit-art { height: 120px; display: grid; place-items: center; margin-bottom: 16px; background: #eef0e6; border-radius: 5px; }
+.board-unit-art img { width: 150px; height: 120px; object-fit: contain; }
+#board-detail h2 { font: 20px/1.3 var(--serif); }
+.unit-nationality { font-size: 12px; color: #6b735f; margin-top: 8px; }
+.unit-facts { margin: 20px 0 0; font-size: 12px; }
+.unit-facts > div { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); }
+.unit-facts dt { color: #6b735f; }
+.unit-facts dd { margin: 0; text-align: right; max-width: 150px; }
+.unit-local-controls { display: flex; gap: 5px; margin-top: 16px; }
+.unit-local-controls > button { font-size: 12px; }
+.board-workspace .research-controls { position: absolute; right: 18px; bottom: 62px; z-index: 2; display: flex; gap: 0; padding: 4px; }
+.research-controls button { width: 40px; height: 40px; border: 0; padding: 6px; }
+.board-workspace .research-footer { position: absolute; bottom: 0; right: 0; padding: 7px 12px; gap: 16px; font-size: 11px; background: #fbfaf5ed; pointer-events: none; }
+.board-workspace .research-status { position: absolute; left: 12px; bottom: 32px; z-index: 1; padding: 5px 8px; font-size: 10px; border: 0; background: #fbfaf5e8; border-radius: 3px; max-width: calc(100% - 220px); }
+.board-workspace .research-unavailable { text-align: center; padding: 22px; font-size: 20px; }
+#board-message { position: absolute; bottom: 0; left: 0; padding: 7px 12px; max-width: 55%; font-size: 11px; background: #fbfaf5ed; line-height: 1.5; pointer-events: none; }
+#board-placement { position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%); width: min(540px, calc(100% - 36px)); background: var(--paper); border: 1px solid var(--olive); border-radius: 6px; padding: 12px; display: none; align-items: center; gap: 12px; font-size: 13px; box-shadow: 0 3px 15px #0002; }
+#board-placement[data-active=true] { display: flex; }
+#board-counters { position: absolute; inset: 0; pointer-events: none; }
+.board-counter { position: absolute; width: 64px; height: 64px; transform: translate(-50%, -50%); pointer-events: none; }
+.counter-marker { position: relative; width: 64px; height: 64px; background: #f7f7e9; border: 2px solid #71815e; padding: 3px; box-shadow: 0 2px 6px #23351f40; pointer-events: auto; }
+.counter-marker img { width: 100%; height: 100%; object-fit: contain; }
+.counter-marker > span { position: absolute; bottom: -5px; right: -5px; font-size: 10px; background: var(--olive); color: white; border-radius: 12px; min-width: 18px; padding: 2px; }
+.selected .counter-marker { outline: 3px solid #fffef0; box-shadow: 0 0 0 5px #485b3f, 0 4px 9px #0005; }
+.selected { z-index: 2; }
+.counter-actions { position: absolute; display: flex; padding: 3px; pointer-events: auto; }
+.counter-actions::before { content: ""; position: absolute; width: 10px; height: 10px; background: var(--paper); top: -6px; left: calc(var(--pointer-left) - 5px); transform: rotate(45deg); border-left: 1px solid #c9ccbf; border-top: 1px solid #c9ccbf; }
+.counter-actions[data-placement=above]::before { top: auto; bottom: -6px; transform: rotate(225deg); }
+.counter-actions::after { content: ""; position: absolute; bottom: calc(100% + 6px); left: var(--pointer-left); height: var(--leader-height); border-left: 1px solid var(--olive); transform: rotate(var(--leader-angle)); transform-origin: bottom; pointer-events: none; z-index: -1; }
+.counter-actions[data-placement=above]::after { bottom: auto; top: calc(100% + 6px); transform-origin: top; }
+/* Tooltips share the clamped bar's bounds instead of overflowing edge buttons. */
+.counter-actions .board-icon { position: static; }
+.counter-actions[data-placement=above] .board-tooltip { top: auto; bottom: calc(100% + 10px); }
+.dialog.board-dialog { width: min(900px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); }
+.board-dialog h2 { padding-right: 26px; }
+.board-dialog > p, .calendar-notes p { font-size: 14px; line-height: 1.6; margin-top: 14px; }
+.calendar-current { background: #edf0e5; border-radius: 5px; padding: 16px; margin-top: 20px; }
+.calendar-current strong { display: block; font-size: 14px; }
+.calendar-stages { display: flex; gap: 8px; margin-top: 14px; }
+.calendar-weeks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 20px; max-height: 36vh; overflow: auto; padding: 5px; }
+.calendar-weeks button { display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 4px; font-size: 11px; padding: 10px; }
+.calendar-weeks b { font-size: 15px; }
+.calendar-weeks [aria-pressed=true], .calendar-stages [aria-pressed=true] { background: var(--olive); color: var(--paper); border-color: var(--olive); }
+.calendar-notes { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); }
+.calendar-notes summary { cursor: pointer; }
+.calendar-notes h3 { margin-top: 18px; }
+.calendar-notes button { margin-top: 14px; }
+.reference-note { color: #647058; }
+@media (max-width: 1000px) {
+  .floating-panel { width: 210px; }
+  .unit-panel { width: 240px; }
+  .board-workspace .research-footer p { display: none; }
+}
+@media (max-width: 650px) {
+  #board-top { inset: 10px 10px auto; flex-direction: column; gap: 8px; }
+  .calendar-chip { padding: 9px 12px; align-self: flex-start; }
+  .calendar-chip > span { font-size: 14px; }
+  .calendar-chip small { font-size: 11px; }
+  .board-tools { align-self: flex-end; padding: 3px; }
+  .floating-panel { top: 135px; width: calc(50% - 15px); max-height: 28dvh; }
+  .order-panel { left: 10px; }
+  .unit-panel { right: 10px; }
+  .floating-panel > summary { padding: 11px 9px; font-size: 12px; }
+  #board-roster, #board-detail { padding: 10px; }
+  .panel-empty { font-size: 12px; }
+  .panel-footnote { font-size: 10px; }
+  #board-detail h2 { font-size: 15px; }
+  .board-unit-art { height: 65px; margin-bottom: 10px; }
+  .board-unit-art img { height: 65px; width: 85px; }
+  .unit-facts > div { flex-direction: column; gap: 4px; }
+  .unit-facts dd { text-align: left; }
+  .unit-local-controls { flex-wrap: wrap; }
+  .empty-unit { padding: 0; }
+  .board-workspace .research-controls { right: 10px; bottom: 90px; }
+  .board-workspace .research-status { left: 6px; bottom: 65px; max-width: calc(100% - 12px); }
+  .board-workspace .research-footer { bottom: 44px; font-size: 10px; padding: 3px 8px; }
+  #board-message { max-width: 100%; font-size: 10px; padding: 5px 8px; }
+  .board-tooltip { max-width: 160px; }
+  .board-tools .board-tooltip { left: auto; right: 0; transform: none; }
+  .calendar-weeks { grid-template-columns: repeat(2, 1fr); }
+  .dialog.board-dialog { padding: 24px 18px; }
+  .dialog.board-dialog h2 { font-size: 24px; }
+  .dialog.board-dialog > p { font-size: 12px; line-height: 1.5; margin-block: 10px; }
+}

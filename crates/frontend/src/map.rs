@@ -11,6 +11,7 @@ use web_sys::Element;
 
 mod research;
 pub use research::mount as mount_research;
+pub(crate) use research::{focus as focus_board, refresh as refresh_board};
 
 // Asset contract: 18 upright yaw views, east first, clockwise in a 6×3 atlas.
 const FRAME_COUNT: usize = 18;

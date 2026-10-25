@@ -1,4 +1,4 @@
-//! Full-board research viewer. It never shares state or DOM with the sandbox.
+//! Full-board viewport. Planning overlays are separate from simulation state.
 use crate::document;
 use cna_map::{
     geometry::BoardPoint,
@@ -37,9 +37,10 @@ struct Research {
     board_size: [f64; 2],
     viewport: Option<Viewport>,
     manifest: Option<Manifest>,
-    requested: bool,
     tiles: BTreeMap<(u32, u32, u32), Element>,
     pointers: BTreeMap<i32, ScreenPoint>,
+    press: Option<ScreenPoint>,
+    dragged: bool,
 }
 
 impl Research {
@@ -64,7 +65,7 @@ impl Research {
                     x: self.board_size[0] / 2.0,
                     y: self.board_size[1] / 2.0,
                 },
-                self.fit(),
+                self.fit().max(rect.height() / self.board_size[1]).max(0.25),
             ));
         let mut viewport = Viewport::new(
             center,
@@ -191,12 +192,10 @@ impl Research {
                 .unwrap();
         }
         self.readout.set_text_content(Some(&format!(
-            "Center {:.1}, {:.1} · {:.1}% · DPR {}",
-            center.x,
-            center.y,
-            v.zoom() * 100.0,
-            v.device_pixel_ratio()
+            "{:.0}% · Full source board",
+            v.zoom() * 100.0
         )));
+        crate::board::overlay(v);
         let Some(manifest) = &self.manifest else {
             return;
         };
@@ -325,12 +324,12 @@ fn request_manifest(state: Rc<RefCell<Research>>) -> Result<(), JsValue> {
                 .unwrap()
                 .set_attribute("hidden", "")
                 .unwrap();
-            state.status.set_text_content(Some(
-                "Tile manifest loaded · research only; terrain and scenarios are not verified.",
-            ));
+            state
+                .status
+                .set_text_content(Some("Source map loaded · terrain and seams unverified"));
             state.render();
         } else {
-            state.status.set_text_content(Some("Artwork unavailable · source-map distribution permission is pending; pan and zoom remain available."));
+            state.status.set_text_content(Some("Artwork unavailable · configure private-review tiles; public builds do not bundle source artwork."));
         }
         // One request per page; release its callback after completion.
         request.set_onloadend(None);
@@ -345,14 +344,17 @@ pub fn mount() -> Result<(), JsValue> {
     if document().get_element_by_id("map-research").is_some() {
         return Ok(());
     }
-    let root = document().create_element("details")?;
+    let root = document().create_element("section")?;
     root.set_id("map-research");
-    root.set_inner_html(r#"<summary>Full-board map · research</summary>
-      <div class="research-heading"><div><span class="eyebrow">Map workstream / full-board viewport</span><h2>One board. Six sections.</h2></div><div class="research-controls"><button data-map-control="overview">Overview</button><button data-map-control="gameplay">Gameplay scale</button><button data-map-control="out" aria-label="Zoom out research map">−</button><button data-map-control="in" aria-label="Zoom in research map">+</button></div></div>
+    root.set_attribute("open", "")?;
+    root.set_inner_html(r#"<div class="research-controls" aria-label="Map controls"><button data-map-control="overview" aria-label="Fit full board"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></svg></button><button data-map-control="gameplay" aria-label="Map detail scale">1:1</button><button data-map-control="out" aria-label="Zoom out map">−</button><button data-map-control="in" aria-label="Zoom in map">+</button></div>
       <p class="research-status" role="status">Checking local tile manifest…</p>
-      <div class="research-viewport" tabindex="0" role="region" aria-label="Full-board research map" aria-describedby="research-help"><div class="research-board"></div><span class="research-unavailable">Source artwork is not bundled</span></div>
-      <div class="research-footer"><p id="research-help">Drag to pan · scroll or pinch to zoom · arrow keys to pan · + / − to zoom · Home to fit</p><output class="research-readout"></output></div>"#);
-    document().body().unwrap().append_child(&root)?;
+      <div class="research-viewport" tabindex="0" role="region" aria-label="Full-board map" aria-describedby="research-help"><div class="research-board"></div><div id="board-counters"></div><span class="research-unavailable">Source artwork is not bundled</span></div>
+      <div class="research-footer"><p id="research-help">Drag to pan · scroll to zoom · arrows / + / − / Home</p><output class="research-readout"></output></div>"#);
+    document()
+        .query_selector(".board-workspace")?
+        .unwrap()
+        .prepend_with_node_1(&root)?;
     let surface = root.query_selector(".research-viewport")?.unwrap();
     let source: serde_json::Value =
         serde_json::from_str(include_str!("../../../../public/data/map/sources.json")).unwrap();
@@ -368,33 +370,14 @@ pub fn mount() -> Result<(), JsValue> {
         root: root.clone(),
         viewport: None,
         manifest: None,
-        requested: false,
         tiles: BTreeMap::new(),
         pointers: BTreeMap::new(),
+        press: None,
+        dragged: false,
     }));
-    let s = state.clone();
-    let toggle = Closure::<dyn FnMut(Event)>::new(move |_| {
-        let request = {
-            let mut state = s.borrow_mut();
-            state.pointers.clear();
-            if !state.root.has_attribute("open") {
-                for (_, node) in std::mem::take(&mut state.tiles) {
-                    node.remove();
-                }
-            }
-            state.resize();
-            let request = state.root.has_attribute("open") && !state.requested;
-            if request {
-                state.requested = true;
-            }
-            request
-        };
-        if request {
-            let _ = request_manifest(s.clone());
-        }
-    });
-    root.add_event_listener_with_callback("toggle", toggle.as_ref().unchecked_ref())?;
-    toggle.forget();
+    RESEARCH.with(|current| *current.borrow_mut() = Some(state.clone()));
+    state.borrow_mut().resize();
+    request_manifest(state.clone())?;
     let s = state.clone();
     let click = Closure::<dyn FnMut(Event)>::new(move |event: Event| {
         if let Some(action) = event
@@ -417,6 +400,14 @@ pub fn mount() -> Result<(), JsValue> {
     ] {
         let s = state.clone();
         let pointer = Closure::<dyn FnMut(PointerEvent)>::new(move |event: PointerEvent| {
+            if event
+                .target()
+                .and_then(|t| t.dyn_into::<Element>().ok())
+                .and_then(|t| t.closest("button").ok().flatten())
+                .is_some()
+            {
+                return;
+            }
             let mut state = s.borrow_mut();
             let id = event.pointer_id();
             let point = state.point(f64::from(event.client_x()), f64::from(event.client_y()));
@@ -425,10 +416,22 @@ pub fn mount() -> Result<(), JsValue> {
                     event.prevent_default();
                     let _ = state.surface.unchecked_ref::<HtmlElement>().focus();
                     let _ = state.surface.set_pointer_capture(id);
+                    if state.pointers.is_empty() {
+                        state.press = Some(point);
+                        state.dragged = false;
+                    } else {
+                        state.dragged = true;
+                    }
                     state.pointers.insert(id, point);
                 }
                 "pointermove" if state.pointers.contains_key(&id) => {
                     event.prevent_default();
+                    if state
+                        .press
+                        .is_some_and(|p| (p.x - point.x).hypot(p.y - point.y) > 4.0)
+                    {
+                        state.dragged = true;
+                    }
                     let (from, distance) = pointer_geometry(&state.pointers);
                     state.pointers.insert(id, point);
                     let (to, new_distance) = pointer_geometry(&state.pointers);
@@ -436,7 +439,13 @@ pub fn mount() -> Result<(), JsValue> {
                     state.transform(from, to, zoom);
                 }
                 "pointerup" | "pointercancel" | "lostpointercapture" => {
+                    if event.type_() == "pointerup" && state.pointers.len() == 1 && !state.dragged {
+                        if let Some(v) = state.viewport {
+                            crate::board::place(v.to_board(point));
+                        }
+                    }
                     state.pointers.remove(&id);
+                    state.render();
                 }
                 _ => {}
             }
@@ -483,6 +492,22 @@ pub fn mount() -> Result<(), JsValue> {
     let s = state.clone();
     let keyboard = Closure::<dyn FnMut(KeyboardEvent)>::new(move |event: KeyboardEvent| {
         if event.ctrl_key() || event.meta_key() || event.alt_key() {
+            return;
+        }
+        if event
+            .target()
+            .and_then(|t| t.dyn_into::<Element>().ok())
+            .is_some_and(|t| t.tag_name() == "BUTTON")
+        {
+            return;
+        }
+        if event.key() == "Enter" {
+            event.prevent_default();
+            let mut state = s.borrow_mut();
+            if let Some(v) = state.viewport {
+                crate::board::place(v.center());
+            }
+            state.render();
             return;
         }
         let action = match event.key().as_str() {
@@ -535,4 +560,34 @@ pub fn mount() -> Result<(), JsValue> {
         .add_event_listener_with_callback("resize", resize.as_ref().unchecked_ref())?;
     resize.forget();
     Ok(())
+}
+
+thread_local! { static RESEARCH: RefCell<Option<Rc<RefCell<Research>>>> = const { RefCell::new(None) }; }
+
+pub fn refresh() {
+    RESEARCH.with(|s| {
+        if let Some(s) = &*s.borrow() {
+            s.borrow_mut().render();
+        }
+    });
+}
+
+pub fn focus(point: BoardPoint) {
+    RESEARCH.with(|s| {
+        if let Some(s) = &*s.borrow() {
+            let mut s = s.borrow_mut();
+            if let Some(v) = s.viewport {
+                let mut next = Viewport::new(
+                    point,
+                    v.zoom().max(0.4),
+                    v.css_size(),
+                    v.device_pixel_ratio(),
+                )
+                .unwrap();
+                next.clamp_to_board(s.board_size).unwrap();
+                s.viewport = Some(next);
+                s.render();
+            }
+        }
+    });
 }

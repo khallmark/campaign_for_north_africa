@@ -30,7 +30,8 @@ needed. Do not start a review server to run tests. Keep TCP port 4175 free.
 | `npm test` | Credential and distribution guards, `cargo test --workspace --locked` (including doctests), then Node functional tests. Source-dependent tests are explicitly ignored. |
 | `npm run test:unit` | Rust library and binary unit tests; focused developer command, not a substitute for the default guards. |
 | `npm run test:integration` | All Cargo integration targets under `crates/*/tests`; synthetic map/tile, catalog, contract and sandbox behavior. |
-| `npm run test:functional` | Node's built-in runner discovers `tests/*.test.mjs`: synthetic guard tests, plus PR3's HTTP route tests when merged. No new framework. |
+| `npm run test:functional` | Node's built-in runner discovers `tests/*.test.mjs`: synthetic guard and private-review HTTP route tests. No new framework. |
+| `npm run test:private-review` | Focused alias for the existing synthetic HTTP route suite; already runs once through `test:functional`. |
 | `npm run test:e2e` | Guards, then the existing Playwright suite. Its webServer builds guarded production Wasm/Vite assets and starts/stops a fresh preview. |
 | `npm run test:browser -- ...` | Existing low-level Playwright entry point, retained for compatibility. Prefer `test:e2e` so credential guards also run. |
 | `npm run check:ci` | Default gate plus E2E; CI runs this on both Linux and macOS. |
@@ -100,7 +101,7 @@ after restoring sparse paths. Missing source inputs fail the integrity preflight
 do not suppress failures, refresh locks to hide drift, or run source extraction
 in default CI. Regenerated tiles belong outside `public/` and `dist/`.
 
-## Worker adoption and pending PR reconciliation
+## Worker adoption and pending data wiring
 
 Workers should adopt this setup after the integration owner merges it, rerun
 setup or `npm ci`, run `npm run check`, then `npm run test:e2e` before review.
@@ -110,14 +111,13 @@ outcomes with inputs that distinguish likely regressions. No quota is required.
 Source-dependent Rust tests must have an explanatory `#[ignore]` and run under
 `test:sources`; fast synthetic counterparts should remain in the default lane.
 
-This branch is based on the integration branch with PR2 merged; it does not
-duplicate PR2's commits or include PR3. On combining:
+This branch includes the approved integration base with PR2 and PR3 merged,
+without cherry-picking or duplicating either worker's implementation.
 
-- **PR3:** preserve `test:private-review: node --test tests/private-review.test.mjs`
-  as a focused alias. Keep this branch's `test`, `pretest` and `test:functional`:
-  the functional glob already runs PR3's route suite, so do not run it twice.
-  Preserve PR3's canonicalized `realpath(await mkdtemp(...))` fixture root.
-  Playwright automatically discovers its browser additions.
+- **PR3 (integrated):** its `test:private-review` alias and canonicalized
+  `realpath(await mkdtemp(...))` fixture root are preserved. `npm test` invokes
+  the HTTP suite once via `test:functional`; do not add a second invocation.
+  Playwright automatically discovers browser cases across the four projects.
 - **PR2 (integrated):** `test:source-data` runs its existing importer/schema tests
   directly. That suite rebuilds from original images/PDFs, so it stays out of
   default CI. Its owner can add independent synthetic importer tests to the fast
@@ -132,9 +132,8 @@ duplicate PR2's commits or include PR3. On combining:
   Do not wire absent tests as a passing zero-test gate. Keep the full DB/private
   source text out of `public/`, `dist/` and Wasm; the data owner owns those tests
   and any safe consumer projection. The tooling is not tied to JSON storage.
-- Expect a `package.json` conflict with PR3's `test`/`pretest` edits and possibly
-  README context overlap. Keep both feature documentation and this command
-  contract. Do not import either worker's implementation into this setup PR.
+- PR3's `package.json` and README overlap has been reconciled. Preserve both
+  feature documentation and this command contract in later integrations.
 
 CI uses read-only repository permissions and does not deploy or publish. Merges,
 private source grants and production distribution remain the integration owner's

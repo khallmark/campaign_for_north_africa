@@ -73,7 +73,7 @@ impl Catalog {
             .collect();
         format!(
             r#"<h2>Unit catalog</h2>
-            <p>Browse rulebook records and illustrative sprites. These are references, not deployable units; the battlefield still uses simplified tutorial stats.</p>
+            <p>Browse rulebook records and illustrative sprites. These are references, not an operational order of battle. Source statistics are not executable combat values.</p>
             <details class="catalog-coverage"><summary>{}</summary><p>{}</p><ul>{gaps}</ul><p>Identity verification does not verify every stat. Only sourced numbers are displayed. PDF citations use one-based physical pages.</p></details>
             <div class="catalog-filters"><label>Search records<input id="catalog-query" type="search" placeholder="Name, nationality, role or ID" data-catalog-filter autofocus /></label>
             <label>Record type<select id="catalog-kind" data-catalog-filter><option value="">All record types</option>{kinds}</select></label>

@@ -11,6 +11,7 @@
     "preview": "vite preview --host 0.0.0.0",
     "tiles": "cargo run --release -p cna-map --bin cna-map-tiles",
     "test:browser": "playwright test",
+    "test:private-review": "node --test tests/private-review.test.mjs",
     "test:e2e": "npm run check:guards && npm run test:browser --",
     "test:unit": "cargo test --workspace --locked --lib --bins",
     "test:integration": "cargo test --workspace --locked --test '*'",

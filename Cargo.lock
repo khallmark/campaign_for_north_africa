@@ -90,6 +90,7 @@ dependencies = [
 name = "cna-sim"
 version = "0.1.0"
 dependencies = [
+ "cna-catalog",
  "cna-map",
  "serde",
  "serde_json",

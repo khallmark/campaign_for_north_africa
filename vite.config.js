@@ -6,8 +6,8 @@ import { defineConfig, loadEnv } from 'vite';
 // Explicit local review opt-in. Never copy this source artwork into a build.
 export default defineConfig(({ command, mode }) => {
   // Vite serves workspace files outside public/ too, including /@fs and ?raw.
-  // Preserve Vite 7's default deny rules; private review never enables the DB.
-  const server = { fs: { deny: ['.env', '.env.*', '*.{crt,pem}', '**/.git/**', '**/catalog.sqlite{,-*}'] } };
+  // Source images must use the opted-in middleware; the DB is never served.
+  const server = { fs: { deny: ['.env', '.env.*', '*.{crt,pem}', '**/.git/**', '**/catalog.sqlite{,-*}', '**/docs/CNAv2.1.0/images/**'] } };
   const directory = loadEnv(mode, process.cwd(), 'CNA_PRIVATE_REVIEW_').CNA_PRIVATE_REVIEW_TILES;
   if (command !== 'serve' || !directory) return { server };
   const root = resolve(directory);

@@ -36,9 +36,10 @@ async function fixture(t, enabled = true) {
 
 test('private source route serves only opted-in image basenames over GET/HEAD', async t => {
   const { root, assets, servers } = await fixture(t);
+  const options = reviewConfig({ command: 'serve', mode: 'test' });
   const server = await createServer({
-    ...reviewConfig({ command: 'serve', mode: 'test' }), root, configFile: false,
-    logLevel: 'silent', server: { host: '127.0.0.1', port: 0 },
+    ...options, root, configFile: false,
+    logLevel: 'silent', server: { ...options.server, host: '127.0.0.1', port: 0 },
   });
   servers.push(server);
   await server.listen();
@@ -68,7 +69,8 @@ test('private source route serves only opted-in image basenames over GET/HEAD', 
 test('private source route is absent without opt-in and from production build/preview', async t => {
   const { root, assets, servers } = await fixture(t, false);
   const config = { root, configFile: false, mode: 'test', logLevel: 'silent' };
-  const server = await createServer({ ...config, ...reviewConfig({ command: 'serve', mode: 'test' }), server: { host: '127.0.0.1', port: 0 } });
+  const options = reviewConfig({ command: 'serve', mode: 'test' });
+  const server = await createServer({ ...config, ...options, server: { ...options.server, host: '127.0.0.1', port: 0 } });
   servers.push(server);
   await server.listen();
   const path = '/__source-tokens/' + encodeURIComponent(Object.keys(assets)[0]);
@@ -122,7 +124,7 @@ test('private map tiles revalidate cached bytes and never cache missing files', 
 });
 
 for (const enabled of [false, true]) {
-  test(`private SQLite is denied through Vite files and transforms (review=${enabled})`, async t => {
+  test(`private SQLite and artwork are denied through Vite files and transforms (review=${enabled})`, async t => {
     const { root, assets, servers } = await fixture(t, enabled);
     await mkdir(join(root, 'data'));
     await mkdir(join(root, 'public/data'), { recursive: true });
@@ -153,12 +155,30 @@ for (const enabled of [false, true]) {
       '/data/catalog.sqlite-wal', '/data/catalog.sqlite-shm', '/data/catalog.sqlite-journal',
       '/.env', '/secret.pem',
     ];
+    for (const name of Object.keys(assets)) {
+      const image = '/docs/CNAv2.1.0/images/' + encodeURIComponent(name);
+      for (const prefix of ['', `/@fs/${root}`]) {
+        for (const query of ['', '?raw', '?url', '?import']) paths.push(prefix + image + query);
+      }
+    }
     for (const path of paths) {
       for (const method of ['GET', 'HEAD']) {
         const response = await fetch(base + path, { method, headers: { accept: 'application/octet-stream' } });
         const bytes = Buffer.from(await response.arrayBuffer());
-        assert.ok([403, 404].includes(response.status), `${method} ${path}: ${response.status}`);
+        if (path.endsWith('?import') && response.status === 200) {
+          // Vite can export a URL for an unresolved encoded filename. That is
+          // not source content, and following the URL must still be denied.
+          if (method === 'GET') {
+            const target = /^export default "(\/[^"\n]+)"/.exec(bytes.toString());
+            assert.ok(target, `${path}: expected a URL-only module`);
+            const file = await fetch(base + target[1], { headers: { accept: 'application/octet-stream' } });
+            assert.ok([403, 404].includes(file.status), `${target[1]}: ${file.status}`);
+          }
+        } else {
+          assert.ok([403, 404].includes(response.status), `${method} ${path}: ${response.status}`);
+        }
         assert.equal(bytes.includes(privateBytes), false, path);
+        for (const asset of Object.values(assets)) assert.equal(bytes.includes(asset), false, path);
       }
     }
     // Encoded separators are not file routes in Vite. HTML navigation may use

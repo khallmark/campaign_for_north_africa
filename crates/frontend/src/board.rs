@@ -250,9 +250,16 @@ impl Board {
                 self.catalog
                     .select_type(&element.get_attribute("data-type").unwrap());
             }
-            "catalog-page" => {
+            "catalog-record" => {
                 self.catalog
-                    .update_results(element.get_attribute("data-page").unwrap().parse().unwrap());
+                    .open_record(&element.get_attribute("data-record").unwrap());
+            }
+            "catalog-list" => self.catalog.back_to_list(),
+            "catalog-page" => {
+                self.catalog.update_results(
+                    element.get_attribute("data-page").unwrap().parse().unwrap(),
+                    true,
+                );
                 let _ = document()
                     .query_selector(".catalog-count")
                     .unwrap()
@@ -518,7 +525,7 @@ pub fn mount() -> Result<(), JsValue> {
                     ("input", "INPUT") | ("change", "SELECT")
                 )
             {
-                b.catalog.update_results(0);
+                b.catalog.update_results(0, false);
             }
         });
     });

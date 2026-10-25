@@ -41,9 +41,9 @@
       "coverage": {"kind": "hexside", "sides": [{"hex":"D3714","direction":"east"},{"hex":"D3615","direction":"north_west"},{"hex":"D3516","direction":"north_west"},{"hex":"D3516","direction":"east"},{"hex":"D3517","direction":"east"},{"hex":"D3518","direction":"east"}], "observation": {"status": "provisional", "value": "railroad"}}
     },
     {
-      "id": "matruh-rail-west", "label": "Charing Cross railroad · western sample", "notes": "Cross-tied line continues from D3612 east then southeast to the Gerawla junction. Near D3515 the path lies close to a corner; keep provisional pending second review.",
-      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=9400,1750,800,450", "docs/CNAv2.1.0/images/TEC.png#legend/Railroad"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
-      "coverage": {"kind": "hexside", "sides": [{"hex":"D3612","direction":"east"},{"hex":"D3514","direction":"north_west"},{"hex":"D3514","direction":"east"},{"hex":"D3515","direction":"north_east"}], "observation": {"status": "provisional", "value": "railroad"}}
+      "id": "matruh-rail-west", "label": "Charing Cross unfinished railroad · western sample", "notes": "Correction from whole-map legend comparison: disconnected cross marks match TEC Unfinished Railroad, not its continuous Railroad symbol. Retain the traced sides as unresolved construction-state evidence; exclude them from typed network links. Near D3515 the crossing also lies close to a corner. Completion date and operational status are not established.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=9400,1750,800,450", "docs/CNAv2.1.0/images/TEC.png#legend/Unfinished-Railroad"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"D3612","direction":"east"},{"hex":"D3514","direction":"north_west"},{"hex":"D3514","direction":"east"},{"hex":"D3515","direction":"north_east"}], "observation": {"status": "unresolved", "source_label": "Unfinished Railroad; construction-state and operational interpretation unresolved"}}
     },
     {
       "id": "gerawla-track", "label": "Gerawla southern track · sample", "notes": "Single dashed line crosses D3516 to D3415 then D3315. The double-dashed line southwest of Charing Cross is an unfinished road, NOT a track; omitted until construction state is modeled.",

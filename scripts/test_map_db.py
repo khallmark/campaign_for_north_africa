@@ -45,6 +45,9 @@ class MapDatabaseTests(unittest.TestCase):
             self.assertNotIn("E3519", reachable)
             self.assertEqual("D3616" in reachable, feature == "road")
             self.assertEqual("D3516" in reachable, feature == "railroad")
+        # TEC's disconnected crosses are unfinished railroad, not usable links.
+        self.assertEqual(self.db.execute("SELECT count(*) FROM network_links WHERE survey='matruh-rail-west'").fetchone()[0], 0)
+        self.assertEqual(self.db.execute("SELECT count(*) FROM observations WHERE survey='matruh-rail-west' AND status='unresolved'").fetchone()[0], 4)
         self.assertEqual(self.db.execute("SELECT count(*) FROM network_links WHERE status='reviewed'").fetchone()[0], 0)
 
     def test_regeneration_is_logically_identical_and_changes_are_detectable(self):

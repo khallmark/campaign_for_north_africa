@@ -54,20 +54,24 @@ retains the existing section priority and does not resolve seam identity.
 ## Coverage as of the first transcription batch
 
 There are **19 surveys / 102 observations**: 70 terrain, 23 hexside and 9 point
-observations. **100 are provisional, 2 unresolved, none human-reviewed.** Terrain
+observations. **96 are provisional, 6 unresolved, none human-reviewed.** Terrain
 has observations in 70 cells (B 35, C 9, D 10, E 16); 7,110 cells have none. Even
 observed cells remain partially transcribed; absent features are unknown, not
 Clear or evidence of an absent road/river.
 
 - Matruh: settlement dots, distinct connected coastal road/rail samples,
-  Charing Cross railroad, Gerawla track, rough and salt-marsh samples.
+  Charing Cross unfinished railroad evidence, Gerawla track, rough and salt-marsh samples.
 - Giarabub: village, two oasis symbols and salt-marsh sample. The oasis label's
   extent is not interpreted as a region filled with oases.
 - Libyan Sand Desert, Jebel Akhdar and Nile Delta: interior samples, using the
   existing Desert, Mountain and Delta vocabulary after comparison with TEC.
 - Five Nile minor-river side observations; no wadi/slope/escarpment transcription yet.
 - Unresolved: Matruh's offshore port icon versus its operational settlement
-  hex; Tanta's city category. No capacity or city level is assigned.
+  hex; Tanta's city category; four Charing Cross unfinished railroad sides.
+  The disconnected cross marks match TEC's **Unfinished Railroad**, not its
+  continuous Railroad symbol. These sides are excluded from typed network links;
+  construction state and operational interpretation need a separate contract.
+  No capacity or city level is assigned.
 
 These are **samples**, not completed regions. Network ends are transcription
 limits, not real termini. The unfinished road southwest of Charing Cross is

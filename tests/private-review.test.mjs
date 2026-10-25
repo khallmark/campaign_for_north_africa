@@ -22,7 +22,7 @@ async function fixture(t, enabled = true) {
   process.chdir(root);
   const images = join(root, 'docs/CNAv2.1.0/images');
   await mkdir(images, { recursive: true });
-  await writeFile(join(root, 'index.html'), '<!doctype html><title>Synthetic route fixture</title>');
+  await writeFile(join(root, 'index.html'), '<!doctype html><title>Synthetic route fixture</title><div class="startup"></div>');
   if (enabled) await writeFile(join(root, '.env.test'), `CNA_PRIVATE_REVIEW_TILES=${root}/tiles\n`);
   const assets = {
     'Token (1) #2.png': Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j1ioAAAAASUVORK5CYII=', 'base64'),
@@ -43,6 +43,7 @@ test('private source route serves only opted-in image basenames over GET/HEAD', 
   servers.push(server);
   await server.listen();
   const base = `http://127.0.0.1:${server.httpServer.address().port}/__source-tokens/`;
+  assert.match(await (await fetch(new URL('/', base))).text(), /class="startup-overview".*src="\/tiles\/map\/0\/0_0.png"/);
   for (const [name, bytes] of Object.entries(assets)) {
     const url = base + encodeURIComponent(name);
     const response = await fetch(url);
@@ -73,6 +74,7 @@ test('private source route is absent without opt-in and from production build/pr
   const path = '/__source-tokens/' + encodeURIComponent(Object.keys(assets)[0]);
   const request = { headers: { accept: 'image/png' } };
   assert.equal((await fetch(`http://127.0.0.1:${server.httpServer.address().port}${path}`, request)).status, 404);
+  assert.doesNotMatch(await (await fetch(`http://127.0.0.1:${server.httpServer.address().port}/`)).text(), /startup-overview|\/tiles\/map\//);
 
   // Even with the opt-in configured, a real production build/preview must not serve source bytes.
   await writeFile(join(root, '.env.test'), `CNA_PRIVATE_REVIEW_TILES=${root}/tiles\n`);
@@ -81,6 +83,42 @@ test('private source route is absent without opt-in and from production build/pr
   servers.push(production);
   assert.equal((await fetch(`http://127.0.0.1:${production.httpServer.address().port}${path}`, request)).status, 404);
   assert.match(await readFile(join(root, 'dist/index.html'), 'utf8'), /Synthetic route fixture/);
+  assert.doesNotMatch(await readFile(join(root, 'dist/index.html'), 'utf8'), /startup-overview|\/tiles\/map\//);
+});
+
+test('private map tiles revalidate cached bytes and never cache missing files', async t => {
+  const { root, assets, servers } = await fixture(t);
+  await mkdir(join(root, 'tiles/0'), { recursive: true });
+  const file = join(root, 'tiles/0/0_0.png');
+  const bytes = Object.values(assets)[0];
+  await writeFile(file, bytes);
+  const options = reviewConfig({ command: 'serve', mode: 'test' });
+  const server = await createServer({
+    ...options, root, configFile: false, logLevel: 'silent',
+    server: { ...options.server, host: '127.0.0.1', port: 0 },
+  });
+  servers.push(server);
+  await server.listen();
+  const url = `http://127.0.0.1:${server.httpServer.address().port}/tiles/map/0/0_0.png`;
+  const first = await fetch(url);
+  assert.equal(first.status, 200);
+  assert.equal(first.headers.get('cache-control'), 'private, max-age=0, must-revalidate');
+  const etag = first.headers.get('etag');
+  assert.ok(etag);
+  assert.deepEqual(Buffer.from(await first.arrayBuffer()), bytes);
+  const cached = await fetch(url, { headers: { 'if-none-match': etag } });
+  assert.equal(cached.status, 304);
+  assert.equal((await cached.arrayBuffer()).byteLength, 0);
+  const updated = Buffer.concat([bytes, Buffer.from('changed')]);
+  await writeFile(file, updated);
+  const changed = await fetch(url, { headers: { 'if-none-match': etag } });
+  assert.equal(changed.status, 200);
+  assert.notEqual(changed.headers.get('etag'), etag);
+  assert.deepEqual(Buffer.from(await changed.arrayBuffer()), updated);
+  await rm(file);
+  const missing = await fetch(url, { headers: { 'if-none-match': changed.headers.get('etag') } });
+  assert.equal(missing.status, 404);
+  assert.equal(missing.headers.get('cache-control'), 'private, no-store');
 });
 
 for (const enabled of [false, true]) {

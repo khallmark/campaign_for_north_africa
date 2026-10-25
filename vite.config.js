@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { readFile, realpath } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { defineConfig, loadEnv } from 'vite';
@@ -15,6 +16,9 @@ export default defineConfig(({ command, mode }) => {
     server,
     plugins: [{
       name: 'cna-private-review-tiles',
+      transformIndexHtml(html) {
+        return html.replace('<div class="startup">', '<div class="startup"><img class="startup-overview" src="/tiles/map/0/0_0.png" alt="" fetchpriority="high" />');
+      },
       configureServer(server) {
         server.middlewares.use(async (request, response, next) => {
           const pathname = (request.url ?? '').split('?')[0];
@@ -49,6 +53,16 @@ export default defineConfig(({ command, mode }) => {
             const bytes = await readFile(file);
             if (token) response.setHeader('Content-Security-Policy', "default-src 'none'; style-src 'unsafe-inline'; sandbox");
             response.setHeader('Content-Type', match[1].endsWith('.json') ? 'application/json' : match[1].endsWith('.svg') ? 'image/svg+xml' : 'image/png');
+            if (!token) {
+              const etag = `"${createHash('sha256').update(bytes).digest('hex')}"`;
+              response.setHeader('Cache-Control', 'private, max-age=0, must-revalidate');
+              response.setHeader('ETag', etag);
+              if (request.headers['if-none-match']?.split(',').some(value => value.trim().replace(/^W\//, '') === etag)) {
+                response.statusCode = 304;
+                response.end();
+                return;
+              }
+            }
             response.end(request.method === 'HEAD' ? undefined : bytes);
           } catch (error) {
             response.statusCode = error.code === 'ENOENT' ? 404 : 500;

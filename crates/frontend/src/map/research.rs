@@ -316,6 +316,17 @@ fn request_manifest(state: Rc<RefCell<Research>>) -> Result<(), JsValue> {
                                 && l.height >= m.levels[i - 1].height))
                 })
         }) {
+            if manifest.levels[0].columns == 1 && manifest.levels[0].rows == 1 {
+                let overview = document().create_element("img").unwrap();
+                overview.set_class_name("research-overview");
+                overview.set_attribute("alt", "").unwrap();
+                overview.set_attribute("draggable", "false").unwrap();
+                overview.set_attribute("fetchpriority", "high").unwrap();
+                state.board.prepend_with_node_1(&overview).unwrap();
+                overview
+                    .set_attribute("src", "/tiles/map/0/0_0.png")
+                    .unwrap();
+            }
             state.manifest = Some(manifest);
             state
                 .surface

@@ -39,6 +39,40 @@ test('missing artwork stays explicit and simulation actions do not alter the boa
   expect((await state(page)).x).toBeCloseTo(before.x + 100, 4);
 });
 
+test('a small overview covers loading tiles until full detail arrives', async ({ page }) => {
+  let release!: () => void;
+  const detail = new Promise<void>(resolve => { release = resolve; });
+  let overviewRequests = 0;
+  let failDetails = false;
+  await page.route('**/tiles/map/manifest.json', route => route.fulfill({ json: manifest }));
+  await page.route(/\/tiles\/map\/\d+\/\d+_\d+\.png$/, async route => {
+    if (route.request().url().endsWith('/0/0_0.png')) overviewRequests++;
+    else {
+      await detail;
+      if (failDetails) return route.fulfill({ status: 404, body: 'Missing tile' });
+    }
+    await route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="448" height="145"><rect width="448" height="145" fill="#abbd83"/></svg>' });
+  });
+  try {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('.research-board')).toHaveAttribute('data-ready', 'true');
+    await expect(page.locator('.research-overview')).toBeVisible();
+    await expect(page.locator('.research-tile').first()).not.toHaveAttribute('data-ready', 'true');
+    await expect(page.locator('.research-tile').first().locator('span')).toBeHidden();
+    await expect(page.locator('.research-tile').first()).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    release();
+    await expect.poll(() => page.locator('.research-tile:not([data-ready=true])').count()).toBe(0);
+    failDetails = true;
+    await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
+    await expect.poll(() => page.locator('.research-tile:not([data-ready=false])').count()).toBe(0);
+    await expect(page.locator('.research-tile').first().locator('span')).toBeVisible();
+    await expect(page.locator('.research-tile').first()).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    expect(overviewRequests).toBe(1);
+  } finally {
+    release();
+  }
+});
+
 test('tiles follow drag, cursor zoom and a bounded visible ring', async ({ page }, testInfo) => {
   const requests: string[] = [];
   const errors: string[] = [];
@@ -71,6 +105,8 @@ test('tiles follow drag, cursor zoom and a bounded visible ring', async ({ page 
     const y0 = Math.max(0, Math.floor((s.y - s.height / (2 * s.zoom)) * sy / 512) - 1);
     const y1 = Math.min(l.rows - 1, Math.ceil((s.y + s.height / (2 * s.zoom)) * sy / 512));
     for (const request of requests.splice(0)) {
+      // One tiny full-board overview remains behind the bounded detail ring.
+      if (request === '/tiles/map/0/0_0.png') continue;
       const [, z, x, y] = request.match(/(\d+)\/(\d+)_(\d+)\.png$/)!;
       expect(+z).toBe(s.level);
       expect(+x).toBeGreaterThanOrEqual(x0); expect(+x).toBeLessThanOrEqual(x1);

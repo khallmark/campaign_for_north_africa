@@ -73,6 +73,37 @@ CNA-58 owns browser measurements and any evidence-backed target revision. A
 passing offline byte budget does not establish frame time, GPU memory, browser
 decode overhead, network latency or tile eviction behavior.
 
+## Private review loading measurements
+
+Chromium, 2458 × 1358 CSS pixels, DPR 2, actual private PNG tiles, with CDP
+network emulation at 10 Mbps and 60 ms latency. Each run starts with a fresh
+browser context, then reloads in that same context; no request interception.
+Tile time runs from the first tile request to the last tile response. These
+single-run measurements describe transfer/loading, not frame time or GPU memory.
+
+| State | Before: tile transfer / time | After: tile transfer / time |
+| --- | --- | --- |
+| Cold | 8,987,043 bytes / 7,284 ms | 9,099,558 bytes / 7,386 ms |
+| Reload | 8,987,043 bytes / 7,288 ms | 18,300 bytes / 698 ms |
+
+Reload transfer fell 99.8% and tile time fell about 90%. The server revalidates
+cached tiles and the manifest by content hash; changed or missing files do not
+reuse stale responses. Private opt-in and distribution restrictions are unchanged.
+
+Cold full-detail transfer is unchanged apart from one 112,215-byte overview.
+That overview appeared after 560 ms cold (63 ms on reload), covering blank tile
+placeholders while original-resolution detail arrived. It adds one 448 × 145
+image (259,840 decoded RGBA bytes) outside the 100-detail-tile cap. This is not a
+claim that cold full-resolution loading or frame time improved.
+
+Startup no longer waits for WebAssembly to request the private preview, and
+Google Fonts no longer blocks the application stylesheet. Separate cold captures
+at 1280 × 800 and 390 × 800 (DPR 2, the same network emulation) painted content at
+352/284 ms and finished the preview response at 388/390 ms, measured from
+navigation. WebAssembly finished downloading at 4,440/4,329 ms. The workspace
+becomes interactive after WebAssembly initializes; the earlier preview is only
+loading feedback, not an interactive map. Both widths had no horizontal overflow.
+
 ## Reproduce privately
 
 ```sh

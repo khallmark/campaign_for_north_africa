@@ -1,5 +1,28 @@
 import { expect, test, type Page } from '@playwright/test';
 
+test('startup paints without waiting for WebAssembly or external fonts', async ({ page }) => {
+  let release!: () => void;
+  const pending = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/*.wasm', async route => { await pending; await route.continue(); });
+  await page.route('https://fonts.googleapis.com/**', async route => {
+    await pending;
+    await route.fulfill({ contentType: 'text/css', body: '' });
+  });
+  try {
+    await page.goto('/', { waitUntil: 'commit' });
+    await expect(page.locator('.startup-status')).toBeVisible();
+    await expect(page.locator('.startup-status')).toContainText('Loading the map workspace');
+    await expect(page.locator('.startup')).toHaveCSS('position', 'fixed');
+    await expect.poll(() => page.evaluate(() => performance.getEntriesByName('first-contentful-paint').length)).toBe(1);
+    await expect(page.locator('.research-viewport')).toHaveCount(0);
+    release();
+    await expect(page.getByRole('region', { name: 'Full-board map', exact: true })).toBeVisible();
+    await expect(page.locator('.startup')).toHaveCount(0);
+  } finally {
+    release();
+  }
+});
+
 function collectErrors(page: Page) {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));

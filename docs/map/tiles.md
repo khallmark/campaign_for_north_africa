@@ -51,8 +51,24 @@ per board pixel. Exact per-axis level ratios position cropped boundary tiles.
 Only the visible rectangle plus one tile ring is requested; a coarser level is
 used if the DPR-aware candidate exceeds 100 live tile images. Old levels are
 removed before new requests, and closing the viewer removes its tile nodes.
-Failed images retain labeled placeholders. Browser cache/GPU retention and frame
-budgets still require CNA-58 measurements; a node cap is not a memory proof.
+One additional level-zero image, when that level fits a single tile, stays behind
+the detail ring to show the whole board while detail loads. Failed detail images
+still retain labeled placeholders instead of silently presenting the preview as
+full detail.
+
+With private review enabled, the HTML loading screen also requests that preview
+before WebAssembly downloads. Without opt-in, it shows only a local loading
+status; production HTML contains no source preview request. External fonts load
+without blocking the first paint, using system fonts until they are available.
+
+The opt-in private dev server permits browser caching of map tiles and the
+manifest, with mandatory content-hash revalidation on every reuse. Unchanged
+bytes return 304; changed files return fresh bytes, and missing files return an
+uncacheable error. Source-token responses remain `private, no-store`. This does
+not enable shared caching, production serving, or source redistribution.
+See [loading measurements](performance.md#private-review-loading-measurements).
+Browser GPU retention and frame budgets still require measurement; a node cap
+is not a memory proof.
 
 ```sh
 npm run test:browser -- tests/browser/map-viewport.spec.ts tests/browser/smoke.spec.ts

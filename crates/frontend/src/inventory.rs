@@ -63,7 +63,22 @@ impl Inventory {
         )
     }
 
+    pub fn planning_panel(&self) -> String {
+        format!(
+            r#"<h2>Reinforcements</h2><p>Add a candidate identity to your review board, then choose its position. These are planning counters, not historical deployments or scheduled arrivals. No combat statistics are assigned.</p><label class="inventory-search">Find an identity<input id="inventory-query" type="search" placeholder="Unit, model, nationality or source ID" data-inventory-filter autofocus/></label><div id="inventory-results">{}</div>"#,
+            self.planning_results("", 0)
+        )
+    }
+
+    pub fn planning_results(&self, query: &str, page: usize) -> String {
+        self.identity_results(query, page, true)
+    }
+
     pub fn results(&self, query: &str, page: usize) -> String {
+        self.identity_results(query, page, false)
+    }
+
+    fn identity_results(&self, query: &str, page: usize, planning: bool) -> String {
         let words: Vec<_> = query
             .to_lowercase()
             .split_whitespace()
@@ -95,12 +110,13 @@ impl Inventory {
             let role = entry.role_id.as_deref().and_then(role);
             let portrait = if entry.sprite.ready() { entry.sprite.portrait_path.clone() }
                 else { role.map(|r| format!("/sprites/{}.png", r.id)) };
-            let image = portrait.map(|p| format!("<img src=\"{}\" alt=\"\" loading=\"lazy\"/>", escape(&p))).unwrap_or_default();
-            format!(r#"<article class="deployment-card">{image}<h3>{}</h3><small>{} · {}</small><p>{}</p><small>{} · {} source rows</small><button data-action="deploy-identity" data-identity="{}" {}>Place identity</button></article>"#,
+            let image = portrait.as_ref().map(|p| format!("<img src=\"{}\" alt=\"\" loading=\"lazy\"/>", escape(p))).unwrap_or_default();
+            format!(r#"<article class="deployment-card">{image}<h3>{}</h3><small>{} · {}</small><p>{}</p><small>{} · {} source rows</small><button data-action="deploy-identity" data-identity="{}" {}>{}</button></article>"#,
                 escape(&entry.name), escape(&entry.entity_kind), escape(&entry.side),
-                if entry.sprite.ready() { "Unique identity artwork" } else { "Unique art missing — shared role placeholder" },
+                if entry.sprite.ready() { "Unique identity artwork" } else if portrait.is_none() { "Artwork unavailable" } else { "Unique art missing — shared role placeholder" },
                 escape(&entry.identity_status), entry.source_entry_ids.len(), escape(&entry.id),
-                if role.is_some() { "" } else { "disabled title=\"No sandbox behavior mapped\"" })
+                if planning || role.is_some() { "" } else { "disabled title=\"No sandbox behavior mapped\"" },
+                if planning { "Add planning counter" } else { "Place identity" })
         }).collect();
         format!(
             r#"<p class="inventory-count" role="status" tabindex="-1">Showing {}–{} of {} candidate identities</p><div class="deployment-grid">{cards}</div><nav class="catalog-pages" aria-label="Identity pages"><button data-action="inventory-page" data-page="{}" {}>Previous</button><span>Page {} of {}</span><button data-action="inventory-page" data-page="{}" {}>Next</button></nav>"#,

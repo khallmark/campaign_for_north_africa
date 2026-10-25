@@ -1,6 +1,6 @@
 # The Campaign for North Africa — Field Command
 
-A small browser-playable prototype inspired by SPI's _The Campaign for North Africa_. Command four Commonwealth formations on a schematic Tobruk-frontier hex map against three automated Axis formations. Capture Tobruk within 12 operations stages.
+A full-board review workspace for SPI's _The Campaign for North Africa_: pan and zoom the supplied map, browse source records, arrange explicitly user-placed planning counters, and inspect the 111-Game-Turn calendar. The old fictional Tobruk teaching scenario is no longer mounted. An official simulation and historical deployments are not loaded.
 
 ## Run
 
@@ -30,7 +30,9 @@ server. Chromium runs at 2458×1358 and 1280×800, each at DPR 1 and 2.
 To select one project, append `--project=chromium-1280x800-dpr1`.
 Screenshot snapshots live under ignored `tests/browser/__screenshots__/`;
 failure screenshots, videos and traces go to ignored `test-results/`.
-Each lane owns its feature specs; the shared smoke test only checks startup.
+The smoke suite checks floating controls, selection anchoring at viewport edges, delayed tooltips,
+keyboard dialogs, reference calendar boundaries and narrow layout. The map suite
+also checks missing artwork, tile budgets, cursor zoom and touch pinch.
 
 ## Amp orbs
 
@@ -45,7 +47,7 @@ The development service is declared in `.amp/services.yaml`; setup does not star
 
 ### Authorized private full-map review
 
-The full-board research viewer can serve source-derived tiles in an explicitly
+The main full-board map can serve source-derived tiles in an explicitly
 authorized review orb without putting them in `public/` or `dist/`:
 
 ```sh
@@ -56,12 +58,18 @@ amp orb service restart cna
 amp orb services ensure
 ```
 
-Expand **Full-board map · research** below the teaching sandbox. The opt-in Vite
+The full board opens directly as the main map. The opt-in Vite
 development middleware serves only the manifest and numbered PNG tiles at
 `/tiles/map/`, with private/no-store responses. It is absent from production
 builds and previews. Remove the local environment setting and restart to disable
 it; regenerate the pyramid if the temporary directory is lost. Do not commit
 the opt-in or copy the tiles into release assets.
+
+The same opt-in serves private PNG/SVG token sources at
+`/__source-tokens/<encoded basename>` from `docs/CNAv2.1.0/images/`.
+It permits GET/HEAD only, rejects path traversal, sends private/no-store headers
+and sandboxes standalone SVG content. These source images are distinct from
+generated illustrations; their availability does not clear public redistribution.
 
 Kevin authorized this source artwork for his existing review portal on
 2026-10-24. That is not a third-party redistribution grant or public-release
@@ -69,7 +77,19 @@ authorization: `docs/map/distribution.json` remains pending, and the default
 build still rejects uncleared tiles in public assets. Historical seams, terrain,
 scenario identities and official rules remain unverified.
 
-## Play
+## Review board
+
+- Drag, scroll or pinch the map; with it focused, arrow keys pan, + / − zoom, and Home fits the board.
+- **Reinforcements** adds a candidate identity as a planning counter. Click a mapped position, or pan and press Enter to place at the viewport center. No historical position, terrain legality, supplies or combat value is inferred.
+- Select a counter from the left order of battle or the map. Information floats on the right; icon actions stay below the counter. Hover tooltips appear after one second; keyboard focus shows them immediately. Reposition and remove affect only this review session. Combat, fortification, supply and End stage explain that no simulation is connected.
+- The date chip opens all **111 weekly Game-Turns**, with three Operations Stages each. Labels follow the supplied printed track from September III, 1940 through January I, 1943, using four labelled weeks per month rather than Gregorian date arithmetic. The cursor is reference-only. Track events and reinforcement annotations are not an adjudicated schedule; the calendar links back to the original track on the map.
+- **New operation** confirms clearing the review board, not loading a fictional scenario. All work remains session-only.
+
+Canonical identity IDs are preserved. Displayed illustrations are generated artwork, not canonical game-token images. Missing artwork stays labelled. Section-local positions use the map geometry's VASSAL-derived IDs, not certified printed aliases; no cross-section adjacency or occupancy merging is inferred.
+
+## Retained teaching model (not mounted)
+
+The following behavior documents the preserved sandbox code and regression tests, not the full-board review UI:
 
 - Select a Commonwealth formation on the map or in the order of battle.
 - **Move:** choose a highlighted destination. Ground movement costs 1 CP in desert and 2 on ridges. Motorized units use 8 fuel per CP; foot troops and camel scouts do not. Ships stay at sea; aircraft cross land, sea, occupied hexes and ground control for 1 CP per hex, but cannot end on an occupied hex. Entering an armed enemy's adjacent hex in the same ground/naval domain ends movement.
@@ -93,7 +113,7 @@ The supplied rulebook text is in `docs/rules.txt`. This prototype adapts the ide
 
 **This is not a rules-complete implementation or a historical scenario.** Forces, positions, terrain, timings within stages, values, weather cycle, and combat formulas are invented for a playable demonstration. Air, naval and support actions are simplified sandbox behaviors, not the rulebook's full systems. The simulation omits the full order of battle, stacking, morale/cohesion, breakdowns, detailed logistical networks, stores, replacements, and the Italian pasta rule. Shared fallback artwork is distinguished by labels. Roads are decorative and do not change movement cost. The supply overlay shows distance, not guaranteed stocks or a traced route. Movement animation interpolates endpoints, not every hex of the engine's reachable path.
 
-The 24 shared unit-role sprites in `public/sprites/` were generated with Amp's AI image-generation tool, then cropped and resized with transparency preserved. They are illustrative, not unique portraits, historically exact reconstructions, or extracted rulebook counters. The original four game sprites are unchanged; the catalog adds twenty role illustrations. The map is original SVG artwork. The original game and rulebook belong to their respective rights holders; this prototype does not establish a license for commercial distribution.
+The 24 shared unit-role sprites in `public/sprites/` were generated with Amp's AI image-generation tool, then cropped and resized with transparency preserved. They are illustrative, not unique portraits, historically exact reconstructions, or extracted rulebook counters. The original four game sprites are unchanged; the catalog adds twenty role illustrations. The retained teaching map is original SVG artwork; the current review map uses the supplied source board under the private opt-in above. The original game and rulebook belong to their respective rights holders; this prototype does not establish a license for commercial distribution.
 
 All 24 shared sprite roles have 18 upright directional views each in `public/sprites/directional/` (432 frames), and all are available as sandbox role units. The renderer completes the shortest-arc turn in place, then moves with a fixed heading. Turns use an even angular cadence at 2 ms per degree (80 ms minimum, 360 ms for a half-turn); travel eases independently over 420–1800 ms by distance. Already aligned units move immediately. Exactly one fully opaque directional view is shown at a time, with no crossfade, double exposure or flat image rotation. Reduced motion snaps immediately. Each atlas has six columns and three rows of 256px cells, ordered clockwise from east. Nominal 20° intervals and ground-contact alignment remain approximate illustrations, not calibrated 3D renders; discrete heading and detail changes remain visible. `public/data/directional-sprites.json` records role-art provenance and limitations, including near-duplicate views and ambiguous AA, engineer and warship bearings. Individual unit artwork uses the same atlas geometry but resolves through the identity inventory, not the shared-role path.
 
@@ -101,9 +121,9 @@ All 24 shared sprite roles have 18 upright directional views each in `public/spr
 
 - `crates/cna-sim/src/sandbox/`: unchanged teaching-game state, geometry, legal moves, combat, supply, AI and outcomes. The crate root re-exports this API for the existing browser. `tests/sandbox_behavior.rs` preserves the sandbox regression assertions. `contract/` defines versioned authoritative-engine envelopes, not implemented official rules; see [command boundary v1](docs/contracts/sim-command-v1.md).
 - `crates/cna-sim/build.rs`: conservative compile-time token lint rejects `sandbox` references anywhere under `src/official/`, including comments and unused source files. It is a direct-reference guard, not Rust name resolution; official modules must not use the crate-root compatibility re-exports either.
-- `crates/frontend/src/lib.rs`: Rust browser input, dialogs, and session state.
-- `crates/frontend/src/view.rs`: interface markup, formation panel, and dialogs.
-- `crates/frontend/src/map.rs`: persistent keyed SVG map and sprite rendering.
+- `crates/frontend/src/board.rs` and `board/`: full-board review session, floating interface, keyboard dialogs and source-reference calendar. No sandbox state is imported.
+- `crates/frontend/src/map/research.rs`: main tiled viewport, pointer/keyboard navigation and screen-space planning overlays.
+- `crates/frontend/src/lib.rs`, `view.rs`, `map.rs`: entry point, shared icons and retained unmounted teaching UI/SVG renderer.
 - `crates/frontend/src/motion.rs`: shortest-arc sprite turns and movement interpolation, with reduced-motion support.
 - `crates/frontend/src/catalog.rs`: source catalog parsing, search, filters, and reference rendering.
 - `crates/frontend/src/inventory.rs`: candidate identity search, unique-art readiness and per-unit asset resolution.
@@ -112,4 +132,4 @@ All 24 shared sprite roles have 18 upright directional views each in `public/spr
 - `src/style.css`: responsive field-map interface.
 - `scripts/build-wasm.sh`: builds the Rust frontend and generates browser bindings in ignored `public/wasm/`.
 
-`npm test` runs the Rust workspace tests. `cargo clippy --workspace --all-targets -- -D warnings` checks Rust code. Keep the CLI version in setup and this document aligned with the exact wasm-bindgen dependency in `crates/frontend/Cargo.toml`.
+`npm test` runs the private-review HTTP route tests and Rust workspace tests. `npm run test:private-review` checks image serving, path/method rejection, opt-in and production exclusion using temporary synthetic assets; no private artwork is required. `cargo clippy --workspace --all-targets -- -D warnings` checks Rust code. Keep the CLI version in setup and this document aligned with the exact wasm-bindgen dependency in `crates/frontend/Cargo.toml`.

@@ -438,12 +438,15 @@ mod tests {
             "oa-116-006-1st-rifle-brigade",
             "formation",
             "allied",
-            "infantry",
+            "motorized-infantry",
             "commonwealth",
             0,
         );
         assert!(html.contains("1st Rifle Brigade"));
-        assert!(html.contains("Infantry"), "source unit type is missing");
+        assert!(
+            html.contains("Motorized infantry"),
+            "source unit type is missing"
+        );
         assert!(html.contains("Formation"));
         assert!(html.contains("Commonwealth · Allies"));
         let generic = catalog.results("", "", "", "anti-air-cruiser", "", 0);

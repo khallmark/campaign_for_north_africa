@@ -1,11 +1,20 @@
-# Fuel arithmetic: implemented operations and an unresolved source conflict
+# Fuel arithmetic: implemented operations and adjudicated source conflict
 
 `official::fuel` computes movement consumption and tank capacity, debits exact
 fuel quantities without overdrawing, and applies fuel evaporation/spillage.
 These are operations for a trusted rules kernel, **not movement commands or a
 complete implementation of section 49**. Nothing is wired into the browser yet.
 
-## ADJ-FUEL-BASIS: pending Kevin
+## ADJ-FUEL-BASIS: approved by Kevin, 2026-10-25
+
+Decision: §49.13's prose and worked example take precedence over the §49.19
+chart. Official movement consumption uses `FuelBasis::StartedFiveCpGroups`:
+each started five-CP group costs the full per-TOE rate. At one TOE and rate 4,
+1 CP costs 4 fuel, 6 CP costs 8, and 12 CP costs 12.
+
+Approval: Kevin answered “yes” to the recommendation in
+[the simulation thread](https://ampcode.com/threads/T-01a16d7a-91e9-710b-918d-62d24e845c3f).
+This approves fuel-consumption precedence only; ADJ-SHIP remains pending.
 
 Both conflicting readings exist in the **original** sources, not just VASSAL:
 
@@ -15,16 +24,17 @@ Both conflicting readings exist in the **original** sources, not just VASSAL:
 | Original R79 physical p106, §49.19 chart, visually inspected; VASSAL `49.19 Fuel Consumption Chart.png` matches | Rate-4 column, CP rows 1–5: **0.8, 1.6, 2.4, 3.2, 4**. Proportional accounting gives 12 CP a cost of 9.6. |
 
 `FuelBasis::StartedFiveCpGroups` and `FuelBasis::ProportionalCp` implement these
-two readings explicitly. There is **no default**. The host must bind a chosen
-basis to the ruleset digest, not let players choose a cheaper basis per order.
-Neither option is recorded as approved. Recommendation: prefer §49.13's explicit
-prose and worked example; retain the chart discrepancy in the historical record.
+two readings explicitly. There is **no API default**. The official host must bind
+the approved `StartedFiveCpGroups` basis to the ruleset digest, not let players
+choose a cheaper basis per order. `ProportionalCp` remains comparison evidence,
+not an approved official rules option. Retain the chart discrepancy in the
+historical record.
 
 The original and July §49.14 capacity formula is CPA × rate ÷ 5 per TOE.
 `tank_capacity` implements that literal formula without rounding or filling a
 tank. For CPA not divisible by five, its “exactly sufficient” description does
 not agree with started-group consumption. This is another consequence of the
-same unresolved basis decision, not a reason to silently change the formula.
+source conflict; the consumption decision does not change the capacity formula.
 
 ## Evidence and calculations
 

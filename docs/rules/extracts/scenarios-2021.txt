@@ -1,0 +1,1745 @@
+UPDATED WITH INTEGRATED ADDENDA & ERRATA
+JULY 2021
+59.0 INTRODUCTION TO SCENARIOS
+59.1 Scenario Organization
+59.2 How to Read the Scenario Set-Ups
+59.3 Initial Air Strengths
+59.4 Initial Truck Strengths
+59.5 Initial Supply
+59.6 Abstract Logistics and Air
+60.0 SCENARIO GROUP ONE:
+The Italians
+60.1 General Description
+60.2 Scenario Length
+60.3 Axis Forces
+60.4 Commonwealth Forces
+60.5 Air Facilities
+60.6 Initiative
+60.7 Construction on the Map at the Start of the Game
+60.8 First Scenario Group Victory Conditions
+60.9 Air & Logistics Games Abstractions
+61.0 SCENARIO GROUP TWO:
+The Desert Fox
+61.1 General Description
+61.2 Scenario Length and Duration
+61.3 Commonwealth Forces
+61.4 Axis Forces
+61.5 Initiative
+61.6 Construction on the Map at the Start of the Game
+61.7 Air & Logistics Games Abstractions
+61.8 Victory Conditions
+62.0 SCENARIO GROUP THREE:
+Operation Crusader
+62.1 General Description
+62.2 Scenario Length and Duration
+62.3 Commonwealth Forces
+62.4 Axis Forces
+62.5 Construction at the Start of the Scenario
+62.6 Air & Logistics Games Abstractions
+62.7 Initiative
+62.8 Victory Conditions
+63.0 SCENARIO GROUP FOUR:
+El Alamein
+63.1 General Description
+63.2 Scenario Length and Duration
+63.3 Commonwealth Forces
+63.4 Axis Forces
+63.5 Special Rules
+63.6 Initiative
+63.7 Construction
+63.8 Air & Logistics Games Abstractions
+63.9 Victory Conditions
+64.0 SCENARIO GROUP FIVE:
+The Campaign
+for North Africa
+64.1 Introduction
+64.2 Scenario Length
+64.3 Initial Deployments
+64.4 Initiative
+64.5 Special Rules/ Adjustments
+64.6 Air & Logistics Games Abstractions
+64.7 Victory Conditions
+65.0 IN CONCLUSION
+DESIGNER’S NOTES
+BIBLIOGRAPHY
+(correction) The letters Cp are the abbreviation for
+Corps. Also, the letters TOE, used throughout the
+rules, literally stand for Table of Organization and
+Equipment. Their meaning — for the game — has
+been twisted somewhat, but that is not important.
+[59.3] INITIAL AIR STRENGTHS
+[59.31] Each scenario lists the starting Axis and Al-
+lied plane types, numbers, pilots, air facilities, and
+squadron ground support units. This listing is divided
+into forces available in North Africa and Malta for the
+Allied Player and to forces available in North Africa
+and Sicily /Italy /Crete for the Axis Player.
+[59.32] Planes are listed by type, with the ready
+planes indicated as a portion of the total available.
+All planes (refitted or not) are considered to begin a
+scenario fueled and armed (at no cost to the supplies
+available).
+[59.33] Planes may be distributed among the squad-
+ron ground support units as the owning Player desires
+within the restrictions on squadron composition listed
+in Case 35 .2.
+[59.34] Pilots may be assigned to planes and squad-
+rons as the owning Player desires.
+[59.35] Squadron ground support units may be placed
+on any of the air facilities owned by the Player. How-
+ever, the number of SGSU's may not exceed an air
+facility's readying capability.
+[59.36] Maintenance may not be performed on planes
+during the first OpStage of a Scenario.
+[59.4] INITIAL TRUCK STRENGTHS
+[59.41] Trucks initially available to each Player are
+divided into 1st Line, 2nd-3rd Line available for sup-
+plies, and 2nd-3rd Line available for air facilities.
+[59.42] First-Line trucks are listed by hex in the land
+forces initial deployment section of the scenario.
+These trucks must be assigned to units in their listed
+hex. The trucks may be divided among the units in
+that hex in any manner the Player desires.
+[59.43] Second-Third Line (in convoy) trucks avail-
+able for air facilities must be placed on an air facility.
+[59.44] Second-Third Line trucks available to trans-
+port supplies must be placed (if the Axis Player is not
+starting them off-map) on a hex occupied by a Friend-
+ly combat unit, a supply dump, or a major city/town/
+oasis. These trucks may be distributed as the owning
+Player desires.
+[59.45] Trucks may start a scenario transporting
+supplies or motorizing troops or anti-aircraft
+units at no cost or penalty. Any trucks
+starting with supplies may load any type of
+supply. These supplies are in addition to those
+listed in the supply section of the scenario.
+(important note) This is a rule that should have been
+placed in bold letters. All trucks may be loaded with
+whatever the player wants. Moreover, at the start of a
+scenario, a Player may load his trucks with supplies
+above and beyond what is listed as being available.
+[59.2] HOW TO READ
+THE SCENARIO SET-UPS
+Basically, all air and land units, supplies, and trucks
+available at the start of a scenario are listed by hex
+location. Generally, the parent unit will be listed, and
+Players must refer to the appropriate OA Chart to de-
+termine which subordinate units are assigned to that
+parent unit. Whenever a given unit has a composition
+different from the one listed on the OA Chart, that is
+noted in parentheses.
+Hex Location. If more than one hex is listed for a
+given group of units, the Player may divide the listed
+units between the hexes in any way he chooses, so
+long as stacking limitations are not exceeded.
+Unit Type. If not apparent from the name, this is
+noted with an abbreviation. Where noted, it is always
+the first item enclosed in parentheses. I = infantry; R
+= reconnaissance (recce); T = tank; Ar = artillery; AT
+= anti-tank; AA = anti-air; HQ = headquarters (the
+headquarters counter only).
+Parent of Listed Unit. If the listed unit has been as-
+signed to a parent unit (whether or not it still is), that
+parent unit's designation is listed, in bold type, as it
+appears on the listed unit's counter. This is to facilitate
+identification of the listed unit.
+Listed Unit Lacks Subordinate Units Originally
+Assigned. All such subtractions from what is listed
+on the OA Chart are noted after the indicator "Less.''
+Listed Unit Includes Subordinate Units Not Origi-
+nally Assigned. All such additional units (which may
+be detached) are listed after the indicator "Assg."
+Assigned Subordinate Units Are Detached. These
+are listed under the parent unit after the indicator
+"Det." Of course, they are listed separately in the
+hex(es) they themselves are in.
+Listed Unit Has Entirely New /Different Roster of
+Assigned Units from Those Listed on OA Chart.
+All subordinate units listed after indicator "Consists
+of."
+Note. Whenever a unit inside parentheses requires
+expanded explanation, that explanation is enclosed
+inside double parentheses: e.g., (( .... ))
+Listed Unit Exceeds Formation Organization
+Limits. Such units may operate normally, in­
+cluding
+being themselves assigned and/or attached, with the
+exception that no new subordinate units may be as-
+signed or attached to them, and should any units be
+detached, no new ones may be attached in violation
+of the limits.
+Listed Unit Includes Subordinate Units Attached
+But Not Assigned. All such units are listed after the
+abbreviation "Att."
+Disposition of the Units in a Hex. All units listed to
+begin in the same hex may be organized as the own-
+ing Player chooses, within the limits of the Formation
+Organization rules and stacking limita­
+tions. In other
+words, units in the same hex may be freely detached
+or attached to each other at the start of the scenario, in
+any fashion deemed desirable.
+Trucks. All listed trucks are first line trucks and must
+be assigned to the units in the hex, in any manner
+deemed desirable.
+2
+SCENARIOS
+[59.0] INTRODUCTION
+TO SCENARIOS
+COMMENTARY:
+There are five scenario groups in Campaign for North
+Africa. Each scenario group contains at least one
+separate game. Of course, one is for the playing of a
+campaign game. The groups cover what the designer
+felt were the most important — and most accessible,
+in terms of information — areas of the campaign.
+Specific battles, such as Gazala, were avoided as they
+did not fit within the concept of the game (operation-
+al). Each scenario is a self-contained game and each
+highlights certain problems.
+Those wishing to get the most out of CNA without
+becoming enmeshed in a lifetime occupation are
+advised to try the Rommel's Arrival scenario — it is
+fast-moving and a lot of fun. It is also not too long
+or difficult (the small number of units involved keeps
+paperwork to a minimum). For those interested in
+seeing why trucks are so important and want to keep
+all their work in a small area, try the Italian scenario.
+For those interested in seeing a lot of units sit around
+doing nothing, try El Alamein — a remarkably boring
+situation (in game terms, if not historically).
+Players should take great care in setting up each
+scenario, as a great deal of information is provided.
+The bigger scenarios could take 10 to 15 hours to
+prepare. A further word to the Africa buffs: given all
+the information in the game, it should be fairly easy
+to concoct your own situations and scenarios. Your
+major problem would be logistical information.
+On the subject of Victory Conditions, it is the design-
+er's feeling that, in a game of this size and scope, few
+Players will patiently battle through 100–200 hours of
+playing time and feel they have actually lost (or won).
+Finishing is an event in itself. The Victory Conditions
+have been thought out carefully, in light of not only
+what was actually accomplished, but also what had
+to be accomplished. Yet the conditions are somewhat
+general, especially the campaign game objectives.
+This is because outside considerations that could not
+possibly have been simulated had to be taken into
+effect. Any Player worth his salt will know whether
+he has accomplished what he set out to do without
+checking what we've told him he must do.
+CASES:
+[59.1] SCENARIO ORGANIZATION
+[59.11] The scenarios in CNA are divided into five
+groups. The first four of these groups deal with in­
+dividual battles or offensives, and the fifth covers the
+campaign game.
+[59.12] Each of the first four scenario groups contains
+the following information:
+a. Length of the scenarios in the group.
+b. Victory Conditions of the scenarios in the group.
+c. Initial location and strength of all land and air
+forces.
+d. Initial location and amount of all supplies.
+e. Initial location and number of all trucks.
+f. Forces available on Malta & Crete/Italy/Sicily.
+g. Abstractions necessary to play the scenarios
+without the Air and/ or Logistics Games.
+h. Special rules for the individual scenarios.
+[59.5] INITIAL SUPPLY
+[59.51] Each scenario lists the location and amounts
+of a Player's initial supplies.
+[59.52] The supplies are divided into those available
+at air facilities and those available at supply dumps.
+Air facilities automatically possess a supply dump. If
+a Player places supplies available at a supply dump in
+the same location as those available at an air facility,
+the totals are combined and it becomes one dump
+(see Case 36.17). Some scenarios separately list an
+aggregate number of supplies available at a player's
+air facilities. These may never be allocated to off-map
+facilities.
+[59.53] Certain scenarios list a Player as receiving ac-
+tive and non-active supply dumps. Non-active dumps
+are dummy dumps and cannot, therefore, be placed in
+the same hex as an air facility.
+[59.54] Axis coastal shipping begins all scenarios
+unloaded (i.e., empty).
+[59.6] ABSTRACT
+LOGISTICS & AIR
+[59.61] If only the Air Game is abstracted, the Players
+simply ignore all Trucks and supplies available at/for
+Air facilities in the initial set-ups. Play is then gov-
+erned by the rules in Section 58.0.
+[59.62] If the Logistics Game is abstracted, whether
+or not the Air Game is also abstracted, Players will
+be using Motorization Points and Supply Units. The
+initial set-ups for the Supply Units and Motorization
+Points are given in the following cases.
+[59.63] Initial Motorization Point Strengths: The
+initial motorization points available to each Player
+are calculated from the trucks listed in the scenario
+set-up.
+A. Attached Motorization Points: These are calculat-
+ed, hex by hex, from the 1st Line trucks available to
+the Player unless specifically modified by a scenario's
+instructions. Each Medium Truck and each Heavy
+Truck is equal to one Motorization Point. Example:
+In the first Scenario Group, the 4th CCNN is listed
+as beginning the scenario with 10 Light, 25 Medium
+and 10 Heavy Trucks. It possesses 35 Motorization
+Points.
+B. Unattached Motorization Points: These are calcu-
+lated from the Second-Third Line trucks available to
+each Player in the same manner as in "A." If the Air
+Game is being abstracted, ignore all trucks available
+at air facilities. Note that the initial distribution/place-
+ment of these trucks will affect their ability to start
+a scenario loaded with supplies in addition to those
+listed as available in supply dumps (see Case 59.66).
+[59.64] Initial Motorization Point distributions may
+be, with one exception (see Case 59.66 "B"), freely
+altered once the game starts as per the Land Game
+rules on attachment and detachment.
+[59.65] Supply Units: The Player's initial supply lev-
+els are listed as to the number, location, and contents
+of regular and depot supply units available. Regular
+supply units are described in Section 32.0. Depot sup-
+ply units — used only if the Air Game is being played
+and the Logistics Game is being abstracted — are de-
+scribed in Sec­
+tion 47 .0. Initial supply unit placement
+may exceed stacking limitations only if unavoidable
+due to scenario distribution instructions. There is no
+penalty in such situations; however, no additional
+supply unit may be stacked in that hex. Once the
+supply unit distribution meets stacking restrictions
+all normal stacking restrictions for that hex must be
+met from that point on. (Remember that motorization
+points transporting supply units do not count against
+hex stacking limits.)
+[59.66] Additional Supplies:
+A. Motorization Points may begin a scenario loaded
+with supplies. These do not count against supplies
+listed in the scenarios supply dumps.
+B. Each attached Motorization Point (see Case 59.63
+"A") not initially transporting men or guns may start
+loaded with 1 Ammo Point or 3 Fuel Points. The unit
+must consume these supplies first (i.e., it may not
+draw on a supply unit) in order to meet any supply
+expenditure requirement. These supplies may not be
+transferred to a supply unit. The Motorization Points
+transporting these supplies may be detached from the
+unit only if remaining attached to a subsidiary combat
+unit of that parent unit (Note that the Motorization
+Point is under this restriction only while it is trans-
+porting these initial supplies).
+C.Unattached Motorization Points (see Case 59.63
+"B") are divided into those that are listed as initially
+available at air facilities (these appear only if playing
+the Air Game) and all other unattached Motorization
+Points. Air facility Motorization Points may begin by
+transporting additional supply units as follows: Each
+50 Motorization Points in a hex may start with a depot
+supply unit; each 30 Motorization Points in a hex may
+start with a regular supply unit. Each 30 other unat-
+tached Motorization Points in a hex may start with
+a regular supply unit. Example: 80 air facility and
+100 other Motorization Points may begin with the air
+facility points transporting one depot and one regular
+supply unit while the other points may begin with
+three regular supply units. Note that for these Motor-
+ization Points to begin with a supply unit they must be
+in groups of 30 (and/or 50 if air facility) points (i.e.,
+20 Motorization Points may not begin with a supply
+unit). The Tripoli–Tunisia boxes are hexes for the
+purposes of this Case.
+END OF CASE [59.0]
+INTRODUCTION TO SCENARIOS
+[60.0] SCENARIO GROUP
+ONE: The Italians
+CASES:
+[60.1] GENERALDESCRIPTION
+The first scenario group covers the initial months of
+the desert fighting, from 15 September 1940 through
+the middle of February 1941. Although there was an
+actual state of war existing between the British and
+the Italians vis-à-vis Libya/Egypt, the months of June
+through early September 1940 have been ignored as
+there was little done other than aggressive patrolling.
+The actual campaign starts with the first Italian offen-
+sive and subsequent British counterattack.
+[60.2] SCENARIO LENGTH
+[60.21] There are two separate scenarios in the Italian
+scenario group; each may be played separately to a
+specific conclusion.
+3
+[60.22] Graziani's Offensive
+This scenario starts with Game-Turn 1, OpStage 1;
+it ends with the conclusion of Game-Turn 6,
+OpStage 3. The estimated time of play is anywhere
+from 25 to 50 hours. Victory Conditions are listed
+in Case 60.71.
+[60.23] The Italian Campaign
+This scenario starts with Game-Turn 1, OpStage
+1, and proceeds through the end ofGame-Turn 20,
+OpStage 3. It includes Operation Compass
+(O'Conner's counteroffensive
+) . The estimated
+time of play is 90 to 150 hours. Victory Conditions
+are listed in Case 60.72.
+[60.3] AXIS FORCES
+[60.31] Italian Initial Deployment(Hex,: Units)
+C4218: I CCNN Div (I; Att: I(M) [T; Ar/LTC]
+Trucks: 10 light, 25 medium, 10 heavy.
+C4120: 63 Cirene Div (I; Att: LXIII (L) [T;
+Ar/LTC]; Trucks: 45medium, 5 heavy.
+C4020: I Libyan Div (I); Trucks: 10 light, 15
+medium.
+C3920: 2 Libyan Div (I;Att: IX(L) [T;Tvl/LTC];
+Trucks: 15light, 15 medium.
+C39 19 : Aresca Regt (T; LTC, Det: all except
+XXI); Trucks: 5 medium, 5heavy.
+C39 18: 62 Marmarcia Div (I; Att: LXII(L) [T;
+Ar/LTC]; Trucks: 40 medium, 5heavy.
+C3617: Maletti Div (I; Att: II(M) [T, Tvl/LTC];
+Trucks: 5 light, 30 medium, 5heavy.
+C4707: 64 Catanzaro Div (I); Trucks: 30 medium,
+5heavy.
+C4507: 4 CCNN Div (I); Trucks: 10 light, 25
+medium, IO heavy.
+Bardia (C4321): Trivoli Regt (T;LTC; Det: II(M)
+and IX(L)
+)
+;Bardia Garrison;Trucks: 20 medium.
+Tobruk (C4807): HQ: Libyan Tank Command;
+Tobruk Garrison;Trucks: 5 medium.
+Benghazi (84827): Benghazi Garrison.
+Barce (B5504): Libyan ParachuteRegt (I);Trucks:
+5medium.
+Derna (B5925): Derna Garrison.
+Mechili (B4921): Mechili Garrison.
+Giaribub (C1014): Giaribub Garrison.
+Bir Scheferzen (C3419): Scheferzen Garrison.
+Fort Maddelena (C3019 ): Fort Maddelena Gar­
+rison.
+elGrein (C1715): el Grein Garrison.
+Benina (A4829): Benina Garrison.
+Soluch (A4130): Soluch Garrison;X Cp (Ar).
+Anywhere in Libya: I/JAR; 2/IAR; 3/IAR;
+4/IAR; XXI Cp; XXVI Cp 4/IAR;XXICp (Ar).
+Within 3 Hexes of C0716: Saharan Det (I);
+Trucks: 5 light.
+Anywhere on Map A or B: XVII!Lib (I;*);XXX­
+IILib (I;*); and (all Ar) 147; 131; 2/24; 5/1; 6
+GaF;16 GaF;22GaF;42 GaF;350 GaF.
+Tripoli: 2 CCNN Div (I); 3 CCNN Div (I); XXII
+Cp (Ar)
+;XXIII Cp (Ar).
+Tripolitania: 4/IO Army (I).
+In addition, two TOE strength Points of Autoblin­
+da 40's (recce, 1D Code "WW") may be attached,
+each point to any unit (but not both to the same)
+ignoring all regular unit composition restrictions.
+Or they may be deployed in Tobruk as regular
+(i.e., trained and fueled) replacement points.
+[60.32] Italian Air Strengths
+The following planes may be placed at any Italian
+airfields, landing strips, flying boat basins, etc.,
+within the capacities of those facilities. However,
+no planes start the game in Italy/Scily. Crete is
+unavailable (it isstillBritish).
+Plane Total Available Total Refitted
+CR 42 65 25
+CR 32 70 28
+Ba 65 IO 2
+Ba 88 24 6
+SM 79 133 35
+SM 81 17 4
+Ca 309 56 12
+Ro37Bis JO 6
+Z501 9 9
+The Italian Player may not attempt to refit planes
+until Game-TurnI, OpStage 2.
+ItalianPilotsAvailable:
+Three's: 3
+Two's: JO
+One's: 15
+ItalianSGSUAvailable: 39.
+[60.33] Italian Second-ThirdLineTrucks
+The Italian Player receives the following trucks
+(Points). He may assign them and place them ashe
+wishes; within the restrictions listed. (Original
+assignments may, of course, be changed as the
+game progresses).
+Location
+Tripoli
+Anywhere in
+Libya
+Any Air Fac­
+ility
+TrucksAvailable
+(in points)
+25 Light
+140 Medium
+·40 Heavy
+30 Light
+JOO Medium
+25 Heavy
+JO Light
+50 Medium
+The Italians have a major repair facility at Tripoli,
+and a temporary facility at Tobruk and Benghazi.
+[60.34] Axis Initial Supply Status: The Axis
+Player receives Dumps with the following supplies
+at the following locations:
+Supply (in points)
+Location Ammo Fuel Stores Water
+Tobruk (C 4807) 200 2000 500
+Bardia (C 4321) JOO 1000 200
+Benghazi 100 250 100
+Derna (B 5925) 250 50
+Tripoli (box) 250 5000 250
+Dump !* 1000 1500 1500 200
+Dump 2* 1000 1500 1000 200
+C 0716 100 50 50
+*These and two Dummy supply dumps may be
+placed in any hex on map section C in Libya that is
+not within four hexes of aCommonwealth unit.
+In addition the Axis Player receives a total of 1200
+Ammo, 850 Fuel, 100 Stores and 100 Water Points
+which may be freely distributed among his air­
+fields.
+[60.35] The Italian Player may use all Axis coastal
+shipping counters.They start the game in Tripoli.
+[60.36] The Axis Player's Strategic attacks on
+Malta are restricted to forces called for by
+Availability Level I (see the Axis strategic Com­
+mitment Chart, case44.41).
+[60.37] The Italian Player must plan convoy runs
+for the remainder of September, 1940, prior to
+starting the game. He may only use lanes 2,3 and 6.
+Consult the Convoy Availability Charts to see
+what shipping the Italian Player has. He receives
+all reinforcements as per the Reinforcement
+Track.
+[60.4] COMMONWEALTH FORCES
+[60.41] Commonwealth InitialDeployment
+(Hex: Units)
+C4131: 2nd Scots Guards (I); 31st Field Arty Regt
+(4In); Trucks: JO medium.
+C3926: !st Coy French Motor Marines;Trucks:
+2 medium.
+C3922: 3rd Coldstream Gds/(I); !st Kings
+Royal Rifle Corps (I;'7Spt/7); 4th RHA (7Spt/7);
+7th Medium Arty Regt; Trucks: 15 Medium, 5
+Heavy.
+C3721: !st Royal Northumberland Fusiliers (I);
+3rd RHA (AT; 7Spt/7); Trucks: 5 medium, 5
+light.
+C3520: 1st RTR (7/7);Trucks: 5 medium.
+C3320: 2nd Rifle Bde (I; 7Spt/7); Trucks: 10
+medium.
+C3020: 11th Hus (R; 7Spt/7); Trucks: 3
+Medium.
+D3714: Matruh Garrison (I;Att: I Essex 23170;
+1st Durham Lt Inf 23170; 1st South Stafforshires;
+Trucks: 5 light, 15 medium, 5 heavy.
+D3612: 7th Armored Division (Det: all 7 Arm
+Div. units listed above); Trucks: 5 light, 5
+medium, 5 heavy.
+D3615: 4th Indian Division (Det: 31stField Arty
+and 7th In Bde); Trucks: 5 light, 20 medium, 2
+heavy.
+E1829: 16th InfBde (70); Trucks: 20 medium.
+Alexandria (E3613 &/or 3714): HQ: 2nd New
+Zealand Division; 4th NZ Bde (2 NZ); 27th NZ
+MG Bn (2 NZ); 2nd NZ Cavalry (2 NZ); 4th NZ
+Field Arty Regt (2 NZ); Trucks: 10 light, 15
+medium, 5 heavy.
+Cairo and/or Helwan (E 1430): In Training: 6th
+Australian Division (Less: 19 Aus Bdg; 2/IAF!d
+Arty;2/2AFld Arty).
+Cairo: 8th Field Arty Regt; !st Welch (I); 1st
+Cheshire MG Bn;2nd King's Own RylRegt (I).
+Anywhere on Map D or E: 8th Medium Arty
+Regt;65th Anti-tank Regt;149th Anti-Tank Regt;
+9th Heavy AA; 15th Light AA;57th Light AA.
+Note: !st Welsh counter bears the same colora­
+tion as Indian Units.
+BrokenDown Vehicles
+Alexandria: 2 TOE ofA9 Cruiser Tanks;I TOE of
+AI0 Cruiser tanks.
+[60.42] Commonwealth North African Air Force
+The following planes, SGSU's and pilots may be
+placed at any Commonwealth N. African air
+facility, within the capacity ofthat facility.
+Plane
+Lysanders
+Bombays
+Sunderlands
+Blenheim Mk. l's
+Blenheim Mk. !V's
+Blenheim Mk. IVF's
+Gladiators
+Hurricane Mk. J's
+Morane 406's*
+Potez 63/ l l *
+Valentia's
+Total
+Available Refitted
+12 8
+15 12
+18 11
+26 18
+12 12
+9 5
+36 30
+6 4
+4 2
+2 2
+3 1
+*May be in the same squadron (Free French).
+Pilots Available: I Three, 5 Two's and 8 One's.
+SGSU Available: 14.
+[60.43] Commonwealth Second-ThirdLineTrucks
+The Commonwealth Player receives the following
+Truck Points; He may assign them and place them
+as he wishes, within the restrictions listed. (These
+will change).
+Location Truck Points Available
+Any hex in
+Cairo
+Alexandria
+Anywhere, maps
+Any Air Fac­
+ility
+40 Medium
+JO Heavy
+JO Light
+20 Medium
+15 Light
+40 Medium
+5 Heavy
+5 Light
+30 Medium
+20 Heavy
+27
+28
+'
+[60.44] INITIAL SUPPLY STATUS
+(Factors
+Location Ammo Fuel Stores
+Mersa Matruh (D3714) 1000 3000 4000
+Sidi Baranni (C4131) 250 500 100
+Dump! 500 750 500
+The Dump I dump and one dummy dump may be
+placed anywhere in Egypt on map C or D.
+Remember that unlimited supply points are
+availableinCairo andAlexandria.
+Air Supply (Distribute amongst Air Facilities as
+desired)
+Ammo: 200
+Fuel: 250
+Stores: 50
+Unlimited Supplies in Cairo/Alexandria (as per
+rules)
+The Commonwealth Player has his Major Repair
+Facility in Alexandria. He has one Temporary
+Facilityin Mersa Matruh.
+[60.45] Commonwealth Fleet: The Com­
+monwealth Player has a total of one battleship,
+three cruisers and seven destroyers available at the
+beginning of the campaign. These are deployed ac­
+cording to the Commonwealth Fleet Schedule (see
+Section 30.0). The warships may not be moved un­
+til the first OpStage of the second Game-Turn.
+Their combat ratings are unaffected (i.e., they do
+not need repair and may fire).
+The following units are available and in Port at
+Alexandria:
+Number Type
+2 Battleships
+2 Cruisers
+4 A. A. Cruisers
+6 Destroyers
+The following units are inValetta, in Malta:
+Number Type
+I Cruiser
+1 A. A. Cruiser
+2 Destroyer
+No Fleet units may be moved until the
+September 1/IV _Stage/Turn. All ships may
+use their AA Ratings.
+[60.46] Malta
+Planes:
+15 Hurricane Mkl's
+12 Swordfish
+3 Gladiators
+I Sea Gladiator
+Pilots:
+4 Two's, 6 One's
+(2 SGSU's)
+(I SGSU)
+(I SGSU)
+(I SGSU)
+(12 Ready)
+(9 ready)
+(all ready)
+(all ready)
+AA: 17 AA Pointsdistributedasplayer seesfit
+State of Air facilities: The Malta bases have an in­
+itial capacity ofJive SGSU's. These maybe spread
+amongst the Malta facilities as the player wishes.
+Construction on increasing the capacity of Malta
+Air Facilities maybegin in October, 1940.
+[60.47] The Commonwealth Player uses his Rein­
+forcement Track as printed, bringing in units
+where and when listed (Remember that some units
+need Training, which means that other units have
+to be assigned as Training Units!) No Replacement
+Points may arrive before November 1940.
+(60.5] AIR FACILITIES
+The following Air Facilities are in existence.
+Players will note that Air facilities may be used by
+anyone Who controls them. All facilities in Egypt
+belong to the Commonwealth; all those in Libya
+belongto the Italians. at the start ofthe game.
+Airfields
+CityIVillage
+Abbassia
+Aboukir
+Abu Seier
+Alexandria
+Almaza
+Amiriya
+Barce
+Benina
+Dekheila
+Deversoir
+El Adem
+El Berea
+Fayid
+Ft. Maddalena
+Ismailia
+Kabrit
+Martuba
+Mersa Matruh
+Soluch
+Hex
+E2132
+E3815
+Off-Map E(3433)
+Both hexes, (E3613, 3714)
+E2133
+E2212
+B5504
+A4829
+E3512
+Off-Map E(\833)
+C4507
+A4728
+Off-Map
+C3019
+Off-Map
+Off-Map E(I833)
+B5526
+D3714
+A4130
+B5825
+The four Tripoli/Tunisia boxes (off-map).
+Air Landing Strips
+Augila
+Bardia
+Bir el Gubi
+Burg el Arab
+Buq Buq
+El Agheila
+El Hamman
+Ft. Capuzzo
+Fuka
+Gambut
+Gazala
+Giarabub
+Maraua
+Matten Baggush
+Mechili
+Menastir
+Qotifiya
+Sidi Azeiz
+Sidi Barrani
+Sidi Haneish
+Sidi Omar
+Sollum
+Siwa
+Tmimi
+Tobruk
+Ztert
+B0707
+C4321
+C4108
+E3109
+C3926
+AI816
+E3007
+C4020
+D3323
+C4414
+B4933
+C1014
+B5410
+D3520
+B4921
+C4419
+D3227
+C4218
+C4131
+D3418
+C3618
+C4021
+C0127
+B5229
+C4807
+B5917
+C4119
+D3231
+D3416
+D3516
+D3903
+Note: Insufficient Air Landing Strip counters are
+provided.Use blanks.
+FlyingBoatBasins
+Alexandria
+Bomba
+E3614
+B5331
+Port Said (off-mapE4033).
+Flying Boat Alighting Areas
+Derna B5925
+[60.6] INITIATIVE
+For this Scenario Group, the Italian Player has the
+Initiative for the entire first Game-Turn. Starting
+with the second Game-Turn, players determine In­
+itiativeas per the rules forsuch.
+(60.7) CONSTRUCTION ON THE MAP
+AT THE START OF THE GAME
+There are no minefields, fortifications, or pipeline
+(other than those provided by the RR). The RR
+runs to Mersa Matruh (D3714) and ends there. All
+ports are at listed Efficiency with the exception of
+Tobruk, which is at Efficiency Level 7 (the San
+Giorgiois partiallysunk, blocking theharbor).
+(60.8] FIRST SCENARIO GROUP
+VICTORY CONDITIONS
+[60.81] Grazianni's Offensive
+Italian Strategic Victory: The Italian Player must
+take and hold either Alexandria or Cairo (any hex)
+with a combat unit that can be supplied (by con­
+voy) from anyhex on Game-MapD.
+Italian Decisive Victory: The Italian must take
+and hold (occupy) both Mersa Matruh and Siwa
+with any combat unit that can be supplied by con­
+voy from Tobruk.
+Italian Tactica) Victory: The Italian must take
+and hold (occupy) Sidi Birani and retain posses­
+sion of Sollum (C4021) and Fort Maddalena and
+Giarabub in supply (as above, to Tobruk)
+Commonwealth Tactical Victory: Must take
+and hold Sollum and Halfaya Pass (C3922) as well
+as Siwa (C0127) tracing supply by truck convoy
+back to Alexandriaor Cairo.
+Commonwealth Decisive Victory: Must take
+and hold Bardia, Fort Maddalena, Sidi Omar,
+Sollum and Siwa, supply as above.
+Commonwealth Strategic Victory: Must take
+and hold Tobruk; supply asabove.
+[60.82] The Italian Campaign
+Players are awarded points for holding (occupy­
+ing) the following locations. Units holding such
+places must be combat units (i.e., units with non­
+parenthesized Close Assault Ratings) and they
+must be able to trace supply of not more than one
+Game-Turn's duration back to a Supply Dump or
+City which can eventually be traced back either to
+Cairo (Commonwealth) orTripoli (Italian).
+Victory Points
+Commonwealth
+City/Village Italians Hold Holds
+Mersa Matruh 100 0
+Tobruk 50 25
+Derna 20 30
+Giarabub 10 IO
+Siwa (C0127) 10 10
+Benghazi 10 50
+Agadabia
+(A2629) 10 50
+Mersa Brega
+(A2021) 0 50
+If there are no Italian combat units that can trace a
+Supply Line on the game-map the Commonwealth
+Player wins a Strategic Victory. All other condi­
+tions produce a simple "Victory". Most points
+wins. These conditions are based on what actually
+happened, and less on actualobjectives.
+(60.9] AIR & LOGISTICS GAMES
+ABSTRACTIONS
+This Case lists the adjustments needed in addition
+to those given in Case 59.6 in order to play this
+scenario without the Air and/or Logistics
+Game(s).
+[60.9'1] Air Abstracted
+(Land & Logistics Games): None.
+[60.92] Air & Logistics Abstracted
+(La_nd Game Only):
+A. The Players' ability_to bring in Motorization
+Points is equal to their respective abilities to bring
+in Medium Truck Points (i.e., each Medium Truck
+Point equal one Motorization Point).
+B. Axis Initial Supply Status: Case 60.34 is replac­
+ed by the followiRg:
+Location
+Tobruk (C 4807)
+Bardia (C 4321)
+Benghazi (B 4827)
+Regular Each with
+Supply Units Ammo Fuel
+3 15 50
+2 10 40
+10 JO
+30
+AirSupply
+The Commonwealth Player has 180 Fuel Points,
+250 Ammo Points, and 50 Stores for distributi"on
+amongst Air Facilities.
+(61.37] COMMONWEALTHFLEET
+The Commonwealth Player receives all his fleet
+counters in Alexandria. They may not move out of
+Alexandria before the first OpStage of Game­
+Turn 27. All are armed and undamaged.
+(61.38] REINFORCEMENTS/
+REPLACEMENTS
+Except as listed below, the Commonwealth Player
+takes his Reinforcements as they arrive, via The
+Reinforcement Track. Replacement Points arrive
+in the normal manner; the Commonwealth Player
+may not plan any such Replacements and must
+start any such planning in the normal course of
+events. There are no replacements allowed for
+March 1941.
+There are several Commonwealth units being refit­
+ted, returned from assignments elsewhere, etc.
+These units had been either on the way to
+Greece/Syria, or in the shops. Plans had to be
+changed hastily, yet the scenario must adjust for
+the time in which that can be done. In essence, no
+units in Cairo or Alexandria may move during the
+third OpStage of Game-Tum 26. After that, only
+one battalion may be released per OpStage. (Thus
+it would take several stages to release the entire
+Polish Brigade; you would have to wait the re­
+quired time to release all the battalions.)
+Remember, also, that battalions will be needed for
+Training purposes! In addition to the above, the
+18th Australian Brigade appears in Alexandria on
+the first OpStage of April, 1941. It may move (by
+rail, sea or land) on the succeeding OpStages of
+April, 1941 (in addition to anyof the above units.
+The 7th Armored Division presents a special case.
+It had been chewed up pretty badly in the previous
+six months' action; its tank battalions were a mess
+and its infantry and support units worn to the
+bone. The unit was in Alexandria for a complete
+refit. At the start of the scenario, all 7th Armored
+tanks are considered Brokendown. The 7th's Tank
+battalions may not be released until they are at
+least 75% repaired, and then they may be released
+only one per OpStage. In addition, one more non­
+tank battalion may be released and sent westward
+per OpStage, all starting with the first OpStage in
+April. HQ units may be released at any time the
+player wishes. At the time of this scenario the 7th
+Armoured contained the following units: 4th Ar­
+mrd Brigade (6 RTR reassigned, 4RTR assigned);
+7th Armrd Brig; 7th SupportGrp.
+For the purposes of the above Release Schedule,
+the 22nd Guards Brigade counts as one battalion.
+[61.4] AXIS FORCES
+(61.41] AxisLand Forces
+All German land units that are scheduled to arrive
+before the third OpStage of Game-Tum 26 (See
+Reinforcements Schedule) may be placed within
+one hex of El Agheila (Al816) but not east of that
+village. The Axis Player may place them in any
+formations he wishes (using Battle Groups, if he so
+desires). The Italian Player has six Divisions on the
+game-map: the Ariete Division may be placed
+within two hexes of El Agheila, but not east of that
+village. The Pavia, Bologna, Brescia and Savanna
+divisions may be placed anywhere between Ras el
+Ali (A 2010) and Nofilia (A2703) with no divison
+less than two hexes from another. The Trento
+Division is in Tripoli. Also in Tripoli are the XXI
+Corps Artillery, the 350th GaF Artillery Regi­
+ment, the 2nd Artillery Ragruppament, and the
+Sabratha Division. The Sabratha Division haslost
+its 6 infantry battalions (although the 85th and
+86th Regimental Headquarters still exist). Its MG
+Bn, and Arty Regiment have been reduced to I
+TOE Strength Point each. NOTE that the six in­
+fantry battalions and two "support" units may be
+rebuilt byReplacements.
+All units (except the Sabratha) are as listed on the
+OA Sheets(including Tanks).
+One Oasis Company (German) is at Maaten
+Grater (A 1318) and one at Magadah (A 0817).
+(61.42] Axis Airforce
+Planes: The Axis Player receives all of the German
+planes listed in the Axis Airplane Reinforcement
+Chart as shceduled to arrive prior to the 3rd
+OpStage of Game-Turn 26. All of these planes are
+considered refitted. The Axis Player receives the
+following Italian planes:
+Total
+Type Available Refitted
+C.R. 42's 61 27
+G. 50's 62 33
+B.R. 20's 1 0
+SM 79 30 14
+Z 1007bis 1
+Pilots: Italian= 3 THREE, 11 TWO's and 12 ONE
+pilots. German= The Axis Player rolls once to
+determine the number of ONE thru FOUR rated
+pilots he receives (i.e., the March, 1941 die roll).
+SGSU's: 13 Italian. German SGSU's are available
+as per the Air Game rules (because of Air
+Facilities, below).
+Air Facilities: The Axis Player may base any por­
+tion of his airforce at Italy/Sicily within the
+minimum German plane restrictions of Case 43.1
+(Crete is still British). The Axis Player may place
+one airfield and one air landing strip in any hex
+west of El Agheila (A 1816).
+�
+�
+16
+(61.43] AxisTrucks
+All German first line Trucks (which are indicated
+on the Reinforcement Schedule as being attached
+to arrived German units) may be distributed
+among those units freely.
+The Italian Player receives the following First­
+Line Trucks, which may be assigned as he sees fit
+tohisunits:
+Type
+Light
+Medium
+Heavy
+Number
+45
+220
+50
+The following Second/Third Line Trucks are
+available(for any and all purposes):
+Type
+Light
+Medium
+Heavy
+Number
+95
+280
+50
+It is firmly suggested that the Axis Player use these
+as Second/Third Line Trucks, otherwise he will
+have a hard time moving his Supply a.round.
+Additional second/third line trucks: 10 Medium
+Trucks at air facilities.
+(61.44] Supply
+The Axis Player receives five Dumps, twoof which
+are Dummies. These dumps may be placed at any
+hex betweenEl Agheila and Nofilia.
+For division between the three active dumps the
+Axis Player has 9600 Fuel Points, 2500 Ammo
+Points, 950 Stores, and llOO Water Points. No
+more than.50% of each may be located at any one
+dump.
+In addition, Tripoli holds 3000 Fuel Points, 1500
+Ammunition Points, and 500 Stores.
+For distribution to Air Facilities (remember,
+Tripoli/Tunisia air facilities have unlimited Fuel
+and Ammo) there are50 Fuel Points and 50Ammo
+Points. The Axis player does not receive a Convoy
+during the first game-tum. He must plan his con­
+voys for the second and third game-turns.
+(61.45] All Axis Reinforcements are taken nor­
+mally, as they appear on thetrack.
+[61.5] INITIATIVE
+The Axis Player has the Initiative through the end
+of Game-tum 27. Players roll for Initiative star­
+ting with Game-Turn 28.
+[61.6] CONSTRUCTION ON THE MAP
+AT THE START OF SCENARIO
+The railroad runs to Mersa Matruh (D3714) and
+ends there. There are no minefields or pipeline
+(other than provided by the RR). All ports are of
+full (listed) Efficiency Le_vel except Benghazi (at
+zero) and Tobruk (at seven-and San Giorgio is
+still there). The Commonwealth Player may place
+a total of four Level I Fortifications within two
+hexes of Tobruk. The unfinished roads connecting
+Sollum (C4021) and Sidi Barrini (C4131) and the
+entire network around Tobruk have been built.
+[61.7] AIR & LOGISTICS GAMES
+ABSTRACTIONS
+This Case covers the adjustments needed in addi­
+tion to those given in Case59.6 inorder to playthis
+scenario without the Air and/or Logistics
+Game(s).
+I61.71] Air Abstracted (Land &Logistics Games):
+The 2nd-3rd Line Trucks available to the Players
+are modified as follows:
+A. Axis Player: 2nd-3rd Line are now a total of 90
+Light, 270Medium and 40 Heavy.
+B. Commonwealth Player: 2nd/3rd Line Trucks
+in Alexandria/Cairo are now a total of 25 Light,
+150 Medium and 25 Heavy. Other 2nd/3rd Line
+Trucks are now a total of 40 Light, 90 Medium and
+20 Heavy.
+(61.72] Air & Logistics Abstracted
+(Land Game Only):
+A. The Players' ability to bring in motorization
+points is equal to their respective abilities to bring
+in Medium Truck Points (i.e., each Medium Truck
+Point equal oneMotorizationPoint).
+B. Initial unattached motorization points: The
+Axis Player has 290; the Commonwealth Player
+h_as 150 in Alexandria/Cairo and 90 at other loca­
+tions.
+C. Axis Initial Supply Status: Case 61.43 is replac­
+ed by the following: The Axis receives 10 regular
+supply units, each with 40 Ammo and 60 Fuel
+Points and 3 Dummy supply units which may be
+distributed freely (within stacking restrictions) in
+any of the road hexes between El Agheila (A 1816).
+and Nofilia (A 2703) inclusive. This does not in­
+clude the road from E 1716 the Maatan Groter (A
+1318). In addition, the Axis Player receives 8
+regular supply units, each with 40 Ammo and 25
+Fuel Points, in the Tripoli box.
+D. Commonwealth Initial Supply Status: Case
+61.35 is replaced bythe following:
+The Commonwealth Player receives one regular
+supply unit with 20 Ammo and 30 Fuel Points in
+Benghazi (A 4827) and 5 regular supply units, each
+with 40 Ammo and 15 Fuel Points, in Tobruk (C
+4807). In addition, he receives 9 regular sl!pply
+[61.41] (addition) The German Mobile Tank
+Recovery Squadron starts in Tripolitania.
+units, eachwith 40 Ammo and 25 Fuel Points, and
+4 Dummy supply units to be divided among the
+following locations with the restriction that no
+more than 2 regular supply units may be placed at
+any location: Mersa Brega (A 2021), Agadabia (A
+2629), Sceledima (A 3933), El Magrun (A 3729),
+Msus (B 4004), Tecnis (B 5407), Barce (B 5504),
+Tocra (B 5501), Martuba (B 5526), Mechili (B
+4921), Timimi (B 5229) and Dema (B 5925)
+In addition, Cairo and Alexandria each contain
+two regular supply units: eachsupply unit contains
+40 Ammo and 60 Fuel Points.
+[61.73] LogisticsAbstracted (Land & Air Games):
+A. The Players' ability to bring in motorization
+points is equal to their respective abilities to bring
+in Medium plus Heavy Truck Points (i.e., each
+Medium and each Heavy Truck Point is equal to
+one Motorization Point).
+B. Axis Initial Supply Status: As in 61.62 "C"
+above and in addition I regular supply unit with 20
+Ammo and 30 Fuel Points may be placed at any
+one Axis air facility.
+C. Commonwealth Initial Supply Status: As in
+61.72 "D" above plus I regular supply unit with
+40 Ammo and 60 Fuel Points which may be placed
+at any one Commonwealth air facility.
+[61.8] VICTORY CONDITIONS
+Victory Conditions for The Race for Tobruk
+Scenario are\fairly simple. The Player who holds
+Tobruk at1he end of the scenario wins. If the Axis
+Player also holds Bardia (C 4321)- he wins a
+Decisive Victory. If he holds Benghazi-Tobruk­
+Bardia plus any two villages/cities in Egypt he
+wins a Strategic Victory. If he holds anything less
+than the above, it is a Commonwealth Victory.
+Furthermore, if the Commonwealth holds all the
+above (including Benghazi) it is a Smashing Vic­
+tory.
+[62.0] SCENARIO GROUP
+THREE: OPERATION
+CRUSADER
+[62.1] GENERAL DESCRIPTION
+Operation Crusader covers the events of the
+Winter of 1941-2, in which the Commonwealth
+forces attempted to relieve Tobruk (under siege by
+the Axis) while, at the same time, Rommel had
+planned to strike eastward at the Allied forces in
+Egypt. The result was an extended series of battles
+in the areabetween Sollum andTobruk.
+[62.2] SCENARIO LENGTHAND
+DURATION
+The scenario starts with the 3rd OpStage of the
+57th Game-Tum. The scenario ends with the con­
+clusion of the !st OpStage of the 65th Game-Tum.
+The estimated playing time for this scenario is bet­
+ween 200 and250 hours.
+[62.3] COMMONWEALTHFORCES
+[62.31] CommonwealthForcesInitial
+Deployment(Hex: Units)
+Within 1 hex of
+C4807: 32 Army Tank Bde (2; Assg: 1st RTR
+[7/7]; 4th RTR and 7th RTR); PolishBde; 70th In­
+fantry Division (.Less: I Argyll & Sutherland;
+Assg: 2nd Kings Own Rifles [in place of the I
+A&S], !st Royal Northumberland Fusiliers MG
+Bn, !st RHA; 104th RHA, 107th RHA; ATT:
+144th Field Arty, 2/13 Aus Inf Bn (20/9 ]); 12/15
+Aus In Bn [TOE strength of 4; 0/9]; 13th Light
+AA; 14 Light AA; 2nd Light AA and 89th Heavy
+AA. Trucks: 20 Light, 135 Medium, 53Heavy.
+C4111: 7th Armored Bde 7; Assg: 7th Hus [417],
+6th RTR [4/7}, 2nd RTR; Less its own I RTR and
+8 Hus; Att: 4th RHA [7Spt/7]) Trucks: 30
+Medium, 15 Heavy.
+C4131: Kings Dragoon Gds (R; 2Spt/2); 67th
+Medium Arty; 16th Light AA; Trucks: 6 Light, 10
+Medium, 3 Heavy.
+C 3814: 4th South African Armored Car Bn
+Trucks:2 Light, 3Medium, I Heavy. 4th Armored
+Brigade (7; Independent Bde: no longer con­
+sidered assignedassigned to the 7th Armored Div;
+Less: its 6 RTR and 7 Hus; Assg: 8th Hus [7/7];
+3rd RTR [1/2]; 5th RTR [3/2]; Att: 102nd AT
+Regt; 2nd RHA [2Spt/2]); Trucks: 45 Medium, 15
+Heavy.
+C3823: 11 In Bde (4 In; Less: 4/7 Rajp; Assg: 2/5
+Mahratta Light Inf [in it place]); Trucks: 5 Light,
+20 Medium, 5 Heavy.
+C3721: Central India Horse Regt (R; TOE
+Strengthof 3; 4In)
+Trucks: 3 Light, 3 Medium.C3714: !st South
+African Divison (Det: the three Inf Bdes and 4th
+SA Field Arty); Trucks: 5 Light, 22 Medium, 6
+Heavy.
+C3614: 7th Support Group (7; Det: 11 Hus [R] and
+4th RHA; Assg: !st LightAA and 60th Field Arty)
+Trucks: 30 Medium, 15 Heavy.
+C3621: 4th InDivision (Det: All three Inf Bdesand
+the Reece Regt); 8th Field Arty; 65th AT Regt;
+57th Light AA; Trucks: 5 Light, 20 Medium, 8
+Heavy
+C3532: 2nd South Africa Div (Det: 7 SA Armored
+Car, 2nd SA Field Arty and 2nd SA AT Regt);
+Trucks: 12 Light, 70 Medium, 14 Heavy.
+C3521: 1st Army Tank Bde
+Trucks: 30 Medium, 17 Heavy.
+C3530: 73rd AT Regt; 7th Medium Arty; 64th
+Medium Arty; 68th Medium Arty; Trucks: 3
+Light, 25 Medium, 5 Heavy.
+C3419: 7th In Bde (4 In); Trucks: 5 Light, 22
+Medium, 5 Heavy.
+C3426: 5th In Bde (4 In; Less: I Royal Fusilier;
+Assg: ·1 Buffs [In its place]); 2nd South Africa AT
+Regt (2 SA); Trucks: 5 Light, 20 Medium, 5
+Heavy.
+C3410: 11th Hus (7Spt/7); Trucks: 10 Medium, 3
+Heavy.
+C 3414: HQ: 7th Armored Division
+Trucks: 2 Light, 2 Mediu·m
+C 3318: 2nd New ZealandDiv
+Trucks: 15 Light, 75 Medium, 21 Heavy.
+C 3212: 22 Armored Bde (now Assg to the 7th Ar­
+moredDiv)
+Trucks: 15 Medium, 10 Heavy.
+C3111: !st SouthAfrican Bde (ISA)
+Trucks: 5 Light, 20 Medium, 3 Heavy.
+C 3015: 22 Gds Bde (I; Assg: !st Tower Hamlet
+Rifles Spt/2, 3rd Coldstream Gds; Att: 51st Field
+Arty)
+Trucks: 20 Medium, IO Heavy.
+C2712: 5th South Africa Bde (ISA)
+Trucks: 5 Light, 20 Medium, 3 Heavy.
+C 1014: 6th South African Armored Car Bn; 7th
+SA Reece Bn (2 SA); 29th In Bde (5 In; Less: 6/13
+FFR; Assg: !st Royal Fusiliers 5/4 In; in its place#;
+Att: 2 South African Field Arty Regt 2 SA)
+Trucks:':/ Light, 25 Medium, 6 Heavy.
+D 3714: 2nd South African Bde (1 SA); 4th SA
+Field Arty (I SA)
+Trucks: 5 Light, 22 Medium, 6 Heavy.
+D2001: l�t South African Road Construction Bn.
+Trucks: 3 Light.
+(62.32] Tanks
+The units listed below have the following TOE of
+tanks (Unit: Tanks).
+1 RTR(32ndArmy,Bde 12): 4 MkVI Light
+4 RTR(32ndArmy,Bde 12): IO Matildas
+7 RTR(32ndArmy,Bde 12): 4 Matildas
+8 RTR(1st Army, TankBde): 10 Valentines
+42nd RTR(1st Army, TankBde): 3 Matilidas (the
+following OpStage, the first of game-tum 58, the
+unit receives 7 more TOE of Matildas if it does not
+move. If it does, it receives them the second
+OpStage ofgame-tum 58.)
+8 Hussars(4/7): I0 Stuarts
+3 RTR(4/7): I0 Stuarts
+5 RTR(4/7): 10 Stuarts
+7 Hussars (7/7): 4 CrusaderI's, 3 A/13's, 4 A/IO's
+6 RTR(7/7): !0Crusaderl's
+2 Hussars (22nd Armor Bde): 9 Crusader l's, I
+A/10
+4CLY(22ndArmorBde): 9Crusader I's, I A/10
+In addition to the above tanks, the following tanks
+(in terms of TOE Points) are considered to be
+broken down inRepair Shops in Alexandria.
+3 x Crusader I; 15 x Crusader II; I8 x Stuart;
+7 x Matilda; 8 x Valentine.
+Repair on these tanks may not start unti! the
+scenario's second OpStage.
+[62.33] Commonwealth North African Air Force
+Planes: These may be distributed freely amongst
+the available air facilities:
+Total
+Plane Available Refitted
+Hurricane I's 82 64
+Hurricane IIA's 66 60
+Hurricane IIB's 42 36
+Blenheim IVF's 24 16
+Tomahawks 88 64
+Beaufighters 22 16
+Blenheim IV's 142 100
+Wellington !C's 110 80
+Bostons 20 16
+Marylands 32 12
+Pilots: I FOUR pilot, 5 THREE pilots, 15 TWO
+pilots and 20 ONE pilots.
+Air Facilities: 1 Flying Boat Basin anywhere on
+map-section D or E, and Port Said (off-map).
+No Flying Boat Alighting Areas.
+Airfields at Maaten Baggush (D 3520), Fuka (D
+3323), Amirya (E 3212), Kabrit (off-map) and
+Tobruk (C 4807).
+Air Landing Strips at any two hexes in the
+Giarabub Oasis (C 1014) complex, Gerawla (D
+3516), Sidi Haneish (D 3418), El Daba (D 3329),
+Qotafiya (D 3227), Abu Seier and Fayid (off-map,
+i.e., both have been reduced to the ability to per­
+form maintenance on a single squadron).
+SGSU's: As per Air Game rules.
+31
+[62.31] (omission) Deploy the three CW
+Tank Delivery Squadrons in Cairo.
+[62.41] (omission) Deploy the German Mobile Tank Recovery Squadron in Benghazi.
+34
+E 2601: 7th In Bde (4 In; Less: 4/11 Sikh; Assg:
+1/2 Gurkha Rifles in its place) and 161st In Motor
+Bde (consists of: 1st Argyll & Sutherland 16/17,
+1/1 Punjab Regt, 4/7 Rajputanis 1114 In).
+Trucks: 5 Llght, 25 Medium, 5 Heavy.
+2501: 50th Inf Div (Less: 150 Bde, 2nd Chesire MG
+Bn and 72 Field Arty; Assg: Greek Bde and IIIth
+Field Arty Regt in place of the Inf Bde and Arty
+Regt respectively; Att: 154th Field Arty Regt,
+102nd AT Regt 2Spt/2 and 34th Light AA Regt).
+Trucks: 35 Light, 65 Medium, 21 Heavy.
+E 2302: 7th Armored Div (Consists of: 4th Ar­
+mored Bde #consists of 4/8 Hus••, Royal Scots
+Grays (8/10) and IKRRC (7 Spt/7); 22nd Ar­
+mored Bde consists of I RTR (7/7), 5 RTR 3/2), 4
+CLY (22 Amr Bde), and I Rifle Bde (2/J); 11th
+Hus r; 7; TOE Strength of 8 3RHA Which now is
+considered a regular artillery unit, Possesses 6
+TOE Strength Points of 25lbrs; 4th Field Arty
+Regt; 97thFieldArty Regt20/JOIn; 65thAT Regt;
+15th LightAA Regt; AH: 2ndDerbyYeomanryR,
+8; Strength of 6; 44th Reece Regt 44. Trucks: 75
+Medium, 40 Heavy.
+E·3005: 1st Armored Div (Consists of: 2 Armored
+Bde Less: 1st RflBde, 7th Motor Bde 7; Which
+consists of: 2nd Rifle Bde (7Spt/7), 7th Rifle Bde
+(2318) and 2nd KRRC(JSpt/1), 2nd RHA #Spt/2,
+4th RHA 7Spt/7, 11th RHA self-propelled
+counter, 78th Field Arty, 76 AT RegtSpt/1, 1st
+Royal Northumberland Fusiliers MG Bn, 42nd
+Light AA, and 12 Lancers R; JSpt/1; Att: An ad
+hoc Bde-level formation known as "Hammer­
+force"; consisting of: 4/6 SA Armored Car
+Regt••• with a TOE Strength of 7, 146th Field Ar­
+ty, 73rd AT Regt and 56th Light AA Regt).
+Trucks: 10Light, 90Medium, 30 Heavy.
+E 3007: 8th Armored Div (Det: 40 RTR and 50
+RTR of the 23rd Armored Bde, 2nd DerYoe R;
+Less: 24thArmored Bde, 7th RifleBde of the 23rd
+Armored Bde); 121st Field Arty. Trucks: 5
+Medium.
+E 2805: 10th Armored Div (consists of: 8 Amr Bde
+10; Less: SctsGray; Assg: 3rd RTR (1/2; in its
+place) and 1st Buffs (I), 24th Armored Bde (8],
+133rd Inf. Bde [44). 1st Royal Dragoons R, I
+RHA, 104 RHA, 98sth Field Arty, 5th RHA self­
+propelled counter, 84th AT, and 53rd Light AA).
+Trucks: 75 Medium, 40 Heavy.
+E 2904: 1st Army Tank Bde (Det: 8 RTR) Trucks:
+5 Medium.
+E 2401: 44th Inf Div (Det: 44th Reece; Less:
+133Inf Bde; Att: 53rd Field Arty). Trucks: 20
+Light, 55 Medium, 6 Heavy.
+Withinone hex ofE 2403: 1st FreeFrenchBde
+Trucks: 10Light, 35Medium, 5 Heavy.
+2nd Free French Bde. Trucks: 5 Light, 12
+Medium, I Heavy.
+Withintwo hexes ofel Alamein
+(E 3002): 14th Light AA; 16th Light AA; 27th
+Light AA; 88th Heavy AA; 94th Heavy AA.
+Trucks: 5 Medium.
+21st In Bde (JO In; consists of:: 1/6 Rajput Rifles
+11/4 In, 3/7
+Rajputana Regt 61 In Mtr Bde and 2/8 Gurkha
+Rifles); 7th Medium Arty Regt; 64th Medium Ar­
+ty; 69th Medium Arty
+Trucks: 10 Light, 25 Medium, 7 Heavy.
+*This is a British unit whose counter bears the In­
+dian units' coloration.
+**Formation created by combining the 4th and 8th
+Hussars. Use the counter for the 8th Hus (7/7).
+The unit's max TOE Strength is still 10.
+•••Formation created by combining the 4th and
+6th SA Armored Car Battalions. Use either
+counter. The unit's max TOE Strength is now 8.
+Certain of the above units may have their equip­
+ment and TOE upgraded, using the rules sections
+for such as references.
+A. Each non-motorized infantry battalion (CPA
+of10) may add I TOE of 6-pounderAT guns; and
+B . Each motorized battalion of infantry (10 +
+CPA) may add 2 TOEof 6-pdr AT guns.
+C . 401\'o (rounded up) of all AT units may replace
+their2-pdr AT guns with 6-pdr AT guns.
+D . Armored car (not armo,red recce) units may be
+upgraded as per the rules for such. (It is not
+necessary to use Replacement points; simply
+upgrade them as if they had used Replacement
+Points)
+E . Any artillery units with IS-pounders or 18/25
+pounders may replacethem with 25 pounders.
+(63.32) Commonwealth Tank Battalion
+Composition
+The following tank battalions are listed as to their
+assigned parent formatin(s) for this scenario and
+their starting compositions, in TOE Strength
+Points, if they differ from their listing on the OA
+Sheet. Parent
+Tank Battalion Formation(s) Composition
+40 RTR
+46 RTR
+50RTR
+8 RTR
+3rd Hussars
+Ry! Wi Yeomanry
+Warwick Yeo
+9th Aus Div Cav
+Royal Scots Greys
+4/8 Hussars
+I RTR
+5 RTR
+4 CLY
+Queens Bays
+9th Lancers
+10th Hussars
+7th Motor Bde HQ
+3 RTR
+Nottingham Yeo
+Staffordshire Yeo
+41RTR
+45 RTR
+47 RTR
+42 RTR
+23/8
+23/8
+23/8
+I Army*
+-t
+91-t
+9 Aust
+4/7
+4/7
+22/7
+22/7
+22/7
+2/1
+2/1
+8/10
+8/10
+8/10
+24/10
+24/10
+24/10
+I Army
+8 Valentines
+10 Valentines
+9 Valentines
+10 Valentines
+2 Grants, 2 Sher-
+mans, 3 Crusader
+I's
+3 Grants, 2 Sher-
+mans, 3 Crusader
+I's
+3 Grants, 3 Sher-
+mans, 3 Crusader
+II's
+3 Crusader IJ's, I
+Stuart 6 ID Code
+"11"
+4 Stuarts, 3·Grants
+9 Stuarts
+4 Stuarts, 5 Grants
+4 Crusader II's,
+5 Grants
+6 Crusader Il's,
+2 Grants
+7 Shermans,
+3 Crusader II's
+6 Shermans,
+4 Crusader Il's
+5 Shermans,
+5 Crusader II's
+I Churchill
+3 Crusader III's,
+2 Shermans,
+3 Grants
+3 Crusader Ill's,
+2 Shermans,
+4 Grants
+3 Crusader Ill's,
+2 Shermans,
+4 Grants
+3 Crusader Ill's,
+6 Shermans
+3 Crusader III's,
+6 Shermans
+3 Crusader III's,
+7 Shermans
+IO Scorpions
+44 RTR I An:ny 10 Scorpions
+*Starts attached to the 1st SA Div.
+tStarts attached to the 2nd NZ Division.
+tThis armored unit is a tank battalion for these
+scenarios.
+(63.33) Commonwealth AirStrength
+Planes (Type
+and #'s Available)
+Location SGSU's(Type and #'s Available
+Burg el 3 Spitfire VB (18); Hurricane
+Arab IIA (12);
+(E 3109) Tomahawks (6); Marylands
+(4); Baltimores (4)
+Wadi Marylands (12)
+Natrun
+(E 2418)
+Deversoir Mitchell II (39)
+Amiriya 28 Boston Ill (48); Baltimore II
+Air (24); Baltimore III (24);
+Com- Tomahawk (16); Kittyhawk
+plex (see I (56); Kittyhawk II (91);
+Air Kittyhawk III (39); Hur-
+Facilities ricane JIB (48); Hurricane
+below) IIC (64); Hurricane IID
+(32); Hurricane IIE (16);
+Spitfire VB(48)
+Idku 2 Beaufighter JC (16); .Beau-
+(E 3817) fighter VIF (16)
+Abu Seier Wellington JC (32)
+Jebel 2 Wellington IC (32)
+Hamzi
+(E 2024)
+Kabrit • Wellington JC (16); Well-
+ington
+Degheila
+II (16)
+1 Albacores (24)
+(E 3512)
+Jsmailia Hudsons (32); Bombays (22)
+•= SGSU's not needed; off-map base.
+All Commonwealth Planes are Refitted!
+PilotsAvailable
+Rating
+Four
+Three
+Two
+One
+NumberAvailable
+1
+5
+22
+31
+AirFacilities
+The Commonwealth Player places six
+Airfields within one hex of Amiriya (The Amiriya
+complex). He has an Airfield at Burg el Arab (E
+3109), Alex­andria, and Cairo. He has a Landing
+Strip at Wadi Natrun (E 2418). The
+Commonwealth Player may also place 2
+additional Airfields and 3 Landing Strips, I
+Flying Boat Basin and I Flying Boat Alighting
+Area anywhere on Map E, but not within
+five hexes of an enemy unit, or in the
+Qatarra Depression. The Commonwealth Player's
+seven off-map facilities are all undamaged.
+(63.34) Commonwealth Trucks
+Second-Third LineTrucks (In Convoy):
+Anywhere on game maps D & E: 200 Light, 725
+Medium, 225 Heavy
+The Commonwealth Player receives 100 Medium
+and 60 Heavy trucks for distribution among his
+Air Facilities.
+(63.35) Commonwealth Supply
+The Commonwealth Player receives 10 Supply
+Dumps plus 3 Dummies, for a total of 13 Dumps.
+As many as five of these dumps may be placed
+within one hex of the Front Line (i.e., any hex
+east of and adjacent to an Axis unit.) One ·dump
+each must be placed at el Alamein, E2805, and
+E2403. The remaining dumps may be placed
+anywhere on Map E, but not within one hex of
+the front.
+Front Line Dumps receive (amongst them) 2500
+Ammo points, 2000 Fuel Points, 1500 Stores, and
+1500 Water Points. The other dumps split (in any
+[63.31] (omission) Deploy the three CW Tank Delivery
+Squadrons in Cairo.
+[63.41] (omission) Deploy the German Mobile Tank Recovery Squadron in Benghazi.
+COUNTER SHEET #9
+(back and front)
+A. The Minefield, POW, Guard, and POW
+Camp counters should be labeled as
+“Commonwealth” and not “Allies”.
+B. The headquarters counter for the 10th
+Bersaglieri Regiment (10 Brs) should show a
+mechanized infantry instead of a motorized
+infan­try symbol.
+C. The 5th and 23rd Desert Patrol (5 DPtl and 23
+DPtl) units should show recon instead of
+motoriz­
+ed infantry symbols.
+D. The 5th, 6th, and 7th Artillery Regiments of
+the Tobruk Garrison should show counter
+ab­
+breviations and Parent Unit indicators of,
+respec­tively, V/31 (Tobruk), VI/31 (Tobruk),
+and VII/31 (Tobruk). The counter abbrevia-
+tions on the Tobruk Garrison’s OA Sheet
+are also incor­
+rect.
+COUNTER SHEET #3
+A. The 138th Infantry Battalion of the 2nd
+CCNN
+Division - 138 (238/2CN) - should not show a
+headquarters stripe.
+COUNTER SHEET #4
+A. The ArKo 104 artillery counter is missing its
+headquarters stripe.
+B. The 368 Heavy Flak Battalion should show a
+Heavy AA instead of an AA symbol.
+C. The 200th Regiment of the 15th Panzer
+Divi­sion should show a motorized infantry
+instead of a mechanized infantry symbol.
+D. The 5th Light Panzer Division’s Stacking
+Point indicator is missing its closing
+parenthesis.
+COUNTER SHEET #5
+A. The 2nd New Zealand Cavalry (2NZ Cav)
+should show an Armored Recon instead of
+a Tank symbol.
+COUNTER SHEET #6
+No errata.
+COUNTER SHEET #7
+A. The 65th Anti-Tank Regiment should show
+an Anti-tank instead of an Artillery symbol.
+B. The 14 (14/70) Anti-tank Company should
+show an Anti-Tank instead of an Artillery
+symbol.
+C. The 61st Heavy AA counter is missing its
+“1” Stacking Point indicator.
+COUNTER SHEET #8
+A. The 13th DCL Armored Car Regiment is
+attached and not assigned to the 18th Indian
+Brigade and should show a dash ( - ) instead
+of “18 In X’’ as its Parent Formation
+indicator.
+B. The 9th Australian Division’s headquarters
+counter should not show an Engineering
+Capability (E) indicator.
+COUNTER ADDENDA
+COUNTER SECTION #1
+A. The following headquarters units are
+missing their identifying stripe:
+63 Cir
+157 (63)
+158 (63)
+64 Cat
+141 (64)
+142 (64)
+101 Tst
+65 (IOI)
+66 (IOI)
+9 Brs (101)
+102 Tm
+61 (102)
+62 (102)
+7 Brs (102)
+Ariete
+132 RC (Ariete)
+8 Brs (Ariete)
+Lit­torio
+133 RC (Littorio)
+12 Brs (Littorio)
+136 GGFF
+B. The 101st Trieste Division’s divisional and
+regimental headquarters counters (i.e., 102
+Tst, 65, and 66) should show a motorized
+infantry in­
+stead of mechanized infantry
+symbols.
+C. The 2/8Brs (Ariete) Anti-tank Battalion is
+assigned directly to the Ariete’s divisional
+head­
+quarters and should bear a counter
+abbreviation and parent formation indicator
+of “2 (Ariete).” It is correctly listed on the
+Ariete’s OA Sheet.
+D. 141st Regiment of the 64th Catanzaro Division
+is missing its organization size indicator of
+“III’’.
+E. The IV/66 (101st Trieste) Company should
+show Heavy Weapons and not an Anti-tank
+symbol.
+COUNTER SHEET #2
+A. The following units are missing
+the head­
+quarters stripe:
+30 GaF (Bardia)
+10 Brs, Libyan
+54 Ter (Derna)
+4/10 Army.
+Note that the Stacking Points indicators
+of the 54 Ter and 4/10 Army are correct
+in not possessing parentheses.
+INTEGRATED
+ADDENDA & ERRATA VERSION
+(JULY 2021)
+PRODUCED BY: CLAY STONE
+GRAPHIC REPRODUCTION
+& COPYEDITING BY: MICHAEL KIRK
+17
+18
+

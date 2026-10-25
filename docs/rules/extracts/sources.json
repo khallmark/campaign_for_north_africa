@@ -1,0 +1,30 @@
+{
+  "command": "pdftotext -raw -enc UTF-8",
+  "version": "22.12.0",
+  "sources": [
+    {
+      "book": "L21",
+      "pdf": "docs/CNAv2.1.0/Rules_Land_07-2021.pdf",
+      "pdf_sha256": "78256d7dd4327216d75aaae0ce8b6980c052ceb81e04706bf1036f6d6546e270",
+      "extract": "docs/rules/extracts/land-2021.txt",
+      "extract_sha256": "ec101b40df4072dac23e76ec906094b1304bbcc7783afdda6e57869230e51b12",
+      "pages": 48
+    },
+    {
+      "book": "AL21",
+      "pdf": "docs/CNAv2.1.0/Rules_Air&Logistics_07-2021.pdf",
+      "pdf_sha256": "af662fee906210c04c8b41a3d47f10139848b7b13f464b976c5ce74d9563959f",
+      "extract": "docs/rules/extracts/airlog-2021.txt",
+      "extract_sha256": "f9058ec1c9b80f423cb3895f0b9fc3fb121551a2356dffc01e7dadc6c22c3b6a",
+      "pages": 28
+    },
+    {
+      "book": "SC21",
+      "pdf": "docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf",
+      "pdf_sha256": "bf805da22221f10dcdb89cbbe9dda5ff862ccafdfe291f3a6bdb43b9d26940f6",
+      "extract": "docs/rules/extracts/scenarios-2021.txt",
+      "extract_sha256": "b9e6b5212a5a2942c428b16b3e1cbdbf4f41339a53d5228b312150ad5f17cef4",
+      "pages": 18
+    }
+  ]
+}

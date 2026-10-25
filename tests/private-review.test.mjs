@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, readFile, rm, symlink, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, realpath, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
@@ -10,7 +10,7 @@ async function fixture(t, enabled = true) {
   const cwd = process.cwd();
   const previous = process.env.CNA_PRIVATE_REVIEW_TILES;
   delete process.env.CNA_PRIVATE_REVIEW_TILES;
-  const root = await mkdtemp(join(tmpdir(), 'cna-private-route-'));
+  const root = await realpath(await mkdtemp(join(tmpdir(), 'cna-private-route-')));
   const servers = [];
   t.after(async () => {
     await Promise.all(servers.map(server => server.close()));

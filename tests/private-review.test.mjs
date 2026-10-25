@@ -82,3 +82,63 @@ test('private source route is absent without opt-in and from production build/pr
   assert.equal((await fetch(`http://127.0.0.1:${production.httpServer.address().port}${path}`, request)).status, 404);
   assert.match(await readFile(join(root, 'dist/index.html'), 'utf8'), /Synthetic route fixture/);
 });
+
+for (const enabled of [false, true]) {
+  test(`private SQLite is denied through Vite files and transforms (review=${enabled})`, async t => {
+    const { root, assets, servers } = await fixture(t, enabled);
+    await mkdir(join(root, 'data'));
+    await mkdir(join(root, 'public/data'), { recursive: true });
+    const privateBytes = Buffer.from('SQLite format 3\0PRIVATE_DATABASE_FIXTURE');
+    for (const suffix of ['', '-wal', '-shm', '-journal']) {
+      await writeFile(join(root, `data/catalog.sqlite${suffix}`), privateBytes);
+    }
+    await writeFile(join(root, 'public/data/safe.json'), '{"safe":true}');
+    await writeFile(join(root, '.env'), 'PRIVATE_ENV_FIXTURE=1');
+    await writeFile(join(root, 'secret.pem'), 'PRIVATE_CERT_FIXTURE');
+    await mkdir(join(root, 'tiles'), { recursive: true });
+    await writeFile(join(root, 'tiles/manifest.json'), '{"review":true}');
+    const options = reviewConfig({ command: 'serve', mode: 'test' });
+    const server = await createServer({
+      ...options, root, configFile: false, logLevel: 'silent',
+      server: { ...options.server, host: '127.0.0.1', port: 0 },
+    });
+    servers.push(server);
+    await server.listen();
+    const base = `http://127.0.0.1:${server.httpServer.address().port}`;
+    const paths = [
+      '/data/catalog.sqlite', `/@fs/${root}/data/catalog.sqlite`,
+      '/data/%63atalog.sqlite', '/%64ata/catalog.sqlite', '/data%2Fcatalog.sqlite',
+      `/@fs/${root}/data/%63atalog.sqlite`, `/@fs/${encodeURIComponent(root + '/data/catalog.sqlite')}`,
+      '/data%252Fcatalog.sqlite', '/data/catalog%2esqlite',
+      '/data/catalog.sqlite?raw', '/data/catalog.sqlite?url', '/data/catalog.sqlite?import',
+      `/@fs/${root}/data/catalog.sqlite?raw`,
+      '/data/catalog.sqlite-wal', '/data/catalog.sqlite-shm', '/data/catalog.sqlite-journal',
+      '/.env', '/secret.pem',
+    ];
+    for (const path of paths) {
+      for (const method of ['GET', 'HEAD']) {
+        const response = await fetch(base + path, { method, headers: { accept: 'application/octet-stream' } });
+        const bytes = Buffer.from(await response.arrayBuffer());
+        assert.ok([403, 404].includes(response.status), `${method} ${path}: ${response.status}`);
+        assert.equal(bytes.includes(privateBytes), false, path);
+      }
+    }
+    // Encoded separators are not file routes in Vite. HTML navigation may use
+    // the SPA fallback, but it must return the fixture page, never DB content.
+    for (const path of ['/data%2Fcatalog.sqlite', '/data%252Fcatalog.sqlite', `/@fs/${encodeURIComponent(root + '/data/catalog.sqlite')}`]) {
+      const response = await fetch(base + path, { headers: { accept: 'text/html' } });
+      assert.match(response.headers.get('content-type'), /^text\/html/);
+      const text = await response.text();
+      assert.match(text, /Synthetic route fixture/);
+      assert.equal(text.includes('PRIVATE_DATABASE_FIXTURE'), false);
+    }
+    assert.match(await (await fetch(base + '/')).text(), /Synthetic route fixture/);
+    assert.deepEqual(await (await fetch(base + '/data/safe.json')).json(), { safe: true });
+    assert.equal((await fetch(base + '/@vite/client')).status, 200);
+    const token = await fetch(base + '/__source-tokens/' + encodeURIComponent(Object.keys(assets)[0]), { headers: { accept: 'image/png' } });
+    assert.equal(token.status, enabled ? 200 : 404);
+    const tiles = await fetch(base + '/tiles/map/manifest.json', { headers: { accept: 'application/json' } });
+    assert.equal(tiles.status, enabled ? 200 : 404);
+    if (enabled) assert.deepEqual(await tiles.json(), { review: true });
+  });
+}

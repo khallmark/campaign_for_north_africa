@@ -14,15 +14,142 @@ function collectErrors(page: Page) {
   return errors;
 }
 
-async function addCounter(page: Page) {
+async function chooseCounter(page: Page) {
   await page.getByRole('button', { name: 'Reinforcements', exact: true }).click();
   await page.getByRole('searchbox', { name: 'Find an identity' }).fill('2nd Bays');
   await page.getByRole('button', { name: 'Add planning counter', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(page.getByRole('region', { name: 'Full-board map', exact: true })).toBeFocused();
+}
+
+async function addCounter(page: Page) {
+  await chooseCounter(page);
   await page.keyboard.press('Enter');
   await expect(page.locator('.counter-marker')).toHaveCount(1);
 }
+
+test('selecting and removing one counter leaves another of the same identity unchanged', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
+  await addCounter(page);
+  const rows = page.locator('.board-roster-unit');
+  const firstPosition = await rows.first().locator('small').innerText();
+  await chooseCounter(page);
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await expect(rows).toHaveCount(2);
+  await expect(page.locator('.counter-marker')).toHaveCount(2);
+  const secondPosition = await rows.last().locator('small').innerText();
+  expect(secondPosition).not.toBe(firstPosition);
+  const secondId = (await rows.last().getAttribute('data-counter'))!;
+  const secondMarker = page.locator(`.counter-marker[data-counter="${secondId}"]`);
+  const secondCoordinates = await secondMarker.locator('..').evaluate(el => [el.getAttribute('data-board-x'), el.getAttribute('data-board-y')]);
+
+  await rows.first().click();
+  await expect(rows.first()).toHaveAttribute('aria-pressed', 'true');
+  await expect(secondMarker).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('#board-detail .unit-facts dd').first()).toHaveText(firstPosition.split(' · ')[0]);
+  await secondMarker.click();
+  await expect(rows.last()).toHaveAttribute('aria-pressed', 'true');
+  await expect(rows.first()).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('#board-detail .unit-facts dd').first()).toHaveText(secondPosition.split(' · ')[0]);
+
+  // Remove the older counter, not the last-added counter or every matching identity.
+  await rows.first().click();
+  await page.getByRole('button', { name: 'Remove planning counter' }).click();
+  await expect(rows).toHaveCount(1);
+  await expect(rows).toHaveAttribute('data-counter', secondId);
+  await expect(rows.locator('small')).toHaveText(secondPosition);
+  await expect(page.locator('.counter-marker')).toHaveCount(1);
+  expect(await secondMarker.locator('..').evaluate(el => [el.getAttribute('data-board-x'), el.getAttribute('data-board-y')])).toEqual(secondCoordinates);
+  await expect(page.locator('#board-detail')).toContainText('Select a unit');
+  await rows.click();
+  await expect(secondMarker).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('group', { name: 'Selected unit actions' })).toHaveCount(1);
+  expect(errors).toEqual([]);
+});
+
+test('off-section placement is rejected and cancellation preserves existing positions', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
+  const map = page.getByRole('region', { name: 'Full-board map', exact: true });
+  async function viewChart() {
+    await page.getByRole('button', { name: 'Open campaign calendar' }).click();
+    await page.getByText('Sequence of play and source notes', { exact: true }).click();
+    await page.getByRole('button', { name: 'View original track on map' }).click();
+    await map.focus();
+  }
+  // The original Game-Turn chart is outside the playable map sections.
+  await viewChart();
+  await chooseCounter(page);
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#board-message')).toContainText('Choose a position within a mapped section');
+  await expect(page.locator('#board-placement')).toBeVisible();
+  await expect(page.locator('.counter-marker')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await expect(page.locator('#board-placement')).toBeHidden();
+  await expect(page.locator('.board-roster-unit small')).toHaveText('Awaiting placement');
+  await expect(page.locator('#board-detail .unit-facts dd').first()).toHaveText('Not placed');
+
+  // Cancel leaves the newly added identity unplaced; it can still be placed later.
+  await page.getByRole('button', { name: 'Place counter', exact: true }).click();
+  await page.keyboard.press('Home');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.counter-marker')).toHaveCount(1);
+  const position = await page.locator('.board-roster-unit small').innerText();
+  const coordinates = await page.locator('.board-counter').evaluate(el => [el.getAttribute('data-board-x'), el.getAttribute('data-board-y')]);
+  await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
+  await page.getByRole('button', { name: 'Reposition planning counter', exact: true }).click();
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#board-placement')).toBeHidden();
+  await expect(page.locator('.board-roster-unit small')).toHaveText(position);
+  expect(await page.locator('.board-counter').evaluate(el => [el.getAttribute('data-board-x'), el.getAttribute('data-board-y')])).toEqual(coordinates);
+
+  await page.getByRole('button', { name: 'Reposition planning counter', exact: true }).click();
+  await viewChart();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#board-message')).toContainText('Choose a position within a mapped section');
+  await expect(page.locator('#board-placement')).toBeVisible();
+  await expect(page.locator('.board-roster-unit small')).toHaveText(position);
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await expect(page.locator('#board-placement')).toBeHidden();
+  await page.getByRole('button', { name: 'Locate selected unit' }).click();
+  expect(await page.locator('.board-counter').evaluate(el => [el.getAttribute('data-board-x'), el.getAttribute('data-board-y')])).toEqual(coordinates);
+  await expect(page.locator('.board-roster-unit small')).toHaveText(position);
+  expect(errors).toEqual([]);
+});
+
+test('catalog controls wire search, selects and pagination into visible results', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Unit catalog', exact: true }).click();
+  const count = page.locator('.catalog-count');
+  const firstPage = await count.innerText();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(count).toContainText('Showing 25–48');
+  await expect(count).toBeFocused();
+  await page.getByRole('button', { name: 'Previous', exact: true }).click();
+  await expect(count).toHaveText(firstPage);
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await page.getByRole('searchbox', { name: 'Search records' }).fill('type-infantry');
+  await expect(count).toContainText('Showing 1–1 of 1 records');
+  await expect(page.locator('.catalog-list')).toContainText('Infantry');
+  await expect(page.getByRole('button', { name: 'Next', exact: true })).toHaveCount(0);
+  await page.getByRole('combobox', { name: 'Record type', exact: true }).selectOption('formation');
+  await expect(count).toContainText('No matching records');
+  await page.getByRole('combobox', { name: 'Record type', exact: true }).selectOption('unit_type');
+  await expect(count).toContainText('Showing 1–1 of 1 records');
+  await page.getByRole('combobox', { name: 'Side', exact: true }).selectOption('axis');
+  await expect(count).toContainText('No matching records');
+  await page.getByRole('combobox', { name: 'Side', exact: true }).selectOption('unspecified');
+  await expect(count).toContainText('Showing 1–1 of 1 records');
+  expect(errors).toEqual([]);
+});
 
 test('full-board workspace removes the scenario and restores modal keyboard focus', async ({ page }) => {
   const errors = collectErrors(page);

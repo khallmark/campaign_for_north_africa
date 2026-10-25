@@ -6,6 +6,7 @@ fn module() -> std::path::PathBuf {
 }
 
 #[test]
+#[ignore = "original source census: npm run test:sources"]
 fn census_accounts_for_every_source_slot_without_merging() {
     let xml = std::fs::read_to_string(module().join("buildFile.xml")).unwrap();
     let census = scan(&xml, &module().join("images")).unwrap();
@@ -86,6 +87,7 @@ fn census_preserves_missing_images_and_only_links_evidenced_palette_copies() {
 }
 
 #[test]
+#[ignore = "original source census: npm run test:sources"]
 fn census_cli_check_verifies_checked_in_output_without_writing() {
     let output = std::process::Command::new(env!("CARGO_BIN_EXE_vassal-census"))
         .args(["--check"])

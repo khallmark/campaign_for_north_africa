@@ -6,6 +6,7 @@ use std::path::Path;
 use std::process::Command;
 
 #[test]
+#[ignore = "original source census: npm run test:sources"]
 fn census_preserves_every_main_map_zone_and_grid_parameter() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let xml = fs::read_to_string(root.join("docs/CNAv2.1.0/buildFile.xml")).unwrap();
@@ -89,6 +90,7 @@ fn census_preserves_every_main_map_zone_and_grid_parameter() {
 }
 
 #[test]
+#[ignore = "original source census: npm run test:sources"]
 fn census_cli_checks_current_sources_without_writing_and_rejects_unknown_options() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let path = root.join("public/data/map/sources.json");
@@ -146,5 +148,40 @@ fn census_release_guard_rejects_pending_tiles_but_allows_explicit_local_research
         !check(false).status.success(),
         "local override must not change policy"
     );
+    fs::remove_dir_all(bundle.join("tiles")).unwrap();
+    for directory in ["__source-tokens", "docs/CNAv2.1.0"] {
+        fs::create_dir_all(bundle.join(directory)).unwrap();
+        fs::write(bundle.join(directory).join("probe.svg"), b"synthetic").unwrap();
+        assert!(
+            !check(false).status.success(),
+            "private source directory must not be published: {directory}"
+        );
+        fs::remove_dir_all(bundle.join(directory)).unwrap();
+    }
+    #[cfg(unix)]
+    {
+        // A renamed link can expose private source files outside the tile tree.
+        std::os::unix::fs::symlink("/nonexistent-private-art", bundle.join("portrait.png"))
+            .unwrap();
+        assert!(!check(false).status.success(), "dangling links are payload");
+        fs::remove_file(bundle.join("portrait.png")).unwrap();
+    }
+    fs::write(
+        bundle.join("original.svg"),
+        b"<svg>synthetic safe art</svg>",
+    )
+    .unwrap();
+    assert!(check(false).status.success());
+    // Text proves renamed locked copies are rejected without original images
+    // or hydrated PDFs in the default suite.
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    fs::copy(
+        root.join("docs/CNAv2.1.0/Read me.txt"),
+        bundle.join("renamed.txt"),
+    )
+    .unwrap();
+    let copied = check(false);
+    assert!(!copied.status.success());
+    assert!(String::from_utf8_lossy(&copied.stderr).contains("locked original source"));
     fs::remove_dir_all(bundle).unwrap();
 }

@@ -288,6 +288,61 @@ fn contains_payload(path: &Path) -> Result<bool> {
     Ok(false)
 }
 
+#[derive(Deserialize)]
+struct LockedSource {
+    size: u64,
+    sha256: String,
+}
+
+#[derive(Deserialize)]
+struct SourceLock {
+    files: BTreeMap<String, LockedSource>,
+}
+
+fn check_original_sources(path: &Path, sources: &SourceLock) -> Result<()> {
+    let metadata = match fs::symlink_metadata(path) {
+        Ok(metadata) => metadata,
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Ok(()),
+        Err(error) => return Err(error.into()),
+    };
+    if metadata.is_symlink() {
+        return Err(format!("bundle symlink is not publishable: {}", path.display()).into());
+    }
+    if metadata.is_dir() {
+        if matches!(
+            path.file_name().and_then(|s| s.to_str()),
+            Some("__source-tokens" | "CNAv2.1.0")
+        ) && contains_payload(path)?
+        {
+            return Err(format!(
+                "private source directory is not publishable: {}",
+                path.display()
+            )
+            .into());
+        }
+        for entry in fs::read_dir(path)? {
+            check_original_sources(&entry?.path(), sources)?;
+        }
+    } else if !metadata.is_file() {
+        return Err(format!("bundle entry is not a regular file: {}", path.display()).into());
+    } else if sources.files.values().any(|s| s.size == metadata.len()) {
+        // Fingerprints suffice: no original artwork needs to be hydrated to
+        // reject renamed byte-for-byte source copies in release assets.
+        let mut file = fs::File::open(path)?;
+        let mut digest = Sha256::new();
+        std::io::copy(&mut file, &mut digest)?;
+        let hash = format!("{:x}", digest.finalize());
+        if sources.files.values().any(|s| s.sha256 == hash) {
+            return Err(format!(
+                "locked original source is not publishable: {}",
+                path.display()
+            )
+            .into());
+        }
+    }
+    Ok(())
+}
+
 fn release_check(root: &Path, args: &[String]) -> Result<()> {
     let mut bundle = root.join("dist");
     let mut local_only = false;
@@ -328,6 +383,8 @@ fn release_check(root: &Path, args: &[String]) -> Result<()> {
     if local_only {
         println!("local-only map check passed; this is NOT permission to publish the bundle");
     } else {
+        let sources = serde_json::from_slice(&fs::read(root.join("docs/sources.lock.json"))?)?;
+        check_original_sources(&bundle, &sources)?;
         println!("map distribution check passed: {}", bundle.display());
     }
     Ok(())

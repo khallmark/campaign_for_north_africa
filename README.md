@@ -17,11 +17,19 @@ npm run build
 
 `npm run dev` builds Rust/Wasm before starting Vite, which prints the development URL. After editing Rust, run `npm run wasm` and reload the page. `npm run preview` serves the production build. No game account, backend, or API key is needed. Fonts use Google Fonts with local system fallbacks. Play is session-only: reloading starts again.
 
-## Browser tests
+## Validation
+
+Run `npm run check` for fast default checks, then `npm run test:e2e` before review.
+`npm run check:ci` runs both, using the same commands as Linux/macOS CI.
+Neither needs original artwork, hydrated PDFs, a private review opt-in, or credentials.
+See [testing and contribution commands](docs/testing.md) for prerequisites,
+unit/integration/functional categories, explicit source checks, and worker ownership.
+
+### Browser tests
 
 ```sh
 npx playwright install --with-deps chromium  # Also run by .agents/setup
-npm run test:browser -- tests/browser/smoke.spec.ts
+npm run test:e2e -- tests/browser/smoke.spec.ts
 ```
 
 The harness builds Rust/Wasm and serves a fresh production preview on port 4175,
@@ -37,6 +45,10 @@ also checks missing artwork, tile budgets, cursor zoom and touch pinch.
 ## Amp orbs
 
 Amp runs `.agents/setup` when preparing a fresh or stale project snapshot. It installs the pinned Node.js release only when needed, checks the official download checksum, runs `npm ci`, and prepares Rust, the Wasm target, and the matching wasm-bindgen CLI. Matching snapshots skip setup and retain the installed dependencies. The build script makes Rust's user-local tools available to supervised services.
+
+Default setup does not hydrate private sources. For authorized source work, restore
+any sparse paths and use `CNA_SETUP_SOURCES=1 .agents/setup`; this retains the
+locked source check and prepares the Python schema-test environment.
 
 ```sh
 .agents/setup             # Safe to rerun manually; installs tools and dependencies
@@ -132,4 +144,11 @@ All 24 shared sprite roles have 18 upright directional views each in `public/spr
 - `src/style.css`: responsive field-map interface.
 - `scripts/build-wasm.sh`: builds the Rust frontend and generates browser bindings in ignored `public/wasm/`.
 
-`npm test` runs the private-review HTTP route tests and Rust workspace tests. `npm run test:private-review` checks image serving, path/method rejection, opt-in and production exclusion using temporary synthetic assets; no private artwork is required. `cargo clippy --workspace --all-targets -- -D warnings` checks Rust code. Keep the CLI version in setup and this document aligned with the exact wasm-bindgen dependency in `crates/frontend/Cargo.toml`.
+`npm test` runs default safety guards, Rust workspace tests and Node functional
+tests. `npm run lint` checks native/Wasm Rust strictly and parses authored scripts;
+`npm run format:check` checks Rust formatting. Keep the CLI version in setup and
+this document aligned with the exact wasm-bindgen dependency in `crates/frontend/Cargo.toml`.
+
+`npm run test:private-review` checks image serving, path/method rejection, opt-in
+and production exclusion using temporary synthetic assets; no private artwork is
+required. It also runs once as part of `test:functional`.

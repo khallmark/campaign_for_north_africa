@@ -7,6 +7,8 @@ use std::collections::BTreeSet;
 fn terrain_schema_covers_every_source_row_and_enum_with_a_reference() {
     let schema: Value =
         serde_json::from_str(include_str!("../../../docs/map/map-v1.schema.json")).unwrap();
+    let sources: Value =
+        serde_json::from_str(include_str!("../../../docs/sources.lock.json")).unwrap();
     let terrain_rows = schema["$defs"]["terrain"]["oneOf"].as_array().unwrap();
     let hexside_rows = schema["$defs"]["hexside"]["oneOf"].as_array().unwrap();
     let expected_terrain = [
@@ -83,10 +85,12 @@ fn terrain_schema_covers_every_source_row_and_enum_with_a_reference() {
         assert_eq!(entry["x-source-ref"], source);
         let (path, section) = source.split_once('#').unwrap();
         assert!(!section.is_empty());
-        assert!(std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../..")
-            .join(path)
-            .is_file());
+        // Validate references against the reviewed inventory without requiring
+        // source art on disk. check:sources verifies those bytes explicitly.
+        assert!(
+            sources["files"].get(path).is_some(),
+            "unlocked source: {path}"
+        );
     }
 }
 

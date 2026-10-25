@@ -1,0 +1,58 @@
+name: Validate
+
+on:
+  pull_request:
+    branches: [main, feat/cna-private-integration]
+  push:
+    branches: [main, feat/cna-private-integration]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Default checks (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    env:
+      CNA_PRIVATE_REVIEW_TILES: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/docs/CNAv2.1.0/images/
+            !*.pdf
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Rust toolchain and Wasm bindings
+        run: |
+          rustup show
+          cargo install wasm-bindgen-cli --version 0.2.105 --locked
+      - run: npm ci --include=dev --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Assert original artwork is absent
+        shell: bash
+        run: |
+          test ! -e docs/CNAv2.1.0/images
+          test -z "$(find docs -name '*.pdf' -print -quit)"
+      - run: npm run check:ci
+      # No source tree, dist, traces or screenshots are uploaded. Browser
+      # fixtures are synthetic; inspect local ignored output when debugging.

@@ -34,16 +34,23 @@ time {
   npm --version
 }
 
-echo '[setup] Preparing source payloads'
-time {
-  if ! git lfs version >/dev/null 2>&1; then
-    sudo -n apt-get update -qq
-    sudo -n apt-get install -y git-lfs
-  fi
-  git lfs install --local
-  git lfs pull
-  bash scripts/check-sources.sh
-}
+if [[ "${CNA_SETUP_SOURCES:-0}" == 1 ]]; then
+  echo '[setup] Preparing opt-in source payloads and Python test dependencies'
+  time {
+    if ! git lfs version >/dev/null 2>&1; then
+      sudo -n apt-get update -qq
+      sudo -n apt-get install -y git-lfs
+    fi
+    git lfs install --local
+    git lfs pull
+    bash scripts/check-sources.sh
+    python3 -m venv .venv
+    .venv/bin/python -m pip install -r requirements-test.txt
+  }
+else
+  echo '[setup] Default checks need no original artwork or LFS hydration.'
+  echo '[setup] For source work: restore sparse paths, then CNA_SETUP_SOURCES=1 .agents/setup'
+fi
 
 echo '[setup] Installing locked dependencies (including development tools)'
 time npm ci --include=dev --prefer-offline --no-audit --no-fund
@@ -64,4 +71,4 @@ time {
   fi
   cargo fetch --locked
 }
-echo '[setup] Ready. Run npm test, npm run build, or amp orb services ensure.'
+echo '[setup] Ready. Run npm run check:ci, npm run build, or amp orb services ensure.'

@@ -11,7 +11,8 @@ test('bundled terrain works without private scans and survives map controls', as
   await page.goto('/');
   const art = page.getByRole('button', { name: 'Original terrain', exact: true });
   await expect(art).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.getByRole('button', { name: 'Source scan', exact: true })).toBeDisabled();
+  await expect(page.locator('[data-map-control=source]')).toBeDisabled();
+  await expect(page.locator('[data-map-control=source]')).toBeHidden();
   await expect(page.locator('.research-status')).toContainText('Original terrain art');
   await expect(page.getByText('Source artwork is not bundled', { exact: true })).toHaveCount(0);
   await expect(page.locator('.research-tile')).toHaveCount(0);
@@ -46,6 +47,10 @@ test('bundled terrain works without private scans and survives map controls', as
   expect(texture.y + texture.height / 2).toBeCloseTo(selected.y + selected.height / 2, 1);
   await expect(art).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('.research-board')).toHaveAttribute('data-source-visible', 'false');
+  // A distant jump must refresh terrain outside the previous viewport buffer.
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('B5614');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  await expect(page.locator('[data-hex="B5614"][data-terrain="mountain"], [data-hex="B5614"] [data-terrain="mountain"]')).toBeVisible();
   expect(failedArt).toEqual([]);
   expect(errors).toEqual([]);
 });

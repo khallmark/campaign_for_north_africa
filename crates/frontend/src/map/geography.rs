@@ -14,11 +14,11 @@ use web_sys::Element;
 pub(super) struct Geography {
     svg: Element,
     ground: Element,
-    drawing: Element,
     inspector: Element,
     records: Vec<Vec<MapRecord>>,
     artwork: Artwork,
     last_render: Option<(Viewport, [bool; 3], Option<HexId>)>,
+    ground_viewport: Option<Viewport>,
     pub original_art: bool,
     pub grid: bool,
     pub features: bool,
@@ -27,7 +27,7 @@ pub(super) struct Geography {
 }
 
 impl Geography {
-    pub fn new(root: &Element) -> Self {
+    pub fn new(root: &Element, board_size: [f64; 2]) -> Self {
         let svg = document()
             .create_element_ns(Some("http://www.w3.org/2000/svg"), "svg")
             .unwrap();
@@ -56,21 +56,27 @@ impl Geography {
             .collect();
         let artwork = Artwork::new(&records);
         let ground = document()
-            .create_element_ns(Some("http://www.w3.org/2000/svg"), "g")
+            .create_element_ns(Some("http://www.w3.org/2000/svg"), "svg")
             .unwrap();
-        ground.set_inner_html(&artwork.render_ground());
-        svg.append_child(&ground).unwrap();
-        let drawing = document()
-            .create_element_ns(Some("http://www.w3.org/2000/svg"), "g")
+        ground.set_attribute("class", "terrain-art-board").unwrap();
+        ground.set_attribute("aria-hidden", "true").unwrap();
+        ground
+            .set_attribute("width", &board_size[0].to_string())
             .unwrap();
-        svg.append_child(&drawing).unwrap();
+        ground
+            .set_attribute("height", &board_size[1].to_string())
+            .unwrap();
+        svg.parent_node()
+            .unwrap()
+            .insert_before(&ground, Some(&svg))
+            .unwrap();
         Self {
             svg,
             ground,
-            drawing,
             artwork,
             records,
             last_render: None,
+            ground_viewport: None,
             original_art: true,
             inspector: root
                 .query_selector(".geography-inspector")
@@ -189,15 +195,30 @@ impl Geography {
             return;
         }
         let [width, height] = viewport.css_size();
+        // Retain a quarter-viewport overscan on each side. Rebuild only when
+        // the visible rectangle leaves that buffer, not on every pointer move.
+        let ground_covers_viewport = self.ground_viewport.is_some_and(|old| {
+            old.zoom() == viewport.zoom()
+                && old.css_size() == viewport.css_size()
+                && (old.center().x - viewport.center().x).abs() * viewport.zoom() <= width * 0.25
+                && (old.center().y - viewport.center().y).abs() * viewport.zoom() <= height * 0.25
+        });
+        if self.original_art && !ground_covers_viewport {
+            self.ground
+                .set_inner_html(&self.artwork.render_ground(viewport));
+            self.ground_viewport = Some(viewport);
+        }
         self.svg
             .set_attribute("viewBox", &format!("0 0 {width} {height}"))
             .unwrap();
         let origin = viewport.to_screen(cna_map::geometry::BoardPoint { x: 0.0, y: 0.0 });
+        // A separate composited SVG keeps pan translations from repainting every
+        // textured cell when the screen-space evidence overlay changes.
         self.ground
             .set_attribute(
-                "transform",
+                "style",
                 &format!(
-                    "translate({} {}) scale({})",
+                    "transform:translate({}px,{}px) scale({})",
                     origin.x,
                     origin.y,
                     viewport.zoom()
@@ -376,7 +397,7 @@ impl Geography {
             )
             .unwrap();
         }
-        self.drawing.set_inner_html(&html);
+        self.svg.set_inner_html(&html);
         self.last_render = Some(state);
     }
 }

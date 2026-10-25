@@ -96,7 +96,16 @@ impl Artwork {
         art
     }
 
-    pub fn render_ground(&self) -> String {
+    pub fn render_ground(&self, viewport: Viewport) -> String {
+        let [width, height] = viewport.css_size();
+        let visible = |hex| {
+            let c = viewport.to_screen(center(hex));
+            let margin = 90.0 * viewport.zoom();
+            c.x > -width * 0.25 - margin
+                && c.x < width * 1.25 + margin
+                && c.y > -height * 0.25 - margin
+                && c.y < height * 1.25 + margin
+        };
         let polygon = |hex, inset| {
             let c = center(hex);
             corners(hex)
@@ -122,11 +131,11 @@ impl Artwork {
         // and an unknown neighboring section must not erase observed artwork.
         // Batch only the paint, not identities or hit testing, into one compound path.
         html.push_str(r##"<path class="terrain-art-unknown" fill="#d8dcdf" d=""##);
-        for &hex in hexes() {
+        for &hex in hexes().iter().filter(|&&hex| visible(hex)) {
             write!(html, "M{}Z", polygon(hex, 1.0).replace(' ', "L")).unwrap();
         }
         html.push_str("\"/>");
-        for (&hex, materials) in &self.terrain {
+        for (&hex, materials) in self.terrain.iter().filter(|(hex, _)| visible(**hex)) {
             if materials.len() == 1 {
                 let material = materials.first().unwrap();
                 write!(html, r#"<polygon class="terrain-art-cell terrain-art-surface" data-hex="{hex}" data-terrain="{material}" points="{}" fill="url(#art-{material})"/>"#, polygon(hex, 0.84)).unwrap();
@@ -191,7 +200,7 @@ mod tests {
         let art = Artwork::new(&[records]);
         let viewport =
             Viewport::new(center("C3617".parse().unwrap()), 1.0, [500.0, 400.0], 1.0).unwrap();
-        let ground = art.render_ground();
+        let ground = art.render_ground(viewport);
         let points = art.render_points(viewport);
         assert!(ground.contains("data-terrain=\"rough\""));
         assert!(ground.contains("data-terrain=\"salt_marsh\""));

@@ -26,7 +26,7 @@ terrain → links → railroad spine/ties → locations paint order.
 
 **Original terrain** is enabled by default, even with no private tile manifest.
 There is no missing-source-artwork banner. Source scan is an optional, initially
-off mode, enabled only when a valid local scan manifest exists; selecting either
+off mode, shown only when a valid local scan manifest exists; selecting either
 art mode turns the other off. Turning original art off leaves the schematic
 geography mode usable without scans.
 

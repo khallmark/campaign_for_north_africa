@@ -397,13 +397,13 @@ fn request_manifest(state: Rc<RefCell<Research>>) -> Result<(), JsValue> {
                     .unwrap();
             }
             state.manifest = Some(manifest);
-            state
+            let source_control = state
                 .root
                 .query_selector("[data-map-control=source]")
                 .unwrap()
-                .unwrap()
-                .remove_attribute("disabled")
                 .unwrap();
+            source_control.remove_attribute("disabled").unwrap();
+            source_control.remove_attribute("hidden").unwrap();
         }
         state.render();
         // One request per page; release its callback after completion.
@@ -425,7 +425,7 @@ pub fn mount() -> Result<(), JsValue> {
     root.set_inner_html(r#"<div class="research-controls" aria-label="Map controls"><button data-map-control="overview" aria-label="Fit full board"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></svg></button><button data-map-control="gameplay" aria-label="Map detail scale">1:1</button><button data-map-control="out" aria-label="Zoom out map">−</button><button data-map-control="in" aria-label="Zoom in map">+</button></div>
       <p class="research-status" role="status">Original terrain art</p>
       <div class="geography-tools">
-        <div class="geography-switches"><button data-map-control="art" aria-pressed="true">Original terrain</button><button data-map-control="grid" aria-pressed="true">Hex grid</button><button data-map-control="features" aria-pressed="true">Geography</button><button data-map-control="source" aria-pressed="false" disabled>Source scan</button><button data-map-control="inspect" aria-pressed="false">Inspect mode</button></div>
+        <div class="geography-switches"><button data-map-control="art" aria-pressed="true">Original terrain</button><button data-map-control="grid" aria-pressed="true">Hex grid</button><button data-map-control="features" aria-pressed="true">Geography</button><button data-map-control="source" aria-pressed="false" disabled hidden>Source scan</button><button data-map-control="inspect" aria-pressed="false">Inspect mode</button></div>
         <form class="geography-search"><label for="geography-id">Hex identity</label><input id="geography-id" placeholder="D3714" maxlength="10" autocomplete="off"><button type="submit">Inspect hex</button></form>
         <p class="geography-coverage"></p>
         <details class="geography-details"><summary>Hex evidence</summary>
@@ -443,15 +443,16 @@ pub fn mount() -> Result<(), JsValue> {
     let surface = root.query_selector(".research-viewport")?.unwrap();
     let source: serde_json::Value =
         serde_json::from_str(include_str!("../../../../public/data/map/sources.json")).unwrap();
+    let board_size = [
+        source["image"]["width"].as_f64().unwrap(),
+        source["image"]["height"].as_f64().unwrap(),
+    ];
     let state = Rc::new(RefCell::new(Research {
         surface: surface.clone(),
         board: root.query_selector(".research-board")?.unwrap(),
         status: root.query_selector(".research-status")?.unwrap(),
         readout: root.query_selector(".research-readout")?.unwrap(),
-        board_size: [
-            source["image"]["width"].as_f64().unwrap(),
-            source["image"]["height"].as_f64().unwrap(),
-        ],
+        board_size,
         root: root.clone(),
         viewport: None,
         manifest: None,
@@ -459,7 +460,7 @@ pub fn mount() -> Result<(), JsValue> {
         pointers: BTreeMap::new(),
         press: None,
         dragged: false,
-        geography: Geography::new(&root),
+        geography: Geography::new(&root, board_size),
         source_visible: false,
     }));
     RESEARCH.with(|current| *current.borrow_mut() = Some(state.clone()));

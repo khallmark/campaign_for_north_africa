@@ -370,6 +370,16 @@
 .research-footer p { margin: 0; }
 .research-readout { font-variant-numeric: tabular-nums; }
 
+.terrain-art-board {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+  transform-origin: 0 0;
+  will-change: transform;
+  z-index: 1;
+}
 .geography-overlay {
   position: absolute;
   inset: 0;
@@ -396,6 +406,7 @@
 .geography-location.unresolved { fill: none; stroke: #ac3c65; }
 .terrain-art-key { color: #4b5b58; margin: 8px 0; line-height: 1.45; }
 .geography-switches button:disabled { opacity: 0.4; cursor: default; }
+.geography-switches button[hidden] { display: none; }
 .research-board[data-source-visible=false] { visibility: hidden; }
 #map-research .geography-tools {
   position: absolute;

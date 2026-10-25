@@ -30,7 +30,7 @@ server. Chromium runs at 2458×1358 and 1280×800, each at DPR 1 and 2.
 To select one project, append `--project=chromium-1280x800-dpr1`.
 Screenshot snapshots live under ignored `tests/browser/__screenshots__/`;
 failure screenshots, videos and traces go to ignored `test-results/`.
-The smoke suite checks floating controls, selection anchoring, delayed tooltips,
+The smoke suite checks floating controls, selection anchoring at viewport edges, delayed tooltips,
 keyboard dialogs, reference calendar boundaries and narrow layout. The map suite
 also checks missing artwork, tile budgets, cursor zoom and touch pinch.
 
@@ -132,4 +132,4 @@ All 24 shared sprite roles have 18 upright directional views each in `public/spr
 - `src/style.css`: responsive field-map interface.
 - `scripts/build-wasm.sh`: builds the Rust frontend and generates browser bindings in ignored `public/wasm/`.
 
-`npm test` runs the Rust workspace tests. `cargo clippy --workspace --all-targets -- -D warnings` checks Rust code. Keep the CLI version in setup and this document aligned with the exact wasm-bindgen dependency in `crates/frontend/Cargo.toml`.
+`npm test` runs the private-review HTTP route tests and Rust workspace tests. `npm run test:private-review` checks image serving, path/method rejection, opt-in and production exclusion using temporary synthetic assets; no private artwork is required. `cargo clippy --workspace --all-targets -- -D warnings` checks Rust code. Keep the CLI version in setup and this document aligned with the exact wasm-bindgen dependency in `crates/frontend/Cargo.toml`.

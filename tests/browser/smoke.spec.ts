@@ -1,5 +1,19 @@
 import { expect, test, type Page } from '@playwright/test';
 
+function collectErrors(page: Page) {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  page.on('console', message => {
+    if (message.type() !== 'error') return;
+    // Production intentionally excludes private source tiles. Only this exact
+    // missing-manifest response is expected; application console errors still fail.
+    if (new URL(message.location().url || 'about:blank').pathname === '/tiles/map/manifest.json'
+      && message.text() === 'Failed to load resource: the server responded with a status of 404 (Not Found)') return;
+    errors.push(message.text());
+  });
+  return errors;
+}
+
 async function addCounter(page: Page) {
   await page.getByRole('button', { name: 'Reinforcements', exact: true }).click();
   await page.getByRole('searchbox', { name: 'Find an identity' }).fill('2nd Bays');
@@ -11,8 +25,7 @@ async function addCounter(page: Page) {
 }
 
 test('full-board workspace removes the scenario and restores modal keyboard focus', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('pageerror', error => errors.push(error.message));
+  const errors = collectErrors(page);
   await page.goto('/');
   await expect(page.getByRole('region', { name: 'Full-board map', exact: true })).toBeVisible();
   await expect(page.locator('header, .battle-map')).toHaveCount(0);
@@ -54,8 +67,7 @@ test('calendar exposes 111 weekly turns and three reference stages without execu
 });
 
 test('planning selection and icon actions track pan and zoom; hover waits one second', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('pageerror', error => errors.push(error.message));
+  const errors = collectErrors(page);
   await page.goto('/');
   await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
   await addCounter(page);
@@ -107,6 +119,67 @@ test('planning selection and icon actions track pan and zoom; hover waits one se
   await page.getByRole('button', { name: 'Remove planning counter' }).click();
   await expect(marker).toHaveCount(0);
   await expect(page.locator('#board-roster')).toContainText('0 planning counters');
+  expect(errors).toEqual([]);
+});
+
+test('selected actions stay reachable at bottom, sides and corners after panning', async ({ page }) => {
+  const errors = collectErrors(page);
+  for (const viewport of [page.viewportSize()!, { width: 390, height: 844 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
+    await addCounter(page);
+    await page.locator('.order-panel > summary').click();
+    await page.locator('.unit-panel > summary').click();
+    const { width, height } = viewport;
+    for (const [edge, x, y] of [
+      ['bottom', width / 2, height - 20],
+      ['left', 20, Math.floor(height * .65)],
+      ['right', width - 20, Math.floor(height * .65)],
+      ['bottom left', 20, height - 20],
+      ['bottom right', width - 20, height - 20],
+    ] as const) {
+      // Re-selecting the roster row centers the actual counter, without modifying state.
+      await page.locator('.order-panel > summary').click();
+      await page.locator('.board-roster-unit').click();
+      await page.locator('.order-panel > summary').click();
+      const marker = (await page.locator('.counter-marker').boundingBox())!;
+      const dx = x - marker.x - marker.width / 2;
+      const dy = y - marker.y - marker.height / 2;
+      const startX = width / 2 + (dx > 0 ? -90 : 90), startY = height / 2 - 120;
+      await page.mouse.move(startX, startY);
+      await page.mouse.down();
+      await page.mouse.move(startX + dx, startY + dy, { steps: 10 });
+      await page.mouse.up();
+      const moved = (await page.locator('.counter-marker').boundingBox())!;
+      expect(moved.x + moved.width / 2).toBeCloseTo(x, 1);
+      expect(moved.y + moved.height / 2).toBeCloseTo(y, 1);
+      const bar = (await page.locator('.counter-actions').boundingBox())!;
+      const label = `${width}px ${edge}`;
+      expect.soft(bar.x, label).toBeGreaterThanOrEqual(8);
+      expect.soft(bar.x + bar.width, label).toBeLessThanOrEqual(width - 8);
+      expect.soft(bar.y, label).toBeGreaterThanOrEqual(8);
+      expect.soft(bar.y + bar.height, label).toBeLessThanOrEqual(height - 8);
+      if (edge.startsWith('bottom')) expect.soft(bar.y + bar.height, label).toBeLessThan(moved.y);
+      expect.soft(await page.locator('.counter-actions button').evaluateAll(buttons => buttons
+        .filter(button => {
+          const r = button.getBoundingClientRect();
+          return document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest('button') !== button;
+        }).map(button => button.getAttribute('aria-label'))), label).toEqual([]);
+      await page.getByRole('button', { name: 'Reposition planning counter', exact: true }).focus();
+      await page.keyboard.press('Tab');
+      const tip = page.getByRole('tooltip', { name: 'Attack — requires an active simulation', exact: true });
+      await expect(tip).toBeVisible();
+      const tipBox = (await tip.boundingBox())!;
+      expect(tipBox.x).toBeGreaterThanOrEqual(0);
+      expect(tipBox.x + tipBox.width).toBeLessThanOrEqual(width);
+      expect(tipBox.y).toBeGreaterThanOrEqual(0);
+      expect(tipBox.y + tipBox.height).toBeLessThanOrEqual(height);
+      await page.keyboard.press('Enter');
+      await expect(page.getByRole('dialog')).toContainText('No active simulation');
+      await page.keyboard.press('Escape');
+    }
+  }
   expect(errors).toEqual([]);
 });
 

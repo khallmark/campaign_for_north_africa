@@ -327,17 +327,67 @@ pub(crate) fn overlay(viewport: Viewport) {
             return;
         };
         let html = view::counters(&b, viewport);
+        let mut focused = None;
         if html != b.overlay_html {
-            let focused = document()
+            focused = document()
                 .active_element()
                 .filter(|e| layer.contains(Some(e)))
                 .and_then(|e| focus_selector(&e));
             layer.set_inner_html(&html);
             b.overlay_html = html;
-            if let Some(selector) = focused {
-                if let Some(element) = document().query_selector(&selector).unwrap() {
-                    let _ = element.unchecked_ref::<HtmlElement>().focus();
-                }
+        }
+        // Measure the rendered controls, not duplicated CSS sizes. Keep their
+        // pointer attached to the counter even when the bar shifts at an edge.
+        if let Some(actions) = layer.query_selector(".counter-actions").unwrap() {
+            let anchor = layer
+                .query_selector(".selected .counter-marker")
+                .unwrap()
+                .unwrap()
+                .get_bounding_client_rect();
+            let bounds = layer.get_bounding_client_rect();
+            let bar = actions.get_bounding_client_rect();
+            let tips = actions.query_selector_all(".board-tooltip").unwrap();
+            let tip_height = (0..tips.length())
+                .map(|i| {
+                    tips.item(i)
+                        .unwrap()
+                        .unchecked_into::<Element>()
+                        .get_bounding_client_rect()
+                        .height()
+                })
+                .fold(0.0, f64::max);
+            let center = anchor.left() + anchor.width() / 2.0;
+            let left = (center - bar.width() / 2.0).clamp(
+                bounds.left() + 8.0,
+                (bounds.right() - bar.width() - 8.0).max(bounds.left() + 8.0),
+            );
+            let above =
+                anchor.bottom() + 12.0 + bar.height() + 10.0 + tip_height > bounds.bottom() - 8.0;
+            let top = if above {
+                anchor.top() - 12.0 - bar.height()
+            } else {
+                anchor.bottom() + 12.0
+            }
+            .max(bounds.top() + 8.0);
+            let pointer = (center - left).clamp(12.0, bar.width() - 12.0);
+            actions
+                .set_attribute("data-placement", if above { "above" } else { "below" })
+                .unwrap();
+            actions
+                .set_attribute(
+                    "style",
+                    &format!(
+                        "left:{}px;top:{}px;--pointer-left:{pointer}px",
+                        left - anchor.left(),
+                        top - anchor.top()
+                    ),
+                )
+                .unwrap();
+        }
+        // Restore focus only after clamping, so focus cannot scroll a clipped bar.
+        if let Some(selector) = focused {
+            if let Some(element) = document().query_selector(&selector).unwrap() {
+                let _ = element.unchecked_ref::<HtmlElement>().focus();
             }
         }
     });

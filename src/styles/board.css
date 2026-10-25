@@ -104,8 +104,12 @@
 .counter-marker > span { position: absolute; bottom: -5px; right: -5px; font-size: 10px; background: var(--olive); color: white; border-radius: 12px; min-width: 18px; padding: 2px; }
 .selected .counter-marker { outline: 3px solid #fffef0; box-shadow: 0 0 0 5px #485b3f, 0 4px 9px #0005; }
 .selected { z-index: 2; }
-.counter-actions { position: absolute; display: flex; top: 76px; left: 50%; transform: translateX(-50%); padding: 3px; pointer-events: auto; }
-.counter-actions::before { content: ""; position: absolute; width: 10px; height: 10px; background: var(--paper); top: -6px; left: calc(50% - 5px); transform: rotate(45deg); border-left: 1px solid #c9ccbf; border-top: 1px solid #c9ccbf; }
+.counter-actions { position: absolute; display: flex; padding: 3px; pointer-events: auto; }
+.counter-actions::before { content: ""; position: absolute; width: 10px; height: 10px; background: var(--paper); top: -6px; left: calc(var(--pointer-left) - 5px); transform: rotate(45deg); border-left: 1px solid #c9ccbf; border-top: 1px solid #c9ccbf; }
+.counter-actions[data-placement=above]::before { top: auto; bottom: -6px; transform: rotate(225deg); }
+/* Tooltips share the clamped bar's bounds instead of overflowing edge buttons. */
+.counter-actions .board-icon { position: static; }
+.counter-actions[data-placement=above] .board-tooltip { top: auto; bottom: calc(100% + 10px); }
 .dialog.board-dialog { width: min(900px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); }
 .board-dialog h2 { padding-right: 26px; }
 .board-dialog > p, .calendar-notes p { font-size: 14px; line-height: 1.6; margin-top: 14px; }

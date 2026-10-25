@@ -357,19 +357,67 @@ pub(crate) fn overlay(viewport: Viewport) {
                 })
                 .fold(0.0, f64::max);
             let center = anchor.left() + anchor.width() / 2.0;
-            let left = (center - bar.width() / 2.0).clamp(
+            let mut left = (center - bar.width() / 2.0).clamp(
                 bounds.left() + 8.0,
                 (bounds.right() - bar.width() - 8.0).max(bounds.left() + 8.0),
             );
-            let above =
+            let mut above =
                 anchor.bottom() + 12.0 + bar.height() + 10.0 + tip_height > bounds.bottom() - 8.0;
-            let top = if above {
+            let mut top = if above {
                 anchor.top() - 12.0 - bar.height()
             } else {
                 anchor.bottom() + 12.0
             }
             .max(bounds.top() + 8.0);
+            // Leave the panels usable: find free horizontal space for the bar
+            // and tooltip instead of raising them over panel content.
+            let panels = document().query_selector_all(".floating-panel").unwrap();
+            let mut slots = vec![(bounds.left() + 8.0, bounds.right() - 8.0)];
+            let mut panels_bottom = bounds.top();
+            for i in 0..panels.length() {
+                let panel = panels
+                    .item(i)
+                    .unwrap()
+                    .unchecked_into::<Element>()
+                    .get_bounding_client_rect();
+                panels_bottom = panels_bottom.max(panel.bottom());
+                let tooltip_top = if above { top - tip_height - 10.0 } else { top };
+                let tooltip_bottom =
+                    top + bar.height() + if above { 0.0 } else { tip_height + 10.0 };
+                if tooltip_top < panel.bottom() + 8.0 && tooltip_bottom > panel.top() - 8.0 {
+                    slots = slots
+                        .into_iter()
+                        .flat_map(|(start, end)| {
+                            [
+                                (start, end.min(panel.left() - 8.0)),
+                                (start.max(panel.right() + 8.0), end),
+                            ]
+                        })
+                        .filter(|(start, end)| end - start >= bar.width())
+                        .collect();
+                }
+            }
+            if let Some(free_left) = slots
+                .into_iter()
+                .map(|(start, end)| left.clamp(start, end - bar.width()))
+                .min_by(|a, b| (a - left).abs().total_cmp(&(b - left).abs()))
+            {
+                left = free_left;
+            } else {
+                // Narrow layouts can have no bar-sized gap between the panels.
+                top = panels_bottom + 8.0;
+                above = false;
+            }
+            let gap = if above {
+                anchor.top() - top - bar.height()
+            } else {
+                top - anchor.bottom()
+            };
             let pointer = (center - left).clamp(12.0, bar.width() - 12.0);
+            let dx = center - left - pointer;
+            let dy = (gap + anchor.height() / 2.0 - 6.0).max(0.0);
+            let leader = if gap > 12.0 || dx.abs() > 1.0 { dx.hypot(dy) } else { 0.0 };
+            let angle = dx.atan2(dy).to_degrees() * if above { -1.0 } else { 1.0 };
             actions
                 .set_attribute("data-placement", if above { "above" } else { "below" })
                 .unwrap();
@@ -377,7 +425,7 @@ pub(crate) fn overlay(viewport: Viewport) {
                 .set_attribute(
                     "style",
                     &format!(
-                        "left:{}px;top:{}px;--pointer-left:{pointer}px",
+                        "left:{}px;top:{}px;--pointer-left:{pointer}px;--leader-height:{leader}px;--leader-angle:{angle}deg",
                         left - anchor.left(),
                         top - anchor.top()
                     ),
@@ -438,6 +486,13 @@ pub fn mount() -> Result<(), JsValue> {
     });
     root.add_event_listener_with_callback("click", click.as_ref().unchecked_ref())?;
     click.forget();
+    let toggle = Closure::<dyn FnMut(Event)>::new(|_| crate::map::refresh_board());
+    root.add_event_listener_with_callback_and_bool(
+        "toggle",
+        toggle.as_ref().unchecked_ref(),
+        true,
+    )?;
+    toggle.forget();
     let input = Closure::<dyn FnMut(Event)>::new(|event: Event| {
         let Some(target) = event.target().and_then(|t| t.dyn_into::<Element>().ok()) else {
             return;

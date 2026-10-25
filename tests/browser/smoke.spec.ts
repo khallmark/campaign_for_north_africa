@@ -183,6 +183,51 @@ test('selected actions stay reachable at bottom, sides and corners after panning
   expect(errors).toEqual([]);
 });
 
+test('open floating panels do not intercept selected actions', async ({ page }) => {
+  const errors = collectErrors(page);
+  for (const [width, x, y] of [[1280, 950, 200], [1280, 300, 200], [1280, 1250, 650], [390, 195, 200]]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Reinforcements', exact: true }).click();
+    await page.getByRole('searchbox', { name: 'Find an identity' }).fill('2nd Bays');
+    await page.getByRole('button', { name: 'Add planning counter', exact: true }).click();
+    await page.mouse.click(x, y);
+    await expect(page.locator('.counter-marker')).toHaveCount(1);
+    if (width === 390) {
+      // Put the snapped marker's center in the visible gap between the panels.
+      const marker = (await page.locator('.counter-marker').boundingBox())!;
+      await page.mouse.move(100, 500);
+      await page.mouse.down();
+      await page.mouse.move(100 + Math.round(x - marker.x - marker.width / 2), 500);
+      await page.mouse.up();
+    }
+    for (const panel of ['.order-panel', '.unit-panel']) await expect(page.locator(panel)).toHaveAttribute('open');
+    const panel = page.locator(x < width / 2 ? '.order-panel' : '.unit-panel');
+    for (const open of [true, false, true]) {
+      if (await panel.evaluate(p => p.hasAttribute('open')) !== open) await panel.locator('summary').click();
+      await expect.poll(() => page.locator('.counter-actions button, .floating-panel > summary, .counter-marker').evaluateAll(controls => controls
+        .filter(control => {
+          const r = control.getBoundingClientRect();
+          return document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest('button, summary') !== control;
+        }).map(control => control.getAttribute('aria-label') || control.textContent)),
+      { message: `${width}px placement ${x},${y}, panel open=${open}` }).toEqual([]);
+      if (!open && width === 1280 && y === 200) {
+        await expect.poll(async () => {
+          const marker = (await page.locator('.counter-marker').boundingBox())!;
+          const bar = (await page.locator('.counter-actions').boundingBox())!;
+          return Math.abs(bar.x + bar.width / 2 - marker.x - marker.width / 2);
+        }).toBeLessThan(1);
+      }
+    }
+    await page.getByRole('button', { name: 'Resupply — requires an active simulation' }).click();
+    await expect(page.getByRole('dialog')).toContainText('No active simulation');
+    await page.keyboard.press('Escape');
+    await page.getByRole('button', { name: 'Remove planning counter' }).click();
+    await expect(page.locator('.counter-marker')).toHaveCount(0);
+  }
+  expect(errors).toEqual([]);
+});
+
 test('narrow layout keeps floating controls and dialogs reachable without horizontal scroll', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');

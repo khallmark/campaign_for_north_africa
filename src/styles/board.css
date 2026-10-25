@@ -107,6 +107,8 @@
 .counter-actions { position: absolute; display: flex; padding: 3px; pointer-events: auto; }
 .counter-actions::before { content: ""; position: absolute; width: 10px; height: 10px; background: var(--paper); top: -6px; left: calc(var(--pointer-left) - 5px); transform: rotate(45deg); border-left: 1px solid #c9ccbf; border-top: 1px solid #c9ccbf; }
 .counter-actions[data-placement=above]::before { top: auto; bottom: -6px; transform: rotate(225deg); }
+.counter-actions::after { content: ""; position: absolute; bottom: calc(100% + 6px); left: var(--pointer-left); height: var(--leader-height); border-left: 1px solid var(--olive); transform: rotate(var(--leader-angle)); transform-origin: bottom; pointer-events: none; z-index: -1; }
+.counter-actions[data-placement=above]::after { bottom: auto; top: calc(100% + 6px); transform-origin: top; }
 /* Tooltips share the clamped bar's bounds instead of overflowing edge buttons. */
 .counter-actions .board-icon { position: static; }
 .counter-actions[data-placement=above] .board-tooltip { top: auto; bottom: calc(100% + 10px); }

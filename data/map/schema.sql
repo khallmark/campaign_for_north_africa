@@ -15,6 +15,26 @@ CREATE TABLE hexsides (
   CHECK(direction IN ('east','north_west','north_east'))
 ) STRICT;
 CREATE INDEX hexsides_other ON hexsides(other);
+CREATE TABLE cell_measurements (
+  hex TEXT PRIMARY KEY REFERENCES hexes(id),
+  surface TEXT NOT NULL CHECK(surface IN ('land','water','mixed_water_land','unresolved')),
+  evidence TEXT NOT NULL CHECK(json_valid(evidence))
+) STRICT;
+CREATE TABLE examinations (
+  hex TEXT NOT NULL REFERENCES cell_measurements(hex),
+  family TEXT NOT NULL CHECK(family IN ('surface','terrain','transport','hexside','locations')),
+  status TEXT NOT NULL CHECK(status IN ('detected','candidate','not_detected','unresolved')),
+  PRIMARY KEY(hex,family)
+) STRICT;
+CREATE TABLE side_examinations (
+  hex TEXT NOT NULL, direction TEXT NOT NULL,
+  evidence TEXT NOT NULL CHECK(json_valid(evidence)),
+  PRIMARY KEY(hex,direction), FOREIGN KEY(hex,direction) REFERENCES hexsides(hex,direction)
+) STRICT;
+CREATE VIEW examination_coverage AS
+SELECT h.section, e.family, e.status, count(*) AS hexes
+FROM examinations e JOIN hexes h ON h.id=e.hex
+GROUP BY h.section,e.family,e.status;
 CREATE TABLE surveys (id TEXT PRIMARY KEY, label TEXT NOT NULL, notes TEXT NOT NULL) STRICT;
 CREATE TABLE observations (
   id TEXT PRIMARY KEY, survey TEXT NOT NULL REFERENCES surveys(id),

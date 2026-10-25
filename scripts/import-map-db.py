@@ -17,6 +17,9 @@ INPUTS = [
     "crates/cna-map/src/hex.rs", "crates/cna-map/src/terrain.rs",
     "crates/cna-map/src/model.rs", "crates/cna-map/src/bin/map-model.rs",
     "scripts/import-map-db.py", "Cargo.lock",
+    "scripts/extract-map.py", "data/map/extraction-rules.json",
+    "data/map/extracted-surveys.json", "data/map/examination.json",
+    "data/map/location-labels.json",
 ]
 
 
@@ -46,15 +49,30 @@ def export_model():
 
 
 def populate(db, model):
+    ledger = json.loads((ROOT / "data/map/examination.json").read_text())
+    if digest(ROOT / "data/map/extracted-surveys.json") != ledger["extracted_sha256"]:
+        raise ValueError("extracted observations differ from the examination ledger; regenerate")
+    for path, expected in ledger["input_fingerprints"].items():
+        if digest(ROOT / path) != expected:
+            raise ValueError(f"stale extraction input: {path}; re-examine source before importing")
+    geometry_hash = hashlib.sha256(encode({k: model[k] for k in ("hexes", "hexsides")}).encode()).hexdigest()
+    if geometry_hash != ledger["geometry_sha256"]:
+        raise ValueError("examination geometry fingerprint differs from current geometry")
+    summaries = {c["hex"]: {k: c[k] for k in ("crop", "surface", "families")} for c in ledger["cells"]}
+    if summaries != model["examinations"] or any(model["sources"].get(p) != h for p, h in ledger["sources"].items()):
+        raise ValueError("examination evidence differs from exported model/source pins")
+    if len(ledger["cells"]) != len(model["hexes"]) or len(ledger["sides"]) != len(model["hexsides"]):
+        raise ValueError("incomplete examination inventory")
     db.executescript((ROOT / "data/map/schema.sql").read_text())
     fingerprints = {path: digest(ROOT / path) for path in INPUTS}
     db.executemany("INSERT INTO metadata VALUES (?,?)", [
         ("generator", "cna-map-model"),
-        ("schema_version", "1"), ("membership", model["membership"]),
+        ("schema_version", "2"), ("membership", model["membership"]),
         ("input_fingerprints", encode(fingerprints)),
         ("model_sha256", hashlib.sha256(encode(model).encode()).hexdigest()),
         ("seams", "unresolved; no cross-section movement or identity equivalence"),
         ("terrain_completeness", "partial; absence of an observation is unknown, never Clear"),
+        ("examination", encode({k: v for k, v in ledger.items() if k not in ("cells", "sides")})),
     ])
     db.executemany("INSERT INTO sources VALUES (?,?)", sorted(model["sources"].items()))
     db.executemany("INSERT INTO hexes(id,section,col,row,center_x,center_y,corners) VALUES (?,?,?,?,?,?,?)", [
@@ -62,6 +80,15 @@ def populate(db, model):
     ])
     db.executemany("INSERT INTO hexsides VALUES (?,?,?,?)", [
         (s["hex"], s["direction"], s["other"], encode(s["edge"])) for s in model["hexsides"]
+    ])
+    db.executemany("INSERT INTO cell_measurements VALUES (?,?,?)", [
+        (c["hex"], c["surface"], encode(c)) for c in ledger["cells"]
+    ])
+    db.executemany("INSERT INTO examinations VALUES (?,?,?)", [
+        (c["hex"], family, status) for c in ledger["cells"] for family, status in c["families"].items()
+    ])
+    db.executemany("INSERT INTO side_examinations VALUES (?,?,?)", [
+        (s["hex"], s["direction"], encode(s)) for s in ledger["sides"]
     ])
     for survey in model["surveys"]:
         db.execute("INSERT INTO surveys VALUES (?,?,?)", (survey["id"], survey["label"], survey["notes"]))

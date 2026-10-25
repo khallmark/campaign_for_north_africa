@@ -1,7 +1,7 @@
 //! Auditable transcription batches expanded into the existing map-v1 vocabulary.
 //! Connectivity is section-local evidence, never an official movement graph.
 use crate::{
-    geometry::contains_hex,
+    geometry::{contains_hex, hexes},
     hex::{HexId, HexsideId},
     terrain::{HexsideFeature, MapRecord, Observation, PointFeature, Provenance, Record, Terrain},
 };
@@ -44,6 +44,17 @@ pub struct Model {
     pub version: u32,
     pub sources: BTreeMap<String, String>,
     pub surveys: Vec<Survey>,
+    #[serde(default)]
+    pub examinations: BTreeMap<HexId, Examination>,
+}
+
+/// Detector coverage is independent of terrain completeness and human review.
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Examination {
+    pub crop: [i32; 4],
+    pub surface: String,
+    pub families: BTreeMap<String, String>,
 }
 
 impl Survey {
@@ -95,6 +106,27 @@ impl Model {
         for hash in self.sources.values() {
             if hash.len() != 64 || !hash.bytes().all(|b| b.is_ascii_hexdigit()) {
                 return Err("expected source SHA256".into());
+            }
+        }
+        if !self.examinations.is_empty() && self.examinations.len() != hexes().len() {
+            return Err("examination ledger must cover the entire geometry inventory".into());
+        }
+        for (hex, examination) in &self.examinations {
+            if !contains_hex(*hex)
+                || examination.crop[2] <= 0
+                || examination.crop[3] <= 0
+                || !["land", "water", "mixed_water_land", "unresolved"]
+                    .contains(&examination.surface.as_str())
+                || examination.families.len() != 5
+                || ["surface", "terrain", "transport", "hexside", "locations"]
+                    .iter()
+                    .any(|family| !examination.families.contains_key(*family))
+                || examination.families.values().any(|status| {
+                    !["detected", "candidate", "not_detected", "unresolved"]
+                        .contains(&status.as_str())
+                })
+            {
+                return Err(format!("invalid automated examination for {hex}"));
             }
         }
         let mut ids = BTreeSet::new();
@@ -165,8 +197,14 @@ impl Model {
 pub fn model() -> &'static Model {
     static MODEL: OnceLock<Model> = OnceLock::new();
     MODEL.get_or_init(|| {
-        let model: Model = serde_json::from_str(include_str!("../../../data/map/surveys.json"))
+        let mut model: Model = serde_json::from_str(include_str!("../../../data/map/surveys.json"))
             .expect("valid map surveys");
+        let extracted: Model =
+            serde_json::from_str(include_str!("../../../data/map/extracted-surveys.json"))
+                .expect("valid extracted map surveys");
+        assert_eq!(model.sources, extracted.sources, "extraction source pins");
+        model.surveys.extend(extracted.surveys);
+        model.examinations = extracted.examinations;
         model.validate().expect("source-backed map surveys");
         model
     })

@@ -99,6 +99,66 @@
       "id": "tanta-city-marker", "label": "Tanta", "notes": "Dark marker does not match the TEC cluster-of-buildings Major City symbol closely enough to certify category. Position is source-local E3027; retain untyped pending source adjudication.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=13300,2100,800,600", "docs/CNAv2.1.0/images/TEC.png#legend/Major-City"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
       "coverage": {"kind": "point", "hexes": ["E3027"], "observation": {"status": "unresolved", "source_label": "Tanta dark city marker; category unresolved"}}
+    },
+    {
+      "id": "malta-takali", "label": "Takali airfield", "notes": "Blue triangular airfield glyph near (312,500), matched to TEC Airfield. Printed numeral 6 is not imported as capacity or a rule cost.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=230,450,120,85", "docs/CNAv2.1.0/images/TEC.png#legend/Airfield"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
+      "coverage": {"kind": "point", "hexes": ["Malta 0802"], "observation": {"status": "provisional", "value": {"type": "airfield"}}}
+    },
+    {
+      "id": "malta-luqa", "label": "Luqa airfield", "notes": "Blue triangular airfield glyph near (434,566), matched to TEC Airfield. No capacity or movement permission inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=370,530,100,85", "docs/CNAv2.1.0/images/TEC.png#legend/Airfield"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
+      "coverage": {"kind": "point", "hexes": ["Malta 0704"], "observation": {"status": "provisional", "value": {"type": "airfield"}}}
+    },
+    {
+      "id": "malta-safi", "label": "Safi airfield", "notes": "Blue triangular airfield glyph near (484,637), matched to TEC Airfield. No capacity or movement permission inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=430,605,85,75", "docs/CNAv2.1.0/images/TEC.png#legend/Airfield"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
+      "coverage": {"kind": "point", "hexes": ["Malta 0604"], "observation": {"status": "provisional", "value": {"type": "airfield"}}}
+    },
+    {
+      "id": "malta-hal-far", "label": "Hal Far airfield", "notes": "Blue triangular airfield glyph near (531,701), distinct from adjacent black Kalafrana basin. No capacity or movement permission inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=435,675,125,75", "docs/CNAv2.1.0/images/TEC.png#legend/Airfield"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
+      "coverage": {"kind": "point", "hexes": ["Malta 0505"], "observation": {"status": "provisional", "value": {"type": "airfield"}}}
+    },
+    {
+      "id": "malta-flying-boats", "label": "Valetta and Kalafrana flying-boat basins", "notes": "Black triangular glyph plus anchor matches TEC Flying Boat Basin: Valetta in Malta 0805 near (581,502); Kalafrana in Malta 0506 near (604,707). Numerals and offshore anchors do not establish port capacities or sea connections.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=530,460,210,295", "docs/CNAv2.1.0/images/TEC.png#legend/Flying-Boat-Basin"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
+      "coverage": {"kind": "point", "hexes": ["Malta 0805","Malta 0506"], "observation": {"status": "provisional", "value": {"type": "flying_boat_basin"}}}
+    },
+    {
+      "id": "benghazi-major-city", "label": "Benghazi building cluster", "notes": "Blue building cluster matches TEC Major City, distinct from black training-area figures. Its glyph lies in A4827; adjacent El Berca and Benina dots are separate locations. No automatic port or fortification level assignment.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2270,1000,170,150", "docs/CNAv2.1.0/images/TEC.png#legend/Major-City"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
+      "coverage": {"kind": "point", "hexes": ["A4827"], "observation": {"status": "provisional", "value": {"type": "major_city"}}}
+    },
+    {
+      "id": "tobruk-major-city", "label": "Tobruk building cluster", "notes": "Blue building cluster matches TEC Major City. Offshore anchor and training figures are separate features; no capacity or fortification level is inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=6200,1020,150,150", "docs/CNAv2.1.0/images/TEC.png#legend/Major-City"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
+      "coverage": {"kind": "point", "hexes": ["C4807"], "observation": {"status": "provisional", "value": {"type": "major_city"}}}
+    },
+    {
+      "id": "bardia-major-city", "label": "Bardia building cluster", "notes": "Blue building cluster matches TEC Major City. Bardia Holding Box is not this source-grid hex and is not connected by an inferred route.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=7360,1400,170,150", "docs/CNAv2.1.0/images/TEC.png#legend/Major-City"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
+      "coverage": {"kind": "point", "hexes": ["C4321"], "observation": {"status": "provisional", "value": {"type": "major_city"}}}
+    },
+    {
+      "id": "bardia-road-branch", "label": "Bardia road branch", "notes": "Continuous double road line enters the city across C4320 east. Building and training-area glyphs interrupt the palette detector, but the road strokes are visible on both sides. Visual source correction, not arbitrary gap closing; no port association or operational junction inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=7246,1303,280,280", "docs/CNAv2.1.0/images/TEC.png#legend/Road"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C4320","direction":"east"}], "observation": {"status": "provisional", "value": "road"}}
+    },
+    {
+      "id": "sollum-road-branch", "label": "Sollum road branch", "notes": "Continuous double road line crosses C4020 east beneath the blue barred hexside marks and reaches the Sollum dot. The dashed-capsule road south of the dot is unfinished and excluded. Blue barred marks remain separately unresolved, not railroad or movement authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=7289,1521,280,280", "docs/CNAv2.1.0/images/TEC.png#legend/Road", "docs/CNAv2.1.0/images/TEC.png#legend/Unfinished-Road"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C4020","direction":"east"}], "observation": {"status": "provisional", "value": "road"}}
+    },
+    {
+      "id": "alexandria-major-city", "label": "Alexandria building clusters", "notes": "Blue building clusters in two adjacent source-grid cells match TEC Major City. Text extent, offshore icon and black training figures do not add further city cells. No fortification levels or port capacity inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=12300,1800,300,220", "docs/CNAv2.1.0/images/TEC.png#legend/Major-City"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
+      "coverage": {"kind": "point", "hexes": ["E3613","E3714"], "observation": {"status": "provisional", "value": {"type": "major_city"}}}
+    },
+    {
+      "id": "cairo-major-city", "label": "Cairo building clusters", "notes": "Five blue building clusters matched to TEC Major City and their actual outlines. Nearby Heliopolis and Mena dark dots are not promoted to Major City. Rivers and training figures remain distinct features; no level or capacity is inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=13600,3040,410,370", "docs/CNAv2.1.0/images/TEC.png#legend/Major-City"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
+      "coverage": {"kind": "point", "hexes": ["E1930","E1931","E1829","E1830","E1730"], "observation": {"status": "provisional", "value": {"type": "major_city"}}}
     }
   ]
 }

@@ -1,14 +1,17 @@
 //! Full-board viewport. Planning overlays are separate from simulation state.
+use super::geography::Geography;
 use crate::document;
 use cna_map::{
-    geometry::BoardPoint,
+    geometry::{center, contains_hex, hex_at, BoardPoint},
+    hex::HexId,
     viewport::{ScreenPoint, Viewport},
 };
 use serde::Deserialize;
 use std::{cell::RefCell, collections::BTreeMap, rc::Rc};
 use wasm_bindgen::{closure::Closure, JsCast, JsValue};
 use web_sys::{
-    Element, Event, HtmlElement, KeyboardEvent, PointerEvent, WheelEvent, XmlHttpRequest,
+    Element, Event, HtmlElement, HtmlInputElement, KeyboardEvent, PointerEvent, WheelEvent,
+    XmlHttpRequest,
 };
 
 #[derive(Deserialize)]
@@ -41,6 +44,8 @@ struct Research {
     pointers: BTreeMap<i32, ScreenPoint>,
     press: Option<ScreenPoint>,
     dragged: bool,
+    geography: Geography,
+    source_visible: bool,
 }
 
 impl Research {
@@ -110,6 +115,41 @@ impl Research {
     }
 
     fn control(&mut self, action: &str) {
+        let toggled = match action {
+            "grid" => {
+                self.geography.grid = !self.geography.grid;
+                Some(self.geography.grid)
+            }
+            "features" => {
+                self.geography.features = !self.geography.features;
+                Some(self.geography.features)
+            }
+            "inspect" => {
+                self.geography.inspecting = !self.geography.inspecting;
+                Some(self.geography.inspecting)
+            }
+            "source" => {
+                self.source_visible = !self.source_visible;
+                self.board
+                    .set_attribute(
+                        "data-source-visible",
+                        if self.source_visible { "true" } else { "false" },
+                    )
+                    .unwrap();
+                Some(self.source_visible)
+            }
+            _ => None,
+        };
+        if let Some(enabled) = toggled {
+            self.root
+                .query_selector(&format!("[data-map-control={action}]"))
+                .unwrap()
+                .unwrap()
+                .set_attribute("aria-pressed", if enabled { "true" } else { "false" })
+                .unwrap();
+            self.render();
+            return;
+        }
         let Some(v) = self.viewport else {
             return;
         };
@@ -195,6 +235,7 @@ impl Research {
             "{:.0}% · Full source board",
             v.zoom() * 100.0
         )));
+        self.geography.render(v);
         crate::board::overlay(v);
         let Some(manifest) = &self.manifest else {
             return;
@@ -360,6 +401,15 @@ pub fn mount() -> Result<(), JsValue> {
     root.set_attribute("open", "")?;
     root.set_inner_html(r#"<div class="research-controls" aria-label="Map controls"><button data-map-control="overview" aria-label="Fit full board"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></svg></button><button data-map-control="gameplay" aria-label="Map detail scale">1:1</button><button data-map-control="out" aria-label="Zoom out map">−</button><button data-map-control="in" aria-label="Zoom in map">+</button></div>
       <p class="research-status" role="status">Checking local tile manifest…</p>
+      <div class="geography-tools">
+        <div class="geography-switches"><button data-map-control="grid" aria-pressed="true">Hex grid</button><button data-map-control="features" aria-pressed="true">Geography</button><button data-map-control="source" aria-pressed="true">Source scan</button><button data-map-control="inspect" aria-pressed="false">Inspect mode</button></div>
+        <form class="geography-search"><label for="geography-id">Hex identity</label><input id="geography-id" placeholder="D3714" maxlength="10" autocomplete="off"><button type="submit">Inspect hex</button></form>
+        <p class="geography-coverage"></p>
+        <details class="geography-details"><summary>Hex evidence</summary>
+          <p class="geography-key">Terrain tint = provisional · orange road / dashed dark railroad / dotted track · blue hexside · outlined dot = unresolved · links show connectivity, not exact linework</p>
+          <div class="geography-inspector" aria-live="polite">Enable Inspect mode and click a hex, or enter its section-local identity. Enter inspects the viewport center. Grid labels appear at detail scale.</div>
+        </details>
+      </div>
       <div class="research-viewport" tabindex="0" role="region" aria-label="Full-board map" aria-describedby="research-help"><div class="research-board"></div><div id="board-counters"></div><span class="research-unavailable">Source artwork is not bundled</span></div>
       <div class="research-footer"><p id="research-help">Drag to pan · scroll to zoom · arrows / + / − / Home</p><output class="research-readout"></output></div>"#);
     document()
@@ -385,10 +435,54 @@ pub fn mount() -> Result<(), JsValue> {
         pointers: BTreeMap::new(),
         press: None,
         dragged: false,
+        geography: Geography::new(&root),
+        source_visible: true,
     }));
     RESEARCH.with(|current| *current.borrow_mut() = Some(state.clone()));
     state.borrow_mut().resize();
     request_manifest(state.clone())?;
+    let s = state.clone();
+    let search = Closure::<dyn FnMut(Event)>::new(move |event: Event| {
+        event.prevent_default();
+        let mut state = s.borrow_mut();
+        let input = state
+            .root
+            .query_selector("#geography-id")
+            .unwrap()
+            .unwrap()
+            .unchecked_into::<HtmlInputElement>();
+        let hex = input
+            .value()
+            .parse::<HexId>()
+            .ok()
+            .filter(|&h| contains_hex(h));
+        state.geography.inspect(hex);
+        state
+            .root
+            .query_selector(".geography-details")
+            .unwrap()
+            .unwrap()
+            .set_attribute("open", "")
+            .unwrap();
+        if let (Some(hex), Some(v)) = (hex, state.viewport) {
+            // Keep the inspected hex away from the desktop/top or narrow/bottom panel.
+            let mut target = center(hex);
+            if v.css_size()[0] > 1000.0 {
+                target.y -= v.css_size()[1] * 0.25;
+            } else {
+                target.y += v.css_size()[1] * 0.22;
+            }
+            let mut next =
+                Viewport::new(target, 1.0, v.css_size(), v.device_pixel_ratio()).unwrap();
+            next.clamp_to_board(state.board_size).unwrap();
+            state.viewport = Some(next);
+        }
+        state.render();
+    });
+    root.query_selector(".geography-search")?
+        .unwrap()
+        .add_event_listener_with_callback("submit", search.as_ref().unchecked_ref())?;
+    search.forget();
     let s = state.clone();
     let click = Closure::<dyn FnMut(Event)>::new(move |event: Event| {
         if let Some(action) = event
@@ -452,7 +546,18 @@ pub fn mount() -> Result<(), JsValue> {
                 "pointerup" | "pointercancel" | "lostpointercapture" => {
                     if event.type_() == "pointerup" && state.pointers.len() == 1 && !state.dragged {
                         if let Some(v) = state.viewport {
-                            crate::board::place(v.to_board(point));
+                            if state.geography.inspecting {
+                                state.geography.inspect(hex_at(v.to_board(point)));
+                                state
+                                    .root
+                                    .query_selector(".geography-details")
+                                    .unwrap()
+                                    .unwrap()
+                                    .set_attribute("open", "")
+                                    .unwrap();
+                            } else {
+                                crate::board::place(v.to_board(point));
+                            }
                         }
                     }
                     state.pointers.remove(&id);
@@ -516,7 +621,18 @@ pub fn mount() -> Result<(), JsValue> {
             event.prevent_default();
             let mut state = s.borrow_mut();
             if let Some(v) = state.viewport {
-                crate::board::place(v.center());
+                if state.geography.inspecting {
+                    state.geography.inspect(hex_at(v.center()));
+                    state
+                        .root
+                        .query_selector(".geography-details")
+                        .unwrap()
+                        .unwrap()
+                        .set_attribute("open", "")
+                        .unwrap();
+                } else {
+                    crate::board::place(v.center());
+                }
             }
             state.render();
             return;

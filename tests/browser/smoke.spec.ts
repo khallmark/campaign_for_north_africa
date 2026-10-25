@@ -195,7 +195,7 @@ test('catalog controls wire search, selects and pagination into visible results'
   await expect(profile).toContainText('not current effective CPA');
   await expect(profile.locator('td strong').first()).toHaveText('10+');
   await expect(profile).toContainText('Do not treat base as motorized allowance');
-  await expect(profile).toContainText('Not applicable');
+  await expect(profile).toContainText('Source dash');
   await profile.getByText('Profile sources', { exact: true }).click();
   await expect(profile.locator('.catalog-citations')).toContainText('PDF p. 133');
   await nationality.selectOption({ label: 'German' });
@@ -224,6 +224,33 @@ test('catalog controls wire search, selects and pagination into visible results'
   await page.getByRole('combobox', { name: 'Record type', exact: true }).selectOption('equipment');
   await expect(count).toContainText('No matching records');
   expect(errors).toEqual([]);
+});
+
+test('anti-aircraft profile dashes remain distinct from equipment ratings', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Unit catalog', exact: true }).click();
+  const search = page.getByRole('searchbox', { name: 'Search records' });
+  const kind = page.getByRole('combobox', { name: 'Record type', exact: true });
+  await page.getByRole('combobox', { name: 'Unit type', exact: true }).selectOption('anti-air');
+  await search.fill('13th Light AA Regt');
+  await kind.selectOption('formation');
+  const entry = page.locator('.catalog-list .catalog-entry');
+  await entry.locator('summary').first().click();
+  const equipment = entry.locator('.catalog-equipment-ratings');
+  await expect(equipment).toContainText('not an assigned loadout');
+  await expect(equipment.getByRole('row', { name: /Light AA \(Bofors 40mm\)/ }).locator('td strong')).toHaveText('1');
+  await expect(equipment.getByRole('row', { name: /Heavy AA \(3.7-inch\)/ }).locator('td strong')).toHaveText('4');
+  await expect(equipment).toContainText('Current TOE and weapon mix are required for a unit total');
+  const rating = entry.getByRole('row').filter({ has: page.getByRole('rowheader', { name: /^Anti-aircraft rating/ }) });
+  await expect(rating.locator('td')).toContainText('Source dash');
+  await expect(rating.locator('td')).not.toContainText('Not applicable');
+  await expect(rating).toContainText('Weapon mix or attachments may supply ratings');
+  await search.fill('Bofors');
+  await kind.selectOption('equipment');
+  await entry.locator('summary').first().click();
+  await expect(rating.locator('td strong')).toHaveText('1');
+  await expect(rating.locator('td')).toContainText('rating per TOE point');
+  await expect(rating).toContainText('PDF p. 138');
 });
 
 test('full-board workspace removes the scenario and restores modal keyboard focus', async ({ page }) => {

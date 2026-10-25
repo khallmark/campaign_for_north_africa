@@ -1,5 +1,5 @@
 use crate::view::escape;
-use cna_catalog::catalog::{Record, Sprite};
+use cna_catalog::catalog::{Record, Sprite, Stat};
 use std::collections::BTreeSet;
 
 const PAGE_SIZE: usize = 24;
@@ -277,6 +277,21 @@ impl Catalog {
         }
     }
 
+    fn stat_value(&self, id: &str, stat: &Stat) -> String {
+        match (stat.status.as_str(), stat.value) {
+            ("sourced", Some(value)) => {
+                let printed = stat.raw.clone().unwrap_or_else(|| value.to_string());
+                let unit = self.stat_definitions.iter().find(|d| d.id == id).map(|d| d.unit.as_str()).unwrap_or("");
+                format!("<strong>{}</strong><small>{}</small>{}", escape(&printed), escape(unit), if stat.conditional { "<small><b>Conditional — see note</b></small>" } else { "" })
+            },
+            ("not_applicable", _) if stat.raw.as_deref() == Some("-") =>
+                "<strong>−</strong><small>Source dash</small><small>See this chart’s legend and note; not a calculated unit rating.</small>".into(),
+            ("not_applicable", _) => "Not applicable".into(),
+            ("provisional", _) => "Provisional<br><small>Value withheld</small>".into(),
+            _ => "Unresolved".into(),
+        }
+    }
+
     fn characteristics(&self, record: &Record) -> String {
         let mut stats: Vec<_> = record.stats.iter().collect();
         stats.sort_by_key(|(id, _)| {
@@ -289,15 +304,7 @@ impl Catalog {
             let definition = self.stat_definitions.iter().find(|d| d.id == *id);
             let name = definition.map(|d| d.name.as_str()).unwrap_or(id);
             let description = definition.map(|d| d.description.as_str()).unwrap_or("");
-            let value = match (stat.status.as_str(), stat.value) {
-                ("sourced", Some(value)) => {
-                    let printed = stat.raw.clone().unwrap_or_else(|| value.to_string());
-                    format!("<strong>{}</strong><small>{}</small>{}", escape(&printed), escape(definition.map(|d| d.unit.as_str()).unwrap_or("")), if stat.conditional { "<small><b>Conditional — see note</b></small>" } else { "" })
-                },
-                ("not_applicable", _) => "Not applicable".into(),
-                ("provisional", _) => "Provisional<br><small>Value withheld</small>".into(),
-                _ => "Unresolved".into(),
-            };
+            let value = self.stat_value(id, stat);
             format!("<tr><th scope=\"row\">{}<small>{}</small><small>{}</small><small>{}</small></th><td>{value}</td></tr>", escape(name), escape(description), escape(&stat.note), self.citations(&stat.source_refs))
         }).collect();
         if stats.is_empty() {
@@ -305,6 +312,31 @@ impl Catalog {
         } else {
             format!("<table><caption>Rulebook characteristics, not tutorial stats</caption><thead><tr><th scope=\"col\">Characteristic and source</th><th scope=\"col\">Value</th></tr></thead><tbody>{stats}</tbody></table>")
         }
+    }
+
+    fn aa_equipment_references(&self, record: &Record) -> String {
+        if !matches!(
+            record.kind.as_str(),
+            "formation" | "counter_formation" | "profile"
+        ) || !matches!(
+            record.unit_type.as_str(),
+            "anti-air" | "heavy-anti-air" | "anti-tank-anti-air"
+        ) {
+            return String::new();
+        }
+        let rows: String = self.entries.iter()
+            .filter(|equipment| equipment.kind == "equipment"
+                && equipment.nationality == record.nationality
+                && matches!(equipment.unit_type.as_str(), "anti-air" | "heavy-anti-air" | "anti-tank-anti-air"))
+            .filter_map(|equipment| equipment.stats.get("anti_air").map(|stat| {
+                format!("<tr><th scope=\"row\">{}<small>{}</small><small>{}</small></th><td>{}</td></tr>",
+                    escape(&equipment.name), escape(&stat.note), self.citations(&stat.source_refs),
+                    self.stat_value("anti_air", stat))
+            })).collect();
+        if rows.is_empty() {
+            return String::new();
+        }
+        format!("<section class=\"catalog-equipment-ratings\"><h4>Reference weapon ratings — not an assigned loadout</h4><p>AA combat ratings come from weapon TOE, not a profile dash. These are same-nationality AA weapon references, not equipment assigned to this formation or a compatibility list. Current TOE and weapon mix are required for a unit total; no current total is calculated here.</p><table><caption>Anti-aircraft equipment ratings</caption><thead><tr><th scope=\"col\">Weapon and source</th><th scope=\"col\">Anti-aircraft rating</th></tr></thead><tbody>{rows}</tbody></table></section>")
     }
 
     fn record(&self, record: &Record) -> String {
@@ -325,6 +357,7 @@ impl Catalog {
                 )
             })
             .unwrap_or_default();
+        let equipment = self.aa_equipment_references(record);
         let stats = self.characteristics(record);
         let stats = if record.profile_id.is_some() {
             format!("<section class=\"catalog-direct-stats\"><h4>Formation / scenario characteristics</h4>{stats}</section>")
@@ -349,7 +382,7 @@ impl Catalog {
             .map(|value| format!(" · {}", escape(affiliation_name(value))))
             .collect();
         format!(
-            r#"<details class="catalog-entry"><summary>{sprite}<span class="catalog-name"><strong>{}</strong><span>{} · {}{affiliations}</span><small>{}</small></span><span class="catalog-status">{identity}</span></summary><div class="catalog-record"><p class="catalog-id">Record {}</p><p>{}</p>{stats}<details class="catalog-citations"><summary>Record sources</summary>{}</details>{profile}</div></details>"#,
+            r#"<details class="catalog-entry"><summary>{sprite}<span class="catalog-name"><strong>{}</strong><span>{} · {}{affiliations}</span><small>{}</small></span><span class="catalog-status">{identity}</span></summary><div class="catalog-record"><p class="catalog-id">Record {}</p><p>{}</p>{equipment}{stats}<details class="catalog-citations"><summary>Record sources</summary>{}</details>{profile}</div></details>"#,
             escape(&record.name),
             escape(
                 self.unit_type_name(&record.unit_type)
@@ -520,6 +553,7 @@ mod tests {
                 "conditional_rating": {"value": 7, "raw": "(7)", "conditional": true, "status": "sourced", "source_refs": [], "note": "Only under the printed chart restriction."},
                 "unresolved_number": {"value": 9876, "status": "unresolved", "source_refs": [], "note": ""},
                 "provisional_number": {"value": 8765, "status": "provisional", "source_refs": [], "note": ""},
+                "printed_dash": {"value": null, "raw": "-", "status": "not_applicable", "source_refs": [], "note": "Weapon mix supplies the rating."},
                 "not_applicable": {"value": null, "status": "not_applicable", "source_refs": [], "note": ""}
             }
         }]);
@@ -535,6 +569,9 @@ mod tests {
         assert!(html.contains("Only under the printed chart restriction."));
         assert!(html.contains("Unresolved"));
         assert!(html.contains("Provisional"));
+        assert!(html.contains("Source dash"));
+        assert!(html.contains("See this chart’s legend and note"));
+        assert!(html.contains("Weapon mix supplies the rating."));
         assert!(html.contains("Not applicable"));
         assert!(!html.contains("9876"));
         assert!(!html.contains("8765"));
@@ -596,6 +633,45 @@ mod tests {
         }
         assert!(!linked.contains("9876"));
         assert!(!linked.contains("8765"));
+    }
+
+    #[test]
+    fn aa_formations_show_equipment_references_without_assigning_a_loadout() {
+        let catalog =
+            Catalog::parse(include_str!("../../../public/data/unit-catalog.json")).unwrap();
+        let html = catalog.results(
+            "oa-124-002-13th-light-aa-regt",
+            "formation",
+            "allied",
+            "anti-air",
+            "commonwealth",
+            0,
+        );
+        assert!(html.contains("Reference weapon ratings — not an assigned loadout"));
+        assert!(html.contains("Light AA (Bofors 40mm)"));
+        assert!(html.contains("Heavy AA (3.7-inch)"));
+        assert!(html.contains("Current TOE and weapon mix are required for a unit total"));
+        assert!(!html.contains("20mm M/35 Breda"));
+        assert!(!catalog
+            .results(
+                "Bofors",
+                "equipment",
+                "allied",
+                "anti-air",
+                "commonwealth",
+                0
+            )
+            .contains("Reference weapon ratings"));
+        assert!(!catalog
+            .results(
+                "1st Rifle Brigade",
+                "formation",
+                "allied",
+                "motorized-infantry",
+                "commonwealth",
+                0
+            )
+            .contains("Reference weapon ratings"));
     }
 
     #[test]

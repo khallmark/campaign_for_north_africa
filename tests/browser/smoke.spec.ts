@@ -189,8 +189,8 @@ test('catalog controls wire search, selects and pagination into visible results'
   const rifle = page.locator('#catalog-detail');
   const direct = rifle.locator('.catalog-direct-stats');
   const profile = rifle.locator('.catalog-profile-stats');
-  await expect(direct).toContainText('Current / scenario characteristics');
-  await expect(direct.locator('td')).toHaveText('Unresolved');
+  await expect(direct).toHaveCount(0);
+  await expect(rifle).not.toContainText(/unresolved/i);
   await expect(profile).toContainText('Commonwealth infantry profile l · Profile cw-l');
   await expect(profile).toContainText('not current effective CPA');
   await profile.getByText('Base profile characteristics and sources', { exact: true }).click();
@@ -273,7 +273,8 @@ test('formation references distinguish base CPA, arrival totals, conditional and
   await expect(detail.locator('.catalog-arrival-facts > div').nth(1).locator('strong')).toHaveText('2');
   await expect(detail.locator('.catalog-arrival-facts > div').nth(2).locator('strong')).toHaveText('-1');
   await expect(detail.locator('.catalog-arrival')).toContainText('1/12');
-  await expect(detail.locator('.catalog-direct-stats')).toContainText('Current effective CPA is not established');
+  await expect(detail.locator('.catalog-direct-stats')).toHaveCount(0);
+  await expect(detail).not.toContainText(/unresolved/i);
   await expect(detail).not.toContainText('not transcribed');
   const totals = detail.locator('.catalog-arrival-totals');
   const aa = totals.getByRole('row', { name: /^Anti-aircraft rating/ });

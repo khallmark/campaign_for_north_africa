@@ -1,6 +1,6 @@
 use crate::view::escape;
 use cna_catalog::catalog::{Record, Sprite, Stat};
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 
 mod formation;
 mod tokens;
@@ -293,17 +293,31 @@ impl Catalog {
                 "<strong>−</strong><small>Source dash</small><small>See this chart’s legend and note; not a calculated unit rating.</small>".into(),
             ("not_applicable", _) => "Not applicable".into(),
             ("provisional", _) => "Provisional<br><small>Value withheld</small>".into(),
-            _ => "Unresolved".into(),
+            ("unverified", _) => format!("Unverified source<small>{}</small>", Self::source_condition(stat)),
+            ("conflict", _) => format!("Conflicting sources<small>{}</small>", Self::source_condition(stat)),
+            _ => Self::source_condition(stat),
         }
     }
 
-    fn characteristics(
+    fn source_condition(stat: &Stat) -> String {
+        match stat
+            .raw
+            .as_deref()
+            .filter(|raw| !raw.is_empty() && *raw != "?")
+        {
+            Some(raw) => format!("Source / calculation: {}", escape(raw)),
+            None if !stat.note.is_empty() => escape(&stat.note),
+            None => "The source does not specify a value.".into(),
+        }
+    }
+
+    fn characteristics<'a>(
         &self,
-        stats: &BTreeMap<String, Stat>,
+        stats: impl IntoIterator<Item = (&'a String, &'a Stat)>,
         caption: &str,
         reference: bool,
     ) -> String {
-        let mut stats: Vec<_> = stats.iter().collect();
+        let mut stats: Vec<_> = stats.into_iter().collect();
         stats.sort_by_key(|(id, _)| {
             self.stat_definitions
                 .iter()
@@ -408,17 +422,26 @@ impl Catalog {
             .formation_reference
             .as_ref()
             .filter(|reference| reference.schema_version == 1);
-        let stats = self.characteristics(
-            &record.stats,
-            "Rulebook characteristics, not tutorial stats",
-            false,
-        );
-        let stats = if formation.is_some() {
-            format!("<section class=\"catalog-direct-stats\"><h4>Current / scenario characteristics</h4><p>Current effective CPA is not established by a base profile or arrival reference. Unknown values below do not mean that base CPA is missing.</p>{stats}</section>")
-        } else if record.profile_id.is_some() {
-            format!("<section class=\"catalog-direct-stats\"><h4>Formation / scenario characteristics</h4>{stats}</section>")
+        // These rows were importer placeholders for a future scenario, not
+        // source characteristics. The catalog displays the sourced base CPA.
+        let direct_stats: Vec<_> = record
+            .stats
+            .iter()
+            .filter(|(id, stat)| {
+                !(id.as_str() == "capability_points"
+                    && stat.value.is_none()
+                    && stat.status == "unresolved"
+                    && matches!(
+                        record.kind.as_str(),
+                        "unit_type" | "formation" | "counter_formation"
+                    ))
+            })
+            .collect();
+        let stats = if direct_stats.is_empty() {
+            String::new()
         } else {
-            stats
+            let table = self.characteristics(direct_stats, "Direct source characteristics", false);
+            format!("<section class=\"catalog-direct-stats\"><h4>Direct source characteristics</h4>{table}</section>")
         };
         let profile = record.profile_id.as_ref().filter(|_| formation.is_none()).map(|id| {
             match self.profiles.iter().find(|profile| profile.id == *id) {
@@ -427,7 +450,7 @@ impl Catalog {
                     escape(&profile.name), escape(&profile.id), escape(&profile.note),
                     self.characteristics(&profile.stats, "Base profile characteristics", false), self.source_details(&profile.source_refs)
                 ),
-                None => format!("<p>Characteristic profile {} is unavailable; linked values are unresolved.</p>", escape(id)),
+                None => format!("<p>Characteristic profile {} is not included in this catalog. Consult the record’s cited source.</p>", escape(id)),
             }
         }).unwrap_or_default();
         let reference = formation
@@ -701,7 +724,7 @@ mod tests {
                 "sourced_zero": {"value": 0, "status": "sourced", "source_refs": [], "note": ""},
                 "breakdown_shift": {"value": -1, "raw": "1L", "status": "sourced", "source_refs": [], "note": "Left shift, not a combat rating."},
                 "conditional_rating": {"value": 7, "raw": "(7)", "conditional": true, "status": "sourced", "source_refs": [], "note": "Only under the printed chart restriction."},
-                "unresolved_number": {"value": 9876, "status": "unresolved", "source_refs": [], "note": ""},
+                "unknown_number": {"value": 9876, "raw": "That of <attached> units", "status": "unresolved", "source_refs": [], "note": ""},
                 "provisional_number": {"value": 8765, "status": "provisional", "source_refs": [], "note": ""},
                 "printed_dash": {"value": null, "raw": "-", "status": "not_applicable", "source_refs": [], "note": "Weapon mix supplies the rating."},
                 "not_applicable": {"value": null, "status": "not_applicable", "source_refs": [], "note": ""}
@@ -717,7 +740,8 @@ mod tests {
         assert!(html.contains("<strong>(7)</strong>"));
         assert!(html.contains("Conditional — see note"));
         assert!(html.contains("Only under the printed chart restriction."));
-        assert!(html.contains("Unresolved"));
+        assert!(!html.contains("Unresolved"));
+        assert!(html.contains("That of &lt;attached&gt; units"));
         assert!(html.contains("Provisional"));
         assert!(html.contains("Source dash"));
         assert!(html.contains("See this chart’s legend and note"));
@@ -744,7 +768,10 @@ mod tests {
             "id": "test", "name": "Test formation", "kind": "formation",
             "side": "allied", "nationality": "commonwealth", "unit_type": "infantry",
             "verification": "verified", "source_refs": [], "profile_id": "base",
-            "stats": {"capability_points": {"value": null, "status": "unresolved", "note": "Effective CPA unknown", "source_refs": []}}
+            "stats": {
+                "capability_points": {"value": null, "status": "unresolved", "note": "Effective CPA unknown", "source_refs": []},
+                "basic_morale": {"value": -2, "status": "sourced", "note": "Direct formation observation", "source_refs": []}
+            }
         }]);
         data["profiles"] = serde_json::json!([{
             "id": "base", "name": "Base <profile>", "unit_type": "infantry",
@@ -761,9 +788,10 @@ mod tests {
         let catalog = Catalog::parse(&data.to_string()).unwrap();
         let html = catalog.detail("test").unwrap();
         let (direct, linked) = html.split_once("Linked profile characteristics").unwrap();
-        assert!(direct.contains("Formation / scenario characteristics"));
-        assert!(direct.contains("Effective CPA unknown"));
-        assert!(direct.contains("Unresolved"));
+        assert!(direct.contains("Direct source characteristics"));
+        assert!(direct.contains("<strong>-2</strong>"));
+        assert!(!direct.contains("Effective CPA unknown"));
+        assert!(!direct.contains("Unresolved"));
         assert!(!direct.contains("<strong>10+</strong>"));
         for text in [
             "Base &lt;profile&gt;",
@@ -775,7 +803,6 @@ mod tests {
             "Conditional — see note",
             "Printed restriction",
             "PDF p. 133",
-            "Unresolved",
             "Provisional",
             "Not applicable",
         ] {
@@ -812,12 +839,8 @@ mod tests {
         let machinegun = catalog.detail("oa-149-084-60th-machinegun-bn").unwrap();
         assert!(machinegun.contains("Base capability point allowance"));
         assert!(machinegun.contains("<strong>8</strong><small>CP</small>"));
-        assert!(
-            machinegun.find("Base capability point allowance").unwrap()
-                < machinegun
-                    .find("Current / scenario characteristics")
-                    .unwrap()
-        );
+        assert!(!machinegun.contains("Current / scenario characteristics"));
+        assert!(!machinegun.to_lowercase().contains("unresolved"));
         assert!(!machinegun.contains("not transcribed"));
         assert!(!machinegun.contains("Linked profile characteristics"));
         assert!(machinegun.contains("1/12"));
@@ -830,6 +853,24 @@ mod tests {
         let missing = catalog.detail("oa-165-065-gruppe-badde").unwrap();
         assert!(missing.contains("That of the attached units"));
         assert!(missing.contains("No independent quantified loadout"));
+    }
+
+    #[test]
+    fn catalog_does_not_display_internal_missing_value_status() {
+        let catalog =
+            Catalog::parse(include_str!("../../../public/data/unit-catalog.json")).unwrap();
+        assert!(!catalog.panel().to_lowercase().contains("unresolved"));
+        for record in catalog.entries.iter().chain(&catalog.profiles) {
+            assert!(
+                !catalog
+                    .detail(&record.id)
+                    .unwrap()
+                    .to_lowercase()
+                    .contains("unresolved"),
+                "{} still displays an internal missing-value status",
+                record.id
+            );
+        }
     }
 
     #[test]

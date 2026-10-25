@@ -52,7 +52,7 @@ impl Inventory {
         )).collect();
         format!(
             r#"<h2>Reinforcements</h2><p>Place a named identity using explicitly fictional sandbox capabilities. Historical source stats are not imported as combat values.</p>
-            <p class="inventory-coverage">{ready} of {} candidate identities have ready unique artwork. This is NOT a certified distinct-unit count. Missing art uses a clearly marked shared placeholder; source aliases and unresolved identities remain under review.</p>
+            <p class="inventory-coverage">{ready} of {} candidate identities have ready unique artwork. This is NOT a certified distinct-unit count. Missing art uses a clearly marked shared placeholder; source aliases and identity matches remain under review.</p>
             <label class="deployment-side">Command side<select id="deployment-side"><option value="allied">Player controlled</option><option value="axis">Enemy AI</option></select></label>
             <label class="inventory-search">Find an identity<input id="inventory-query" type="search" placeholder="Unit, model, nationality or source ID" data-inventory-filter autofocus/></label>
             <div id="inventory-results">{}</div>

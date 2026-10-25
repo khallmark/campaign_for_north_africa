@@ -11,11 +11,12 @@ impl Catalog {
             ("conflict", _) => "Conflicting sources — value withheld".into(),
             ("provisional", _) => "Provisional — value withheld".into(),
             ("unverified", _) => "Unverified — value withheld".into(),
-            _ => "Unresolved — see source note".into(),
+            _ => Self::source_condition(stat),
         };
         let raw = stat
             .raw
             .as_ref()
+            .filter(|_| stat.status != "unresolved")
             .map(|raw| format!("<small>Source / calculation: {}</small>", escape(raw)))
             .unwrap_or_default();
         format!(
@@ -30,11 +31,20 @@ impl Catalog {
     }
 
     fn reference_fact(&self, name: &str, stat: &Stat) -> String {
+        let note_is_value = stat.status == "unresolved"
+            && stat
+                .raw
+                .as_deref()
+                .is_none_or(|raw| raw.is_empty() || raw == "?");
+        let note = if note_is_value {
+            String::new()
+        } else {
+            format!("<p>{}</p>", escape(&stat.note))
+        };
         format!(
-            "<div><h5>{}</h5>{}<p>{}</p><small>{}</small></div>",
+            "<div><h5>{}</h5>{}{note}<small>{}</small></div>",
             escape(name),
             self.reference_value(stat),
-            escape(&stat.note),
             self.citations(&stat.source_refs)
         )
     }
@@ -60,8 +70,8 @@ impl Catalog {
             });
         let mismatch = if reference.base_profile_id != reference.catalog_profile_id {
             format!("<p>Arrival reference profile: {}. Catalog profile remains {}. This is not a change to the unit’s current state.</p>",
-                escape(reference.base_profile_id.as_deref().unwrap_or("unresolved")),
-                escape(reference.catalog_profile_id.as_deref().unwrap_or("unresolved")))
+                escape(reference.base_profile_id.as_deref().unwrap_or("not specified")),
+                escape(reference.catalog_profile_id.as_deref().unwrap_or("not specified")))
         } else {
             String::new()
         };
@@ -74,8 +84,8 @@ impl Catalog {
             .collect::<Vec<_>>();
         let base = format!(
             "<section class=\"catalog-profile-stats\"><div class=\"catalog-base-cpa\"><h4>Base capability point allowance</h4>{cpa}<p>Base reference only — not current effective CPA.</p></div><p><strong>{}</strong> · Profile {}</p><p>Printed profile code: {}</p><p>{}</p>{mismatch}<details><summary>Base profile characteristics and sources</summary>{}{}</details></section>",
-            escape(reference.base_profile_name.as_deref().unwrap_or("No resolved base profile")),
-            escape(reference.base_profile_id.as_deref().unwrap_or("unresolved")),
+            escape(reference.base_profile_name.as_deref().unwrap_or("No base profile specified by the source")),
+            escape(reference.base_profile_id.as_deref().unwrap_or("not specified")),
             escape(reference.printed_profile_code.as_deref().unwrap_or("not supplied")),
             escape(&reference.base_profile_note),
             self.characteristics(&reference.base_stats, "Base profile characteristics", false),
@@ -100,7 +110,7 @@ impl Catalog {
             };
             let barrage = component.land_barrage_toe.map(|toe| format!("<p>Land-barrage calculation uses {toe} TOE points under the cited restrictions.</p>")).unwrap_or_default();
             format!("<details class=\"catalog-component\"><summary>{} · printed component {}</summary><p>Record <code>{}</code> · {}</p>{}{barrage}{ratings}</details>",
-                escape(&component.name), escape(&component.label), escape(component.record_id.as_deref().unwrap_or("unresolved")),
+                escape(&component.name), escape(&component.label), escape(component.record_id.as_deref().unwrap_or("not specified")),
                 escape(&component.kind), self.reference_fact("Assigned arrival TOE", &component.toe))
         }).collect();
         let components = if components.is_empty() {

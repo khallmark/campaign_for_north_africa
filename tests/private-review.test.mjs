@@ -26,6 +26,7 @@ async function fixture(t, enabled = true) {
   if (enabled) await writeFile(join(root, '.env.test'), `CNA_PRIVATE_REVIEW_TILES=${root}/tiles\n`);
   const assets = {
     'Token (1) #2.png': Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j1ioAAAAASUVORK5CYII=', 'base64'),
+    'Plain.svg': Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="2" height="2"/>'),
     'Token + 3.svg': Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>'),
   };
   for (const [name, bytes] of Object.entries(assets)) await writeFile(join(images, name), bytes);

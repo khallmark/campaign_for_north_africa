@@ -203,6 +203,44 @@ mod tests {
             projection_delta_ref: "fixture-delta".into(),
         });
         assert!(route.validate().is_err());
+        route.reveals = vec![
+            Reveal {
+                at_step: 1,
+                projection_delta_ref: "first".into(),
+            },
+            Reveal {
+                at_step: 1,
+                projection_delta_ref: "second".into(),
+            },
+            Reveal {
+                at_step: 3,
+                projection_delta_ref: "third".into(),
+            },
+        ];
+        assert!(
+            route.validate().is_ok(),
+            "same-step deltas retain array order"
+        );
+        let restored: RouteResult =
+            serde_json::from_str(&serde_json::to_string(&route).unwrap()).unwrap();
+        assert_eq!(restored.reveals, route.reveals);
+        route.reveals.swap(0, 2);
+        assert!(
+            route.validate().is_err(),
+            "a later reveal cannot precede an earlier one"
+        );
+        route.reveals.clear();
+        route.steps.truncate(1);
+        route.stop = Stop {
+            kind: StopKind::RejectedSuffix,
+            at_step: 0,
+        };
+        assert!(
+            route.validate().is_ok(),
+            "an accepted origin-only stop has no travel"
+        );
+        route.steps.clear();
+        assert!(route.validate().is_err());
         assert!(serde_json::from_str::<RouteFixture>(
             &FIXTURES[0].replace("\"fixture\"", "\"verified\"")
         )

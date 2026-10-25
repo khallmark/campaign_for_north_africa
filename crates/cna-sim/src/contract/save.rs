@@ -140,6 +140,9 @@ mod tests {
             let mut invalid = fixture.clone();
             invalid[field] = json!({});
             assert!(serde_json::from_value::<ViewerExport<Projection>>(invalid).is_err());
+            let mut nested = fixture.clone();
+            nested["history"][0][field] = json!({});
+            assert!(serde_json::from_value::<ViewerExport<Projection>>(nested).is_err());
         }
         assert!(serde_json::from_value::<ViewerExport<Projection>>(current()).is_err());
         let mut invalid_save = current();

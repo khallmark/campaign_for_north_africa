@@ -193,8 +193,12 @@ impl Catalog {
         };
         let profile = record.profile_id.as_ref().map(|id| format!("<p>Characteristic profile: {}. Search this ID to inspect the profile separately.</p>", escape(id))).unwrap_or_default();
         format!(
-            r#"<details class="catalog-entry"><summary>{sprite}<span class="catalog-name"><strong>{}</strong><span>{} · {} · {}</span><small>{}</small></span><span class="catalog-status">{identity}</span></summary><div class="catalog-record"><p class="catalog-id">Record {}</p><p>{}</p>{profile}{stats}<details class="catalog-citations"><summary>Record sources</summary>{}</details></div></details>"#,
+            r#"<details class="catalog-entry"><summary>{sprite}<span class="catalog-name"><strong>{}</strong><span>{} · {} · {} · {}</span><small>{}</small></span><span class="catalog-status">{identity}</span></summary><div class="catalog-record"><p class="catalog-id">Record {}</p><p>{}</p>{profile}{stats}<details class="catalog-citations"><summary>Record sources</summary>{}</details></div></details>"#,
             escape(&record.name),
+            escape(
+                self.unit_type_name(&record.unit_type)
+                    .unwrap_or(&record.unit_type)
+            ),
             escape(kind_name(&record.kind)),
             escape(&record.nationality.replace('_', " ")),
             escape(if record.side.is_empty() {
@@ -283,6 +287,16 @@ impl Catalog {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn catalog_displays_the_unit_type_for_a_named_formation() {
+        let catalog =
+            Catalog::parse(include_str!("../../../public/data/unit-catalog.json")).unwrap();
+        let html = catalog.results("oa-116-006-1st-rifle-brigade", "formation", "allied", 0);
+        assert!(html.contains("1st Rifle Brigade"));
+        assert!(html.contains("Infantry"), "source unit type is missing");
+        assert!(html.contains("Formation"));
+    }
 
     #[test]
     fn catalog_numbers_require_stat_verification_even_when_identity_is_verified() {

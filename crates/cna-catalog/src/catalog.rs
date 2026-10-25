@@ -81,10 +81,18 @@ pub struct Sprite {
 #[derive(Deserialize)]
 struct UnitType {
     id: String,
+    name: String,
     sprite_id: String,
 }
 
 impl Catalog {
+    pub fn unit_type_name(&self, id: &str) -> Option<&str> {
+        self.unit_types
+            .iter()
+            .find(|unit_type| unit_type.id == id)
+            .map(|unit_type| unit_type.name.as_str())
+    }
+
     pub fn parse(json: &str) -> Result<Self, String> {
         let mut catalog: Self = serde_json::from_str(json).map_err(|e| e.to_string())?;
         if catalog.schema_version != 1 {

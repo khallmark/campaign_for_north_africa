@@ -187,6 +187,19 @@ def apply_evidence(root, catalog, evidence, locks):
         for key, value in erratum["values"].items():
             record = by_id[erratum["record_id"]]
             original = copy.deepcopy(record["stats"][key])
+            if "correction_id" in original:
+                require(original["correction_id"] == erratum["id"],
+                        f"Projected correction conflicts with erratum: {record['id']}/{key}")
+                require(original["value"] == value and original["status"] == ("not_applicable" if value is None else "sourced")
+                        and original["raw"] == ("-" if value is None else str(value))
+                        and original["conditional"] == (original["original_observation"]["conditional"] or key in erratum.get("conditional_fields", [])),
+                        f"Projected stat disagrees with erratum: {record['id']}/{key}")
+                # Already corrected by the private DB projection. Preserve its
+                # original observation, notes and citations; don't nest or reapply.
+                record["stats"][key].update(
+                    erratum_id=erratum["id"], verification="explicit_vassal_erratum",
+                    errata_source={**source, "locator": erratum["locator"], "quote": erratum["quote"]})
+                continue
             require("erratum_id" not in original, f"Two errata target one cell: {record['id']}/{key}")
             record["stats"][key] = {
                 "value": value, "status": "not_applicable" if value is None else "sourced",
@@ -296,7 +309,7 @@ def build(root):
     sources = copy.deepcopy(catalog["sources"])
     sources.extend({"id": e["id"], "title": "VASSAL incorporated erratum", "path": e["source_path"],
                     "section": e["locator"], "pdf_page": None, "lines": None, "note": e["note"]}
-                   for e in evidence["errata"])
+                   for e in evidence["errata"] if e["id"] not in {s["id"] for s in catalog["sources"]})
     reference = {"schema_version": 1, "purpose": "Reference data only; no scenario or sandbox state.",
                  "coverage": coverage, "input_sources": [source_info(root, p, locks) for p in inputs],
                  "identity_redirects": inventory["identity_redirects"], "units": units, "counters": counters,

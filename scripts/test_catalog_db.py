@@ -89,6 +89,61 @@ class ImportContracts(unittest.TestCase):
         with closing(catalog.connect(self.database, readonly=True)) as db:
             return db.execute(sql).fetchall()
 
+    def test_stat_projection_preserves_originals_and_only_exports_reviewed_cells(self):
+        with closing(catalog.connect(self.database)) as db:
+            db.executescript("""
+                INSERT INTO stat_definition VALUES ('unknown',1,'Unknown','CP','Unknown','[]');
+                INSERT INTO stat_observation VALUES ('record','unknown',NULL,'unresolved','?',0,'Unknown','[]');
+                INSERT INTO stat_correction VALUES ('record','cpa',0,'sourced','0',1,'review');
+                INSERT INTO metadata VALUES ('private_text','DO NOT EXPORT');
+            """)
+        original = {"schema_version": 1, "sources": [], "entries": [{
+            "id": "record", "name": "Public name", "stats": {
+                "cpa": {"value": 5, "status": "sourced", "raw": "5", "conditional": False,
+                        "note": "original", "source_refs": []},
+                "unknown": {"value": None, "status": "unresolved", "raw": "?", "conditional": False,
+                            "note": "Unknown", "source_refs": []}}}], "profiles": []}
+        destination = self.root / "catalog.json"
+        destination.write_text(json.dumps(original))
+        before, db_before = destination.read_bytes(), self.database.read_bytes()
+        with self.assertRaisesRegex(ValueError, "Stat projection drift"):
+            catalog.project_stats(self.database, destination, check=True)
+        self.assertEqual(destination.read_bytes(), before)
+        self.assertTrue(catalog.project_stats(self.database, destination))
+        projected = json.loads(destination.read_text())
+        stat = projected['entries'][0]['stats']['cpa']
+        self.assertEqual((stat['value'], stat['raw'], stat['status'], stat['conditional']), (0, '0', 'sourced', True))
+        self.assertEqual(stat['original_observation'], original['entries'][0]['stats']['cpa'])
+        self.assertEqual(stat['correction_id'], 'review')
+        self.assertEqual(stat['source_refs'], ['review'])
+        self.assertEqual(stat['note'], 'reviewed correction')
+        self.assertEqual(projected['entries'][0]['stats']['unknown'], original['entries'][0]['stats']['unknown'])
+        self.assertEqual(projected['entries'][0]['name'], 'Public name')
+        self.assertEqual(projected['sources'], [{'id': 'review', 'title': 'Reviewed stat correction',
+                         'path': 'fixture.txt', 'section': 'row 1', 'pdf_page': None, 'lines': None,
+                         'note': 'Original observation retained alongside the correction.'}])
+        self.assertNotIn('DO NOT EXPORT', destination.read_text())
+        self.assertNotIn('quoted source', destination.read_text())
+        after = destination.read_bytes()
+        self.assertFalse(catalog.project_stats(self.database, destination, check=True))
+        self.assertFalse(catalog.project_stats(self.database, destination))
+        self.assertEqual(destination.read_bytes(), after)
+        self.assertEqual(self.database.read_bytes(), db_before)
+        with closing(catalog.connect(self.database)) as db:
+            db.execute("UPDATE stat_correction SET value=NULL,status='not_applicable',raw='-',conditional=0")
+            db.commit()
+        self.assertTrue(catalog.project_stats(self.database, destination))
+        stat = json.loads(destination.read_text())['entries'][0]['stats']['cpa']
+        self.assertIsNone(stat['value'])
+        self.assertEqual(stat['original_observation']['value'], 5)
+        for broken in ({**original, 'entries': []},
+                       {**original, 'entries': [{'id': 'record', 'stats': {}}]}):
+            destination.write_text(json.dumps(broken))
+            before = destination.read_bytes()
+            with self.assertRaises(ValueError):
+                catalog.project_stats(self.database, destination)
+            self.assertEqual(destination.read_bytes(), before)
+
     def test_profile_projection_is_bounded_cited_and_preserves_unknowns(self):
         with closing(catalog.connect(self.database)) as db:
             db.executescript("""
@@ -350,10 +405,15 @@ class CommittedDatabaseContracts(unittest.TestCase):
     def test_profile_patch_preserves_stats_identity_and_rejects_wrong_baseline(self):
         with tempfile.TemporaryDirectory() as directory:
             database = Path(directory) / "catalog.sqlite"
+            patches = Path(directory) / "patches"
+            patches.mkdir()
+            for patch_file in (catalog.SQL / "patches").glob("*.sql"):
+                if patch_file.name <= "003-reviewed-italian-profile-links.sql":
+                    (patches / patch_file.name).write_bytes(patch_file.read_bytes())
             with closing(catalog.connect(catalog.DATABASE, readonly=True)) as source, closing(catalog.connect(database)) as db:
                 source.backup(db)
                 db.executescript("""
-                    DELETE FROM sql_patch WHERE name='003-reviewed-italian-profile-links.sql';
+                    DELETE FROM sql_patch WHERE name>='003-reviewed-italian-profile-links.sql';
                     UPDATE catalog_record SET profile_id=NULL,note='Original counter-only identity'
                         WHERE id IN (SELECT substr(id,14) FROM correction_evidence WHERE id LIKE 'profile-link:%');
                     DELETE FROM correction_evidence WHERE id LIKE 'profile-link:%';
@@ -368,12 +428,12 @@ class CommittedDatabaseContracts(unittest.TestCase):
                 db.commit()
             before = database.read_bytes()
             with self.assertRaises(sqlite3.IntegrityError):
-                catalog.update_database(database, SCHEMA, catalog.SQL / "patches", lambda db, tmp: None)
+                catalog.update_database(database, SCHEMA, patches, lambda db, tmp: None)
             self.assertEqual(database.read_bytes(), before)
             with closing(catalog.connect(database)) as db:
                 db.execute("UPDATE catalog_record SET profile_id=NULL WHERE id='counter-it-61-61-sirte-division-hq'")
                 db.commit()
-            self.assertTrue(catalog.update_database(database, SCHEMA, catalog.SQL / "patches", lambda db, tmp: None))
+            self.assertTrue(catalog.update_database(database, SCHEMA, patches, lambda db, tmp: None))
             with closing(catalog.connect(database, readonly=True)) as db:
                 for table, rows in stable.items():
                     self.assertEqual(db.execute(f"SELECT * FROM {table} ORDER BY 1,2").fetchall(), rows, table)
@@ -381,8 +441,61 @@ class CommittedDatabaseContracts(unittest.TestCase):
                 self.assertEqual(db.execute("SELECT source_id,count(*) FROM record_source WHERE source_id LIKE 'vassal-oc-it-%' GROUP BY source_id ORDER BY source_id").fetchall(),
                                  [('vassal-oc-it-61', 14), ('vassal-oc-it-62', 13), ('vassal-oc-it-63', 14)])
             before = database.read_bytes()
-            self.assertFalse(catalog.update_database(database, SCHEMA, catalog.SQL / "patches", lambda db, tmp: None))
+            self.assertFalse(catalog.update_database(database, SCHEMA, patches, lambda db, tmp: None))
             self.assertEqual(database.read_bytes(), before)
+
+    def test_corrected_stats_reach_catalog_and_sidecar_without_inventing_scenario_values(self):
+        document = json.loads((ROOT / 'public/data/unit-catalog.json').read_text())
+        records = {r['id']: r for r in document['entries'] + document['profiles']}
+        reference = json.loads((ROOT / 'public/data/unit-reference.json').read_text())
+        sidecar = {r['id']: r for r in reference['records'] + reference['profiles']}
+        self.assertEqual(len(reference['sources']), len({s['id'] for s in reference['sources']}))
+        expected = {
+            ('weapons-ge-pz-iii-e', 'armor_protection'): (3, False),
+            ('weapons-ge-pz-iii-e', 'breakdown_shift'): (0, True),
+            ('weapons-ge-7-62cm-pak-r', 'capability_points'): (15, False),
+            ('weapons-ge-marder-iii-sp', 'capability_points'): (25, False),
+            ('aircraft-cw-gladiator-mk-ii-standard', 'air_fuel'): (1, False),
+            ('aircraft-it-cant-z-506b-airone-standard', 'air_range'): (110, False),
+            ('aircraft-ge-bf-110-fighter', 'maneuver'): (30, True),
+            ('aircraft-ge-bf-110-recon-load', 'maneuver'): (28, False),
+            ('support-cw-lrdg-1', 'capability_points'): (50, False),
+            ('support-cw-lrdg-2', 'capability_points'): (50, False),
+            ('support-ge-dska', 'capability_points'): (50, False),
+            ('support-ge-tank-recovery', 'capability_points'): (25, False),
+            ('support-cw-tank-delivery-a', 'capability_points'): (25, False),
+            ('support-cw-tank-delivery-b', 'capability_points'): (25, False),
+            ('support-cw-tank-delivery-c', 'capability_points'): (25, False),
+            ('weapons-it-75-27-gun', 'anti_armor'): (2, True),
+            ('weapons-ge-7-5cm-ig18-light-infantry-gun', 'anti_armor'): (3, True),
+        }
+        for (record, key), pair in expected.items():
+            stat = records[record]['stats'][key]
+            self.assertEqual((stat['value'], stat['conditional']), pair, (record, key))
+        self.assertIn('32 on night missions', records['aircraft-ge-bf-110-fighter']['stats']['maneuver']['note'])
+        self.assertEqual(records['aircraft-ge-bf-109e-standard']['missions'], 'F:day S:day')
+        self.assertEqual(sidecar['aircraft-ge-bf-109e-standard']['missions'], 'F:day S:day')
+        self.assertEqual(records['aircraft-ge-bf-109f-standard']['missions'], 'F:day S:day')
+        self.assertFalse(any(gap.startswith('Pz IIIE shifted') for gap in document['coverage']['gaps']))
+        with closing(catalog.connect(catalog.DATABASE, readonly=True)) as db:
+            for record_id, stat_id, value, status, raw, conditional, evidence in db.execute(
+                    'SELECT record_id,stat_id,value,status,raw,conditional,evidence_id FROM stat_correction'):
+                stat = records[record_id]['stats'][stat_id]
+                projected = sidecar[record_id]['stats'][stat_id]
+                for field, expected_value in [('value', value), ('status', status), ('raw', raw),
+                                              ('conditional', bool(conditional)), ('correction_id', evidence)]:
+                    self.assertEqual(stat[field], expected_value, (record_id, stat_id, field))
+                    self.assertEqual(projected[field], expected_value, (record_id, stat_id, field))
+                self.assertEqual(stat['original_observation'], projected['original_observation'])
+            self.assertEqual(db.execute("SELECT count(*) FROM stat_correction WHERE evidence_id='chart-weapon-dash'").fetchone(), (208,))
+        bofors = records['weapons-cw-light-aa-bofors-40mm']['stats']
+        self.assertEqual(bofors['anti_air']['value'], 1)
+        self.assertIsNone(bofors['barrage']['value'])
+        self.assertIn('not applicable or zero', bofors['barrage']['note'])
+        self.assertNotIn('not numeric zero', bofors['barrage']['note'])
+        self.assertIsNone(records['cw-ee']['stats']['anti_air']['value'])
+        self.assertEqual(records['oa-124-002-13th-light-aa-regt']['stats']['capability_points']['status'], 'unresolved')
+        self.assertFalse(catalog.project_stats(catalog.DATABASE, ROOT / 'public/data/unit-catalog.json', check=True))
 
     def test_reviewed_profiles_are_numeric_cited_and_projected_to_sidecar(self):
         document = json.loads((ROOT / "public/data/unit-catalog.json").read_text())

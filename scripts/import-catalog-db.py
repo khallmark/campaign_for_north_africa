@@ -9,6 +9,7 @@ Examples (from any directory):
   python3 scripts/import-catalog-db.py --project-types # project only classifications into existing JSON
   python3 scripts/import-catalog-db.py --project-types --check # read-only projection parity check
   python3 scripts/import-catalog-db.py --project-profiles # reviewed links/citation notes, never numeric stats
+  python3 scripts/import-catalog-db.py --project-stats # reviewed stat corrections, with original observations
 
 Python 3.11+, SQLite 3.37+ (STRICT tables) and Cargo are required for source import.
 --patch-only requires only Python/SQLite. Images and saves are never embedded.
@@ -381,6 +382,84 @@ def project_profile_links(database, destination, *, check=False):
     return changed
 
 
+def project_stats(database, destination, *, check=False):
+    """Project explicit stat overlays, never a formation's inferred equipment/state.
+
+    Only the public stat fields and citation locators leave the DB. Original
+    observations are retained once, from immutable rows, not from prior exports.
+    Private source text, evidence quotations and arbitrary details are excluded.
+    """
+    document = read_json(destination)
+    require(document["schema_version"] == 1, "Unsupported catalog JSON version")
+    before = json_text(document)
+    sources = {s["id"]: s for s in document["sources"]}
+
+    def add_citation(evidence_id, path, locator):
+        citation = {"id": evidence_id, "title": "Reviewed stat correction", "path": path,
+                    "section": locator, "pdf_page": None, "lines": None,
+                    "note": "Original observation retained alongside the correction."}
+        if evidence_id in sources:
+            require(sources[evidence_id] == citation, f"Correction citation collision: {evidence_id}")
+        else:
+            document["sources"].append(citation)
+            sources[evidence_id] = citation
+
+    with closing(connect(database, readonly=True)) as db:
+        validate(db)
+        records = {}
+        for collection in ("entries", "profiles"):
+            ids = [r[0] for r in db.execute("SELECT id FROM catalog_record WHERE collection=? ORDER BY position", (collection,))]
+            require([r["id"] for r in document[collection]] == ids,
+                    f"Catalog {collection} record order/IDs differ from DB; reconcile before projection")
+            records.update({r["id"]: r for r in document[collection]})
+        for row in db.execute("""
+            SELECT s.record_id,s.stat_id,s.value,s.status,s.raw,s.conditional,s.note,
+                   s.original_source_refs_json,s.evidence_id,
+                   o.value,o.status,o.raw,o.conditional,o.note,e.source_path,e.locator
+            FROM effective_stat s JOIN stat_observation o USING(record_id,stat_id)
+            JOIN correction_evidence e ON e.id=s.evidence_id ORDER BY s.record_id,s.stat_id
+        """):
+            (record_id, stat_id, value, status, raw, conditional, note, refs, evidence_id,
+             original_value, original_status, original_raw, original_conditional, original_note, path, locator) = row
+            record = records[record_id]
+            require(stat_id in record["stats"], f"Corrected stat missing from compatibility record: {record_id}/{stat_id}")
+            require(status in ("sourced", "not_applicable"), f"Unsupported corrected status: {status}")
+            original = {"value": original_value, "status": original_status, "raw": original_raw,
+                        "conditional": bool(original_conditional), "note": original_note,
+                        "source_refs": json.loads(refs)}
+            record["stats"][stat_id] = {
+                "value": value, "status": status, "raw": raw, "conditional": bool(conditional),
+                "note": note, "source_refs": [*original["source_refs"], evidence_id],
+                "correction_id": evidence_id, "original_observation": original,
+            }
+            add_citation(evidence_id, path, locator)
+        for record_id, missions, note, evidence_id, path, locator, explanation in db.execute("""
+            SELECT r.id,json_extract(r.details_json,'$.missions'),r.note,e.id,e.source_path,e.locator,e.note
+            FROM catalog_record r JOIN correction_evidence e ON e.id='mission:' || r.id ORDER BY r.id
+        """):
+            record = records[record_id]
+            require(isinstance(missions, str) and 'missions' in record,
+                    f"Reviewed mission correction lacks compatibility field: {record_id}")
+            record['missions'] = missions
+            record['note'] = note + ' ' + explanation
+            record['source_refs'] = [r[0] for r in db.execute(
+                'SELECT source_id FROM record_source WHERE record_id=? ORDER BY position', (record_id,))] + [evidence_id]
+            add_citation(evidence_id, path, locator)
+        coverage = db.execute("SELECT note FROM correction_evidence WHERE id='catalog-stat-coverage'").fetchone()
+        if coverage:
+            document['coverage']['gaps'] = [coverage[0] if gap.startswith('Pz IIIE shifted chart cells,') else gap
+                                            for gap in document['coverage']['gaps']]
+    changed = json_text(document) != before
+    if check:
+        require(not changed, "Stat projection drift: run python3 scripts/import-catalog-db.py --project-stats")
+    elif changed:
+        with tempfile.TemporaryDirectory(prefix=".catalog-stats-", dir=destination.parent) as directory:
+            candidate = Path(directory) / destination.name
+            candidate.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n")
+            os.replace(candidate, destination)
+    return changed
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--database", type=Path, default=DATABASE, help="Private database path (default data/catalog.sqlite)")
@@ -389,6 +468,7 @@ def main():
     modes.add_argument("--patch-only", action="store_true", help="Apply new SQL patches without source/Cargo prerequisites")
     modes.add_argument("--project-types", action="store_true", help="Copy only DB unit_type values into existing public/data/unit-catalog.json; no sources needed")
     modes.add_argument("--project-profiles", action="store_true", help="Copy reviewed DB profile links and citation notes into existing catalog; no numeric values or private texts")
+    modes.add_argument("--project-stats", action="store_true", help="Copy reviewed stat overlays and citation locators; preserve original observations and exclude private text")
     parser.add_argument("--check", action="store_true", help="Verify the selected import/projection causes no change; never write")
     args = parser.parse_args()
     if args.bootstrap and args.check:
@@ -402,6 +482,10 @@ def main():
         if args.project_profiles:
             changed = project_profile_links(args.database, ROOT / "public/data/unit-catalog.json", check=args.check)
             print(json.dumps({"projection": "reviewed_profile_links", "changed": changed}))
+            return
+        if args.project_stats:
+            changed = project_stats(args.database, ROOT / "public/data/unit-catalog.json", check=args.check)
+            print(json.dumps({"projection": "reviewed_stats", "changed": changed}))
             return
         locks = verify_sources(ROOT) if not args.patch_only else None
 

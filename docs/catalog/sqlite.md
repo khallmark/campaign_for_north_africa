@@ -5,7 +5,7 @@ cache. VASSAL is the import source; numbered SQL files record reviewed correctio
 and small curated changes. Commit the importer/SQL changes and resulting database
 together. The existing JSON files remain compatibility inputs for the current
 frontend; they are **not read by ordinary database imports**. The bounded
-projections below update classifications and reviewed profile links from this database.
+projections below update classifications, reviewed profile links and stat corrections from this database.
 
 ## Import and correction workflow
 
@@ -96,7 +96,47 @@ output. It does not reparse VASSAL independently or use the committed JSON censu
 as the import source. Images remain files: SQLite stores paths, hashes, existence,
 layer labels and source locators, not image bytes or decoded save state.
 
-Add `data/sql/patches/004-<description>.sql` (then 005, etc.). Filenames sort
+### Reviewed stat compatibility projection
+
+```sh
+python3 scripts/import-catalog-db.py --patch-only
+python3 scripts/import-catalog-db.py --project-stats
+python3 scripts/import-unit-data.py
+python3 scripts/import-catalog-db.py --project-stats --check
+```
+
+This mode exports only `stat_correction` overlays, their public citation locators,
+and explicitly evidenced mission corrections. It preserves IDs, ordering, profile
+links and all other cells. Each corrected cell retains its immutable original
+observation and correction ID; private source quotations/documents are not exported.
+The sidecar validates already projected errata instead of applying them twice or
+nesting an already corrected value as the original. Missing cells, reordered IDs,
+citation collisions and conflicting errata fail before atomic replacement.
+The current frontend still needs a Wasm rebuild to display these changes.
+
+This fixes a compatibility gap: the 14 cells from patch 001 formerly reached only
+SQLite and the sidecar, not the viewer's embedded catalog. Patches 004–005 also:
+
+- Recover all seven unresolved special-unit CPAs directly from rules 22.63/22.7
+  and 27.14/27.2: delivery/recovery 25, LRDG/DSKA 50 (base allowances, not current CP).
+- Correct Bf.110 fighter maneuver to 30 normally / 32 at night, and remove Bf.109E
+  dive-bombing capability per incorporated erratum 4.44c. Other configurations remain separate.
+- Mark the two dated gun anti-armor values and seven additional German tank BAR
+  values conditional, preserving their effective-date notes and real zero values.
+- Correct 208 weapon-chart and 146 aircraft-chart dash explanations. Weapon legends
+  say **not applicable or zero**; aircraft dashes cannot be explained by ground-unit
+  weapon attachments. Null dashes are not automatically converted to zero.
+
+Audit coverage: inspected all 81 tank/gun rows against the three VASSAL charts,
+the incorporated stat errata, and the special-unit rules. The VASSAL Pak/Marder
+rows visibly shift columns; explicit CPA errata take priority rather than copying
+the shifted cells. This is **not** an all-formation arrival-loadout transcription or
+an independently repeated visual audit of every aircraft/profile cell. The German
+profile v close-assault print and Italian pp aggregate TOE remain unresolved;
+formation current CPA, assigned equipment, readiness and supply remain scenario data.
+The AA profile dash cannot be replaced with a Bofors rating or the maximum TOE.
+
+Add `data/sql/patches/006-<description>.sql` (then 007, etc.). Filenames sort
 lexically, so keep the padded numbering. Use `counter_correction` for corrected
 counter labels, `stat_correction` for reviewed numeric/not-applicable overrides,
 and `correction_evidence` for exact source path, locator, quotation and rationale.
@@ -210,9 +250,9 @@ authentication or a general sandbox for the repository. Vite's deny rule does
 not filter `public/`, so the no-copy/no-embed boundary above remains essential.
 
 No SQLite browser loader or HTTP endpoint is implemented here. The current UI
-still embeds catalog/inventory JSON at Wasm compile time. Classification changes
-and reviewed profile links reach it only after their bounded projections, sidecar regeneration and Wasm rebuild;
-other SQL corrections still do **not** change that UI. A broader consumer migration
+still embeds catalog/inventory JSON at Wasm compile time. Classification changes,
+reviewed profile links and stat corrections reach it only after their bounded projections,
+sidecar regeneration and Wasm rebuild. Other database fields are not automatically exposed. A broader consumer migration
 must explicitly project allowed columns/rows, omit private text and local
 source-token routes, preserve IDs/redirects/order/null semantics, then change the
 async loading boundary and retire obsolete JSON artifacts. Do not use `SELECT *`

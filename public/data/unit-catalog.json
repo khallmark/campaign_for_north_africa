@@ -7,7 +7,7 @@
     "summary": "Main Organization-at-Arrival identity rows, all 124 national characteristic codes, 81 tank/gun chart rows, 102 aircraft configurations, 132 printed SGSUs, 20 naval counters and counter-only/support supplements. Shared illustrative sprites cover every catalog row. This is not a certified unique historical unit inventory or a playable campaign setup.",
     "gaps": [
       "Initial formation TOE, morale, weapon mixtures, arrival/withdrawal dates, placement, readiness and supply inventories are not transcribed. No row is ready for playable scenario selection.",
-      "OA pages omit the three Italian divisions Sirte, Marmarica and Cirene that appear on counter p.182. Their 41 counter identities have no inferred characteristic profile.",
+      "Counter-origin identities have base-characteristic links where individually reviewed against VASSAL organization charts; current scenario values remain untranscribed.",
       "Some attached, replacement and alternative-organization rows refer to the same historical unit. OA source rows are intentionally not deduplicated; entry count is not a physical-counter count.",
       "Pz IIIE shifted chart cells, 7.62cm Pak and Marder III CPA, Cant Z506B range, Gladiator II fuel, German profile v close assault, and Italian profile pp aggregate TOE remain unresolved where the print is ambiguous or conditional.",
       "Printed chart exceptions and parenthesized values require their rule context. This catalog does not implement augmentation, refits, combat formulas, aircraft mission eligibility or scenario rules.",
@@ -626,6 +626,27 @@
       "pdf_page": 187,
       "lines": null,
       "note": "One-based physical PDF page. Manually transcribed from the scan; OCR is not the numeric authority."
+    },
+    {
+      "id": "vassal-oc-it-61",
+      "title": "VASSAL 2.1.0: 61st Sirte organization chart",
+      "path": "docs/CNAv2.1.0/images/OC IT 61st Sirte Division.png",
+      "section": "ID Code column",
+      "note": "Visually transcribed named rows; links to Italian base characteristic profiles, not current scenario ratings."
+    },
+    {
+      "id": "vassal-oc-it-62",
+      "title": "VASSAL 2.1.0: 62nd Marmarica organization chart",
+      "path": "docs/CNAv2.1.0/images/OC IT 62nd Marmarica Division.png",
+      "section": "ID Code column",
+      "note": "Visually transcribed named rows; the attached LXII(L) tank row has no printed ID code and is not inferred."
+    },
+    {
+      "id": "vassal-oc-it-63",
+      "title": "VASSAL 2.1.0: 63rd Cirene organization chart",
+      "path": "docs/CNAv2.1.0/images/OC IT 63rd Cirene Division.png",
+      "section": "ID Code column",
+      "note": "Visually transcribed named rows; the attached LXIII(L) tank row has no printed ID code and is not inferred."
     }
   ],
   "stat_definitions": [
@@ -70570,10 +70591,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "headquarters",
-      "profile_id": null,
+      "profile_id": "it-b",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -70582,7 +70604,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 61st Sirte Div HQ: b. Base characteristics are in profile it-b; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -70592,7 +70614,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 61st Sirte Div HQ: b. Base characteristics are in profile it-b; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -70604,10 +70626,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "headquarters",
-      "profile_id": null,
+      "profile_id": "it-h",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -70616,7 +70639,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 69th Infantry Regt HQ: h. Base characteristics are in profile it-h; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -70626,7 +70649,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 69th Infantry Regt HQ: h. Base characteristics are in profile it-h; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -70638,10 +70661,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -70650,7 +70674,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: I/69 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -70660,7 +70684,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: I/69 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -70672,10 +70696,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -70684,7 +70709,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: II/69 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -70694,7 +70719,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: II/69 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -70706,10 +70731,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -70718,7 +70744,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: III/69 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -70728,7 +70754,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: III/69 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -70740,10 +70766,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "headquarters",
-      "profile_id": null,
+      "profile_id": "it-h",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -70752,7 +70779,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 70th Infantry Regt HQ: h. Base characteristics are in profile it-h; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -70762,7 +70789,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 70th Infantry Regt HQ: h. Base characteristics are in profile it-h; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -70774,10 +70801,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -70786,7 +70814,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: I/70 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -70796,7 +70824,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: I/70 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -70808,10 +70836,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -70820,7 +70849,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: II/70 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -70830,7 +70859,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: II/70 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -70842,10 +70871,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -70854,7 +70884,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: III/70 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -70864,7 +70894,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: III/70 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -70876,10 +70906,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "machinegun",
-      "profile_id": null,
+      "profile_id": "it-bb",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -70888,7 +70919,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 61st Machinegun Bn: bb. Base characteristics are in profile it-bb; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -70898,7 +70929,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 61st Machinegun Bn: bb. Base characteristics are in profile it-bb; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -70910,10 +70941,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "anti-tank",
-      "profile_id": null,
+      "profile_id": "it-rr",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -70922,7 +70954,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 61st Anti-tank Coy: rr. Base characteristics are in profile it-rr; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -70932,7 +70964,7 @@
         "native_facing_degrees": 150,
         "directional": true
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 61st Anti-tank Coy: rr. Base characteristics are in profile it-rr; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -70944,10 +70976,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "artillery",
-      "profile_id": null,
+      "profile_id": "it-kk",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -70956,7 +70989,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 43rd Artillery Regt: kk. Base characteristics are in profile it-kk; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -70966,7 +70999,7 @@
         "native_facing_degrees": 150,
         "directional": true
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 43rd Artillery Regt: kk. Base characteristics are in profile it-kk; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -70978,10 +71011,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "engineer",
-      "profile_id": null,
+      "profile_id": "it-bbb",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -70990,7 +71024,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 61st Engineer Bn: bbb. Base characteristics are in profile it-bbb; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71000,7 +71034,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 61st Engineer Bn: bbb. Base characteristics are in profile it-bbb; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -71012,10 +71046,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "recon",
-      "profile_id": null,
+      "profile_id": "it-aaa",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-61"
       ],
       "stats": {
         "capability_points": {
@@ -71024,7 +71059,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 61st Bersaglieri Mitrg Coy: aaa. Base characteristics are in profile it-aaa; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71034,7 +71069,7 @@
         "native_facing_degrees": 145,
         "directional": true
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 61st Bersaglieri Mitrg Coy: aaa. Base characteristics are in profile it-aaa; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "61 Sirte Division",
       "identity_scope": "counter"
@@ -71046,10 +71081,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "headquarters",
-      "profile_id": null,
+      "profile_id": "it-b",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-62"
       ],
       "stats": {
         "capability_points": {
@@ -71058,7 +71094,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 62nd Marmarica Div HQ: b. Base characteristics are in profile it-b; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71068,7 +71104,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 62nd Marmarica Div HQ: b. Base characteristics are in profile it-b; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "62 Marmarica Division",
       "identity_scope": "counter"
@@ -71080,10 +71116,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "headquarters",
-      "profile_id": null,
+      "profile_id": "it-h",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-62"
       ],
       "stats": {
         "capability_points": {
@@ -71092,7 +71129,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 115th Infantry Regt HQ: h. Base characteristics are in profile it-h; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71102,7 +71139,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 115th Infantry Regt HQ: h. Base characteristics are in profile it-h; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "62 Marmarica Division",
       "identity_scope": "counter"
@@ -71114,10 +71151,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-62"
       ],
       "stats": {
         "capability_points": {
@@ -71126,7 +71164,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: I/115 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71136,7 +71174,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: I/115 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "62 Marmarica Division",
       "identity_scope": "counter"
@@ -71148,10 +71186,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-62"
       ],
       "stats": {
         "capability_points": {
@@ -71160,7 +71199,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: II/115 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71170,7 +71209,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: II/115 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "62 Marmarica Division",
       "identity_scope": "counter"
@@ -71182,10 +71221,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-62"
       ],
       "stats": {
         "capability_points": {
@@ -71194,7 +71234,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: III/115 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71204,7 +71244,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: III/115 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "62 Marmarica Division",
       "identity_scope": "counter"
@@ -71216,10 +71256,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "headquarters",
-      "profile_id": null,
+      "profile_id": "it-h",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-62"
       ],
       "stats": {
         "capability_points": {
@@ -71228,7 +71269,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 116th Infantry Regt HQ: h. Base characteristics are in profile it-h; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71238,7 +71279,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 116th Infantry Regt HQ: h. Base characteristics are in profile it-h; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "62 Marmarica Division",
       "identity_scope": "counter"
@@ -71250,10 +71291,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-62"
       ],
       "stats": {
         "capability_points": {
@@ -71262,7 +71304,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: I/116 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71272,7 +71314,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: I/116 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "62 Marmarica Division",
       "identity_scope": "counter"
@@ -71284,10 +71326,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-62"
       ],
       "stats": {
         "capability_points": {
@@ -71296,7 +71339,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: II/116 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71306,7 +71349,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: II/116 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "62 Marmarica Division",
       "identity_scope": "counter"
@@ -71318,10 +71361,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-62"
       ],
       "stats": {
         "capability_points": {
@@ -71330,7 +71374,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: III/116 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71340,7 +71384,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: III/116 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "62 Marmarica Division",
       "identity_scope": "counter"
@@ -71352,10 +71396,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "machinegun",
-      "profile_id": null,
+      "profile_id": "it-bb",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-62"
       ],
       "stats": {
         "capability_points": {
@@ -71364,7 +71409,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 62nd Machinegun Bn: bb. Base characteristics are in profile it-bb; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71374,7 +71419,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 62nd Machinegun Bn: bb. Base characteristics are in profile it-bb; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "62 Marmarica Division",
       "identity_scope": "counter"
@@ -71386,10 +71431,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "anti-tank",
-      "profile_id": null,
+      "profile_id": "it-rr",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-62"
       ],
       "stats": {
         "capability_points": {
@@ -71398,7 +71444,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 62nd Anti-tank Coy: rr. Base characteristics are in profile it-rr; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71408,7 +71454,7 @@
         "native_facing_degrees": 150,
         "directional": true
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 62nd Anti-tank Coy: rr. Base characteristics are in profile it-rr; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "62 Marmarica Division",
       "identity_scope": "counter"
@@ -71420,10 +71466,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "artillery",
-      "profile_id": null,
+      "profile_id": "it-kk",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-62"
       ],
       "stats": {
         "capability_points": {
@@ -71432,7 +71479,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 44th Artillery Regt: kk. Base characteristics are in profile it-kk; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71442,7 +71489,7 @@
         "native_facing_degrees": 150,
         "directional": true
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 44th Artillery Regt: kk. Base characteristics are in profile it-kk; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "62 Marmarica Division",
       "identity_scope": "counter"
@@ -71454,10 +71501,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "engineer",
-      "profile_id": null,
+      "profile_id": "it-bbb",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-62"
       ],
       "stats": {
         "capability_points": {
@@ -71466,7 +71514,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 62nd Engineer Bn: bbb. Base characteristics are in profile it-bbb; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71476,7 +71524,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 62nd Engineer Bn: bbb. Base characteristics are in profile it-bbb; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "62 Marmarica Division",
       "identity_scope": "counter"
@@ -71488,10 +71536,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "headquarters",
-      "profile_id": null,
+      "profile_id": "it-b",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71500,7 +71549,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 63rd Cirene Div HQ: b. Base characteristics are in profile it-b; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71510,7 +71559,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 63rd Cirene Div HQ: b. Base characteristics are in profile it-b; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"
@@ -71522,10 +71571,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "headquarters",
-      "profile_id": null,
+      "profile_id": "it-h",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71534,7 +71584,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 157th Infantry Regt HQ: h. Base characteristics are in profile it-h; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71544,7 +71594,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 157th Infantry Regt HQ: h. Base characteristics are in profile it-h; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"
@@ -71556,10 +71606,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71568,7 +71619,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: I/157 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71578,7 +71629,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: I/157 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"
@@ -71590,10 +71641,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71602,7 +71654,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: II/157 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71612,7 +71664,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: II/157 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"
@@ -71624,10 +71676,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71636,7 +71689,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: III/157 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71646,7 +71699,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: III/157 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"
@@ -71658,10 +71711,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "headquarters",
-      "profile_id": null,
+      "profile_id": "it-h",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71670,7 +71724,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 158th Infantry Regt HQ: h. Base characteristics are in profile it-h; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71680,7 +71734,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 158th Infantry Regt HQ: h. Base characteristics are in profile it-h; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"
@@ -71692,10 +71746,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71704,7 +71759,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: I/158 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71714,7 +71769,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: I/158 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"
@@ -71726,10 +71781,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71738,7 +71794,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: II/158 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71748,7 +71804,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: II/158 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"
@@ -71760,10 +71816,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "infantry",
-      "profile_id": null,
+      "profile_id": "it-u",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71772,7 +71829,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: III/158 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71782,7 +71839,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: III/158 Infantry Bn: u. Base characteristics are in profile it-u; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"
@@ -71794,10 +71851,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "machinegun",
-      "profile_id": null,
+      "profile_id": "it-bb",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71806,7 +71864,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 63rd Machinegun Bn: bb. Base characteristics are in profile it-bb; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71816,7 +71874,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 63rd Machinegun Bn: bb. Base characteristics are in profile it-bb; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"
@@ -71828,10 +71886,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "anti-tank",
-      "profile_id": null,
+      "profile_id": "it-rr",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71840,7 +71899,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 63rd Anti-tank Coy: rr. Base characteristics are in profile it-rr; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71850,7 +71909,7 @@
         "native_facing_degrees": 150,
         "directional": true
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 63rd Anti-tank Coy: rr. Base characteristics are in profile it-rr; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"
@@ -71862,10 +71921,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "artillery",
-      "profile_id": null,
+      "profile_id": "it-kk",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71874,7 +71934,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 45th Artillery Regt: kk. Base characteristics are in profile it-kk; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71884,7 +71944,7 @@
         "native_facing_degrees": 150,
         "directional": true
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 45th Artillery Regt: kk. Base characteristics are in profile it-kk; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"
@@ -71896,10 +71956,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "engineer",
-      "profile_id": null,
+      "profile_id": "it-bbb",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71908,7 +71969,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 63rd Engineer Bn: bbb. Base characteristics are in profile it-bbb; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71918,7 +71979,7 @@
         "native_facing_degrees": 150,
         "directional": false
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 63rd Engineer Bn: bbb. Base characteristics are in profile it-bbb; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"
@@ -71930,10 +71991,11 @@
       "side": "axis",
       "nationality": "italian",
       "unit_type": "recon",
-      "profile_id": null,
+      "profile_id": "it-aaa",
       "verification": "verified",
       "source_refs": [
-        "scan-182"
+        "scan-182",
+        "vassal-oc-it-63"
       ],
       "stats": {
         "capability_points": {
@@ -71942,7 +72004,7 @@
           "source_refs": [
             "scan-182"
           ],
-          "note": "No associated OA/characteristics ID code located; counter-side numerals are stacking values, not CPA.",
+          "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 63rd Bersaglieri Mitrg Coy: aaa. Base characteristics are in profile it-aaa; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
           "raw": "?",
           "conditional": false
         }
@@ -71952,7 +72014,7 @@
         "native_facing_degrees": 145,
         "directional": true
       },
-      "note": "Counter-only identity. Division name expanded from printed abbreviation. No profile or numerical characteristics inferred.",
+      "note": "Counter-origin identity. Reviewed VASSAL ID-code row: 63rd Bersaglieri Mitrg Coy: aaa. Base characteristics are in profile it-aaa; current/scenario CPA remains unresolved. Original counter numerals are stacking values, not CPA.",
       "playable": false,
       "formation": "63 Cirene Division",
       "identity_scope": "counter"

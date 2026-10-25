@@ -31,6 +31,7 @@ fn fixture() -> (GameState, BTreeSet<cna_catalog::CanonicalUnitId>) {
         revision: 0,
         calendar: Calendar::new(1, 1).unwrap(),
         mode: Mode::DetailedLogisticsAbstractAir58,
+        initiative: None,
         instances: BTreeMap::from([
             ("fixture-a".into(), unit.clone()),
             ("fixture-b".into(), unit),

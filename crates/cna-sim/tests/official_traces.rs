@@ -17,6 +17,7 @@ mod official {
                 revision,
                 calendar: Calendar::new(1, 1).unwrap(),
                 mode: Mode::DetailedLogisticsAbstractAir58,
+                initiative: None,
                 instances: BTreeMap::new(),
                 organizations: BTreeMap::new(),
                 cargo_batches: BTreeMap::from([(

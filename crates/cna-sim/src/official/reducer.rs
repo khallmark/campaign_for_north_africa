@@ -186,7 +186,7 @@ impl<E> Transaction<E> {
     }
 }
 
-/// The only shipped kernel payload/event. No official game rule executes here.
+/// Diagnostic kernel payload/event. No game rule executes in this kernel.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Noop {}

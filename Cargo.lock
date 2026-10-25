@@ -93,6 +93,7 @@ dependencies = [
  "cna-map",
  "serde",
  "serde_json",
+ "sha2",
 ]
 
 [[package]]

@@ -1,13 +1,21 @@
 //! Coverage checking only: evidence content and rule interpretation need review.
-use serde::{de::DeserializeOwned, Deserialize};
+#[path = "rules-ledger/index.rs"]
+mod index;
+
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use std::{collections::BTreeMap, fs, path::Path};
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
 const HELP: &str = "rules-ledger --check [--section N] [--require STATUS,...] [--check-pages]
 rules-ledger --check-pages
+rules-ledger --rebuild-index --check-index
+rules-ledger --check-index [--data-dir PATH]
 
-Read-only checks; no prompts or generated ledger rows.
+Checks are read-only; only --rebuild-index writes files. No generated ledger rows.
+  --rebuild-index   Rebuild data/rules/case-index.json and docs/rules/coverage.md
+                    from pinned extracts; cannot combine with --data-dir
+  --check-index     Check extract hashes, source-lock fingerprints and index/coverage
   --section N       Check completeness/status in section 1–65 (default all)
   --require LIST    Minimum ordinary status; not_applicable is a separate opt-in
   --check-pages     Check image-only page records; report explicit pending pages
@@ -17,13 +25,14 @@ Read-only checks; no prompts or generated ledger rows.
 Statuses: unread, compared, fixtures, implemented, verified, not_applicable
 Inputs: case-index.json, ledger.json; evidence-index.json for --check-pages
 Examples:
+  cargo run -p cna-sim --bin rules-ledger -- --rebuild-index --check-index
   cargo run -p cna-sim --bin rules-ledger -- --check --section 8 --require verified
   cargo run -p cna-sim --bin rules-ledger -- --check --require verified,not_applicable --check-pages
   rules-ledger --check --data-dir /tmp/review-fixture
 Exit 0 means requested checks pass, 1 means invalid input or failed checks.
 Pending page records are accounted for, NOT certified transcriptions.";
 
-#[derive(Clone, Copy, Debug, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
 enum Book {
     L21,
     AL21,
@@ -41,15 +50,15 @@ enum Status {
     NotApplicable,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 struct Case {
     case: String,
     section: u8,
     book: Book,
     page: u16,
-    // Index extraction can preserve noisy source labels without changing the key.
-    #[serde(default)]
+    // Preserve source spelling when an explicit indexing alias supplies the key.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     raw_label: Option<String>,
 }
 
@@ -251,6 +260,7 @@ fn run(args: &[String]) -> Result<()> {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let mut data_dir = root.join("data/rules");
     let (mut ledger_check, mut pages) = (false, false);
+    let (mut rebuild_index, mut check_index, mut custom_data_dir) = (false, false, false);
     let mut section = None;
     let mut required = Vec::new();
     let mut args = args.iter();
@@ -258,6 +268,8 @@ fn run(args: &[String]) -> Result<()> {
         match arg.as_str() {
             "--check" => ledger_check = true,
             "--check-pages" => pages = true,
+            "--rebuild-index" => rebuild_index = true,
+            "--check-index" => check_index = true,
             "--section" => {
                 let n = args
                     .next()
@@ -279,15 +291,26 @@ fn run(args: &[String]) -> Result<()> {
                     )?);
                 }
             }
-            "--data-dir" => data_dir = args.next().ok_or("--data-dir needs a path")?.into(),
+            "--data-dir" => {
+                data_dir = args.next().ok_or("--data-dir needs a path")?.into();
+                custom_data_dir = true;
+            }
             _ => return Err(format!("unknown option {arg}; see --help").into()),
         }
     }
     if !ledger_check && (section.is_some() || !required.is_empty()) {
         return Err("--section/--require need --check".into());
     }
-    if !ledger_check && !pages {
-        return Err("choose --check or --check-pages; see --help".into());
+    if rebuild_index && custom_data_dir {
+        return Err("--rebuild-index writes repository outputs; omit --data-dir".into());
+    }
+    if !ledger_check && !pages && !rebuild_index && !check_index {
+        return Err(
+            "choose --check, --check-pages, --check-index or --rebuild-index; see --help".into(),
+        );
+    }
+    if rebuild_index || check_index {
+        index::run(&root, &data_dir, rebuild_index, check_index)?;
     }
     if ledger_check {
         let count = check(

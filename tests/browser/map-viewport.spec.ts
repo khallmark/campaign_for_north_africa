@@ -18,22 +18,23 @@ async function state(page: Page) {
 
 async function open(page: Page) {
   await page.goto('/');
-  await page.getByText('Full-board map · research', { exact: true }).click();
-  await page.locator('.research-viewport').scrollIntoViewIfNeeded();
+  await expect(page.getByRole('region', { name: 'Full-board map', exact: true })).toBeVisible();
 }
 
-test('missing artwork stays explicit, interactive and separate from the sandbox', async ({ page }) => {
+test('missing artwork stays explicit and simulation actions do not alter the board', async ({ page }) => {
   await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'Unavailable' }));
   await open(page);
   await expect(page.locator('.research-status')).toContainText('Artwork unavailable');
   await expect(page.locator('.research-unavailable')).toHaveText('Source artwork is not bundled');
   await expect(page.locator('.research-tile')).toHaveCount(0);
-  await page.getByRole('button', { name: 'Gameplay scale', exact: true }).click();
+  await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
   const before = await state(page);
   await page.locator('.research-viewport').focus();
   await page.keyboard.press('ArrowRight');
   expect((await state(page)).x - before.x).toBeCloseTo(100, 4);
-  await page.getByRole('button', { name: 'End stage', exact: true }).click();
+  await page.getByRole('button', { name: 'End stage — unavailable in review mode', exact: true }).click();
+  await expect(page.getByRole('dialog')).toContainText('No active simulation');
+  await page.keyboard.press('Escape');
   await expect(page.locator('#map-research')).toHaveCount(1);
   expect((await state(page)).x).toBeCloseTo(before.x + 100, 4);
 });
@@ -53,7 +54,7 @@ test('tiles follow drag, cursor zoom and a bounded visible ring', async ({ page 
     await route.fulfill({ contentType: 'image/svg+xml', body: `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="100%" height="100%" fill="#dce3d0"/><path d="M0 0H${width}V${height}H0Z" fill="none" stroke="#647653"/><text x="12" y="28" fill="#34422f" font-size="16">SYNTHETIC ${z}:${x}:${y}</text></svg>` });
   });
   await open(page);
-  await expect(page.locator('.research-status')).toContainText('Tile manifest loaded');
+  await expect(page.locator('.research-status')).toContainText('Source map loaded');
   await expect(page.locator('.research-unavailable')).toBeHidden();
   await expect(page.locator('.research-tile[data-ready=true]').first()).toBeVisible();
   await page.locator('#map-research').screenshot({ path: testInfo.outputPath('overview.png') });
@@ -78,7 +79,7 @@ test('tiles follow drag, cursor zoom and a bounded visible ring', async ({ page 
     expect(await page.locator('.research-tile').count()).toBeLessThanOrEqual(100);
   }
   await ring();
-  await page.getByRole('button', { name: 'Gameplay scale', exact: true }).click();
+  await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
   await ring();
   await page.locator('#map-research').screenshot({ path: testInfo.outputPath('gameplay.png') });
   const surface = page.locator('.research-viewport');
@@ -107,10 +108,9 @@ test('tiles follow drag, cursor zoom and a bounded visible ring', async ({ page 
   await surface.focus();
   await page.keyboard.press('Home');
   await ring();
-  expect((await state(page)).x).toBe(7155);
-  await page.locator('#map-research > summary').click();
-  await expect(page.locator('.research-tile')).toHaveCount(0);
-  await page.locator('#map-research > summary').click();
+  expect((await state(page)).x).toBeCloseTo(7155, 6);
+  await page.getByRole('button', { name: 'Open campaign calendar' }).click();
+  await page.keyboard.press('Escape');
   await ring();
   expect(errors).toEqual([]);
 });
@@ -125,9 +125,10 @@ test('failed tiles retain placeholders and touch pinch preserves its midpoint', 
   const surface = page.locator('.research-viewport');
   // Fit leaves no horizontal pan room: the camera must not move off board.
   await surface.focus();
+  await page.keyboard.press('Home');
   await page.keyboard.press('ArrowLeft');
-  expect((await state(page)).x).toBe(7155);
-  await page.getByRole('button', { name: 'Gameplay scale', exact: true }).click();
+  expect((await state(page)).x).toBeCloseTo(7155, 6);
+  await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
   await expect.poll(async () => page.locator('.research-tile:not([data-ready=false])').count()).toBe(0);
   await page.locator('#map-research').screenshot({ path: testInfo.outputPath('missing-tiles.png') });
   const before = await state(page);

@@ -1,3 +1,4 @@
+mod board;
 mod catalog;
 mod catalog_view;
 mod inspect;
@@ -367,6 +368,12 @@ fn focus_selector(e: &Element) -> Option<String> {
 
 #[wasm_bindgen(start)]
 pub fn start() -> Result<(), JsValue> {
+    board::mount()
+}
+
+// Retained teaching implementation, deliberately not mounted on the full board.
+#[allow(dead_code)]
+fn mount_training() -> Result<(), JsValue> {
     APP.with(|app| app.borrow_mut().render());
     map::mount_research()?;
     let root = document().get_element_by_id("app").unwrap();

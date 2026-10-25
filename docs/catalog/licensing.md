@@ -9,6 +9,7 @@ This is a distribution decision record, **not a copyright license or legal deter
 | Original manual scans and OCR copies | Supplied `docs/The Campaign for North Africa*.pdf`, `docs/rules.txt` | Private reference and source verification | Public republication permission not documented |
 | VASSAL PDFs, text and incorporated errata | Supplied module root `.pdf`/`.txt` files | Private reference and extraction | Attribution and redistribution terms require review; not presumed cleared by module availability |
 | Derived text/transcriptions | `data/sources/vassal-2.1-document-text.json`, evidence JSON, supplemental reference data | Private development/review, with source hashes and confidence labels | Extraction is not rights clearance. Review quotations/descriptions and extracted text before a public release |
+| Committed reference database | `data/catalog.sqlite`, importing VASSAL metadata, manual observations, private extracted text and SQL corrections | Private repository and offline reference queries | Not a public/runtime bundle; exclude from `public/`, `dist/` and Wasm. Any future consumer projection needs explicit field selection and distribution review |
 | Generated artwork | Existing `public/sprites/` illustrations; provenance in sprite manifests and `docs/unit-identities.md` | Existing application/private review, clearly labeled generated | No third-party scanned-token permission inferred; historical accuracy and generated-output rights require their own review |
 
 ## Serving boundary

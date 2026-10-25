@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "interpretation": "Reviewed source associations, not identity merges or scenario instances. A link requires the specified label, organization board, nationality/side and existing manual identity citation. Palette copies remain separate GPIDs. Numeric CPA checks do not certify footnote glyphs or all other columns.",
+  "link_groups": [
+    {
+      "nationality": "commonwealth",
+      "formation_context": "1st Armored Division",
+      "vassal_board": "BR 1st Armoured Division",
+      "manual_source": "scan-116",
+      "units": {
+        "1st-armored-div-hq": ["3634", "BR 1 - none"],
+        "2nd-armored-bde-hq": ["3700", "BR 2 - 1"],
+        "2nd-bays": ["3702", "BR 2 Bays - 2-1"],
+        "10th-royal-hussars": ["3657", "BR 10 Hus - 2-1"],
+        "9th-lancers": ["3821", "BR 9 Lanc - 2-1"],
+        "1st-rifle-brigade": ["3698", "BR 1RflBde - 2-1"],
+        "1st-support-group-hq": ["3649", "BR 1 Spt - 1"],
+        "2nd-krrc": ["3721", "BR 2KRRC - 1Spt-1"],
+        "76th-anti-tank-regt": ["3806", "BR 76 - 1Spt-1"],
+        "11th-royal-horse-arty": ["3667", "BR 11 RHA - 1Spt-1"],
+        "61st-light-aa-regt": ["3785", "BR 61 LAA - 1Spt-1"],
+        "12th-lancers-bn": ["3675", "BR 12Lancr"]
+      }
+    },
+    {
+      "nationality": "commonwealth",
+      "formation_context": "2nd Armored Division",
+      "vassal_board": "BR 2nd Armoured Division",
+      "manual_source": "scan-117",
+      "units": {
+        "2nd-armored-div-hq": ["3701", "BR 2 - none"],
+        "1st-armored-bde-hq": ["3633", "BR 1 - 2"],
+        "4th-hussars": ["3741", "BR 4 Hus - 1-2"],
+        "3rd-royal-tank-regt": ["3732", "BR 3 RTR - 1-2"],
+        "3rd-armored-bde-hq": ["3727", "BR 3 - 2"],
+        "32nd-army-tank-bde-hq": ["3734", "BR 32 Army - 2"],
+        "5th-royal-tank-regt": ["3760", "BR 5 RTR - 3-2"],
+        "2nd-support-group-hq": ["3726", "BR 2SPt - 2"],
+        "1st-tower-hamlet-rifles": ["3650", "BR 1 THRf - 2SPt-2"],
+        "1st-rangers": ["3697", "BR 1Ranger - 2SPt-2"],
+        "2nd-royal-horse-arty": ["3708", "BR 2 RHA - 2SPt-2"],
+        "kings-dragoon-guards": ["3825", "BR KDGd - 2Spt-2"]
+      }
+    },
+    {
+      "nationality": "commonwealth",
+      "formation_context": "7th Armored Division",
+      "vassal_board": "BR 7th Armoured Division",
+      "manual_source": "scan-117",
+      "units": {
+        "7th-armored-div-hq-engineering": ["3795", "BR 7 - none"],
+        "4th-armored-bde-hq": ["3737", "BR 4 - 7"],
+        "6th-royal-tank-regt": ["3781", "BR 6 RTR - 4-7"],
+        "7th-queens-own-hussars": ["3797", "BR 7 Hus - 4-7"],
+        "7th-armored-bde-hq": ["3794", "BR 7 - 7"],
+        "1st-royal-tank-regt": ["3648", "BR 1 RTR - 7-7"],
+        "8th-hussars": ["3815", "BR 8 Hus - 7-7"],
+        "7th-support-group-hq": ["3801", "BR 7 Spt - 7"],
+        "7th-motor-bde-hq": ["3799", "BR 7 Mtr - 7"],
+        "1st-krrc": ["3644", "BR 1 KRRC - 7Spt-7"],
+        "2nd-rifle-brigade": ["3723", "BR 2RflBde - 7Spt-7"],
+        "3rd-ryl-horse-arty": ["3731", "BR 3 RHA - 7Spt-7"],
+        "4th-ryl-horse-arty": ["3742", "BR 4 RHA - 7Spt-7"],
+        "11th-hussars": ["3665", "BR 11 Hus - 7Spt-7"]
+      }
+    },
+    {
+      "nationality": "commonwealth",
+      "formation_context": "8th Armored Division",
+      "vassal_board": "BR 8th Armoured Division",
+      "manual_source": "scan-118",
+      "units": {
+        "40th-royal-tank-regt": ["3745", "BR 40 RTR - 23-8"],
+        "46th-royal-tank-regt": ["3752", "BR 46 RTR - 23-8"],
+        "50th-royal-tank-regt": ["3765", "BR 50 RTR - 23-8"],
+        "7th-rifle-brigade": ["3810", "BR 7RflBde - 23-8"],
+        "11th-krrc": ["3666", "BR 11 KRRC - 24-8"],
+        "2nd-derbyshire-yeomanry": ["3720", "BR 2DerYeo - 8"]
+      }
+    },
+    {
+      "nationality": "commonwealth",
+      "formation_context": "44th (Home Counties) Infantry Division",
+      "vassal_board": "BR 44th (Home Countries) Infantry Division",
+      "manual_source": "scan-118",
+      "units": {
+        "1-5-queens": ["3652", "BR 1-5 Qns - 131-44"],
+        "1-6-queens": ["3653", "BR 1-6 Qns - 131-44"],
+        "1-7-queens": ["3654", "BR 1-7 Qns - 131-44"]
+      }
+    },
+    {
+      "nationality": "italian",
+      "formation_context": "132nd Ariete Divisione Corazzata",
+      "vassal_board": "IT 132nd Ariete Divisione Corazzata (Armored)",
+      "manual_source": "scan-147",
+      "units": {
+        "ariete-132nd-div-hq-engineering": ["4681", "IT Ariete - none"],
+        "vii-m-tank-bn": ["4684", "IT VII(M) - 132-Ariete"],
+        "viii-m-tank-bn": ["4685", "IT VIII(M) - 132-Ariete"],
+        "reco-nizza-cavalleria": ["4683", "IT NizCav - Ariete"]
+      }
+    },
+    {
+      "nationality": "italian",
+      "formation_context": "133rd Littorio Divisione Corazzata",
+      "vassal_board": "IT 133rd Littoria Divisione Corazzata (Armored)",
+      "manual_source": "scan-148",
+      "units": {"reco-lanceria-di-novara": ["4692", "IT LancNov - Littorio"]}
+    },
+    {
+      "nationality": "italian",
+      "formation_context": "16th Pistoia Division (Semi-motorized)",
+      "vassal_board": "IT 16th Pistoia Division",
+      "manual_source": "scan-149",
+      "units": {
+        "i-35-infantry-bn": ["4519", "IT I-35 - 16 Pist"],
+        "ii-35-infantry-bn": ["4521", "IT II-35 - 16 Pist"],
+        "16th-engineer-bn": ["4513", "IT 16 - 16 Pist"]
+      }
+    },
+    {
+      "nationality": "german",
+      "formation_context": "5th Light Panzer Division (later 21st Panzer Division)",
+      "vassal_board": "GE 5th Light Panzer Division",
+      "manual_source": "scan-162",
+      "units": {
+        "i-5-panzer-bn": ["3167", "GE I-5 - 5 Le"],
+        "ii-5-panzer-bn": ["3086", "GE 2-5 - 5 Le"],
+        "3rd-aufklarungs-bn": ["3099", "GE 3 - 5 Le"]
+      }
+    },
+    {
+      "nationality": "german",
+      "formation_context": "15th Panzer Division",
+      "vassal_board": "GE 15th Panzer Division",
+      "manual_source": "scan-163",
+      "units": {
+        "15th-panzer-div-hq": ["3073", "GE 15 - none"],
+        "i-104-schutzen-bn": ["3154", "GE I-104 - 15"],
+        "ii-104-schutzen-bn": ["3176", "GE II-104 - 15"],
+        "33rd-aufklarungs-bn": ["3102", "GE 33 - 15 (ACAV)"],
+        "33rd-pioneer-bn": ["3105", "GE 33 - 15 (ENG)"]
+      }
+    }
+  ],
+  "profile_cpa_checks": [
+    {
+      "prefix": "cw",
+      "vassal_image": "Allied Unit Characteristics Chart.png",
+      "manual_pages": [133, 134],
+      "values": "a=30;b=30*;c=30;d=20*;e=20;f=20;g=25;h=15;j=15;k=10;l=10+;m=10;n=10+;p=10;q=10;r=10;s=10;t=10;u=8;v=10+;w=8;x=20;y=20;z=15;aa=15;bb=15;cc=15;dd=15;ee=15;ff=15;gg=15;hh=45;jj=45;kk=45;ll=45;mm=45;nn=45;pp=45;qq=45;rr=45;ss=45;tt=35;uu=25",
+      "scope": "Numeric CPA compared visually in VASSAL chart and original manual pages. Original g marker and c ID marker are degraded; only scalar values are verified. Existing profile conditions/notes remain authoritative pending glyph reconciliation."
+    },
+    {
+      "prefix": "ge",
+      "vassal_image": "German Unit Characteristics Chart.png",
+      "manual_pages": [137],
+      "values": "a=60;b=30;c=30†;d=30†;e=30;f=25;g=25;h=10;j=10+‡;k=10+;l=10;m=10+;n=8+;p=8+;q=8+;r=25;s=10;t=8;u=20;v=20;w=20;x=20;y=20;z=15**;aa=15;bb=15;cc=15;dd=15;ee=45;ff=45;gg=25",
+      "scope": "Numeric CPA compared visually in VASSAL chart and original manual. Marker typography differs (c/d dagger versus double-star; j dagger glyph uncertain). ID b/e star is not a CPA multiplier. Only scalar values verified; conditions retained."
+    },
+    {
+      "prefix": "it",
+      "vassal_image": "Italian Unit Characteristics Chart.png",
+      "manual_pages": [169, 170],
+      "values": "a=45;b=30;c=30*;d=30*;e=30*;f=20;g=20;h=20*;j=20*;k=30;l=30;m=10;n=25;p=15;q=15;r=15;s=10;t=10+;u=10;v=10;w=10+;x=10;y=8;z=8;aa=8;bb=8;cc=25;dd=15;ee=15;ff=15;gg=10;hh=8+;jj=15;kk=15;ll=15;mm=15;nn=15;pp=0;qq=15;rr=15;ss=15;tt=15;uu=15;vv=45;ww=45;xx=35;yy=15;zz=10;aaa=25;bbb=25",
+      "scope": "Numeric CPA compared visually in VASSAL chart and original manual. The genuine pp zero is retained; starred CPA and motorization plus marks are conditions, not arithmetic."
+    }
+  ],
+  "organization_checks": {
+    "vassal_image": "BR 1st Armoured Division.png",
+    "manual_source": "scan-116",
+    "formation_context": "1st Armored Division",
+    "basic_morale_raw": "+2 (+1)",
+    "scope": "Organization-at-arrival reference, not live scenario state. Equipment quantities are TOE points, never literal vehicle counts. N is preserved as source notation, not zero or a guessed maximum. Parenthesized morale conditions not flattened.",
+    "description": "The 1st Armored Division was formed along the new (armored division type III) lines. However, even here — as with most armored divisions in the desert — the formation's organization is mixed up. For example, there is a motorized rifle unit assigned directly to the armored brigade, and the Support Brigade Group is understrength and confused. The 22nd Armored Brigade was originally destined for this division, but it became assigned to the 7th Armored Division instead.",
+    "description_status": "vassal_transcription",
+    "rows": {
+      "1st-armored-div-hq": ["1 × Stuart", "3/56"],
+      "2nd-armored-bde-hq": ["1 × Stuart", "3/58"],
+      "2nd-bays": ["8 × Crusader Mk I, 2 × A13", "3/58"],
+      "10th-royal-hussars": ["9 × Crusader Mk I, 1 × A13", "3/58"],
+      "9th-lancers": ["10 × Stuarts", "3/58"],
+      "1st-rifle-brigade": ["N", "3/58"],
+      "1st-support-group-hq": ["N", "3/59"],
+      "2nd-krrc": ["N", "3/59"],
+      "76th-anti-tank-regt": ["8 × 2-pounders", "3/59"],
+      "11th-royal-horse-arty": ["6 × 25-pounders", "3/59"],
+      "61st-light-aa-regt": ["6 × Light AA", "3/59"],
+      "12th-lancers-bn": ["N", "3/58"]
+    },
+    "disagreements": "Original scan text is degraded around 11th RHA name and 61st LAA profile code; VASSAL reads11th and ee. Existing identities preserved; no profile reassignment inferred from degraded text. TOE/equipment and arrival rows agree visually."
+  },
+  "errata": [
+    {
+      "id": "sep79-4.49-pz-iii-e",
+      "record_id": "weapons-ge-pz-iii-e",
+      "source_path": "docs/CNAv2.1.0/incorporated errata.txt",
+      "locator": "[4.49]",
+      "quote": "The correct values for the German PzIIIE\nare 25 1 - 4 - 3 4/4 3 0 (reading across).",
+      "values": {"capability_points": 25, "anti_air": 1, "barrage": null, "anti_armor": 4, "vulnerability": null, "armor_protection": 3, "close_assault_offensive": 4, "close_assault_defensive": 4, "fuel_rate": 3, "breakdown_shift": 0},
+      "conditional_fields": ["breakdown_shift"],
+      "note": "VASSAL corrected chart agrees. Original manual row is shifted/degraded; original observations remain in source records. BAR1R until1/31 still applies; zero is later base BAR, not all dates."
+    },
+    {
+      "id": "sep79-4.49-pak-cpa",
+      "record_id": "weapons-ge-7-62cm-pak-r",
+      "source_path": "docs/CNAv2.1.0/incorporated errata.txt",
+      "locator": "[4.49]",
+      "quote": "The CPA for the 7.62cm Pak(R) is \"15\";for the\nMarder, \"25\".",
+      "values": {"capability_points": 15},
+      "note": "Original CPA unresolved. VASSAL chart agrees with errata CPA; other VASSAL row columns visibly misaligned, so only CPA is corrected here."
+    },
+    {
+      "id": "sep79-4.49-marder-cpa",
+      "record_id": "weapons-ge-marder-iii-sp",
+      "source_path": "docs/CNAv2.1.0/incorporated errata.txt",
+      "locator": "[4.49]",
+      "quote": "The CPA for the 7.62cm Pak(R) is \"15\";for the\nMarder, \"25\".",
+      "values": {"capability_points": 25},
+      "note": "Original CPA unresolved. VASSAL chart agrees with errata CPA; other VASSAL row columns visibly misaligned, so only CPA is corrected here."
+    },
+    {
+      "id": "sep79-4.44a-gladiator-fuel",
+      "record_id": "aircraft-cw-gladiator-mk-ii-standard",
+      "source_path": "docs/CNAv2.1.0/incorporated errata.txt",
+      "locator": "[4.44a]",
+      "quote": "The Fuel Consumption rating of the Gladiator is \"1\".",
+      "values": {"air_fuel": 1},
+      "note": "Errata resolves omitted original cell; does not claim the original chart printed1. Not applied to a different aircraft variant by name similarity."
+    },
+    {
+      "id": "sep79-4.4b-z506-range",
+      "record_id": "aircraft-it-cant-z-506b-airone-standard",
+      "source_path": "docs/CNAv2.1.0/incorporated errata.txt",
+      "locator": "[4.4b]",
+      "quote": "The Range for the Z506 is 110.",
+      "values": {"air_range": 110},
+      "note": "Errata resolves omitted original cell; does not claim the original chart printed110."
+    }
+  ]
+}

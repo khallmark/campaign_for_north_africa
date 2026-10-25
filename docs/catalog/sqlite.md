@@ -3,8 +3,9 @@
 `data/catalog.sqlite` is the **committed private reference database**, not a build
 cache. VASSAL is the import source; numbered SQL files record reviewed corrections
 and small curated changes. Commit the importer/SQL changes and resulting database
-together. The existing JSON files remain unchanged compatibility inputs for the
-current frontend; they are **not read by ordinary database imports**.
+together. The existing JSON files remain compatibility inputs for the current
+frontend; they are **not read by ordinary database imports**. The bounded
+classification projection below updates only their unit types from this database.
 
 ## Import and correction workflow
 
@@ -17,13 +18,49 @@ python3 scripts/import-catalog-db.py --check      # same import, detect drift, n
 python3 scripts/import-catalog-db.py --patch-only # SQL only; no sources/Cargo needed
 ```
 
+### Classification compatibility projection
+
+After applying a classification patch, run:
+
+```sh
+python3 scripts/import-catalog-db.py --project-types
+python3 scripts/import-unit-data.py
+python3 scripts/import-catalog-db.py --project-types --check
+```
+
+The first command reads the committed DB read-only and replaces only `unit_type`
+in the existing catalog's `entries` and `profiles`. The existing JSON is a template
+for every other field, not the authority for classifications. Schema version 1,
+exact record IDs/order and the existing type vocabulary must match before any
+write. No-op runs preserve bytes; drift checks never write; failed validation
+leaves the output intact. This is not a full exporter or permission to add private
+fields. It cannot recreate a missing catalog: restore the compatibility template
+from Git. Profile assignments, stats (including unresolved/conditional observations),
+affiliations, citations, sprites and IDs are not exported or changed by this mode.
+
+The second command is the existing hydrated-source sidecar generator. It updates
+record types, each canonical unit's sorted `unit_type_ids`, and the catalog input
+fingerprint; it does not change token links or generated art. Commit DB, SQL,
+catalog and sidecar together. Fast tests reject a stale projection or sidecar;
+the existing source suite still verifies full sidecar regeneration.
+
+Patch `002-reviewed-unit-classifications.sql` corrects twelve individual records
+covering ten formerly empty categories. Twelve evidence rows retain the previous
+classification, rule anchors and visually inspected VASSAL image/GPID locators.
+It fails if any expected original record/type is missing or changed. Shared
+profiles are deliberately unchanged (for example `cw-uu` covers both road and
+rail construction). Historical motorization is not current truck availability.
+Motorization points, replacement points and generic truck convoys remain without
+a named historical-unit roster. Coverage is still partial; this is not a full
+classification audit. The French Motor Marine company's token link stays unresolved.
+
 The source command verifies `docs/sources.lock.json`, runs the existing Rust
 `vassal-census` against `docs/CNAv2.1.0/buildFile.xml`, and loads its temporary
 output. It does not reparse VASSAL independently or use the committed JSON census
 as the import source. Images remain files: SQLite stores paths, hashes, existence,
 layer labels and source locators, not image bytes or decoded save state.
 
-Add `data/sql/patches/002-<description>.sql` (then 003, etc.). Filenames sort
+Add `data/sql/patches/003-<description>.sql` (then 004, etc.). Filenames sort
 lexically, so keep the padded numbering. Use `counter_correction` for corrected
 counter labels, `stat_correction` for reviewed numeric/not-applicable overrides,
 and `correction_evidence` for exact source path, locator, quotation and rationale.
@@ -136,19 +173,20 @@ HTML navigation can receive the SPA page, not database contents. This is not
 authentication or a general sandbox for the repository. Vite's deny rule does
 not filter `public/`, so the no-copy/no-embed boundary above remains essential.
 
-No SQLite browser loader, HTTP endpoint or safe public projection is implemented
-here. The current UI still embeds catalog/inventory JSON at Wasm compile time;
-SQL corrections in this DB do **not** change that UI yet. A later coordinated
-consumer migration must explicitly project allowed columns/rows, omit private
-text and local source-token routes, preserve IDs/redirects/order/null semantics,
-then change the async loading boundary and retire obsolete JSON artifacts. Do not
-use `SELECT *` to produce that projection. Public release requires per-class
+No SQLite browser loader or HTTP endpoint is implemented here. The current UI
+still embeds catalog/inventory JSON at Wasm compile time. Classification changes
+reach it only after the bounded projection, sidecar regeneration and Wasm rebuild;
+other SQL corrections still do **not** change that UI. A broader consumer migration
+must explicitly project allowed columns/rows, omit private text and local
+source-token routes, preserve IDs/redirects/order/null semantics, then change the
+async loading boundary and retire obsolete JSON artifacts. Do not use `SELECT *`
+to produce that projection. Public release requires per-class
 rights review independent of source integrity. Scenario state remains ID-only.
 
 ## Tests
 
 ```sh
-# Fast: stdlib + committed DB; no original artwork, JSON inputs, Cargo or network
+# Fast: stdlib + committed DB/compatibility JSON; no original artwork, Cargo or network
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts -p 'test_catalog_db.py'
 # Explicit hydrated-source rebuild check; no replacement
 python3 scripts/import-catalog-db.py --check
@@ -158,7 +196,9 @@ The fast suite covers patch ordering/once-only application, changed/deleted/earl
 history, failure atomicity/retry, re-import preservation, source-write rejection,
 missing linked GPIDs, redirect integrity, unknown versus zero, nullable
 corrections, token/generated-art separation, private-output rejection, and the committed DB read contract.
-There is no public projection to certify yet. The first command is included in
+It also verifies classification-patch scope/failure/rerun behavior, type-only
+projection with unknown/zero preservation and private-field exclusion, and
+committed DB/catalog/sidecar type parity. The first command is included in
 `test:functional` and the second in `test:source-data`, retaining `test_unit_data.py`.
 `tests/private-review.test.mjs` exercises HTTP denial with both opt-in states,
 encoded/query forms and SQLite sidecars, while checking safe assets and review routes.

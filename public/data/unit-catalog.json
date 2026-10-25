@@ -16909,7 +16909,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "infantry",
+      "unit_type": "motorized-infantry",
       "profile_id": "cw-l",
       "verification": "verified",
       "source_refs": [
@@ -22544,7 +22544,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "infantry",
+      "unit_type": "commandos",
       "profile_id": "cw-h",
       "verification": "verified",
       "source_refs": [
@@ -22579,7 +22579,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "infantry",
+      "unit_type": "commandos",
       "profile_id": "cw-j",
       "verification": "verified",
       "source_refs": [
@@ -29439,7 +29439,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "armored-recon",
+      "unit_type": "armored-car",
       "profile_id": "cw-rr",
       "verification": "verified",
       "source_refs": [
@@ -30244,7 +30244,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "road-construction",
+      "unit_type": "railroad-engineer",
       "profile_id": "cw-uu",
       "verification": "verified",
       "source_refs": [
@@ -30279,7 +30279,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "road-construction",
+      "unit_type": "railroad-engineer",
       "profile_id": "cw-uu",
       "verification": "verified",
       "source_refs": [
@@ -31959,7 +31959,7 @@
       "kind": "formation",
       "side": "allied",
       "nationality": "commonwealth",
-      "unit_type": "infantry",
+      "unit_type": "motorized-marines",
       "profile_id": "cw-v",
       "verification": "verified",
       "source_refs": [
@@ -40954,7 +40954,7 @@
       "kind": "formation",
       "side": "axis",
       "nationality": "italian",
-      "unit_type": "infantry",
+      "unit_type": "marines",
       "profile_id": "it-x",
       "verification": "verified",
       "source_refs": [
@@ -46834,7 +46834,7 @@
       "kind": "formation",
       "side": "axis",
       "nationality": "german",
-      "unit_type": "machinegun",
+      "unit_type": "motorized-machinegun",
       "profile_id": "ge-n",
       "verification": "verified",
       "source_refs": [
@@ -47184,7 +47184,7 @@
       "kind": "formation",
       "side": "axis",
       "nationality": "german",
-      "unit_type": "infantry",
+      "unit_type": "motorized-mountain-infantry",
       "profile_id": "ge-m",
       "verification": "verified",
       "source_refs": [
@@ -47219,7 +47219,7 @@
       "kind": "formation",
       "side": "axis",
       "nationality": "german",
-      "unit_type": "heavy-weapons",
+      "unit_type": "motorized-heavy-weapons",
       "profile_id": "ge-p",
       "verification": "verified",
       "source_refs": [
@@ -47534,7 +47534,7 @@
       "kind": "formation",
       "side": "axis",
       "nationality": "german",
-      "unit_type": "infantry",
+      "unit_type": "motorcycle-infantry",
       "profile_id": "ge-g",
       "verification": "verified",
       "source_refs": [

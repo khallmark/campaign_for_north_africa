@@ -2,6 +2,7 @@
 set -euo pipefail
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
 python3 - <<'PY'
+from contextlib import ExitStack
 from pathlib import Path
 import re
 import subprocess
@@ -13,14 +14,25 @@ patterns = [
     re.compile(rb'(?:^|[\r\n\x1b])(?:begin_save|end_save)(?=[\t\r\n\x1b]|$)'),
     re.compile(rb'''(?i)(?<![\w])["']?(?:password|passwd|pwd)["']?\s*[:=]'''),
 ]
-paths = subprocess.check_output(['git', 'ls-files', '-z']).split(b'\0')[:-1]
+paths = subprocess.check_output(['git', 'ls-files', '-t', '-z']).split(b'\0')[:-1]
 failed = []
 for raw in paths:
-    path = Path(raw.decode())
-    if path.is_symlink() or not path.is_file():
+    sparse = raw[:2] == b'S '
+    path = Path(raw[2:].decode())
+    if path.is_symlink() or (not path.is_file() and not sparse):
         failed.append(str(path))
         continue
-    with path.open('rb') as stream:
+    with ExitStack() as stack:
+        if sparse and not path.exists():
+            # Sparse checkouts need no original artwork on disk. Still scan
+            # indexed bytes; exclusion must never become a credential bypass.
+            process = stack.enter_context(subprocess.Popen(
+                ['git', 'cat-file', 'blob', ':' + str(path)], stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL))
+            stream = process.stdout
+        else:
+            process = None
+            stream = stack.enter_context(path.open('rb'))
         tail = b''
         while chunk := stream.read(65536):
             block = tail + chunk
@@ -31,6 +43,10 @@ for raw in paths:
                     failed.append(str(path))
                     break
             tail = block[-1024:]
+        if process is not None:
+            stream.close()
+            if process.wait() != 0 and str(path) not in failed:
+                failed.append(str(path))
 if failed:
     for path in failed:
         print(f'{path}: credential/save marker or unreadable tracked file (content withheld)', file=sys.stderr)

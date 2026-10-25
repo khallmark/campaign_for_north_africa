@@ -89,6 +89,49 @@ class ImportContracts(unittest.TestCase):
         with closing(catalog.connect(self.database, readonly=True)) as db:
             return db.execute(sql).fetchall()
 
+    def test_arrival_import_rejects_incomplete_duplicate_unreviewed_and_changed_sources_atomically(self):
+        source = self.root / 'docs/CNAv2.1.0/images/fixture.png'
+        source.parent.mkdir(parents=True)
+        source.write_bytes(b'locked fixture source')
+        transcription = self.root / 'data/sources/formation-arrivals.json'
+        transcription.parent.mkdir(parents=True)
+        with closing(catalog.connect(self.database)) as db:
+            db.execute("INSERT INTO source_file VALUES (?,?,?)", ('docs/CNAv2.1.0/images/fixture.png', catalog.digest(source), source.stat().st_size))
+            db.execute("UPDATE catalog_record SET nationality='commonwealth',details_json=? WHERE id='record'",
+                       (json.dumps({'formation': 'Fixture', 'private_text': 'DO NOT EXPORT'}),))
+            db.commit()
+        original = {'schema_version': 1, 'sheets': [{'image': 'fixture.png', 'formation': 'Fixture',
+                    'morale_raw': '+2 (0)', 'rows': [['record', None, None, None, 'No loadout printed.']]}]}
+        transcription.write_text(json.dumps(original))
+        self.assertTrue(self.update(lambda db, tmp: catalog.import_arrivals(db, self.root)))
+        self.assertFalse(self.update(lambda db, tmp: catalog.import_arrivals(db, self.root)))
+        with closing(catalog.connect(self.database, readonly=True)) as db:
+            reference = catalog.formation_references(db)['record']
+        self.assertEqual(reference['arrival']['morale']['value'], 0)
+        self.assertIsNone(reference['arrival']['toe_strength']['value'])
+        self.assertIsNone(reference['arrival_totals']['anti_air']['value'])
+        self.assertNotIn('DO NOT EXPORT', json.dumps(reference))
+        for mutation in ('missing', 'duplicate', 'unknown-key', 'profile', 'equipment', 'hash'):
+            document = copy.deepcopy(original)
+            rows = document['sheets'][0]['rows']
+            if mutation == 'missing':
+                rows.clear()
+            elif mutation == 'duplicate':
+                rows.append(rows[0])
+            elif mutation == 'unknown-key':
+                rows[0][0] = 'not-a-record'
+            elif mutation == 'profile':
+                rows[0][1] = 'ee'
+            elif mutation == 'equipment':
+                rows[0][2] = '3 x invented gun'
+            else:
+                source.write_bytes(b'changed source')
+            transcription.write_text(json.dumps(document))
+            before = self.database.read_bytes()
+            with self.subTest(mutation=mutation), self.assertRaises(ValueError):
+                self.update(lambda db, tmp: catalog.import_arrivals(db, self.root))
+            self.assertEqual(self.database.read_bytes(), before)
+
     def test_stat_projection_preserves_originals_and_only_exports_reviewed_cells(self):
         with closing(catalog.connect(self.database)) as db:
             db.executescript("""
@@ -361,6 +404,111 @@ class ImportContracts(unittest.TestCase):
 
 
 class CommittedDatabaseContracts(unittest.TestCase):
+    def test_all_formation_arrivals_have_cited_loadouts_and_rule_correct_totals(self):
+        document = catalog.read_json(ROOT / 'public/data/unit-catalog.json')
+        records = {r['id']: r for r in document['entries']}
+        sidecar = {r['id']: r for r in catalog.read_json(ROOT / 'public/data/unit-reference.json')['records']}
+        with closing(catalog.connect(catalog.DATABASE, readonly=True)) as db:
+            references = catalog.formation_references(db)
+        self.assertEqual(len(references), 1052)
+        self.assertEqual(set(references), {k for k, r in records.items() if r['kind'] in ('formation', 'counter_formation')})
+        for record_id, reference in references.items():
+            self.assertEqual(records[record_id]['formation_reference'], reference)
+            self.assertEqual(sidecar[record_id]['formation_reference'], reference)
+            self.assertEqual(records[record_id]['stats']['capability_points']['status'], 'unresolved')
+            self.assertIsNone(records[record_id]['stats']['capability_points']['value'])
+        def ref(prefix):
+            return next(v for k, v in references.items() if k.startswith(prefix))
+        # 13th Light AA: six TOE of Bofors, not six guns and not profile max copied into AA.
+        aa = ref('oa-124-002-')
+        self.assertEqual(aa['arrival']['toe_strength']['value'], 6)
+        self.assertEqual(aa['arrival_totals']['anti_air']['value'], 6)
+        self.assertEqual(aa['arrival_totals']['anti_air']['unit'], 'Actual AA points')
+        self.assertEqual(aa['components'][0]['per_toe_stats']['anti_air']['value'], 1)
+        self.assertIsNone(aa['base_stats']['anti_air']['value'])
+        # Asymmetric mix: two AT TOE contribute no AA; two Bofors TOE contribute two.
+        mixed = ref('oa-117-024-')
+        self.assertEqual(mixed['arrival']['toe_strength']['value'], 4)
+        self.assertEqual(mixed['arrival_totals']['anti_air']['value'], 2)
+        self.assertIsNone(mixed['arrival_totals']['anti_armor']['value'])
+        self.assertTrue(mixed['arrival_totals']['anti_armor']['conditional'])
+        # A conditional maximum (US tank capacity) is not a parenthesized combat rating.
+        tank = ref('oa-116-003-')
+        self.assertEqual(tank['arrival_totals']['anti_air']['value'], 8)  # 8 Crusaders + 2 A13
+        self.assertEqual(tank['arrival_totals']['close_assault_offensive']['value'], 28)  # 8×3 + 2×2
+        self.assertNotIn('armor_protection', tank['arrival_totals'])
+        rifle = ref('oa-116-006-')
+        self.assertEqual(rifle['base_stats']['capability_points']['raw'], '10+')
+        self.assertEqual(rifle['arrival']['toe_strength']['value'], 6)
+        self.assertEqual(rifle['arrival_totals']['close_assault_offensive']['value'], 12)
+        self.assertEqual(rifle['arrival_totals']['close_assault_offensive']['unit'], 'Raw combat points (before ÷10)')
+        self.assertEqual(ref('oa-116-001-')['arrival']['morale']['value'], 1)
+        self.assertIsNone(ref('oa-116-001-')['arrival_totals']['anti_air']['value'])
+        # Alphabetic note (a) is not untrained morale: only 20th Brigade arrives at zero.
+        self.assertEqual(ref('oa-125-044-')['arrival']['morale']['raw'], '+1 (a)')
+        self.assertEqual(ref('oa-125-044-')['arrival']['morale']['value'], 1)
+        self.assertEqual(ref('oa-125-045-')['arrival']['morale']['value'], 0)
+        self.assertEqual(ref('oa-125-046-')['arrival']['morale']['value'], 0)
+        for prefix in ('oa-123-096-', 'oa-117-034-', 'oa-165-065-', 'oa-155-027-'):
+            self.assertIsNone(ref(prefix)['arrival']['toe_strength']['value'], prefix)
+            self.assertIsNone(ref(prefix)['arrival_totals']['anti_air']['value'], prefix)
+        attached = ref('oa-147-013-')
+        self.assertTrue(attached['arrival']['related_record_id'].startswith('oa-157-056-'))
+        self.assertEqual(attached['components'], [])
+        unassigned = ref('oa-157-056-')
+        self.assertIsNone(unassigned['base_profile_id'])
+        self.assertEqual(unassigned['arrival']['toe_strength']['value'], 4)
+        self.assertEqual(unassigned['arrival_totals']['anti_air']['value'], 0)
+        coast = ref('oa-155-022-')
+        self.assertEqual(coast['components'][0]['land_barrage_toe'], 4)
+        self.assertEqual(coast['arrival']['stats']['capability_points']['value'], 0)
+        self.assertIsNone(coast['arrival_totals']['close_assault_offensive']['value'])
+        self.assertEqual(ref('oa-151-017-')['base_stats']['capability_points']['raw'], '10+')
+        corrected = ref('oa-165-083-')
+        self.assertEqual((corrected['catalog_profile_id'], corrected['base_profile_id']), ('ge-x', 'ge-w'))
+        self.assertEqual(corrected['arrival_totals']['barrage']['value'], 15)
+        self.assertFalse(catalog.project_formations(catalog.DATABASE, ROOT / 'public/data/unit-catalog.json', check=True))
+
+    def test_arrival_projection_is_bounded_atomic_and_uses_effective_db_stats(self):
+        document = catalog.read_json(ROOT / 'public/data/unit-catalog.json')
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / 'catalog.json'
+            database = Path(directory) / 'catalog.sqlite'
+            with closing(catalog.connect(catalog.DATABASE, readonly=True)) as source, closing(catalog.connect(database)) as db:
+                source.backup(db)
+                db.execute("UPDATE catalog_record SET details_json=json_set(details_json,'$.secret','DO NOT EXPORT')")
+                db.execute("UPDATE stat_observation SET value=7 WHERE record_id='weapons-cw-heavy-aa-3-7-inch' AND stat_id='anti_air'")
+                db.commit()
+            target.write_text(json.dumps(document))
+            before = target.read_bytes()
+            with self.assertRaisesRegex(ValueError, 'Formation projection drift'):
+                catalog.project_formations(database, target, check=True)
+            self.assertEqual(target.read_bytes(), before)
+            self.assertTrue(catalog.project_formations(database, target))
+            projected = catalog.read_json(target)
+            # The only allowed record mutation is this additive field.
+            for old, new in zip(document['entries'], projected['entries']):
+                self.assertEqual({k: v for k, v in old.items() if k != 'formation_reference'},
+                                 {k: v for k, v in new.items() if k != 'formation_reference'})
+            self.assertEqual(document['profiles'], projected['profiles'])
+            self.assertNotIn('DO NOT EXPORT', target.read_text())
+            heavy = next(r for r in projected['entries'] if r['id'].startswith('oa-124-017-'))
+            self.assertEqual(heavy['formation_reference']['arrival_totals']['anti_air']['value'], 14)  # two TOE × changed DB rating
+            self.assertFalse(catalog.project_formations(database, target, check=True))
+            collision = copy.deepcopy(projected)
+            next(s for s in collision['sources'] if s['id'].startswith('oa-arrival:'))['note'] = 'Conflicting citation'
+            target.write_text(json.dumps(collision))
+            before = target.read_bytes()
+            with self.assertRaisesRegex(ValueError, 'Arrival citation collision'):
+                catalog.project_formations(database, target)
+            self.assertEqual(target.read_bytes(), before)
+            projected['entries'].reverse()
+            target.write_text(json.dumps(projected))
+            before = target.read_bytes()
+            with self.assertRaisesRegex(ValueError, 'record order/IDs'):
+                catalog.project_formations(database, target)
+            self.assertEqual(target.read_bytes(), before)
+
     def test_reviewed_patch_changes_only_twelve_types_and_rejects_wrong_baseline(self):
         with tempfile.TemporaryDirectory() as directory:
             database = Path(directory) / "catalog.sqlite"

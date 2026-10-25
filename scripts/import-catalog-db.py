@@ -10,6 +10,8 @@ Examples (from any directory):
   python3 scripts/import-catalog-db.py --project-types --check # read-only projection parity check
   python3 scripts/import-catalog-db.py --project-profiles # reviewed links/citation notes, never numeric stats
   python3 scripts/import-catalog-db.py --project-stats # reviewed stat corrections, with original observations
+  python3 scripts/import-catalog-db.py --project-formations # historical loadouts and rule-derived totals
+  python3 scripts/import-catalog-db.py --project-formations --check # read-only arrival reference parity
 
 Python 3.11+, SQLite 3.37+ (STRICT tables) and Cargo are required for source import.
 --patch-only requires only Python/SQLite. Images and saves are never embedded.
@@ -28,6 +30,8 @@ import subprocess
 import sys
 import tempfile
 from urllib.parse import quote
+
+from formation_reference import import_arrivals, formation_references
 
 ROOT = Path(__file__).resolve().parents[1]
 DATABASE = ROOT / "data/catalog.sqlite"
@@ -460,6 +464,53 @@ def project_stats(database, destination, *, check=False):
     return changed
 
 
+def project_formations(database, destination, *, check=False):
+    """Add only the reviewed arrival reference and allowlisted citations."""
+    document = read_json(destination)
+    require(document["schema_version"] == 1, "Unsupported catalog JSON version")
+    before = json_text(document)
+    with closing(connect(database, readonly=True)) as db:
+        validate(db)
+        for collection in ("entries", "profiles"):
+            ids = [r[0] for r in db.execute("SELECT id FROM catalog_record WHERE collection=? ORDER BY position", (collection,))]
+            require([r["id"] for r in document[collection]] == ids,
+                    f"Catalog {collection} record order/IDs differ from DB; reconcile before projection")
+        references = formation_references(db)
+        for record in document["entries"]:
+            if record["id"] in references:
+                record["formation_reference"] = references[record["id"]]
+        sources = {s["id"]: s for s in document["sources"]}
+        for source_id, title, path, details in db.execute(
+                "SELECT id,title,path,details_json FROM source_citation WHERE id LIKE 'oa-arrival:%' OR id IN ('rules-oa-reference','rules-arrival-raw-strength','rules-arrival-aa-strength') ORDER BY id"):
+            details = json.loads(details)
+            citation = {"id": source_id, "title": title, "path": path,
+                        **{k: details[k] for k in ("section", "note", "sha256") if k in details}}
+            if source_id in sources:
+                require(sources[source_id] == citation, f"Arrival citation collision: {source_id}")
+            else:
+                document["sources"].append(citation)
+                sources[source_id] = citation
+        # All profile/equipment evidence must already have its public locator.
+        def verify_refs(value):
+            if isinstance(value, dict):
+                require(set(value.get("source_refs", [])) <= sources.keys(), "Missing public arrival evidence; project reviewed stats first")
+                for item in value.values():
+                    verify_refs(item)
+            elif isinstance(value, list):
+                for item in value:
+                    verify_refs(item)
+        verify_refs(references)
+    changed = json_text(document) != before
+    if check:
+        require(not changed, "Formation projection drift: run python3 scripts/import-catalog-db.py --project-formations")
+    elif changed:
+        with tempfile.TemporaryDirectory(prefix=".catalog-formations-", dir=destination.parent) as directory:
+            candidate = Path(directory) / destination.name
+            candidate.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n")
+            os.replace(candidate, destination)
+    return changed
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--database", type=Path, default=DATABASE, help="Private database path (default data/catalog.sqlite)")
@@ -469,6 +520,7 @@ def main():
     modes.add_argument("--project-types", action="store_true", help="Copy only DB unit_type values into existing public/data/unit-catalog.json; no sources needed")
     modes.add_argument("--project-profiles", action="store_true", help="Copy reviewed DB profile links and citation notes into existing catalog; no numeric values or private texts")
     modes.add_argument("--project-stats", action="store_true", help="Copy reviewed stat overlays and citation locators; preserve original observations and exclude private text")
+    modes.add_argument("--project-formations", action="store_true", help="Add reviewed historical arrival references and raw-strength calculations; never current scenario values")
     parser.add_argument("--check", action="store_true", help="Verify the selected import/projection causes no change; never write")
     args = parser.parse_args()
     if args.bootstrap and args.check:
@@ -487,6 +539,10 @@ def main():
             changed = project_stats(args.database, ROOT / "public/data/unit-catalog.json", check=args.check)
             print(json.dumps({"projection": "reviewed_stats", "changed": changed}))
             return
+        if args.project_formations:
+            changed = project_formations(args.database, ROOT / "public/data/unit-catalog.json", check=args.check)
+            print(json.dumps({"projection": "formation_arrival_reference", "changed": changed}))
+            return
         locks = verify_sources(ROOT) if not args.patch_only else None
 
         def prepare(db, temp):
@@ -500,6 +556,7 @@ def main():
             db.commit()
             if args.bootstrap:
                 bootstrap_curated(db, ROOT)
+            import_arrivals(db, ROOT)
 
         def verify(db):
             if locks is not None:

@@ -1,0 +1,1433 @@
+{
+  "schema_version": 1,
+  "scope": "Visually transcribed Organization at Arrival rows. Quantities are TOE strength points, not vehicle counts. Arrival/deployment reference, never current scenario state. Source-row keys resolve uniquely to existing catalog IDs; no new census or inferred affiliations.",
+  "row_fields": ["source_row_key", "printed_profile_code", "toe_raw", "arrives_raw", "note"],
+  "row_options": {
+    "oa-117-034": {"calculation_note": "Replacement/redesignation, not an independent additional arriving unit; retained printed N is not a second loadout."},
+    "oa-123-096": {"calculation_note": "Optional refit, not initial arrival. Eligible pre-refit TOE and Cairo conversion conditions determine actual strength; do not assume six TOE."},
+    "oa-151-017": {"base_cpa_raw": "10+"}, "oa-151-018": {"base_cpa_raw": "10+"},
+    "oa-151-021": {"base_cpa_raw": "10+"}, "oa-151-022": {"base_cpa_raw": "10+"}, "oa-151-023": {"base_cpa_raw": "10+"},
+    "oa-153-080": {"base_cpa_raw": "10+"}, "oa-153-081": {"base_cpa_raw": "10+"}, "oa-153-082": {"base_cpa_raw": "10+"},
+    "oa-153-084": {"base_cpa_raw": "10+"}, "oa-153-085": {"base_cpa_raw": "10+"}, "oa-153-086": {"base_cpa_raw": "10+"},
+    "oa-155-021": {"arrival_cpa_raw": "0", "no_assault": true},
+    "oa-155-022": {"arrival_cpa_raw": "0", "no_assault": true},
+    "oa-155-023": {"arrival_cpa_raw": "0", "no_assault": true},
+    "oa-155-024": {"arrival_cpa_raw": "0", "no_assault": true},
+    "oa-155-025": {"arrival_cpa_raw": "0", "no_assault": true},
+    "oa-155-026": {"arrival_cpa_raw": "0"},
+    "oa-156-037": {"arrival_cpa_raw": "0", "no_assault": true},
+    "oa-156-040": {"arrival_cpa_raw": "0", "no_assault": true},
+    "oa-156-041": {"arrival_cpa_raw": "0", "no_assault": true}
+  },
+  "sheets": [
+    {
+      "image": "BR 1st Armoured Division.png",
+      "formation": "1st Armored Division",
+      "morale_raw": "+2 (+1)",
+      "rows": [
+        ["oa-116-001", "b", "1 x Stuart", "3/56", ""],
+        ["oa-116-002", "b", "1 x Stuart", "3/58", ""],
+        ["oa-116-003", "g", "8 x Crusader Mk I, 2 x A13", "3/58", ""],
+        ["oa-116-004", "g", "9 x Crusader Mk I, 1 x A13", "3/58", ""],
+        ["oa-116-005", "g", "10 x Stuarts", "3/58", ""],
+        ["oa-116-006", "l", "N", "3/58", ""],
+        ["oa-116-007", "a", "N", "3/59", ""],
+        ["oa-116-008", "l", "N", "3/59", ""],
+        ["oa-116-009", "aa", "8 x 2-pounders", "3/59", ""],
+        ["oa-116-010", "x", "6 x 25-pounders", "3/59", ""],
+        ["oa-116-011", "ee", "6 x Light AA", "3/59", ""],
+        ["oa-116-012", "ll", "N", "3/58", ""]
+      ]
+    },
+    {
+      "image": "BR 2nd Armoured Division.png",
+      "formation": "2nd Armored Division",
+      "morale_raw": "+2 (+1)",
+      "rows": [
+        ["oa-117-013", "b", "1 x Mk VI Lights", "1/15", ""],
+        ["oa-117-014", "b", "1 x Mk VI Lights", "1/15", "Note b: later withdrawal/return and training restrictions do not alter this initial arrival row."],
+        ["oa-117-015", "g", "5 x A9 Cruisers, 5 x A10 Cruisers", "1/15", ""],
+        ["oa-117-016", "g", "10 x Mk VI Lights", "1/15", ""],
+        ["oa-117-017", "d", "1 x Crusader Mk I", "1/15", ""],
+        ["oa-117-018", "d", "-", "1/51", "Note c: replacement counter for 3rd Armored Brigade, not a new additional formation or loadout."],
+        ["oa-117-019", "g", "10 x A13 Cruisers", "1/15", ""],
+        ["oa-117-020", "a", "N", "1/15", ""],
+        ["oa-117-021", "l", "N", "1/15", ""],
+        ["oa-117-022", "l", "N", "1/15", ""],
+        ["oa-117-023", "x", "6 x 25-pounders", "1/15", ""],
+        ["oa-117-024", "bb", "2 x 2-pounders, 2 x Light AA", "1/15", ""],
+        ["oa-117-025", "pp", "N", "1/15", ""]
+      ]
+    },
+    {
+      "image": "BR 7th Armoured Division.png",
+      "formation": "7th Armored Division",
+      "morale_raw": "+2",
+      "rows": [
+        ["oa-117-026", "b", "1 x Mark VI Light", "D", ""],
+        ["oa-117-027", "b", "1 x Mark VI Light", "D", ""],
+        ["oa-117-028", "g", "10 x Mark VI Lights", "D", ""],
+        ["oa-117-029", "g", "10 x Mark VI Lights", "D", ""],
+        ["oa-117-030", "d", "1 x A9", "D", ""],
+        ["oa-117-031", "g", "7 x A9", "D", ""],
+        ["oa-117-032", "g", "7 x A10", "D", ""],
+        ["oa-117-033", "a", "N", "D", ""],
+        ["oa-117-034", "a", "N", "2/68", "Note c: redesignation/replacement of 7th Support Group, not an additional formation."],
+        ["oa-117-035", "n", "N", "D", ""],
+        ["oa-117-036", "n", "N", "D", ""],
+        ["oa-117-037", "aa", "6 x 2-pounders", "D", ""],
+        ["oa-117-038", "x", "6 x 18/25-pounders", "D", ""],
+        ["oa-117-039", "ll", "U@6 TOE", "D", ""]
+      ]
+    },
+    {
+      "image": "BR 8th Armoured Division.png",
+      "formation": "8th Armored Division",
+      "morale_raw": "+1 (0)",
+      "rows": [
+        ["oa-118-040", "d", "1 x Crusader Mk II", "3/87", ""],
+        ["oa-118-041", "d", "1 x Crusader Mk II", "3/87", ""],
+        ["oa-118-042", "g", "1 x Matilda, 9 x Valentine", "3/87", ""],
+        ["oa-118-043", "g", "1 x Matilda, 9 x Valentine", "3/87", ""],
+        ["oa-118-044", "g", "1 x Matilda, 9 x Valentine", "3/87", ""],
+        ["oa-118-045", "l", "N", "3/87", ""],
+        ["oa-118-046", "d", "1 x Crusader Mk II", "1/88", ""],
+        ["oa-118-047", "g", "1 x Matilda, 9 x Valentine", "1/88", ""],
+        ["oa-118-048", "g", "1 x Matilda, 9 x Valentine", "1/88", ""],
+        ["oa-118-049", "g", "1 x Matilda, 9 x Valentine", "1/88", ""],
+        ["oa-118-050", "l", "N", "1/88", ""],
+        ["oa-118-051", "hh", "N", "3/87", ""]
+      ]
+    },
+    {
+      "image": "BR Unassigned Air units.png",
+      "formation": "Unassigned Anti-aircraft Units",
+      "morale_raw": "+1",
+      "rows": [
+        ["oa-124-001", "ee", "6 x Light AA", "1/31", ""],
+        ["oa-124-002", "ee", "6 x Light AA", "2/11", ""],
+        ["oa-124-003", "ee", "6 x Light AA", "2/41", ""],
+        ["oa-124-004", "ee", "6 x Light AA", "D", ""],
+        ["oa-124-005", "ee", "6 x Light AA", "3/43", ""],
+        ["oa-124-006", "ee", "6 x Light AA", "2/48", ""],
+        ["oa-124-007", "ee", "6 x Light AA", "3/28", ""],
+        ["oa-124-008", "ee", "6 x Light AA", "2/58", ""],
+        ["oa-124-009", "ee", "6 x Light AA", "2/30", ""],
+        ["oa-124-010", "ee", "6 x Light AA", "1/98", ""],
+        ["oa-124-011", "ee", "6 x Light AA", "3/12", ""],
+        ["oa-124-012", "ee", "6 x Light AA", "1/86", ""],
+        ["oa-124-013", "ee", "6 x Light AA", "1/89", ""],
+        ["oa-124-014", "ee", "6 x Light AA", "D", ""],
+        ["oa-124-015", "ee", "6 x Light AA", "1/66", ""],
+        ["oa-124-016", "ee", "6 x Light AA", "1/45", ""],
+        ["oa-124-017", "gg", "2 x Heavy AA", "1/15", ""],
+        ["oa-124-018", "gg", "2 x Heavy AA", "D", ""],
+        ["oa-124-019", "gg", "2 x Heavy AA", "1/43", ""],
+        ["oa-124-020", "gg", "2 x Heavy AA", "1/28", ""],
+        ["oa-124-021", "gg", "2 x Heavy AA", "2/59", ""],
+        ["oa-124-022", "gg", "2 x Heavy AA", "2/59", ""],
+        ["oa-124-023", "gg", "2 x Heavy AA", "3/12", ""],
+        ["oa-124-024", "gg", "2 x Heavy AA", "2/41", ""],
+        ["oa-124-025", "gg", "2 x Heavy AA", "3/42", ""],
+        ["oa-124-026", "gg", "2 x Heavy AA", "1/45", ""],
+        ["oa-124-027", "gg", "2 x Heavy AA", "3/43", ""]
+      ]
+    },
+    {
+      "image": "BR 10th Armoured Division.png", "formation": "10th Armored Division", "morale_raw": "+1 (-1)",
+      "rows": [
+        ["oa-119-072", "b", "1 x Stuart", "1/79", ""],
+        ["oa-119-073", "b", "1 x Stuart", "3/69", ""],
+        ["oa-119-074", "g", "9 x Grant", "3/69", ""],
+        ["oa-119-075", "g", "8 x Grant, 2 x Crusader Mk II", "3/69", ""],
+        ["oa-119-076", "g", "5 x Grant, 4 x Stuart", "3/69", ""],
+        ["oa-119-077", "b", "1 x Stuart", "2/80", ""],
+        ["oa-119-078", "g", "9 x Grant", "2/80", ""],
+        ["oa-119-079", "g", "9 x Grant", "2/80", ""]
+      ]
+    },
+    {
+      "image": "BR 1st Army Tank Brigade.png", "formation": "1st Army Tank Brigade", "morale_raw": "+1 (0)",
+      "rows": [
+        ["oa-119-098", "d", "1 x A9 Cruiser", "1/36", ""],
+        ["oa-119-099", "g", "10 x Matilda", "1/36", ""],
+        ["oa-119-100", "g", "10 x Matilda", "2/28", ""],
+        ["oa-119-101", "g", "10 x Matilda", "1/36", ""]
+      ]
+    },
+    {
+      "image": "BR 22nd Armoured Brigade.png", "formation": "22nd Armored Brigade", "morale_raw": "+2 (+1)",
+      "rows": [
+        ["oa-121-037", "d", "1 x A10 Cruiser", "3/20", ""],
+        ["oa-121-038", "g", "9 x Crusader I, 1 x A9 Cruiser", "3/20", ""],
+        ["oa-121-039", "g", "9 x Crusader I, 1 x A9 Cruiser", "3/20", ""],
+        ["oa-121-040", "g", "9 x Crusader I, 1 x A9 Cruiser", "3/20", ""]
+      ]
+    },
+    {
+      "image": "BR 44th (Home Countries) Infantry Division.png", "formation": "44th (Home Counties) Infantry Division", "morale_raw": "+2",
+      "rows": [
+        ["oa-118-052", "a", "N", "2/90", ""],
+        ["oa-118-053", "a", "N", "1/90", ""],
+        ["oa-118-054", "m", "N", "1/90", ""],
+        ["oa-118-055", "m", "N", "1/90", ""],
+        ["oa-118-056", "m", "N", "1/90", ""],
+        ["oa-118-057", "a", "N", "2/90", ""],
+        ["oa-118-058", "m", "N", "2/90", ""],
+        ["oa-118-059", "m", "N", "2/90", ""],
+        ["oa-118-060", "m", "N", "2/90", ""],
+        ["oa-118-061", "a", "N", "2/90", ""],
+        ["oa-118-062", "m", "N", "2/90", ""],
+        ["oa-118-063", "m", "N", "2/90", ""],
+        ["oa-118-064", "m", "N", "2/90", ""],
+        ["oa-118-065", "u", "N", "2/90", ""],
+        ["oa-118-066", "ll", "N", "2/90", ""],
+        ["oa-118-067", "aa", "6 x 6-pounders, 2 x 2-pounders", "2/95", ""],
+        ["oa-118-068", "x", "6 x 25-pounders", "2/95", ""],
+        ["oa-118-069", "x", "6 x 25-pounders", "2/95", ""],
+        ["oa-118-070", "x", "6 x 25-pounders", "2/95", ""],
+        ["oa-118-071", "ee", "6 x Light AA", "2/90", ""]
+      ]
+    },
+    {
+      "image": "BR 50th (Northumbrian) Infantry Division.png", "formation": "50th (Northumbrian) Infantry Division", "morale_raw": "+1",
+      "rows": [
+        ["oa-119-080", "a", "N", "3/68", ""],
+        ["oa-119-081", "a", "N", "1/69", ""],
+        ["oa-119-082", "m", "N", "1/69", ""],
+        ["oa-119-083", "m", "N", "1/69", ""],
+        ["oa-119-084", "m", "N", "1/69", ""],
+        ["oa-119-085", "a", "N", "3/36", "Initial arrival; later withdrawal/return in note a is not a second initial loadout."],
+        ["oa-119-086", "m", "N", "3/36", ""],
+        ["oa-119-087", "m", "N", "3/36", ""],
+        ["oa-119-088", "m", "N", "3/36", ""],
+        ["oa-119-089", "a", "N", "2/69", ""],
+        ["oa-119-090", "m", "N", "2/69", ""],
+        ["oa-119-091", "m", "N", "2/69", ""],
+        ["oa-119-092", "m", "N", "2/69", ""],
+        ["oa-119-093", "u", "O@4", "3/68", ""],
+        ["oa-119-094", "ll", "U@6", "2/58", ""],
+        ["oa-119-095", "x", "6 x 25-pounders", "2/69", ""],
+        ["oa-119-096", "x", "6 x 25-pounders", "3/68", ""],
+        ["oa-119-097", "x", "6 x 25-pounders", "2/69", ""]
+      ]
+    },
+    {
+      "image": "BR 51st Highland Division.png", "formation": "51st (Highland) Infantry Division", "morale_raw": "+1",
+      "rows": [
+        ["oa-120-001", "a", "N", "2/92", ""],
+        ["oa-120-002", "a", "N", "3/92", ""],
+        ["oa-120-003", "m", "N", "3/92", ""],
+        ["oa-120-004", "m", "N", "3/92", ""],
+        ["oa-120-005", "m", "N", "3/92", ""],
+        ["oa-120-006", "a", "N", "3/92", ""],
+        ["oa-120-007", "m", "N", "3/92", ""],
+        ["oa-120-008", "m", "N", "3/92", ""],
+        ["oa-120-009", "m", "N", "3/92", ""],
+        ["oa-120-010", "a", "N", "3/92", ""],
+        ["oa-120-011", "m", "N", "3/92", ""],
+        ["oa-120-012", "m", "N", "3/92", ""],
+        ["oa-120-013", "m", "N", "3/92", ""],
+        ["oa-120-014", "u", "N", "2/92", ""],
+        ["oa-120-015", "ll", "N", "2/92", ""],
+        ["oa-120-016", "aa", "6 x 6-pounder, 2 x 2-pounder", "1/93", ""],
+        ["oa-120-017", "x", "6 x 25-pounder", "1/93", ""],
+        ["oa-120-018", "x", "6 x 25-pounder", "1/93", ""],
+        ["oa-120-019", "x", "6 x 25-pounder", "1/93", ""],
+        ["oa-120-020", "ee", "6 x Light AA", "1/93", ""]
+      ]
+    },
+    {
+      "image": "BR 70th Infantry Division.png", "formation": "70th Infantry Division", "morale_raw": "+1",
+      "rows": [
+        ["oa-120-021", "a", "N", "2/21", ""],
+        ["oa-120-022", "c", "3 x 4.5-inch Howitzer", "1/35", ""],
+        ["oa-120-023", "m", "N", "1/35", ""],
+        ["oa-120-024", "m", "N", "1/35", ""],
+        ["oa-120-025", "m", "N", "1/35", ""],
+        ["oa-120-026", "dd", "2 x 2-pounder", "1/47", ""],
+        ["oa-120-027", "c", "3 x 3.7-inch Howitzer", "D", ""],
+        ["oa-120-028", "m", "N", "D", ""],
+        ["oa-120-029", "m", "N", "D", ""],
+        ["oa-120-030", "m", "N", "D", ""],
+        ["oa-120-031", "dd", "2 x 2-pounder", "1/50", ""],
+        ["oa-120-032", "c", "3 x 25-pounder", "3/51", ""],
+        ["oa-120-033", "m", "N", "D", "Note f: not assigned to 23rd Brigade until June 1941; deployment strength is not proof of initial attachment."],
+        ["oa-120-034", "m", "N", "D", "Note f: not assigned to 23rd Brigade until June 1941; deployment strength is not proof of initial attachment."],
+        ["oa-120-035", "m", "N", "3/51", ""],
+        ["oa-120-036", "dd", "2 x 2-pounder", "2/50", ""]
+      ]
+    },
+    {
+      "image": "BR Unassigned Anti-Tank Regiments.png", "formation": "Unassigned Anti-tank Regiments", "morale_raw": "+1",
+      "rows": [
+        ["oa-121-044", "aa", "8 x 6-pounders", "2/92", ""],
+        ["oa-121-045", "aa", "6 x 2-pounders", "D", ""],
+        ["oa-121-046", "z", "2 x 18-pounder, 8 x 2-pounder", "1/27", ""],
+        ["oa-121-047", "aa", "8 x 6-pounder", "1/75", ""],
+        ["oa-121-048", "aa", "8 x 2-pounder", "3/60", ""],
+        ["oa-121-049", "aa", "8 x 2-pounder", "1/45", "Deacon refits require the separate note b process; not part of this initial loadout."],
+        ["oa-121-050", "aa", "8 x 2-pounder", "D", ""],
+        ["oa-121-051", "aa", "8 x 2-pounder", "1/11", ""]
+      ]
+    },
+    {
+      "image": "BR Unassigned Armor-Class Units.png", "formation": "Unassigned Armor-Class Units", "morale_raw": "+1",
+      "rows": [
+        ["oa-122-052", "g", "10 x Mark VI Light", "3/4", ""],
+        ["oa-122-053", "g", "10 x A13 Cruiser", "3/2", ""],
+        ["oa-122-054", "g", "10 x Matilda", "3/2", ""],
+        ["oa-122-055", "g", "10 x Matilda", "2/29", ""],
+        ["oa-122-056", "mm", "N", "2/84", ""],
+        ["oa-122-057", "kk", "N", "1/31", ""]
+      ]
+    },
+    {
+      "image": "BR Unassigned Infantry-Type Units.png", "formation": "Unassigned British Infantry-type Units", "morale_raw": "+1",
+      "rows": [
+        ["oa-122-058", "p", "N", "D*", "Asterisk: attached to Matruh Garrison."],
+        ["oa-122-059", "p", "N", "D", ""],
+        ["oa-122-060", "p", "N", "D*", "Asterisk: attached to Matruh Garrison."],
+        ["oa-122-061", "m", "N", "D", ""],
+        ["oa-122-062", "p", "N", "D", ""],
+        ["oa-122-063", "p", "N", "D", ""],
+        ["oa-122-064", "u", "N", "D", ""],
+        ["oa-122-065", "u", "N", "D", ""],
+        ["oa-122-066", "h", "N", "2/19", ""],
+        ["oa-122-067", "j", "N", "2/47", ""],
+        ["oa-122-068", "l", "N", "1/65", ""],
+        ["oa-122-069", "t", "N", "1/70", ""],
+        ["oa-122-070", "l", "N", "2/89", ""],
+        ["oa-122-071", "l", "N", "1/94", ""]
+      ]
+    },
+    {
+      "image": "BR Unassigned Artillery Units.png", "formation": "Unassigned Artillery Units", "morale_raw": "+1",
+      "rows": [
+        ["oa-123-072", "x", "6 x 3.7-inch Howitzer", "2/80", ""],
+        ["oa-123-073", "x", "6 x 25-pounder", "1/33", ""],
+        ["oa-123-074", "x", "6 x 25-pounder", "D", ""],
+        ["oa-123-075", "x", "6 x 25-pounder", "1/86", ""],
+        ["oa-123-076", "x", "6 x 25-pounder", "3/38", ""],
+        ["oa-123-077", "x", "6 x 25-pounder", "1/85", ""],
+        ["oa-123-078", "x", "6 x 25-pounder", "1/15", ""],
+        ["oa-123-079", "x", "6 x 25-pounder", "3/89", ""],
+        ["oa-123-080", "x", "6 x 25-pounder", "2/48", ""],
+        ["oa-123-081", "x", "6 x 25-pounder", "1/56", ""],
+        ["oa-123-082", "x", "6 x 25-pounder", "3/83", ""],
+        ["oa-123-083", "x", "6 x 3.7-inch Howitzer", "3/60", ""],
+        ["oa-123-084", "x", "6 x 25-pounder", "1/85", ""],
+        ["oa-123-085", "x", "6 x 25-pounder", "3/28", ""],
+        ["oa-123-086", "x", "6 x 25-pounder", "3/60", ""],
+        ["oa-123-087", "x", "6 x 60-pounder", "D", ""],
+        ["oa-123-088", "x", "1 x 6-inch Howitzer, 3 x 60-pounder", "D", ""],
+        ["oa-123-089", "x", "6 x 4.5-inch Gun", "2/44", ""],
+        ["oa-123-090", "x", "6 x 4.5-inch Gun", "1/16", ""],
+        ["oa-123-091", "x", "6 x 155mm Howitzer", "1/55", ""],
+        ["oa-123-092", "x", "6 x 4.5-inch Gun", "2/44", ""],
+        ["oa-123-093", "x", "6 x 5.5-inch Gun-Howitzer", "3/83", ""],
+        ["oa-123-094", "x", "6 x 25-pounder", "1/15", ""],
+        ["oa-123-095", "x", "6 x 105mm Howitzer (SPA)", "3/89", ""],
+        ["oa-123-096", "x", "6 x SP 25-pounder", "3/92", "Optional Bishop refit, not a newly arriving unit. Note b requires four continuous turns in Cairo; 11th RHA earliest completion 3/92, other RHA earliest 3/94. Actual converted TOE equals eligible pre-refit TOE, not automatically six."],
+        ["oa-123-097", "x", "4 x 25-pounder", "2/15", ""],
+        ["oa-123-098", "x", "6 x 25-pounder", "3/9", ""]
+      ]
+    },
+    {
+      "image": "BR Selby Force - The Matruh Garrison.png", "formation": "Independent headquarters (text entries)", "morale_raw": "None (that of attached units)",
+      "rows": [
+        ["oa-121-041", "a", null, "1/1", "No assigned units; attachments determine strength and morale. May not voluntarily move until becoming Selby Force at 2/12 or when attacked in close assault. Disband at 3/21. Historical attachment narrative is not an initial loadout."]
+      ]
+    },
+    {
+      "image": "BR 22nd Guards Brigade (200th Guards Brigade).png", "formation": "Independent headquarters (text entries)", "morale_raw": "None (that of attached units)",
+      "rows": [
+        ["oa-121-042", "a", null, "3/21", "No battalions initially assigned. Narrative also gives attachment to 70th Division from 2/21; dates describe different events, not identical arrival statements."],
+        ["oa-121-043", "a", null, "January 1942", "Renaming/replacement of 22nd Guards, not a new unit or additional equipment. Named 200th Guards Motor Brigade Group in April and 201st Guards Motor Brigade Group in May 1942."]
+      ]
+    },
+    {
+      "image": "AU 6th Australian Division.png", "formation": "6th Australian Division", "morale_raw": "+1 (-3)",
+      "rows": [
+        ["oa-124-028", "a", "N", "D", ""],
+        ["oa-124-029", "f", "N", "D", ""],
+        ["oa-124-030", "p", "N", "D", ""],
+        ["oa-124-031", "p", "N", "D", ""],
+        ["oa-124-032", "p", "N", "D", ""],
+        ["oa-124-033", "e", "N", "D", ""],
+        ["oa-124-034", "p", "N", "D", ""],
+        ["oa-124-035", "p", "N", "D", ""],
+        ["oa-124-036", "p", "N", "D", ""],
+        ["oa-124-037", "a", "N", "2/9", ""],
+        ["oa-124-038", "p", "N", "2/9", ""],
+        ["oa-124-039", "p", "N", "2/9", ""],
+        ["oa-124-040", "p", "N", "2/9", ""],
+        ["oa-124-041", "ll", "N", "D", ""],
+        ["oa-124-042", "x", "6 x 25-pounder", "1/11", ""],
+        ["oa-124-043", "x", "3 x 18-pounder, 3 x 4.5-inch Howitzer", "1/7", ""]
+      ]
+    },
+    {
+      "image": "AU 9th Australian Division.png", "formation": "9th Australian Division", "morale_raw": "+1 (a)",
+      "morale_overrides": {"oa-125-045": "+1 (0)", "oa-125-046": "+1 (0)", "oa-125-047": "+1 (0)", "oa-125-048": "+1 (0)"},
+      "rows": [
+        ["oa-125-044", "a", "N", "3/20", ""],
+        ["oa-125-045", "f", "N", "1/13", "Note a: 20th Brigade arrives at morale zero, trainable to +1."],
+        ["oa-125-046", "p", "N", "1/13", "Note a: 20th Brigade arrives at morale zero, trainable to +1."],
+        ["oa-125-047", "p", "N", "1/13", "Note a: 20th Brigade arrives at morale zero, trainable to +1."],
+        ["oa-125-048", "p", "N", "1/13", "Note a: 20th Brigade arrives at morale zero, trainable to +1."],
+        ["oa-125-049", "f", "N", "2/21", ""],
+        ["oa-125-050", "p", "N", "2/21", ""],
+        ["oa-125-051", "p", "N", "1/30", ""],
+        ["oa-125-052", "p", "N", "2/21", ""],
+        ["oa-125-053", "f", "N", "3/20", ""],
+        ["oa-125-054", "p", "N", "3/20", ""],
+        ["oa-125-055", "p", "N", "3/20", ""],
+        ["oa-125-056", "p", "N", "3/20", ""],
+        ["oa-125-057", "ll", "N", "3/29", ""],
+        ["oa-125-058", "aa", "8 x 2-pounder", "3/20", ""],
+        ["oa-125-059", "u", "N", "1/30", ""],
+        ["oa-125-060", "x", "6 x 25-pounder", "3/29", ""],
+        ["oa-125-061", "x", "6 x 25-pounder", "3/29", ""],
+        ["oa-125-062", "x", "6 x 4.5-inch Howitzer", "3/29", ""],
+        ["oa-125-063", "q", "N", "3/29", "Note b: engineer abilities plus profile q; later 2/3 Pioneer uses the same counter, not a second unit."],
+        ["oa-125-064", "ee", "6 x Light AA", "3/29", "Note c: later 2/4 Light AA uses this counter; not an extra unit."]
+      ]
+    },
+    {
+      "image": "AU 18th Australian Brigade.png", "formation": "18th Australian Brigade", "morale_raw": "+1 (0)",
+      "rows": [
+        ["oa-125-065", "f", "N", "3/14", ""],
+        ["oa-125-066", "p", "N", "3/14", ""],
+        ["oa-125-067", "p", "N", "3/14", ""],
+        ["oa-125-068", "p", "N", "3/14", ""],
+        ["oa-125-069", "ll", "N", "3/14", ""],
+        ["oa-125-070", "u", "N", "3/14", ""],
+        ["oa-125-071", "aa", "8 x 2-pounder", "3/14", ""],
+        ["oa-125-072", "x", "6 x 25-pounder", "3/14", ""]
+      ]
+    },
+    {
+      "image": "IN 4th Indian Division.png", "formation": "4th Indian Division", "morale_raw": "+1 (0)",
+      "arrival_profile_overrides": {"oa-126-086": "cw-l"},
+      "rows": [
+        ["oa-126-073", "a", "N", "D", ""],
+        ["oa-126-074", "a", "N", "D", ""],
+        ["oa-126-075", "p", "N", "D", ""],
+        ["oa-126-076", "p", "N", "D", ""],
+        ["oa-126-077", "p", "N", "D", ""],
+        ["oa-126-078", "a", "N", "1/5", ""],
+        ["oa-126-079", "p", "N", "1/5", ""],
+        ["oa-126-080", "p", "N", "1/5", ""],
+        ["oa-126-081", "p", "N", "1/5", ""],
+        ["oa-126-082", "a", "N", "D", ""],
+        ["oa-126-083", "p", "N", "D", ""],
+        ["oa-126-084", "p", "N", "D", ""],
+        ["oa-126-085", "p", "N", "D", ""],
+        ["oa-126-086", "ll", "N", "D", "Note c explicitly uses motorized infantry profile l until trained; no reconnaissance equipment on arrival. Printed row is ll but note calls trained profile kk: that later-profile discrepancy is not silently resolved."],
+        ["oa-126-087", "x", "6 x 18/25-pounder", "3/3", ""],
+        ["oa-126-088", "x", "6 x 3.7-inch Howitzer", "D", ""],
+        ["oa-126-089", "x", "6 x 18-pounder", "D", ""]
+      ]
+    },
+    {
+      "image": "IN 2rd Indian Motorized Brigade.png", "formation": "3rd Indian Motorized Brigade Group", "morale_raw": "+1 (0)",
+      "rows": [
+        ["oa-126-090", "a", "N", "3/23", ""],
+        ["oa-126-091", "l", "N", "3/23", ""],
+        ["oa-126-092", "l", "N", "3/23", ""],
+        ["oa-126-093", "l", "N", "3/23", ""],
+        ["oa-126-094", "x", "6 x 25-pounder", "3/80", "Later artillery arrival; the brigade initially arrived without support guns or anti-tank units (note a)."]
+      ]
+    },
+    {
+      "image": "IN 5th Indian Division.png", "formation": "5th Indian Division", "morale_raw": "+1",
+      "rows": [
+        ["oa-127-095", "a", "N", "3/38", ""],
+        ["oa-127-096", "a", "N", "2/38", ""],
+        ["oa-127-097", "p", "N", "2/38", ""],
+        ["oa-127-098", "p", "N", "2/38", ""],
+        ["oa-127-099", "p", "N", "2/38", ""],
+        ["oa-127-100", "a", "N", "1/40", ""],
+        ["oa-127-101", "p", "N", "1/40", ""],
+        ["oa-127-102", "p", "N", "1/53", ""],
+        ["oa-127-103", "p", "N", "1/40", ""],
+        ["oa-127-104", "a", "N", "3/40", ""],
+        ["oa-127-105", "p", "N", "3/40", ""],
+        ["oa-127-106", "p", "N", "3/41", ""],
+        ["oa-127-107", "p", "N", "3/40", ""],
+        ["oa-127-108", "x", "6 x 25-pounder", "3/38", ""],
+        ["oa-127-109", "x", "6 x 25-pounder", "2/43", ""],
+        ["oa-127-110", "qq", "N", "3/40", ""]
+      ]
+    },
+    {
+      "image": "IN 10th Indian Division.png", "formation": "10th Indian Division", "morale_raw": "+1",
+      "rows": [
+        ["oa-128-001", "a", "N", "3/81", ""],
+        ["oa-128-002", "a", "N", "3/82", "Note b: other battalions are listed under their original formations; do not count them twice."],
+        ["oa-128-003", "p", "N", "2/79", ""],
+        ["oa-128-004", "x", "6 x 25-pounder", "3/82", ""],
+        ["oa-128-005", "a", "N", "3/82", ""],
+        ["oa-128-006", "p", "N", "3/82", ""],
+        ["oa-128-007", "p", "N", "3/82", ""],
+        ["oa-128-008", "x", "6 x 25-pounder", "3/82", ""],
+        ["oa-128-009", "a", "N", "2/82", ""],
+        ["oa-128-010", "p", "N", "2/82", ""],
+        ["oa-128-011", "p", "N", "2/82", ""],
+        ["oa-128-012", "x", "6 x 25-pounder", "2/82", ""]
+      ]
+    },
+    {
+      "image": "IN Unassigned Indian Units.png", "formation": "Unassigned Indian Units", "morale_raw": "+1",
+      "rows": [
+        ["oa-127-111", "m", "N", "D", ""],
+        ["oa-127-112", "p", "N", "3/29", ""],
+        ["oa-127-113", "p", "N", "1/60", ""],
+        ["oa-127-114", "p", "N", "1/60", ""],
+        ["oa-127-115", "p", "N", "2/73", ""],
+        ["oa-127-116", "p", "N", "3/75", ""],
+        ["oa-127-117", "p", "N", "3/75", ""],
+        ["oa-127-118", "p", "N", "3/75", ""],
+        ["oa-127-119", "p", "N", "3/76", ""],
+        ["oa-127-120", "p", "N", "1/84", ""],
+        ["oa-127-121", "u", "O@4", "3/84", ""],
+        ["oa-127-122", "p", "N", "2/87", ""],
+        ["oa-127-123", "p", "N", "2/94", ""],
+        ["oa-127-124", "ll", "N", "1/86", "Same 13th DCO Lancers listed as attached on the 18th Indian Brigade sheet; not two units."]
+      ]
+    },
+    {
+      "image": "IN 18th Indian Brigade.png", "formation": "18th Indian Brigade", "morale_raw": "+1",
+      "row_references": {"oa-128-016": "oa-127-124"},
+      "rows": [
+        ["oa-128-013", "a", "N", "1/86", ""],
+        ["oa-128-014", "p", "N", "1/86", ""],
+        ["oa-128-015", "p", "N", "1/86", ""],
+        ["oa-128-016", null, null, "1/86", "Profile and TOE cells blank here. Note b identifies the attached 13th DCO Lancers; its ll/N row is on the Unassigned Indian Units sheet. Do not count twice."]
+      ]
+    },
+    {
+      "image": "IN 161st Indian Motor Brigade.png", "formation": "161st Indian Motor Brigade", "morale_raw": "+1",
+      "rows": [
+        ["oa-128-017", "a", "N", "3/73", ""],
+        ["oa-128-018", "n", "N", "3/73", ""],
+        ["oa-128-019", "n", "N", "3/73", ""]
+      ]
+    },
+    {
+      "image": "NZ 2nd New Zealand Division.png", "formation": "2nd New Zealand Division", "morale_raw": "+1",
+      "rows": [
+        ["oa-129-020", "a", "N", "D", ""],
+        ["oa-129-021", "a", "N", "D", ""],
+        ["oa-129-022", "m", "N", "D", ""],
+        ["oa-129-023", "m", "N", "D", ""],
+        ["oa-129-024", "m", "N", "D", ""],
+        ["oa-129-025", "a", "N", "1/35", "Note b: returned from Greece; listed date is arrival for this North Africa reference row."],
+        ["oa-129-026", "m", "U@2", "1/35", ""],
+        ["oa-129-027", "m", "U@2", "1/35", ""],
+        ["oa-129-028", "m", "U@2", "1/35", ""],
+        ["oa-129-029", "k", "U@2", "1/35", ""],
+        ["oa-129-030", "a", "N", "3/6", ""],
+        ["oa-129-031", "m", "N", "3/6", ""],
+        ["oa-129-032", "m", "N", "3/6", ""],
+        ["oa-129-033", "m", "N", "3/6", ""],
+        ["oa-129-034", "u", "U@2", "D", ""],
+        ["oa-129-035", "ll", "N", "D", ""],
+        ["oa-129-036", "aa", "8 x 2-pounder", "1/35", ""],
+        ["oa-129-037", "x", "6 x 3.7-inch Howitzer", "D", ""],
+        ["oa-129-038", "x", "6 x 25-pounder", "1/35", ""],
+        ["oa-129-039", "x", "6 x 18/25-pounder", "3/2", ""],
+        ["oa-129-040", "ee", "6 x Light AA", "1/35", ""]
+      ]
+    },
+    {
+      "image": "NZ Unassigned Newzealand Units.png", "formation": "Unassigned New Zealand Units", "morale_raw": "+1",
+      "rows": [
+        ["oa-130-064", "uu", "N", "1/32", "Railroad engineering restrictions apply."],
+        ["oa-130-065", "uu", "N", "3/50", "Railroad engineering restrictions apply."]
+      ]
+    },
+    {
+      "image": "SA Unassigned South African Units.png", "formation": "Unassigned South Africa Units", "morale_raw": "+1",
+      "rows": [
+        ["oa-129-041", "rr", "N", "2/44", ""],
+        ["oa-129-042", "rr", "N", "2/47", ""],
+        ["oa-129-043", "uu", "N", "1/50", "Road construction role; no vehicle count inferred from manpower TOE."]
+      ]
+    },
+    {
+      "image": "SA 1st South African Infantry Division.png", "formation": "1st South African Infantry Division", "morale_raw": "0 (-3)",
+      "rows": [
+        ["oa-130-044", "a", "N", "1/32", ""],
+        ["oa-130-045", "a", "N", "2/37", ""],
+        ["oa-130-046", "p", "N", "2/37", ""],
+        ["oa-130-047", "p", "N", "3/38", ""],
+        ["oa-130-048", "p", "N", "2/37", ""],
+        ["oa-130-049", "a", "N", "3/36", ""],
+        ["oa-130-050", "p", "N", "3/36", ""],
+        ["oa-130-051", "p", "N", "1/38", ""],
+        ["oa-130-052", "p", "N", "3/36", ""],
+        ["oa-130-053", "a", "N", "1/32", ""],
+        ["oa-130-054", "p", "N", "1/32", ""],
+        ["oa-130-055", "p", "N", "1/32", ""],
+        ["oa-130-056", "p", "N", "1/32", ""],
+        ["oa-130-057", "u", "N", "1/38", ""],
+        ["oa-130-058", "jj", "N", "1/47", ""],
+        ["oa-130-059", "z", "8 x 2-pounder, 3 x 18-pounder", "3/36", ""],
+        ["oa-130-060", "x", "4 x 18/25-pounder", "1/51", ""],
+        ["oa-130-061", "x", "4 x 25-pounder", "1/45", ""],
+        ["oa-130-062", "x", "4 x 25-pounder", "1/52", ""],
+        ["oa-130-063", "ee", "6 x Light AA", "2/32", ""]
+      ]
+    },
+    {
+      "image": "SA 2nd South African Infantry Division.png", "formation": "2nd South African Infantry Division", "morale_raw": "0 (-1)",
+      "rows": [
+        ["oa-131-066", "a", "N", "2/36", ""],
+        ["oa-131-067", "a", "N", "1/38", ""],
+        ["oa-131-068", "p", "N", "1/32", ""],
+        ["oa-131-069", "p", "N", "1/38", ""],
+        ["oa-131-070", "p", "N", "1/38", ""],
+        ["oa-131-071", "a", "N", "3/44", ""],
+        ["oa-131-072", "p", "N", "3/44", ""],
+        ["oa-131-073", "p", "N", "3/44", ""],
+        ["oa-131-074", "p", "N", "3/44", ""],
+        ["oa-131-075", "a", "N", "1/38", ""],
+        ["oa-131-076", "p", "N", "1/38", ""],
+        ["oa-131-077", "p", "N", "1/38", ""],
+        ["oa-131-078", "p", "N", "1/38", ""],
+        ["oa-131-079", "u", "N", "2/41", ""],
+        ["oa-131-080", "nn", "N", "2/43", ""],
+        ["oa-131-081", "aa", "8 x 2-pounder", "1/45", ""],
+        ["oa-131-082", "x", "4 x 25-pounder", "2/44", ""],
+        ["oa-131-083", "x", "4 x 25-pounder", "2/44", ""],
+        ["oa-131-084", "x", "4 x 4.5-inch Howitzer", "2/44", ""],
+        ["oa-131-085", "ee", "6 x Light AA", "1/45", ""]
+      ]
+    },
+    {
+      "image": "AL 1st Free French Brigade.png", "formation": "1st Free French Brigade", "morale_raw": "+1",
+      "rows": [
+        ["oa-131-086", "a", "N", "2/62", ""],
+        ["oa-131-087", "r", "N", "2/62", ""],
+        ["oa-131-088", "r", "N", "2/62", ""],
+        ["oa-131-089", "r", "N", "2/62", ""],
+        ["oa-131-090", "r", "N", "1/65", ""],
+        ["oa-131-091", "r", "N", "2/62", ""],
+        ["oa-131-092", "y", "4 x French 149mm (see It. Arty)", "1/63", "The sheet explicitly refers to the Italian artillery chart; do not substitute a same-nationality weapon."],
+        ["oa-131-093", "cc", "4 x 2-pounder", "3/63", ""],
+        ["oa-131-094", "ff", "4 x Light AA", "3/63", ""],
+        ["oa-131-095", "tt", "N", "1/95", "Note g describes a composite column; speculative Stuart identification in that narrative is not a quantified assigned loadout."]
+      ]
+    },
+    {
+      "image": "AL 2nd Free French Brigade.png", "formation": "2nd Free French Brigade", "morale_raw": "+1",
+      "rows": [
+        ["oa-132-096", "a", "N", "3/75", ""],
+        ["oa-132-097", "s", "N", "3/75", ""],
+        ["oa-132-098", "s", "N", "3/75", ""],
+        ["oa-132-099", "cc", "3 x 2-pounder", "3/75", ""]
+      ]
+    },
+    {
+      "image": "AL 1st Greek Brigade Group.png", "formation": "1st Greek Infantry Brigade Group", "morale_raw": "0",
+      "rows": [
+        ["oa-132-100", "a", "N", "1/93", ""],
+        ["oa-132-101", "m", "N", "1/93", "Note a confirms close assault ratings 2/2 include the unrepresented Greek MG Company; do not add another company."],
+        ["oa-132-102", "m", "N", "1/93", "Note a confirms close assault ratings 2/2 include the unrepresented Greek MG Company; do not add another company."],
+        ["oa-132-103", "m", "N", "1/93", "Note a confirms close assault ratings 2/2 include the unrepresented Greek MG Company; do not add another company."],
+        ["oa-132-104", "x", "6 x 25-pounder", "1/93", ""]
+      ]
+    },
+    {
+      "image": "AL The Polish (Carpathian) Division.png", "formation": "The Polish (Carpathian) Brigade", "morale_raw": "+1 (-1)",
+      "rows": [
+        ["oa-132-105", "a", "N", "3/1", ""],
+        ["oa-132-106", "s", "N", "3/1", ""],
+        ["oa-132-107", "s", "N", "3/1", ""],
+        ["oa-132-108", "s", "N", "3/1", ""],
+        ["oa-132-109", "w", "U@1", "3/1", ""],
+        ["oa-132-110", "ss", "N", "3/1", ""],
+        ["oa-132-111", "dd", "1 x 2-pounder", "3/1", ""],
+        ["oa-132-112", "y", "4 x 18-pounder", "3/1", ""]
+      ]
+    },
+    {
+      "image": "AL Unasisgned Allied Units.png", "formation": "Unassigned Allied Units", "morale_raw": "+1",
+      "rows": [
+        ["oa-132-113", "v", "N", "D", ""],
+        ["oa-132-114", "s", "N", "3/8", ""]
+      ]
+    },
+    {
+      "image": "GE 5th Light Panzer Division.png", "formation": "5th Light Panzer Division (later 21st Panzer Division)", "morale_raw": "+2",
+      "rows": [
+        ["oa-162-083", "c", "1 x PzII", "3/21", "a: Reorganized as 21st Panzer Division at 2/58; replace HQ counter."],
+        ["oa-162-084", "c", null, "2/58", "b: Replacement HQ retains the same, if any, tank TOE point attached to 5th Light; not an additional initial tank."],
+        ["oa-162-085", "c", "1 x PzII", "2/21", ""],
+        ["oa-162-086", "f", "1 x PzI, 4 x PzII, 1 x PzIIIE, 7 x PzIIIH, 1 x PzIVD", "1/22", ""],
+        ["oa-162-087", "f", "5 x PzII, 6 x PzIIIH, 2 x PzIVD, 1 x PzIVE", "2/22", ""],
+        ["oa-162-088", "n", "N", "2/24", "c: Reassigned between organizations during campaign."],
+        ["oa-162-089", "n", "N", "1/26", "c: Reassigned between organizations during campaign."],
+        ["oa-162-090", "x", "5 x 3.7cm, 3 x 5cm", "1/21", ""],
+        ["oa-162-091", "y", "3 x PzjgI", "3/22", ""],
+        ["oa-162-092", "v", "3 x 10.5cm Med Gun", "1/23", "d: Later II/155; counters replace one another and are not separate formations."],
+        ["oa-162-093", "bb", "6 x Light AA", "3/22", ""],
+        ["oa-162-094", "cc", "4 x Heavy AA", "2/22", ""],
+        ["oa-162-095", "ff", "N", "1/21", ""],
+        ["oa-162-096", "gg", "N", "2/21", ""]
+      ]
+    },
+    {
+      "image": "GE 15th Panzer Division.png", "formation": "15th Panzer Division", "morale_raw": "+2",
+      "rows": [
+        ["oa-163-001", "c", "1 x PzIIIH", "3/29", ""],
+        ["oa-163-002", "c", "1 x PzIIIH", "2/31", ""],
+        ["oa-163-003", "f", "4 x PzII, 8 x PzIIIH, 2 x PzIVE", "2/31", ""],
+        ["oa-163-004", "f", "4 x PzII, 7 x PzIIIH, 4 x PzIVD", "1/32", ""],
+        ["oa-163-005", "b", "N", "2/27", "a: Shifted between 5th Light and 21st Panzer."],
+        ["oa-163-006", "g", "N", "2/27", ""],
+        ["oa-163-007", "b", "N", "1/28", "b: Intermediate HQ for 104th/115th, maximum six infantry-type battalions; conventional regimental mode maximum three."],
+        ["oa-163-008", "d", "1 x 7.5cm Lt Inf Gun", "1/28", "c: Later transferred to 21st Panzer and enlarged; initial organization shown."],
+        ["oa-163-009", "j", "N", "1/28", ""],
+        ["oa-163-010", "j", "N", "1/29", ""],
+        ["oa-163-011", "d", "1 x 7.5cm Lt Inf Gun", "1/30", ""],
+        ["oa-163-012", "j", "N", "1/30", ""],
+        ["oa-163-013", "j", "N", "1/30", ""],
+        ["oa-163-014", "x", "5 x 3.7cm, 3 x 5cm", "3/24", ""],
+        ["oa-163-015", "u", "2 x 15cm Med Inf Gun", "1/33", ""],
+        ["oa-163-016", "u", "4 x 7.5cm Lt Inf Gun", "2/30", ""],
+        ["oa-163-017", "u", "3 x 15cm Gun", "2/34", ""],
+        ["oa-163-018", "ee", "N", "3/28", ""],
+        ["oa-163-019", "gg", "N", "1/28", ""]
+      ]
+    },
+    {
+      "image": "GE 90th Light (The Afrika) Division.png", "formation": "90th Light (The Afrika) Division", "morale_raw": "+1",
+      "rows": [
+        ["oa-166-121", "b", "N", "2/44", "a: Originally Afrika Division; renamed 90th Light on November 27, 1941."],
+        ["oa-166-122", "b", "N", "3/32", ""],
+        ["oa-166-123", "k", "N", "3/32", ""],
+        ["oa-166-124", "k", "N", "3/32", ""],
+        ["oa-166-125", "k", "N", "3/32", ""],
+        ["oa-166-126", "b", "N", "1/37", "b: Contains ex-members of French Foreign Legion."],
+        ["oa-166-127", "l", "U@3", "1/37", ""],
+        ["oa-166-128", "l", "U@6", "1/37", ""],
+        ["oa-166-129", "v", "3 x 10.5cm Med Gun", "1/37", ""],
+        ["oa-166-130", "l", "N", "3/49", "c: No regimental HQ; later became part of 200th Panzergrenadier Regiment."],
+        ["oa-166-131", "l", "N", "3/49", "c: No regimental HQ; later became part of 200th Panzergrenadier Regiment."],
+        ["oa-166-132", "u", "3 x 21cm How, 3 x 10.5cm Med Gun", "2/82", ""],
+        ["oa-166-133", "z", "3 x 7.5cm Lt Gun, 3 x Light AA", "1/37", ""],
+        ["oa-166-134", "x", "4 x 5cm", "1/91", ""],
+        ["oa-166-135", "ee", "U@6", "1/43", ""],
+        ["oa-166-136", "gg", "N", "1/34", ""]
+      ]
+    },
+    {
+      "image": "GE 164th Light Afrika Division.png", "formation": "164th Light Afrika Division", "morale_raw": "+1",
+      "rows": [
+        ["oa-164-033", "b", "N", "1/93", "a: 707th/708th heavy infantry gun companies attached upon arrival; no separate panzerjaeger battalion supplied by this chart."],
+        ["oa-164-034", "b", "N", "3/93", ""],
+        ["oa-164-035", "k", "N", "3/93", ""],
+        ["oa-164-036", "k", "N", "3/93", ""],
+        ["oa-164-037", "k", "N", "3/93", ""],
+        ["oa-164-038", "b", "N", "1/94", ""],
+        ["oa-164-039", "k", "O@8", "1/94", ""],
+        ["oa-164-040", "k", "O@8", "1/94", ""],
+        ["oa-164-041", "k", "O@8", "1/94", ""],
+        ["oa-164-042", "b", "N", "3/95", ""],
+        ["oa-164-043", "k", "N", "3/95", ""],
+        ["oa-164-044", "k", "N", "3/95", ""],
+        ["oa-164-045", "k", "N", "3/95", ""],
+        ["oa-164-046", "ff", "N", "2/94", "Chart name 165th; counter abbreviation 164 retained as printed."],
+        ["oa-164-047", "bb", "6 x Light AA", "1/93", ""],
+        ["oa-164-048", "b", "N", "1/95", ""],
+        ["oa-164-049", "u", "6 x 10.5cm Med Gun", "1/95", ""],
+        ["oa-164-050", "u", "2 x 15cm Med Field Howitzer", "1/95", ""],
+        ["oa-164-051", "u", "6 x 10.5cm Lt Field Howitzer", "1/95", ""],
+        ["oa-164-052", "u", "6 x 15cm Gun", "1/95", ""],
+        ["oa-164-053", "gg", "N", "3/93", ""]
+      ]
+    },
+    {
+      "image": "GE Sonderverband 288.png", "formation": "Sonderverband 288", "morale_raw": "+1",
+      "rows": [
+        ["oa-162-097", "e", "N", "2/76", "a: Renamed PanzerGrenadier-Regiment Afrika at 3/102."],
+        ["oa-162-098", "m", "U@3", "2/76", "b: Motorized mountain infantry."],
+        ["oa-162-099", "p", "N", "2/76", ""],
+        ["oa-162-100", "q", "N", "2/76", ""],
+        ["oa-162-101", "y", "2 x 5cm", "2/76", ""],
+        ["oa-162-102", "gg", "N", "2/76", ""]
+      ]
+    },
+    {
+      "image": "GE 300th Oasis Battalion.png", "formation": "300th Oasis Battalion", "morale_raw": "0",
+      "note": "a: Administrative, not operational headquarters; companies are independent company-level units.",
+      "rows": [
+        ["oa-163-020", "r", "N", "1/25", ""],
+        ["oa-163-021", "r", "N", "1/25", ""],
+        ["oa-163-022", "r", "N", "2/25", ""],
+        ["oa-163-023", "r", "N", "1/27", ""],
+        ["oa-163-024", "r", "N", "2/29", ""],
+        ["oa-163-025", "r", "N", "2/30", ""],
+        ["oa-163-026", "r", "N", "2/30", ""],
+        ["oa-163-027", "r", "N", "2/31", ""],
+        ["oa-163-028", "r", "N", "2/31", ""],
+        ["oa-163-029", "r", "N", "3/33", ""],
+        ["oa-163-030", "r", "N", "3/34", ""],
+        ["oa-163-031", "r", "N", "2/35", ""],
+        ["oa-163-032", "r", "N", "1/39", ""]
+      ]
+    },
+    {
+      "image": "GE Fallschirmjaeger-Battalion Ramcke.png", "formation": "Fallschirmjaeger-Brigade Ramcke", "morale_raw": "+2",
+      "note": "a: May be airdropped; battalions remain infantry-type for Barrage and Air Bombardment.",
+      "rows": [
+        ["oa-164-054", "b", "N", "2/86", ""],
+        ["oa-164-055", "h", "N + 1 x 7.5cm Lt Gun", "1/91", ""],
+        ["oa-164-056", "h", "N + 1 x 7.5cm Lt Gun", "1/92", ""],
+        ["oa-164-057", "h", "N + 1 x 7.5cm Lt Gun", "1/93", ""],
+        ["oa-164-058", "h", "N + 1 x 7.5cm Lt Gun", "2/87", ""],
+        ["oa-164-059", "h", "N + 1 x 7.5cm Lt Gun", "2/86", ""]
+      ]
+    },
+    {
+      "image": "GE Unassigned Infantry Units.png", "formation": "Unassigned Infantry Units", "morale_raw": "+1",
+      "rows": [
+        ["oa-164-060", "a", "N", "2/20", ""],
+        ["oa-164-061", "t", "N", "2/66", "a: Initially attached to 90th Light, later 164th Light."],
+        ["oa-164-062", "t", "N", "3/76", "b: Initially attached to 200th PanzerGrenadier Regiment, later 164th Light."],
+        ["oa-164-063", "s", "N", "1/85", ""],
+        ["oa-164-064", "gg", "N", "3/66", ""]
+      ]
+    },
+    {
+      "image": "GE Kampfgruppe HQs.png", "formation": "Kampfgruppen HQs", "morale_raw": "That of the attached units",
+      "note": "Ad hoc formations created by attaching a German unit; no fixed arrival or initial TOE is supplied. Do not infer an independent loadout from profile maximum.",
+      "rows": [
+        ["oa-165-065", "b", null, null, ""], ["oa-165-066", "b", null, null, ""],
+        ["oa-165-067", "b", null, null, ""], ["oa-165-068", "b", null, null, ""],
+        ["oa-165-069", "b", null, null, ""], ["oa-165-070", "b", null, null, ""],
+        ["oa-165-071", "b", null, null, ""], ["oa-165-072", "b", null, null, ""],
+        ["oa-165-073", "b", null, null, ""], ["oa-165-074", "b", null, null, ""],
+        ["oa-165-075", "b", null, null, ""], ["oa-165-076", "b", null, null, ""],
+        ["oa-165-077", "b", null, null, ""], ["oa-165-078", "b", null, null, ""]
+      ]
+    },
+    {
+      "image": "GE Non-Divisional Artillery Units.png", "formation": "Non-Divisional Artillery Units", "morale_raw": "+1",
+      "reviewed_profile_disagreements": {"oa-165-083": "ge-x"},
+      "rows": [
+        ["oa-165-079", "b", "N", "2/80", "a: Maximum three assigned artillery units."],
+        ["oa-165-080", "b", "N", "3/97", "a: Maximum three assigned artillery units."],
+        ["oa-165-081", "b", "N", "3/31", "b: Maximum five assigned artillery units; historical assignments below are not a fixed loadout."],
+        ["oa-165-082", "v", "3 x 10.5cm Med Gun", "1/45", "c: Coastal defense is a name, not an emplacement restriction."],
+        ["oa-165-083", "w", "1 x 17cm Gun", "2/30", "Printed w; existing profile link ge-x differs and is preserved pending separate correction."],
+        ["oa-165-084", "v", "3 x 15cm SP Gun", "2/30", ""],
+        ["oa-165-085", "v", "3 x 155mm (Fr. 1915 short)", "3/24", ""],
+        ["oa-165-086", "b", "N", "3/35", ""],
+        ["oa-165-087", "v", "3 x 15cm Med Gun", "3/32", "d: Formerly 864th Heavy Artillery Battalion."],
+        ["oa-165-088", "v", null, null, "e: Replacement of I/75 on reassignment to 155th; inherits existing strength, not a new initial loadout."],
+        ["oa-165-089", "v", "3 x 15cm Gun", "2/34", "f: Formerly 911th Heavy Artillery Battalion."],
+        ["oa-165-090", "w", "1 x 17cm Gun", "1/74", ""],
+        ["oa-165-091", "v", "3 x 155mm (Fr. 1915 short)", "3/24", ""],
+        ["oa-165-092", "v", "3 x 10.5cm Med Gun", "3/71", ""],
+        ["oa-165-093", "v", "3 x 155mm (Fr. 1915 short)", "2/24", ""],
+        ["oa-165-094", "v", "3 x 155mm (Fr. 1915 short)", "2/24", ""],
+        ["oa-165-095", "v", "3 x 10.5cm Med Gun", "1/66", ""],
+        ["oa-165-096", "v", "3 x 15cm Med Field Howitzer", "2/36", ""],
+        ["oa-165-097", "w", "1 x 15cm Med Field Howitzer", "2/68", "Counter abbreviation I/772 is incorrect per chart note."],
+        ["oa-165-098", "w", "1 x 21cm Howitzer", "3/40", ""]
+      ]
+    },
+    {
+      "image": "GE Unassigned Air Units.png", "formation": "Unassigned Anti-Air Units", "morale_raw": "+1",
+      "rows": [
+        ["oa-166-099", "dd", "1 x Heavy AA", "1/39", ""],
+        ["oa-166-100", "cc", "3 x Heavy AA", "2/93", ""],
+        ["oa-166-101", "cc", "4 x Heavy AA", "1/68", ""],
+        ["oa-166-102", "aa", "8 x Light AA", "2/92", ""],
+        ["oa-166-103", "cc", "4 x Heavy AA", "3/52", "b: Later grouped under 135th Flak Regiment."],
+        ["oa-166-104", "cc", "4 x Heavy AA", "2/59", "b: Later grouped under 135th Flak Regiment."],
+        ["oa-166-105", "aa", "8 x Light AA", "1/67", ""],
+        ["oa-166-106", "bb", "6 x Light AA", "2/88", ""],
+        ["oa-166-107", "bb", "6 x Light AA", "2/59", ""],
+        ["oa-166-108", "bb", "6 x Light AA", "2/89", ""],
+        ["oa-166-109", "dd", "2 x Heavy AA", "2/66", ""],
+        ["oa-166-110", "bb", "5 x Light AA", "1/61", ""],
+        ["oa-166-111", "aa", "12 x Light AA", "3/89", ""],
+        ["oa-166-112", "aa", "12 x Light AA", "1/91", ""],
+        ["oa-166-113", "aa", "8 x Light AA", "3/91", ""],
+        ["oa-166-114", "bb", "6 x Light AA", "2/92", ""],
+        ["oa-166-115", "cc", "3 x Heavy AA", "3/60", ""],
+        ["oa-166-116", "aa", "10 x Light AA", "3/66", ""],
+        ["oa-166-117", "aa", "8 x Light AA", "1/58", ""],
+        ["oa-166-118", "aa", "12 x Light AA", "2/70", ""],
+        ["oa-166-119", "bb", "6 x Light AA", "1/61", ""],
+        ["oa-166-120", "aa", "8 x Light AA", "3/92", ""]
+      ]
+    },
+    {
+      "image": "IT 132nd Ariete Divisione Corazzata (Armored).png", "formation": "132nd Ariete Divisione Corazzata", "morale_raw": "+1",
+      "note": "a: Initial arrival organization, not later battle organization or reinforcements stripped from Littorio.",
+      "row_references": {"oa-147-013": "oa-157-056", "oa-147-014": "oa-157-057"},
+      "rows": [
+        ["oa-147-001", "d", "1 x M13/40", "1/18", ""],
+        ["oa-147-002", "d", "1 x M13/40", "1/18", "b: Originally 32nd RC."],
+        ["oa-147-003", "l", "7 x M13/40", "1/18", ""],
+        ["oa-147-004", "l", "7 x M13/40", "1/18", ""],
+        ["oa-147-005", "l", "7 x M13/40", "1/18", ""],
+        ["oa-147-006", "c", "N", "1/18", ""],
+        ["oa-147-007", "n", "N", "1/18", ""],
+        ["oa-147-008", "t", "N", "1/18", ""],
+        ["oa-147-009", "t", "N", "1/18", ""],
+        ["oa-147-010", "qq", "6 x 47/32", "1/18", "c: Conglomeration of 72nd, 132nd and 142nd AT companies."],
+        ["oa-147-011", "ww", "N", "1/18", ""],
+        ["oa-147-012", "kk", "3 x 75/27 Gun, 3 x 75/18 Gun-Howitzer, 3 x 105/28 Gun, 6 x Light AA", "1/18", "d: Later Semovente additions are not part of this arrival loadout."],
+        ["oa-147-013", null, null, "1/18", "e: Attached, not assigned; chart leaves profile and TOE blank."],
+        ["oa-147-014", null, null, "1/18", "e: Attached, not assigned; chart leaves profile and TOE blank."]
+      ]
+    },
+    {
+      "image": "IT 133rd Littoria Divisione Corazzata (Armored).png", "formation": "133rd Littorio Divisione Corazzata", "morale_raw": "0",
+      "note": "a: Arrival loadout before transfers to Ariete; not a later current-strength total.",
+      "rows": [
+        ["oa-148-015", "d", "1 x L6/40", "3/62", ""],
+        ["oa-148-016", "d", "1 x L6/40", "3/62", ""],
+        ["oa-148-017", "l", "5 x M13/40, 2 x M14/41", "3/62", ""],
+        ["oa-148-018", "l", "7 x M14/41", "3/62", ""],
+        ["oa-148-019", "l", "4 x M13/40, 3 x M14/41", "3/62", ""],
+        ["oa-148-020", "c", "N", "3/62", "b: 21st mitraglieri battalion sunk in transit and excluded."],
+        ["oa-148-021", "t", "N", "3/62", ""],
+        ["oa-148-022", "t", "N", "3/62", ""],
+        ["oa-148-023", "vv", "N", "3/62", ""],
+        ["oa-148-024", null, null, null, "c: No regimental counter exists; descriptive parent heading, no initial strength row."],
+        ["oa-148-025", "kk", "3 x 100/17 Howitzer, 6 x Light AA", "3/62", ""],
+        ["oa-148-026", "mm", "2 x Semovente 75/18 SP Gun", "3/62", "d: Transferred immediately to Ariete, later replaced by DLIV/DLVI."],
+        ["oa-148-027", "mm", "2 x Semovente 75/18 SP Gun", "3/62", "d: Transferred immediately to Ariete, later replaced by DLIV/DLVI."]
+      ]
+    },
+    {
+      "image": "IT The Libyan Tank Command.png", "formation": "The Libyan Tank Command (Babini Gruppo Corazzato)", "morale_raw": "0",
+      "rows": [
+        ["oa-149-050", "d", "1 x M11/39", "D", ""],
+        ["oa-149-051", "d", "1 x CV33", "D", ""],
+        ["oa-149-052", "k", "9 x CV33", "D", ""],
+        ["oa-149-053", "k", "9 x CV33", "D", "b: Initially attached to 62 Marmarica."],
+        ["oa-149-054", "k", "9 x CV33", "D", "b: Initially attached to 63 Cirene."],
+        ["oa-149-055", "l", "7 x M11/39", "D", "b: Initially attached to 1st CCNN."],
+        ["oa-149-056", "d", "1 x CV33", "D", ""],
+        ["oa-149-057", "k", "9 x CV33", "D", "b: Initially attached to 2nd Libyan."],
+        ["oa-149-058", "k", "9 x CV33", "D", ""],
+        ["oa-149-059", "k", "9 x CV33", "D", "c: One company initially attached to Maletti."],
+        ["oa-149-060", "k", "9 x CV33", "D", ""],
+        ["oa-149-061", "l", "7 x M11/39", "D", "b: Initially attached to Maletti."]
+      ]
+    },
+    {
+      "image": "IT Gruppo Maletti.png", "formation": "Gruppo Maletti", "morale_raw": "-2",
+      "row_references": {"oa-150-103": "oa-149-061"},
+      "rows": [
+        ["oa-150-089", "b", "N", "D", ""], ["oa-150-090", "f", "N", "D", ""],
+        ["oa-150-091", "w", "N", "D", ""], ["oa-150-092", "w", "N", "D", ""],
+        ["oa-150-093", "w", "N", "D", ""], ["oa-150-094", "f", "N", "D", ""],
+        ["oa-150-095", "x", "N", "D", ""], ["oa-150-096", "x", "N", "D", ""],
+        ["oa-150-097", "f", "N", "D", "b: Camel regiment in name only."],
+        ["oa-150-098", "zz", "N", "D", ""], ["oa-150-099", "zz", "N", "D", ""],
+        ["oa-150-100", "zz", "N", "D", ""],
+        ["oa-150-101", "mm", "3 x 75/27 Gun", "D", ""],
+        ["oa-150-102", "mm", "2 x 75/18 Gun-Howitzer", "D", ""],
+        ["oa-150-103", null, null, "D", "c: Same II(M) from Libyan Tank Command, attached; not another battalion."]
+      ]
+    },
+    {
+      "image": "IT 1st Libyan Infantry Division (Sibille).png", "formation": "1st Libyan Infantry Division (Sibille)", "morale_raw": "-2",
+      "rows": [
+        ["oa-148-028", "b", "N", "D", ""], ["oa-148-029", "h", "1 x 65/17 Gun", "D", ""],
+        ["oa-148-030", "x", "N", "D", ""], ["oa-148-031", "x", "N", "D", ""],
+        ["oa-148-032", "x", "N", "D", ""], ["oa-148-033", "h", "1 x 65/17 Gun", "D", ""],
+        ["oa-148-034", "x", "N", "D", ""], ["oa-148-035", "x", "N", "D", ""],
+        ["oa-148-036", "x", "N", "D", ""], ["oa-148-037", "jj", "6 x 75/27 Gun", "D", ""],
+        ["oa-148-038", "rr", "2 x 47/32 Gun", "D", ""]
+      ]
+    },
+    {
+      "image": "IT 2nd Libyan (Prescatori) Infantry Division.png", "formation": "2nd Libyan (Pescatori) Infantry Division", "morale_raw": "-2",
+      "row_references": {"oa-148-049": "oa-149-057"},
+      "rows": [
+        ["oa-148-039", "b", "N", "D", ""], ["oa-148-040", "h", "1 x 65/17", "D", ""],
+        ["oa-148-041", "x", "N", "D", ""], ["oa-148-042", "x", "N", "D", ""],
+        ["oa-148-043", "x", "N", "D", ""], ["oa-148-044", "h", "1 x 65/17 Gun", "D", ""],
+        ["oa-148-045", "x", "N", "D", ""], ["oa-148-046", "x", "N", "D", ""],
+        ["oa-148-047", "x", "N", "D", ""],
+        ["oa-148-048", "jj", "9 x 75/27 Gun, 3 x 100/17 Howitzer", "D", ""],
+        ["oa-148-049", null, null, "D", "a: Same IX(L) from Libyan Tank Command, initially attached."]
+      ]
+    },
+    {
+      "image": "IT 16th Pistoia Division.png", "formation": "16th Pistoia Division (Semi-motorized)", "morale_raw": "-1",
+      "rows": [
+        ["oa-149-062", "b", "N", "2/92", ""], ["oa-149-063", "h", "1 x 65/17 Gun", "2/92", ""],
+        ["oa-149-064", "u", "N", "2/92", ""], ["oa-149-065", "u", "N", "2/92", ""],
+        ["oa-149-066", "u", "N", "2/92", ""], ["oa-149-067", "h", "1 x 65/17 Gun", "2/92", ""],
+        ["oa-149-068", "u", "N", "2/92", ""], ["oa-149-069", "u", "N", "2/92", ""],
+        ["oa-149-070", "u", "N", "2/92", ""],
+        ["oa-149-071", "kk", "3 x 75/27 Gun, 3 x 100/17 Howitzer, 3 x Heavy AA", "2/92", ""],
+        ["oa-149-072", "bbb", "N", "2/92", ""], ["oa-149-073", "n", "N", "2/99", ""],
+        ["oa-149-074", "vv", "U@4", "2/92", ""]
+      ]
+    },
+    {
+      "image": "IT 60th Sabratha Division.png", "formation": "60th Sabratha Division (Semi-motorized)", "morale_raw": "-1",
+      "rows": [
+        ["oa-149-075", "b", "N", "1/12", ""], ["oa-149-076", "h", "1 x 65/17 Gun", "1/12", ""],
+        ["oa-149-077", "u", "N", "1/12", ""], ["oa-149-078", "u", "N", "1/12", ""],
+        ["oa-149-079", "u", "N", "1/12", ""], ["oa-149-080", "h", "1 x 65/17 Gun", "1/12", ""],
+        ["oa-149-081", "u", "N", "1/12", ""], ["oa-149-082", "u", "N", "1/12", ""],
+        ["oa-149-083", "u", "N", "1/12", ""], ["oa-149-084", "bb", "N", "1/12", ""],
+        ["oa-149-085", "rr", "2 x 47/32 Gun", "1/12", ""],
+        ["oa-149-086", "kk", "6 x 75/27 Gun, 3 x 100/17 Howitzer, 3 x Heavy AA", "1/12", ""],
+        ["oa-149-087", "bbb", "N", "1/12", ""], ["oa-149-088", "aaa", "N", "1/12", ""]
+      ]
+    },
+    {
+      "image": "IT 17th Pavia Division.png", "formation": "17th Pavia Division (Semi-motorized)", "morale_raw": "-1",
+      "row_references": {"oa-150-117": "oa-161-076", "oa-150-118": "oa-161-077", "oa-150-119": "oa-161-078"},
+      "rows": [
+        ["oa-150-104", "e", "N", "2/22", ""], ["oa-150-105", "h", "1 x 65/17 Gun", "2/22", ""],
+        ["oa-150-106", "u", "N", "2/22", ""], ["oa-150-107", "u", "N", "2/22", ""],
+        ["oa-150-108", "u", "N", "2/22", ""], ["oa-150-109", "h", "1 x 65/17 Gun", "2/22", ""],
+        ["oa-150-110", "u", "N", "2/22", ""], ["oa-150-111", "u", "N", "2/22", ""],
+        ["oa-150-112", "u", "N", "2/22", ""], ["oa-150-113", "bb", "N", "2/22", ""],
+        ["oa-150-114", "rr", "2 x 47/32 Gun", "2/22", ""],
+        ["oa-150-115", "kk", "6 x 75/27 Gun, 3 x 100/17 Howitzer, 2 x Heavy AA", "2/22", ""],
+        ["oa-150-116", "bbb", "N", "2/22", ""],
+        ["oa-150-117", null, null, "2/22", "a: Independent 9th CCNN Legion attached; profile/TOE blank here."],
+        ["oa-150-118", null, null, "2/22", "a: Attached 9th CCNN Legion member."],
+        ["oa-150-119", null, null, "2/22", "a: Attached 9th CCNN Legion member."]
+      ]
+    },
+    {
+      "image": "IT 25th Bolgna Division.png", "formation": "25th Bologna Division", "morale_raw": "-1",
+      "row_references": {"oa-151-014": "oa-161-079"},
+      "rows": [
+        ["oa-151-001", "e", "N", "1/24", ""], ["oa-151-002", "h", "1 x 65/17 Gun", "1/24", ""],
+        ["oa-151-003", "u", "N", "1/24", ""], ["oa-151-004", "u", "N", "1/24", ""],
+        ["oa-151-005", "u", "N", "1/24", ""], ["oa-151-006", "h", "1 x 65/17 Gun", "1/24", ""],
+        ["oa-151-007", "u", "N", "1/24", ""], ["oa-151-008", "u", "N", "1/24", ""],
+        ["oa-151-009", "u", "N", "1/24", ""], ["oa-151-010", "bb", "N", "1/24", ""],
+        ["oa-151-011", "rr", "2 x 47/32 Gun", "1/24", ""],
+        ["oa-151-012", "kk", "6 x 75/27 Gun, 3 x 100/17 Howitzer, 2 x Heavy AA", "1/24", ""],
+        ["oa-151-013", "bbb", "N", "1/24", ""],
+        ["oa-151-014", null, null, "1/24", "a: Independent 32nd CCNN battalion attached; blank profile/TOE here."]
+      ]
+    },
+    {
+      "image": "IT 101st Trieste Divisione Fanteria Moroizzate.png", "formation": "101st Trieste Divisione Fanteria Motorizzata", "morale_raw": "0",
+      "rows": [
+        ["oa-151-015", "b", "N", "3/50", ""], ["oa-151-016", "j", "2 x 65/17 Gun", "3/50", ""],
+        ["oa-151-017", "u", "N", "3/50", "b: CPA 10+ instead of 10; sufficient trucks for full motorization."],
+        ["oa-151-018", "u", "N", "3/50", "b: CPA 10+ instead of 10; sufficient trucks for full motorization."],
+        ["oa-151-019", "p", "N", "3/50", "c: Mixed heavy weapons battalion."],
+        ["oa-151-020", "j", "2 x 65/17 Gun", "3/50", ""],
+        ["oa-151-021", "u", "N", "3/50", "b: CPA 10+ instead of 10; sufficient trucks for full motorization."],
+        ["oa-151-022", "u", "N", "3/50", "b: CPA 10+ instead of 10; sufficient trucks for full motorization."],
+        ["oa-151-023", "u", "N", "3/50", "b: CPA 10+ instead of 10; sufficient trucks for full motorization."],
+        ["oa-151-024", "ff", "N", "3/50", ""], ["oa-151-025", "c", "N", "3/50", ""],
+        ["oa-151-026", "t", "N", "3/50", ""], ["oa-151-027", "t", "N", "3/50", ""],
+        ["oa-151-028", "n", "N", "3/50", ""], ["oa-151-029", "p", "N", "3/50", ""],
+        ["oa-151-030", "p", "N", "3/50", "d: Also listed as 508th Divisional Heavy Weapons Battalion."],
+        ["oa-151-031", "jj", "6 x 75/27 Gun, 3 x 100/17 Howitzer, 3 x 105/28 Gun", "3/50", "e: Not Littorio's 21/3 artillery battalion."],
+        ["oa-151-032", "tt", "6 x Light AA", "3/50", ""],
+        ["oa-151-033", "vv", "N", "2/70", ""], ["oa-151-034", "bbb", "N", "3/50", ""]
+      ]
+    },
+    {
+      "image": "IT 55th Savona DIvision.png", "formation": "55th Savona Division", "morale_raw": "-1",
+      "row_references": {"oa-152-048": "oa-161-074", "oa-152-049": "oa-161-075"},
+      "rows": [
+        ["oa-152-035", "e", "N", "1/25", ""], ["oa-152-036", "h", "1 x 65/17 Gun", "1/25", ""],
+        ["oa-152-037", "u", "N", "1/25", ""], ["oa-152-038", "u", "N", "1/25", ""],
+        ["oa-152-039", "u", "N", "1/25", ""], ["oa-152-040", "h", "1 x 65/17 Gun", "1/25", ""],
+        ["oa-152-041", "u", "N", "1/25", ""], ["oa-152-042", "u", "N", "1/25", ""],
+        ["oa-152-043", "u", "N", "1/25", ""], ["oa-152-044", "bb", "N", "1/25", ""],
+        ["oa-152-045", "rr", "2 x 47/32 Gun", "1/25", ""],
+        ["oa-152-046", "kk", "6 x 75/18 Gun-Howitzer, 3 x 100/17 Howitzer, 2 x Heavy AA", "1/25", ""],
+        ["oa-152-047", "bbb", "N", "1/25", ""],
+        ["oa-152-048", null, null, "1/25", "a: Independent 7th CCNN Legion attached; blank profile/TOE here."],
+        ["oa-152-049", null, null, "1/25", "a: Attached 7th CCNN Legion member."]
+      ]
+    },
+    {
+      "image": "IT 27th Brescia DIvision.png", "formation": "27th Brescia Division", "morale_raw": "-1",
+      "row_references": {"oa-152-063": "oa-161-080", "oa-152-064": "oa-161-081"},
+      "rows": [
+        ["oa-152-050", "b", "N", "2/21", ""], ["oa-152-051", "h", "1 x 65/17 Gun", "2/21", ""],
+        ["oa-152-052", "u", "N", "2/21", ""], ["oa-152-053", "u", "N", "2/21", ""],
+        ["oa-152-054", "u", "N", "2/21", ""], ["oa-152-055", "h", "1 x 65/17 Gun", "2/21", ""],
+        ["oa-152-056", "u", "N", "2/21", ""], ["oa-152-057", "u", "N", "2/21", ""],
+        ["oa-152-058", "u", "N", "2/21", ""], ["oa-152-059", "bb", "N", "2/21", ""],
+        ["oa-152-060", "rr", "2 x 47/32 Gun", "2/21", ""],
+        ["oa-152-061", "kk", "6 x 75/18 Gun-Howitzer, 3 x 100/17 Howitzer, 2 x Heavy AA", "2/21", ""],
+        ["oa-152-062", "bbb", "N", "2/21", ""],
+        ["oa-152-063", null, null, "2/21", "a: Independent 33rd CCNN attached; blank profile/TOE here."],
+        ["oa-152-064", null, null, "2/21", "a: Independent 56th CCNN attached; blank profile/TOE here."]
+      ]
+    },
+    {
+      "image": "IT 64th Catanzaro Division.png", "formation": "64th Catanzaro Division", "morale_raw": "-1",
+      "rows": [
+        ["oa-153-065", "b", "N", "D", ""], ["oa-153-066", "h", "1 x 65/17 Gun", "D", ""],
+        ["oa-153-067", "u", "N", "D", ""], ["oa-153-068", "u", "N", "D", ""],
+        ["oa-153-069", "u", "N", "D", ""], ["oa-153-070", "h", "1 x 65/17 Gun", "D", ""],
+        ["oa-153-071", "u", "N", "D", ""], ["oa-153-072", "u", "N", "D", ""],
+        ["oa-153-073", "u", "N", "D", ""], ["oa-153-074", "bb", "N", "D", ""],
+        ["oa-153-075", "rr", "2 x 47/32 Gun", "D", ""],
+        ["oa-153-076", "kk", "6 x 75/18 Gun-Howitzer, 3 x 105/28 Gun, 3 x Light AA", "D", "a: Originally assigned to dispersed 3rd CCNN."],
+        ["oa-153-077", "bbb", "N", "D", ""]
+      ]
+    },
+    {
+      "image": "IT 102nd Trento Divisione Fanteria Moiruzzate.png", "formation": "102nd Trento Divisione Fanteria Motorizzata", "morale_raw": "0",
+      "note": "a: Most trucks stripped upon arrival to support other units; printed 10+ reference capacity does not assert later motorization.",
+      "rows": [
+        ["oa-153-078", "b", "N", "1/21", ""], ["oa-153-079", "j", "2 x 65/17 Gun", "1/21", ""],
+        ["oa-153-080", "u", "N", "1/21", "b: CPA 10+ instead of 10."],
+        ["oa-153-081", "u", "N", "1/21", "b: CPA 10+ instead of 10."],
+        ["oa-153-082", "u", "N", "1/21", "b: CPA 10+ instead of 10."],
+        ["oa-153-083", "j", "2 x 65/17 Gun", "1/21", ""],
+        ["oa-153-084", "u", "N", "1/21", "b: CPA 10+ instead of 10."],
+        ["oa-153-085", "u", "N", "1/21", "b: CPA 10+ instead of 10."],
+        ["oa-153-086", "u", "N", "1/21", "b: CPA 10+ instead of 10."],
+        ["oa-153-087", "c", "N", "1/21", ""], ["oa-153-088", "n", "N", "1/21", ""],
+        ["oa-153-089", "t", "N", "1/21", ""], ["oa-153-090", "t", "N", "1/21", ""],
+        ["oa-153-091", "bb", "N", "1/21", ""], ["oa-153-092", "qq", "8 x 47/32 Gun", "1/21", ""],
+        ["oa-153-093", "jj", "6 x 75/27 Gun, 3 x 100/17 Howitzer", "1/21", ""],
+        ["oa-153-094", "bbb", "N", "1/21", ""], ["oa-153-095", "ss", "8 x Light AA", "1/21", ""]
+      ]
+    },
+    {
+      "image": "IT 136th Giovani Fascisti Divisione Fanteria.png", "formation": "136th Giovani Fascisti Divisione Fanteria", "morale_raw": "-3",
+      "rows": [
+        ["oa-154-096", "b", "N", "1/97", ""], ["oa-154-097", "h", "1 x 65/17 Gun", "1/97", ""],
+        ["oa-154-098", "u", "N", "1/97", ""], ["oa-154-099", "u", "N", "1/97", ""],
+        ["oa-154-100", "s", "N", "1/97", ""],
+        ["oa-154-101", "kk", "6 x 75/27 Gun, 2 x 100/17 Howitzer, 3 x Heavy AA", "1/97", ""]
+      ]
+    },
+    {
+      "image": "IT 185th Folgore Division.png", "formation": "185th Folgore Division", "morale_raw": "+1",
+      "note": "a: Airborne division, may be airdropped under Case 42.4.",
+      "rows": [
+        ["oa-154-102", "b", "N", "2/94", ""], ["oa-154-103", "h", "1 x 47/32 Gun", "2/94", ""],
+        ["oa-154-104", "v", "N", "2/94", ""], ["oa-154-105", "v", "N", "2/94", ""],
+        ["oa-154-106", "v", "N", "2/94", ""], ["oa-154-107", "h", "1 x 47/32 Gun", "2/94", ""],
+        ["oa-154-108", "v", "N", "2/94", ""], ["oa-154-109", "v", "N", "2/94", ""],
+        ["oa-154-110", "v", "N", "2/94", ""],
+        ["oa-154-111", "kk", "6 x ParaArt, 3 x 75/46 AA Gun", "2/94", ""]
+      ]
+    },
+    {
+      "image": "IT Raggruppamento Esplorante del Corp Di Manovra.png", "formation": "Raggruppamento Esplorante del Corpo Di Manovra", "morale_raw": "-1",
+      "note": "a: Tank platoons were attached at various times; not a fixed initial addition.",
+      "rows": [
+        ["oa-154-112", "a", "1 x vv", "1/45", ""], ["oa-154-113", "vv", "N", "1/45", ""],
+        ["oa-154-114", "cc", "N", "1/45", ""], ["oa-154-115", "ll", "6 x 65/17 Gun", "1/45", ""],
+        ["oa-154-116", "bbb", "N", "1/45", ""]
+      ]
+    },
+    {
+      "image": "IT The Sahara Detachment.png", "formation": "Saharan Detachment", "morale_raw": "+1",
+      "rows": [
+        ["oa-154-117", "b", "N", "D", ""], ["oa-154-118", "x", "N", "D", ""],
+        ["oa-154-119", "x", "N", "D", ""], ["oa-154-120", "z", "N", "D", ""],
+        ["oa-154-121", "hh", "N", "D", ""],
+        ["oa-154-122", "mm", "3 x 65/17 Gun, 2 x Light AA", "D", ""],
+        ["oa-154-123", "yy", "U@2", "D", ""]
+      ]
+    },
+    {
+      "image": "IT Benghazi Garrison.png", "formation": "Benghazi Garrison", "morale_raw": "-3",
+      "rows": [
+        ["oa-155-001", "x", "N", "D", ""],
+        ["oa-155-002", "tt", "6 x 'I' Light AA", "D", ""],
+        ["oa-155-003", "ll", "6 x 100/17 Howitzer", "D", ""],
+        ["oa-155-004", "bb", "N", "D", "Profile bb printed despite engineer name; preserved without inference."]
+      ]
+    },
+    {
+      "image": "IT Tobruk Garrison.png", "formation": "Tobruk Garrison", "morale_raw": "-3",
+      "rows": [
+        ["oa-155-005", "f", "N", "D", ""], ["oa-155-006", "x", "N", "D", ""],
+        ["oa-155-007", "x", "N", "D", ""], ["oa-155-008", "x", "N", "D", ""],
+        ["oa-155-009", "f", "N", "D", ""], ["oa-155-010", "v", "N", "D", ""],
+        ["oa-155-011", "v", "N", "D", ""], ["oa-155-012", "v", "N", "D", ""],
+        ["oa-155-013", "f", "N", "D", ""], ["oa-155-014", "x", "N", "D", ""],
+        ["oa-155-015", "x", "N", "D", ""], ["oa-155-016", "x", "N", "D", ""],
+        ["oa-155-017", "x", "N", "D", ""],
+        ["oa-155-018", "mm", "2 x 100/17 Howitzer", "D", "a: No collective artillery HQ; not part of 31st infantry regiment."],
+        ["oa-155-019", "mm", "2 x 149mm Vichy French Gun", "D", "a: No collective artillery HQ."],
+        ["oa-155-020", "mm", "2 x 149/13 Howitzer", "D", "a: No collective artillery HQ."],
+        ["oa-155-021", "pp", "2 x 149/13 Howitzer", "D", "b: Emplaced artillery; cannot move, assault or replenish. Initial CPA 0, combat CPA 10."],
+        ["oa-155-022", "pp", "6 x (4) 100/17 Howitzer, 6 x 'I' Light AA", "D", "b: Only four of six artillery TOE can barrage land targets. Emplaced artillery cannot move/assault/replenish. Initial CPA 0, combat CPA 10; AA may be motorized."],
+        ["oa-155-023", "pp", "4 x 75/18 Gun-Howitzer, 8 x 'I' Light AA", "D", "b: Emplaced artillery cannot move/assault/replenish. Initial CPA 0, combat CPA 10; AA may be motorized."],
+        ["oa-155-024", "pp", "6 x (2) 105/28 Gun, 4 x 'I' Heavy AA", "D", "b: Only two of six artillery TOE can barrage land targets. Emplaced artillery cannot move/assault/replenish. Initial CPA 0, combat CPA 10; AA may be motorized."],
+        ["oa-155-025", "pp", "6 x (2) 149/13 Howitzer, 2 x 'I' Heavy AA", "D", "b: Only two of six artillery TOE can barrage land targets. Emplaced artillery cannot move/assault/replenish. Initial CPA 0, combat CPA 10; AA may be motorized."],
+        ["oa-155-026", "ss", "8 x 'I' Light AA", "D", "b: Initial CPA 0, combat CPA 10; AA not emplaced and may be motorized. At most one AA TOE added per Operations Stage."],
+        ["oa-155-027", null, null, null, "c: Partially sunk cruiser. Only fires at warships/airplanes, not land targets; cannot be attacked by land units or refloated. No profile/TOE/arrival cells printed here."]
+      ]
+    },
+    {
+      "image": "IT Bardia Garrison.png", "formation": "Bardia Garrison", "morale_raw": "-3",
+      "rows": [
+        ["oa-156-028", "f", "N", "D", ""], ["oa-156-029", "u", "N", "D", ""],
+        ["oa-156-030", "u", "N", "D", ""], ["oa-156-031", "u", "N", "D", ""],
+        ["oa-156-032", "aa", "N", "D", "a: Pre-WWI machineguns."],
+        ["oa-156-033", "qq", "6 x 47/32 Gun", "D", ""],
+        ["oa-156-034", "ll", "4 x 100/17 Howitzer", "D", "b: No collective artillery HQ."],
+        ["oa-156-035", "ll", "4 x 100/17 Howitzer, 2 x 75/27 Gun", "D", ""],
+        ["oa-156-036", "ll", "4 x 105/28 Gun, 3 x 100/17 Howitzer", "D", ""],
+        ["oa-156-037", "pp", "1 x 75/27 Gun, 1 x 100/17 Howitzer, 1 x 105/28 Gun", "D", "c: Emplaced, cannot move/assault/replenish artillery; may fire at warships or land. CPA 0, combat CPA 10."],
+        ["oa-156-038", "ss", "8 x Light AA", "D", ""]
+      ]
+    },
+    {
+      "image": "IT Derna Garrison.png", "formation": "Derna Garrison", "morale_raw": "-3",
+      "rows": [
+        ["oa-156-039", "m", "N", "D", "a: Cannot break down into smaller formations."],
+        ["oa-156-040", "pp", "5 x 75/18 Gun-Howitzer", "D", "b: Emplaced, cannot move/assault/replenish artillery; may fire at warships or land. CPA 0, combat CPA 10."],
+        ["oa-156-041", "pp", "2 x 75/18 Gun-Howitzer", "D", "b: Emplaced, cannot move/assault/replenish artillery; may fire at warships or land. CPA 0, combat CPA 10."],
+        ["oa-156-042", "tt", "6 x Light AA", "D", ""]
+      ]
+    },
+    {
+      "image": "IT Giariabub Oasis Complex Garrison.png", "formation": "Giarabub Oasis Complex Garrison", "morale_raw": "0",
+      "rows": [
+        ["oa-157-043", "hh", "N", "D", ""], ["oa-157-044", "gg", "N", "D", ""],
+        ["oa-157-045", "y", "U@4", "D", ""], ["oa-157-046", "rr", "2 x 47/32 Gun", "D", ""],
+        ["oa-157-047", "mm", "1 x 65/17 Gun", "D", ""], ["oa-157-048", "uu", "3 x Light AA", "D", ""]
+      ]
+    },
+    {
+      "image": "IT Minor Garrison Units.png", "formation": "Minor Garrison Units", "morale_raw": "-3",
+      "rows": [
+        ["oa-157-049", "dd", "N", "D", ""], ["oa-157-050", "q", "U@2", "D", ""],
+        ["oa-157-051", "ee", "N", "D", ""], ["oa-157-052", "uu", "2 x Light AA", "D", ""],
+        ["oa-157-053", "r", "U@2", "D", ""], ["oa-157-054", "rr", "2 x 47/32 Gun", "D", ""],
+        ["oa-157-055", "jj", "12 x 100/17 Howitzer", "D", ""]
+      ]
+    },
+    {
+      "image": "IT Unassigned Armored Units.png", "formation": "Unassigned Armored Units", "morale_raw": "0",
+      "note": "ID Code column is blank; equipment and TOE are explicit, but no profile letter is inferred.",
+      "rows": [
+        ["oa-157-056", null, "4 x CV33", "1/18", "a: Arrives attached to Ariete."],
+        ["oa-157-057", null, "4 x CV33", "1/18", "a: Arrives attached to Ariete."],
+        ["oa-157-058", null, "7 x M13/40", "1/55", "b: Brigata Corazzata Speciale member."],
+        ["oa-157-059", null, "7 x M13/40", "2/90", "c: Assigned to Littorio replacing transferred units."],
+        ["oa-157-060", null, "7 x M13/40", "3/13", "b: Brigata Corazzata Speciale member."],
+        ["oa-157-061", null, "7 x M14/41", "1/92", "d: Attached to Ariete during campaign."],
+        ["oa-157-062", null, "7 x M13/40", "3/17", "b: Brigata Corazzata Speciale member."],
+        ["oa-157-063", null, "7 x M13/40", "3/71", "c: Assigned to Littorio replacing transferred units."],
+        ["oa-157-064", null, "7 x M13/40", "3/55", "d: Attached to Ariete during campaign."]
+      ]
+    },
+    {
+      "image": "IT Unassigned Units without a Parent Formation.png", "formation": "Assigned Units without a Parent Formation", "morale_raw": "As listed in the Notes Column",
+      "morale_overrides": {"oa-158-065":"-2", "oa-158-066":"-2", "oa-158-067":"-2", "oa-158-068":"-2", "oa-158-069":"-2", "oa-158-070":"0", "oa-158-071":"-3", "oa-158-072":"-2"},
+      "note": "a: Reassignment restrictions in Case 19.27.",
+      "rows": [
+        ["oa-158-065", "x", "N", "D", "b: Intended 4th Libyan Division never formed."],
+        ["oa-158-066", "x", "N", "D", "b: Intended 4th Libyan Division never formed."],
+        ["oa-158-067", "x", "N", "2/10", "b: Intended 4th Libyan Division never formed."],
+        ["oa-158-068", "x", "N", "2/12", "b: Intended 4th Libyan Division never formed."],
+        ["oa-158-069", "x", "N", "2/15", "b: Intended 4th Libyan Division never formed."],
+        ["oa-158-070", "u", "N", "2/15", "c: Element of 20th Friuli Division."],
+        ["oa-158-071", "u", "N", "3/94", "d: Element of 7th Lupi di Toscana Division."],
+        ["oa-158-072", "u", "N", "2/97", "e: Element of 152nd Piceno Division."]
+      ]
+    },
+    {
+      "image": "IT Battlegroups.png", "formation": "Italian Battle Groups (no counters provided)", "morale_raw": null,
+      "note": "Optional brigade-level HQs formed from attachments; no counters, fixed profile, initial TOE, arrival or morale provided. Composition depends on Maximum Attachments Chart.",
+      "rows": [
+        ["oa-158-073", null, null, null, ""], ["oa-158-074", null, null, null, ""],
+        ["oa-158-075", null, null, null, ""], ["oa-158-076", null, null, null, ""],
+        ["oa-158-077", null, null, null, ""], ["oa-158-078", null, null, null, ""],
+        ["oa-158-079", null, null, null, ""], ["oa-158-080", null, null, null, ""],
+        ["oa-158-081", null, null, null, ""]
+      ]
+    },
+    {
+      "image": "IT Unassigned Infantry and Recon Units.png", "formation": "Unassigned Infantry and Reconnaissance Units", "morale_raw": "As listed in the Notes Column",
+      "morale_overrides": {"oa-158-082":"+1", "oa-158-083":"+1", "oa-158-084":"+1", "oa-158-085":"+1", "oa-158-086":"+1", "oa-158-087":"0", "oa-158-088":"0", "oa-158-089":"-2", "oa-158-090":"-2", "oa-158-091":"-2", "oa-158-092":"-1", "oa-158-093":"-2", "oa-158-094":"-2"},
+      "rows": [
+        ["oa-158-082", "c", "N", "1/11", ""], ["oa-158-083", "t", "N", "1/11", ""],
+        ["oa-158-084", "t", "N", "1/11", ""], ["oa-158-085", "t", "N", "1/11", ""],
+        ["oa-158-086", "aaa", "N", "1/10", ""],
+        ["oa-158-087", "xx", "N", "3/62", "a: Treated as medium-truck mounted for movement; equipment conjecture in note is not a loadout."],
+        ["oa-158-088", "xx", "N", "3/62", "a: Treated as medium-truck mounted for movement."],
+        ["oa-158-089", "f", "N", "D", "b: Airborne in name only; cannot paradrop, not a garrison unit."],
+        ["oa-158-090", "x", "N", "D", "b: Airborne in name only; cannot paradrop, not a garrison unit."],
+        ["oa-158-091", "x", "N", "D", ""],
+        ["oa-158-092", "m", "N", "D", "c: Single formation, not HQ plus battalion counters."],
+        ["oa-158-093", "y", "N", "3/51", ""], ["oa-158-094", "y", "N", "2/59", ""]
+      ]
+    },
+    {
+      "image": "IT Unassigned Gun Units.png", "formation": "Unassigned Gun Units", "morale_raw": "As listed in the Notes Column",
+      "morale_overrides": {"oa-159-001":"-2", "oa-159-002":"-2", "oa-159-003":"-2", "oa-159-004":"-2", "oa-159-005":"-2", "oa-159-006":"-1", "oa-159-007":"-1", "oa-159-008":"0", "oa-159-009":"0", "oa-159-010":"-1", "oa-159-011":"-1", "oa-159-012":"0", "oa-159-013":"0", "oa-159-014":"-1", "oa-159-015":"-1", "oa-159-016":"-1", "oa-159-017":"-1", "oa-159-018":"-1", "oa-159-019":"-1", "oa-159-020":"-1", "oa-159-021":"-1", "oa-159-022":"-2", "oa-159-023":"0", "oa-159-024":"0", "oa-159-025":"0", "oa-159-026":"0", "oa-159-027":"0"},
+      "rows": [
+        ["oa-159-001", "mm", "3 x 75/27 Gun", "D", ""],
+        ["oa-159-002", "mm", "2 x 75/18 Gun-Howitzer", "D", ""],
+        ["oa-159-003", "mm", "3 x 75/27 Gun", "D", ""],
+        ["oa-159-004", "mm", "4 x 100/17 Howitzer", "D", ""],
+        ["oa-159-005", "mm", "2 x 105/28 Gun", "D", ""],
+        ["oa-159-006", "mm", "2 x 100/17 Howitzer", "D", ""],
+        ["oa-159-007", "mm", "2 x 75/27 Gun", "D", ""],
+        ["oa-159-008", "mm", "2 x 75/18 SP Gun", "3/71", "a: Assigned to Littorio replacing transfers to Ariete."],
+        ["oa-159-009", "mm", "2 x 75/18 SP Gun", "3/71", "a: Assigned to Littorio replacing transfers to Ariete."],
+        ["oa-159-010", "mm", "4 x 75/27 Gun", "D", ""],
+        ["oa-159-011", "mm", "3 x 75/27 Gun", "D", ""],
+        ["oa-159-012", "ll", "4 x 75/27 Gun, 4 x 100/17 Howitzer", "1/55", "b: Attached upon arrival."],
+        ["oa-159-013", "ll", "4 x 75/27 Gun, 3 x 100/17 Howitzer", "1/55", ""],
+        ["oa-159-014", "mm", "3 x 75/27 Gun", "D", "c: Independent; raggruppamento purely administrative."],
+        ["oa-159-015", "mm", "3 x 75/18 Gun-Howitzer", "D", "c: Independent."],
+        ["oa-159-016", "mm", "3 x 105/28 Gun", "D", "c: Independent."],
+        ["oa-159-017", "mm", "3 x 100/17 Howitzer", "D", "c: Independent."],
+        ["oa-159-018", "mm", "3 x 75/27 Gun", "1/26", "c: Independent."],
+        ["oa-159-019", "mm", "3 x 75/18 Gun-Howitzer", "1/26", "c: Independent."],
+        ["oa-159-020", "mm", "3 x 100/17 Howitzer", "1/26", "c: Independent."],
+        ["oa-159-021", "mm", "3 x 105/28 Gun", "1/26", "c: Independent."],
+        ["oa-159-022", "kk", "4 x 100/17 Howitzer", "D", "d: Initially at Soluch, not a garrison unit."],
+        ["oa-159-023", "kk", "3 x 75/27 Gun, 6 x 100/17 Howitzer, 3 x Light AA", "D", ""],
+        ["oa-159-024", "kk", "9 x 100/17 Howitzer, 3 x Light AA", "D", ""],
+        ["oa-159-025", "kk", "9 x 100/17 Howitzer, 3 x Light AA", "D", ""],
+        ["oa-159-026", "kk", "9 x 105/28 Gun, 3 x Light AA", "2/9", ""],
+        ["oa-159-027", "kk", "9 x 75/27 Gun, 3 x Light AA", "D", ""]
+      ]
+    },
+    {
+      "image": "IT 2nd CCNN (28 October) Division.png", "formation": "2nd CCNN (28th October) Division", "morale_raw": "0",
+      "rows": [
+        ["oa-159-028", "g", "N", "D", ""], ["oa-159-029", "g", "1 x 65/17 Gun", "D", ""],
+        ["oa-159-030", "x", "N", "D", ""], ["oa-159-031", "x", "N", "D", ""],
+        ["oa-159-032", "x", "N", "D", ""], ["oa-159-033", "g", "1 x 65/17 Gun", "D", ""],
+        ["oa-159-034", "x", "N", "D", ""], ["oa-159-035", "x", "N", "D", ""],
+        ["oa-159-036", "x", "N", "D", ""], ["oa-159-037", "bb", "N", "D", ""],
+        ["oa-159-038", "kk", "3 x 75/18 Gun-Howitzer, 6 x 100/17 Howitzer, 2 x Heavy AA", "D", ""],
+        ["oa-159-039", "bbb", "N", "D", ""], ["oa-159-040", "aaa", "N", "D", ""]
+      ]
+    },
+    {
+      "image": "IT 1st CCNN (23 March) Division.png", "formation": "1st CCNN (23rd March) Division", "morale_raw": "0",
+      "row_references": {"oa-160-054":"oa-149-055"},
+      "rows": [
+        ["oa-160-041", "g", "N", "D", ""], ["oa-160-042", "g", "1 x 65/17 Gun", "D", ""],
+        ["oa-160-043", "x", "N", "D", ""], ["oa-160-044", "x", "N", "D", ""],
+        ["oa-160-045", "x", "N", "D", ""], ["oa-160-046", "g", "1 x 65/17 Gun", "D", ""],
+        ["oa-160-047", "x", "N", "D", ""], ["oa-160-048", "x", "N", "D", ""],
+        ["oa-160-049", "x", "N", "D", ""], ["oa-160-050", "bb", "N", "D", ""],
+        ["oa-160-051", "kk", "6 x 75/27 Gun, 3 x 100/17 Howitzer, 2 x Heavy AA", "D", ""],
+        ["oa-160-052", "bbb", "N", "D", ""], ["oa-160-053", "aaa", "N", "D", ""],
+        ["oa-160-054", null, null, "D", "a: Same I(M) from Libyan Tank Command, attached."]
+      ]
+    },
+    {
+      "image": "IT 3rd CCNN (21 April) Division.png", "formation": "3rd CCNN (21st April) Division", "morale_raw": "-2",
+      "note": "a: No divisional HQ; scant historical OB noted by chart. Legion and remaining units treated independently.",
+      "rows": [
+        ["oa-160-055", "g", "N", "D", ""], ["oa-160-056", "x", "N", "D", ""],
+        ["oa-160-057", "x", "N", "D", ""], ["oa-160-058", "x", "N", "D", ""],
+        ["oa-160-059", "bb", "N", "D", ""],
+        ["oa-160-060", "kk", "6 x 75/18 Gun-Howitzer, 3 x 100/17 Howitzer", "D", ""],
+        ["oa-160-061", "bbb", "N", "D", ""]
+      ]
+    },
+    {
+      "image": "IT 4th CCNN (3 January) Division.png", "formation": "4th CCNN (3 January) Division", "morale_raw": "0",
+      "rows": [
+        ["oa-161-062", "b", "N", "D", ""], ["oa-161-063", "h", "1 x 65/17 Gun", "D", ""],
+        ["oa-161-064", "x", "N", "D", ""], ["oa-161-065", "x", "N", "D", ""],
+        ["oa-161-066", "x", "N", "D", ""], ["oa-161-067", "h", "1 x 65/17 Gun", "D", ""],
+        ["oa-161-068", "x", "N", "D", ""], ["oa-161-069", "x", "N", "D", ""],
+        ["oa-161-070", "x", "N", "D", ""], ["oa-161-071", "bb", "N", "D", ""],
+        ["oa-161-072", "kk", "6 x 75/18 Gun-Howitzer, 3 x 105/28 Gun, 2 x Heavy AA", "D", ""],
+        ["oa-161-073", "bbb", "N", "D", ""]
+      ]
+    },
+    {
+      "image": "IT Unassigned Blackshirt Units.png", "formation": "Unassigned Blackshirt Units", "morale_raw": "0",
+      "rows": [
+        ["oa-161-074", "b", "N", "1/25", "b: Initially attached to Savona."],
+        ["oa-161-075", "x", "N", "1/25", "b: Initially attached to Savona."],
+        ["oa-161-076", "h", "1 x 65/17 Gun", "2/22", "c: Initially attached to Pavia."],
+        ["oa-161-077", "x", "N", "2/22", "c: Initially attached to Pavia."],
+        ["oa-161-078", "x", "N", "2/22", "c: Initially attached to Pavia."],
+        ["oa-161-079", "x", "N", "1/24", "d: Initially attached to Bologna."],
+        ["oa-161-080", "x", "N", "2/21", "e: Initially attached to Brescia."],
+        ["oa-161-081", "x", "N", "2/21", "e: Initially attached to Brescia."],
+        ["oa-161-082", "x", "N", "3/13", ""]
+      ]
+    },
+    {
+      "image": "IT 61st Sirte Division.png", "formation": "61 Sirte Division", "morale_raw": "-1",
+      "rows": [
+        ["counter-it-61-61-sirte-division-hq", "b", "N", "3/10", ""],
+        ["counter-it-61-69-infantry-regiment-hq", "h", "1 x 65/17 Gun", "3/10", ""],
+        ["counter-it-61-i-69-infantry-battalion", "u", "N", "3/10", ""],
+        ["counter-it-61-ii-69-infantry-battalion", "u", "N", "3/10", ""],
+        ["counter-it-61-iii-69-infantry-battalion", "u", "N", "3/10", ""],
+        ["counter-it-61-70-infantry-regiment-hq", "h", "1 x 65/17 Gun", "3/10", ""],
+        ["counter-it-61-i-70-infantry-battalion", "u", "N", "3/10", ""],
+        ["counter-it-61-ii-70-infantry-battalion", "u", "N", "3/10", ""],
+        ["counter-it-61-iii-70-infantry-battalion", "u", "N", "3/10", ""],
+        ["counter-it-61-61-machinegun-battalion", "bb", "N", "3/10", ""],
+        ["counter-it-61-61-anti-tank-company", "rr", "2 x 47/32 Gun", "3/10", ""],
+        ["counter-it-61-43-artillery-regiment", "kk", "6 x 75/27 Gun, 3 x 100/17 Howitzer, 6 x Light AA", "3/10", ""],
+        ["counter-it-61-61-engineer-battalion", "bbb", "N", "3/10", ""],
+        ["counter-it-61-61-bersaglieri-company", "aaa", "N", "3/10", ""]
+      ]
+    },
+    {
+      "image": "IT 62nd Marmarica Division.png", "formation": "62 Marmarica Division", "morale_raw": "-1",
+      "note": "a: Attached LXII(L) is already catalogued under Libyan Tank Command (oa-149-053), not an additional battalion.",
+      "rows": [
+        ["counter-it-62-62-marmarica-division-hq", "b", "N", "D", ""],
+        ["counter-it-62-115-infantry-regiment-hq", "h", "1 x 65/17 Gun", "D", ""],
+        ["counter-it-62-i-115-infantry-battalion", "u", "N", "D", ""],
+        ["counter-it-62-ii-115-infantry-battalion", "u", "N", "D", ""],
+        ["counter-it-62-iii-115-infantry-battalion", "u", "N", "D", ""],
+        ["counter-it-62-116-infantry-regiment-hq", "h", "1 x 65/17 Gun", "D", ""],
+        ["counter-it-62-i-116-infantry-battalion", "u", "N", "D", ""],
+        ["counter-it-62-ii-116-infantry-battalion", "u", "N", "D", ""],
+        ["counter-it-62-iii-116-infantry-battalion", "u", "N", "D", ""],
+        ["counter-it-62-62-machinegun-battalion", "bb", "N", "D", ""],
+        ["counter-it-62-62-anti-tank-company", "rr", "2 x 47/32 Gun", "D", ""],
+        ["counter-it-62-44-artillery-regiment", "kk", "6 x 75/27 Gun, 3 x 105/28 Gun, 3 x Light AA", "D", ""],
+        ["counter-it-62-62-engineer-battalion", "bbb", "N", "D", ""]
+      ]
+    },
+    {
+      "image": "IT 63rd Cirene Division.png", "formation": "63 Cirene Division", "morale_raw": "-1",
+      "note": "a: Attached LXIII(L) is already catalogued under Libyan Tank Command (oa-149-054), not an additional battalion.",
+      "rows": [
+        ["counter-it-63-63-cirene-division-hq", "b", "N", "D", ""],
+        ["counter-it-63-157-infantry-regiment-hq", "h", "1 x 65/17 Gun", "D", ""],
+        ["counter-it-63-i-157-infantry-battalion", "u", "N", "D", ""],
+        ["counter-it-63-ii-157-infantry-battalion", "u", "N", "D", ""],
+        ["counter-it-63-iii-157-infantry-battalion", "u", "N", "D", ""],
+        ["counter-it-63-158-infantry-regiment-hq", "h", "1 x 65/17 Gun", "D", ""],
+        ["counter-it-63-i-158-infantry-battalion", "u", "N", "D", ""],
+        ["counter-it-63-ii-158-infantry-battalion", "u", "N", "D", ""],
+        ["counter-it-63-iii-158-infantry-battalion", "u", "N", "D", ""],
+        ["counter-it-63-63-machinegun-battalion", "bb", "N", "D", ""],
+        ["counter-it-63-63-anti-tank-company", "rr", "2 x 47/32 Gun", "D", ""],
+        ["counter-it-63-45-artillery-regiment", "kk", "6 x 75/18 Gun-Howitzer, 3 x 100/17 Howitzer, 3 x Light AA", "D", ""],
+        ["counter-it-63-63-engineer-battalion", "bbb", "N", "D", ""],
+        ["counter-it-63-63-bersaglieri-company", "aaa", "N", "D", ""]
+      ]
+    }
+  ]
+}

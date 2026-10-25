@@ -86,7 +86,12 @@
       "type": "object", "required": ["id", "name", "unit_type", "source_refs", "stats"],
       "properties": {"stats": {"type": "object", "additionalProperties": {"$ref": "#/$defs/stat"}}, "playable": {"const": false}, "formation_reference": {"$ref": "#/$defs/formation_reference"}}
     },
-    "stats": {"type": "object", "additionalProperties": {"$ref": "#/$defs/stat"}},
+    "stats": {"type": "object", "additionalProperties": {"$ref": "#/$defs/formation_stat"}},
+    "formation_stat": {
+      "allOf": [{"$ref": "#/$defs/stat"}],
+      "required": ["unit"],
+      "properties": {"unit": {"type": "string", "minLength": 1}}
+    },
     "formation_reference": {
       "type": "object", "additionalProperties": false,
       "required": ["schema_version", "scope", "base_profile_id", "base_profile_name", "base_profile_note", "base_stats", "printed_profile_code", "catalog_profile_id", "arrival", "components", "arrival_totals", "limitations"],
@@ -102,7 +107,7 @@
             "toe_raw": {"type": ["string", "null"]}, "arrives_raw": {"type": ["string", "null"]},
             "note": {"type": "string"}, "stats": {"$ref": "#/$defs/stats"}, "source_refs": {"$ref": "#/$defs/strings"},
             "related_record_id": {"type": ["string", "null"]},
-            "toe_strength": {"$ref": "#/$defs/stat"}, "morale": {"$ref": "#/$defs/stat"}
+            "toe_strength": {"$ref": "#/$defs/formation_stat"}, "morale": {"$ref": "#/$defs/formation_stat"}
           }
         },
         "components": {
@@ -111,7 +116,7 @@
             "required": ["record_id", "name", "label", "kind", "toe", "per_toe_stats", "land_barrage_toe"],
             "properties": {
               "record_id": {"type": ["string", "null"]}, "name": {"type": "string"}, "label": {"type": "string"},
-              "kind": {"enum": ["equipment", "profile"]}, "toe": {"$ref": "#/$defs/stat"},
+              "kind": {"enum": ["equipment", "profile"]}, "toe": {"$ref": "#/$defs/formation_stat"},
               "per_toe_stats": {"$ref": "#/$defs/stats"}, "land_barrage_toe": {"type": ["integer", "null"], "minimum": 0}
             }
           }
@@ -120,9 +125,9 @@
           "type": "object", "additionalProperties": false,
           "required": ["anti_air", "barrage", "anti_armor", "close_assault_offensive", "close_assault_defensive"],
           "properties": {
-            "anti_air": {"$ref": "#/$defs/stat"}, "barrage": {"$ref": "#/$defs/stat"},
-            "anti_armor": {"$ref": "#/$defs/stat"}, "close_assault_offensive": {"$ref": "#/$defs/stat"},
-            "close_assault_defensive": {"$ref": "#/$defs/stat"}
+            "anti_air": {"$ref": "#/$defs/formation_stat"}, "barrage": {"$ref": "#/$defs/formation_stat"},
+            "anti_armor": {"$ref": "#/$defs/formation_stat"}, "close_assault_offensive": {"$ref": "#/$defs/formation_stat"},
+            "close_assault_defensive": {"$ref": "#/$defs/formation_stat"}
           }
         },
         "limitations": {"type": "string"}

@@ -143,6 +143,8 @@ migrates the correction overlay to allow `unresolved` with a null value and a
 cited raw symbol; the initial schema digest and original observations stay intact.
 Patch 008 supplies locked text witnesses for automated quote validation, retaining
 the visually checked chart/page in each locator.
+Patch 009 corrects its swapped physical-page labels: German `v` is on p.137;
+Italian `pp` is on p.170, agreeing with the original `scan-137`/`scan-170` citations.
 The machine status vocabulary is unchanged. Historical `original_observation`
 notes retain their old wording; current explanations state the actual source
 condition. No token metadata or identity links change.
@@ -174,7 +176,10 @@ compatibility catalog, and uses the actual OA explanation for records with no
 printed profile code. It computes from DB effective stats, not frontend arithmetic
 or manually edited JSON. The sidecar carries the same record field unchanged.
 
-The additive v1 contract is specified by `docs/unit-reference.schema.json`:
+The additive v1 contract is specified by `docs/unit-reference.schema.json`.
+Every Stat inside `formation_reference` requires a nonempty string `unit`,
+including base/per-TOE ratings and null values. Ordinary record Stats retain
+their existing contract; no new field is added to their emitted data.
 
 - `base_profile_id/name/note`, `base_stats`: attributed base chart characteristics.
   The one reviewed chart/link disagreement (362 Artillery: printed `w`, existing

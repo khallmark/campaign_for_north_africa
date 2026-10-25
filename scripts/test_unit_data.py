@@ -62,6 +62,23 @@ class UnitDataTests(unittest.TestCase):
             with self.subTest(mutation=mutation):
                 self.assertFalse(self.validator.is_valid({**self.reference, 'records': [changed]}))
 
+        coastal = self.records['oa-155-022-2nd-tobruk-cd-arty-group']
+        for path in (('base_stats', 'capability_points'), ('arrival', 'stats', 'capability_points'),
+                     ('arrival', 'toe_strength'), ('arrival', 'morale'),
+                     ('components', 0, 'toe'), ('components', 0, 'per_toe_stats', 'barrage'),
+                     ('arrival_totals', 'barrage')):
+            for invalid in ('missing', None, '', 1):
+                changed = copy.deepcopy(coastal)
+                cell = changed['formation_reference']
+                for key in path:
+                    cell = cell[key]
+                if invalid == 'missing':
+                    del cell['unit']
+                else:
+                    cell['unit'] = invalid
+                with self.subTest(path=path, unit=invalid):
+                    self.assertFalse(self.validator.is_valid({**self.reference, 'records': [changed]}))
+
     def test_schema_rejects_ready_art_without_canonical_paths(self):
         ready = next(u for u in self.reference["units"] if u["generated_art"]["status"] == "ready")
         for field in ["portrait_path", "atlas_path"]:

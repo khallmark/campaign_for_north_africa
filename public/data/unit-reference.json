@@ -33,7 +33,7 @@
     },
     {
       "source_path": "public/data/unit-catalog.json",
-      "sha256": "ac202bd3688453710ec60ccdaacbedcb16758ab63f0c97ed542dc142e0fb03c6",
+      "sha256": "64864284002b8b0f8124e735fe9801a6b91a2b494bc60000070c482bbd54a1c7",
       "size": 17825394
     },
     {
@@ -192847,7 +192847,7 @@
       "id": "chart-ge-v-assault-symbol",
       "title": "Reviewed stat correction",
       "path": "docs/rules.txt",
-      "section": "German Unit Characteristics Chart.png, profile v shared assault column; original PDF p.170; rules.txt line 34564",
+      "section": "German Unit Characteristics Chart.png, profile v shared assault column; original PDF p.137; rules.txt line 34564",
       "pdf_page": null,
       "lines": null,
       "note": "Original observation retained alongside the correction."
@@ -192856,7 +192856,7 @@
       "id": "chart-it-pp-aa-allowance",
       "title": "Reviewed stat correction",
       "path": "docs/rules.txt",
-      "section": "Italian Unit Characteristics Chart.png, profile pp maximum TOE and assignment text; original PDF p.137; rules.txt lines 34453-34456",
+      "section": "Italian Unit Characteristics Chart.png, profile pp maximum TOE and assignment text; original PDF p.170; rules.txt lines 34453-34456",
       "pdf_page": null,
       "lines": null,
       "note": "Original observation retained alongside the correction."

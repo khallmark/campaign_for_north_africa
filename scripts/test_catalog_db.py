@@ -89,6 +89,49 @@ class ImportContracts(unittest.TestCase):
         with closing(catalog.connect(self.database, readonly=True)) as db:
             return db.execute(sql).fetchall()
 
+    def test_profile_projection_is_bounded_cited_and_preserves_unknowns(self):
+        with closing(catalog.connect(self.database)) as db:
+            db.executescript("""
+                INSERT INTO source_citation VALUES ('chart','Reviewed chart','docs/chart.png',
+                    '{"section":"ID Code","private_text":"DO NOT EXPORT"}');
+                INSERT INTO catalog_record VALUES ('profile','profiles',0,'Private profile name','profile','axis','IT','infantry',NULL,'verified','private','{}');
+                UPDATE catalog_record SET profile_id='profile',note='Reviewed base-profile link' WHERE id='record';
+                INSERT INTO record_source VALUES ('record',0,'chart');
+                INSERT INTO correction_evidence VALUES ('profile-link:record','fixture.txt','row','quote','Current CPA remains unknown');
+                INSERT INTO metadata VALUES ('private_text','DO NOT EXPORT');
+            """)
+        original = {"schema_version": 1, "sources": [], "coverage": {"gaps": []},
+                    "entries": [{"id": "record", "name": "Public name", "profile_id": None,
+                                 "note": "No link", "source_refs": [],
+                                 "stats": {"capability_points": {"value": None, "status": "unresolved",
+                                           "raw": "?", "conditional": False, "source_refs": [], "note": "No link"}}}],
+                    "profiles": [{"id": "profile", "stats": {"zero": {"value": 0, "raw": "0"}}}]}
+        expected = copy.deepcopy(original)
+        expected["entries"][0].update(profile_id="profile", note="Reviewed base-profile link", source_refs=["chart"])
+        expected["entries"][0]["stats"]["capability_points"]["note"] = "Current CPA remains unknown"
+        expected["sources"] = [{"id": "chart", "title": "Reviewed chart", "path": "docs/chart.png", "section": "ID Code"}]
+        destination = self.root / "unit-catalog.json"
+        destination.write_text(json.dumps(original))
+        before, db_before = destination.read_bytes(), self.database.read_bytes()
+        with self.assertRaisesRegex(ValueError, "Profile projection drift"):
+            catalog.project_profile_links(self.database, destination, check=True)
+        self.assertEqual(destination.read_bytes(), before)
+        self.assertTrue(catalog.project_profile_links(self.database, destination))
+        self.assertEqual(json.loads(destination.read_text()), expected)
+        after = destination.read_bytes()
+        self.assertFalse(catalog.project_profile_links(self.database, destination, check=True))
+        self.assertFalse(catalog.project_profile_links(self.database, destination))
+        self.assertEqual(destination.read_bytes(), after)
+        self.assertEqual(self.database.read_bytes(), db_before)
+        for field in ("entries", "profiles"):
+            broken = copy.deepcopy(original)
+            broken[field] = []
+            destination.write_text(json.dumps(broken))
+            before = destination.read_bytes()
+            with self.assertRaisesRegex(ValueError, "record order/IDs"):
+                catalog.project_profile_links(self.database, destination)
+            self.assertEqual(destination.read_bytes(), before)
+
     def test_type_projection_only_changes_types_and_checks_without_writing(self):
         with closing(catalog.connect(self.database)) as db:
             db.executescript("""
@@ -266,10 +309,15 @@ class CommittedDatabaseContracts(unittest.TestCase):
     def test_reviewed_patch_changes_only_twelve_types_and_rejects_wrong_baseline(self):
         with tempfile.TemporaryDirectory() as directory:
             database = Path(directory) / "catalog.sqlite"
+            patches = Path(directory) / "patches"
+            patches.mkdir()
+            for patch_file in (catalog.SQL / "patches").glob("*.sql"):
+                if patch_file.name <= "002-reviewed-unit-classifications.sql":
+                    (patches / patch_file.name).write_bytes(patch_file.read_bytes())
             with closing(catalog.connect(catalog.DATABASE, readonly=True)) as source, closing(catalog.connect(database)) as db:
                 source.backup(db)
                 # Reconstruct the pre-patch classifications on a disposable copy.
-                db.execute("DELETE FROM sql_patch WHERE name='002-reviewed-unit-classifications.sql'")
+                db.execute("DELETE FROM sql_patch WHERE name >= '002-reviewed-unit-classifications.sql'")
                 db.execute("DELETE FROM correction_evidence WHERE id LIKE 'classification:%'")
                 for record_id, (old, _) in CLASSIFICATIONS.items():
                     db.execute("UPDATE catalog_record SET unit_type_id=? WHERE id=?", (old, record_id))
@@ -283,12 +331,12 @@ class CommittedDatabaseContracts(unittest.TestCase):
                 db.commit()
             before = database.read_bytes()
             with self.assertRaises(sqlite3.IntegrityError):
-                catalog.update_database(database, SCHEMA, catalog.SQL / "patches", lambda db, tmp: None)
+                catalog.update_database(database, SCHEMA, patches, lambda db, tmp: None)
             self.assertEqual(database.read_bytes(), before)
             with closing(catalog.connect(database)) as db:
                 db.execute("UPDATE catalog_record SET unit_type_id='road-construction' WHERE id=?", (bad_id,))
                 db.commit()
-            self.assertTrue(catalog.update_database(database, SCHEMA, catalog.SQL / "patches", lambda db, tmp: None))
+            self.assertTrue(catalog.update_database(database, SCHEMA, patches, lambda db, tmp: None))
             with closing(catalog.connect(database, readonly=True)) as db:
                 expected = [r[:7] + (CLASSIFICATIONS[r[0]][1],) + r[8:] if r[0] in CLASSIFICATIONS else r for r in records]
                 self.assertEqual(db.execute("SELECT * FROM catalog_record ORDER BY id").fetchall(), expected)
@@ -296,8 +344,81 @@ class CommittedDatabaseContracts(unittest.TestCase):
                     self.assertEqual(db.execute(f"SELECT * FROM {table} ORDER BY 1,2").fetchall(), rows, table)
                 self.assertEqual(db.execute("SELECT count(*) FROM correction_evidence WHERE id LIKE 'classification:%'").fetchone(), (12,))
             before = database.read_bytes()
+            self.assertFalse(catalog.update_database(database, SCHEMA, patches, lambda db, tmp: None))
+            self.assertEqual(database.read_bytes(), before)
+
+    def test_profile_patch_preserves_stats_identity_and_rejects_wrong_baseline(self):
+        with tempfile.TemporaryDirectory() as directory:
+            database = Path(directory) / "catalog.sqlite"
+            with closing(catalog.connect(catalog.DATABASE, readonly=True)) as source, closing(catalog.connect(database)) as db:
+                source.backup(db)
+                db.executescript("""
+                    DELETE FROM sql_patch WHERE name='003-reviewed-italian-profile-links.sql';
+                    UPDATE catalog_record SET profile_id=NULL,note='Original counter-only identity'
+                        WHERE id IN (SELECT substr(id,14) FROM correction_evidence WHERE id LIKE 'profile-link:%');
+                    DELETE FROM correction_evidence WHERE id LIKE 'profile-link:%';
+                    DELETE FROM record_source WHERE source_id LIKE 'vassal-oc-it-%';
+                    DELETE FROM source_citation WHERE id LIKE 'vassal-oc-it-%';
+                """)
+                stable_tables = ("stat_observation", "stat_correction", "canonical_unit", "identity_redirect",
+                                 "unit_record", "unit_counter", "generated_art")
+                stable = {table: db.execute(f"SELECT * FROM {table} ORDER BY 1,2").fetchall() for table in stable_tables}
+                records = db.execute("SELECT id,name,kind,side,nationality,unit_type_id,verification,details_json FROM catalog_record ORDER BY id").fetchall()
+                db.execute("UPDATE catalog_record SET profile_id='it-h' WHERE id='counter-it-61-61-sirte-division-hq'")
+                db.commit()
+            before = database.read_bytes()
+            with self.assertRaises(sqlite3.IntegrityError):
+                catalog.update_database(database, SCHEMA, catalog.SQL / "patches", lambda db, tmp: None)
+            self.assertEqual(database.read_bytes(), before)
+            with closing(catalog.connect(database)) as db:
+                db.execute("UPDATE catalog_record SET profile_id=NULL WHERE id='counter-it-61-61-sirte-division-hq'")
+                db.commit()
+            self.assertTrue(catalog.update_database(database, SCHEMA, catalog.SQL / "patches", lambda db, tmp: None))
+            with closing(catalog.connect(database, readonly=True)) as db:
+                for table, rows in stable.items():
+                    self.assertEqual(db.execute(f"SELECT * FROM {table} ORDER BY 1,2").fetchall(), rows, table)
+                self.assertEqual(db.execute("SELECT id,name,kind,side,nationality,unit_type_id,verification,details_json FROM catalog_record ORDER BY id").fetchall(), records)
+                self.assertEqual(db.execute("SELECT source_id,count(*) FROM record_source WHERE source_id LIKE 'vassal-oc-it-%' GROUP BY source_id ORDER BY source_id").fetchall(),
+                                 [('vassal-oc-it-61', 14), ('vassal-oc-it-62', 13), ('vassal-oc-it-63', 14)])
+            before = database.read_bytes()
             self.assertFalse(catalog.update_database(database, SCHEMA, catalog.SQL / "patches", lambda db, tmp: None))
             self.assertEqual(database.read_bytes(), before)
+
+    def test_reviewed_profiles_are_numeric_cited_and_projected_to_sidecar(self):
+        document = json.loads((ROOT / "public/data/unit-catalog.json").read_text())
+        entries = {r['id']: r for r in document['entries']}
+        # Explicit chart cells span all eight codes and all three divisions.
+        examples = {
+            'counter-it-61-61-sirte-division-hq': 'it-b',
+            'counter-it-61-69-infantry-regiment-hq': 'it-h',
+            'counter-it-62-ii-115-infantry-battalion': 'it-u',
+            'counter-it-63-63-machinegun-battalion': 'it-bb',
+            'counter-it-62-62-anti-tank-company': 'it-rr',
+            'counter-it-63-45-artillery-regiment': 'it-kk',
+            'counter-it-61-61-engineer-battalion': 'it-bbb',
+            'counter-it-63-63-bersaglieri-company': 'it-aaa',
+        }
+        for record_id, profile_id in examples.items():
+            self.assertEqual(entries[record_id]['profile_id'], profile_id)
+        profiles = {r['id']: r for r in document['profiles']}
+        reference = json.loads((ROOT / 'public/data/unit-reference.json').read_text())
+        with closing(catalog.connect(catalog.DATABASE, readonly=True)) as db:
+            linked = dict(db.execute("SELECT r.id,r.profile_id FROM catalog_record r JOIN correction_evidence e ON e.id='profile-link:' || r.id"))
+            self.assertEqual(len(linked), 41)
+            for record_id, profile_id in linked.items():
+                entry = entries[record_id]
+                self.assertEqual(entry['profile_id'], profile_id)
+                self.assertIsNone(entry['stats']['capability_points']['value'])
+                self.assertEqual(entry['stats']['capability_points']['status'], 'unresolved')
+                self.assertTrue(any(s['value'] is not None for s in profiles[profile_id]['stats'].values()))
+                self.assertEqual(entry['source_refs'], [r[0] for r in db.execute(
+                    'SELECT source_id FROM record_source WHERE record_id=? ORDER BY position', (record_id,))])
+            for record in reference['records']:
+                self.assertEqual(record['profile_id'], entries[record['id']].get('profile_id'))
+            for unit in reference['units']:
+                expected = sorted({entries[r]['profile_id'] for r in unit['source_record_ids'] if entries[r].get('profile_id')})
+                self.assertEqual(unit['characteristic_profile_ids'], expected)
+        self.assertFalse(catalog.project_profile_links(catalog.DATABASE, ROOT / 'public/data/unit-catalog.json', check=True))
 
     def test_classifications_and_compatibility_projection_agree(self):
         with closing(catalog.connect(catalog.DATABASE, readonly=True)) as db:

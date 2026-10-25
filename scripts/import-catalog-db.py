@@ -8,6 +8,7 @@ Examples (from any directory):
   python3 scripts/import-catalog-db.py --bootstrap  # ONE-TIME legacy JSON migration; refuses overwrite
   python3 scripts/import-catalog-db.py --project-types # project only classifications into existing JSON
   python3 scripts/import-catalog-db.py --project-types --check # read-only projection parity check
+  python3 scripts/import-catalog-db.py --project-profiles # reviewed links/citation notes, never numeric stats
 
 Python 3.11+, SQLite 3.37+ (STRICT tables) and Cargo are required for source import.
 --patch-only requires only Python/SQLite. Images and saves are never embedded.
@@ -319,6 +320,67 @@ def project_unit_types(database, destination, *, check=False):
     return changed
 
 
+def project_profile_links(database, destination, *, check=False):
+    """Publish only evidence-backed profile links and their curated citation notes.
+
+    Original observations remain immutable in SQLite. The public unknown-CPA
+    note is updated, not its value/status, because the old no-profile explanation
+    is no longer true. No source_document text or arbitrary details are exported.
+    """
+    document = read_json(destination)
+    require(document["schema_version"] == 1, "Unsupported catalog JSON version")
+    before = json_text(document)
+    with closing(connect(database, readonly=True)) as db:
+        validate(db)
+        for collection in ("entries", "profiles"):
+            ids = [r[0] for r in db.execute("SELECT id FROM catalog_record WHERE collection=? ORDER BY position", (collection,))]
+            require([r["id"] for r in document[collection]] == ids,
+                    f"Catalog {collection} record order/IDs differ from DB; reconcile before projection")
+        links = {r[0]: r[1:] for r in db.execute("""
+            SELECT r.id,r.profile_id,r.note,e.note FROM catalog_record r
+            JOIN correction_evidence e ON e.id='profile-link:' || r.id
+            WHERE r.collection='entries'
+        """)}
+        profiles = {r["id"] for r in document["profiles"]}
+        sources = {s["id"] for s in document["sources"]}
+        for record in document["entries"]:
+            if record["id"] not in links:
+                continue
+            profile, note, observation_note = links[record["id"]]
+            require(profile in profiles, f"Reviewed profile missing from compatibility profiles: {profile}")
+            stat = record["stats"]["capability_points"]
+            require(stat["value"] is None and stat["status"] == "unresolved",
+                    f"Reviewed link must not overwrite a resolved CPA: {record['id']}")
+            record.update(profile_id=profile, note=note)
+            stat["note"] = observation_note
+            record["source_refs"] = [r[0] for r in db.execute(
+                "SELECT source_id FROM record_source WHERE record_id=? ORDER BY position", (record["id"],))]
+            for source_id in record["source_refs"]:
+                if source_id in sources:
+                    continue
+                title, path, details_json = db.execute(
+                    "SELECT title,path,details_json FROM source_citation WHERE id=?", (source_id,)).fetchone()
+                details = json.loads(details_json)
+                citation = {"id": source_id, "title": title, "path": path}
+                citation.update({key: details[key] for key in ("section", "pdf_page", "lines", "note") if key in details})
+                document["sources"].append(citation)
+                sources.add(source_id)
+        if links:
+            old_gap = "OA pages omit the three Italian divisions Sirte, Marmarica and Cirene that appear on counter p.182. Their 41 counter identities have no inferred characteristic profile."
+            document["coverage"]["gaps"] = [
+                "Counter-origin identities have base-characteristic links where individually reviewed against VASSAL organization charts; current scenario values remain untranscribed."
+                if gap == old_gap else gap for gap in document["coverage"]["gaps"]]
+    changed = json_text(document) != before
+    if check:
+        require(not changed, "Profile projection drift: run python3 scripts/import-catalog-db.py --project-profiles")
+    elif changed:
+        with tempfile.TemporaryDirectory(prefix=".catalog-profiles-", dir=destination.parent) as directory:
+            candidate = Path(directory) / destination.name
+            candidate.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n")
+            os.replace(candidate, destination)
+    return changed
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--database", type=Path, default=DATABASE, help="Private database path (default data/catalog.sqlite)")
@@ -326,6 +388,7 @@ def main():
     modes.add_argument("--bootstrap", action="store_true", help="One-time transfer of reviewed JSON into a NEW database")
     modes.add_argument("--patch-only", action="store_true", help="Apply new SQL patches without source/Cargo prerequisites")
     modes.add_argument("--project-types", action="store_true", help="Copy only DB unit_type values into existing public/data/unit-catalog.json; no sources needed")
+    modes.add_argument("--project-profiles", action="store_true", help="Copy reviewed DB profile links and citation notes into existing catalog; no numeric values or private texts")
     parser.add_argument("--check", action="store_true", help="Verify the selected import/projection causes no change; never write")
     args = parser.parse_args()
     if args.bootstrap and args.check:
@@ -335,6 +398,10 @@ def main():
         if args.project_types:
             changed = project_unit_types(args.database, ROOT / "public/data/unit-catalog.json", check=args.check)
             print(json.dumps({"projection": "unit_type_only", "changed": changed}))
+            return
+        if args.project_profiles:
+            changed = project_profile_links(args.database, ROOT / "public/data/unit-catalog.json", check=args.check)
+            print(json.dumps({"projection": "reviewed_profile_links", "changed": changed}))
             return
         locks = verify_sources(ROOT) if not args.patch_only else None
 

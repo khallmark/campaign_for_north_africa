@@ -5,7 +5,7 @@ cache. VASSAL is the import source; numbered SQL files record reviewed correctio
 and small curated changes. Commit the importer/SQL changes and resulting database
 together. The existing JSON files remain compatibility inputs for the current
 frontend; they are **not read by ordinary database imports**. The bounded
-classification projection below updates only their unit types from this database.
+projections below update classifications and reviewed profile links from this database.
 
 ## Import and correction workflow
 
@@ -54,13 +54,49 @@ Motorization points, replacement points and generic truck convoys remain without
 a named historical-unit roster. Coverage is still partial; this is not a full
 classification audit. The French Motor Marine company's token link stays unresolved.
 
+### Reviewed characteristic-profile links
+
+Patch `003-reviewed-italian-profile-links.sql` restores 41 explicit ID-code links
+from the VASSAL organization charts for Sirte (14), Marmarica (13) and Cirene (14).
+Each row was visually checked; these are not assignments inferred from unit names.
+The three chart citations and per-record evidence retain the printed row/code.
+Rule 3.5 is a textual characteristics-definition anchor, not evidence of the
+individual mappings. The image paths refer to integrity-locked VASSAL sources.
+
+```sh
+python3 scripts/import-catalog-db.py --patch-only
+python3 scripts/import-catalog-db.py --project-profiles
+python3 scripts/import-unit-data.py
+python3 scripts/import-catalog-db.py --project-profiles --check
+```
+
+This separate projection handles only records with `profile-link:<record-id>`
+evidence. It copies their profile IDs, curated record notes, ordered citation IDs,
+and the reviewed explanation of unresolved CPA. It appends missing citations
+using an explicit public-field allowlist and retires the obsolete no-profile
+coverage warning. It preserves ordering, identities, affiliations, artwork, all
+numeric values, raw/conditional/status fields, and unknown-versus-zero distinctions.
+Original observations remain unchanged in SQLite, including their historical
+no-profile note; the projection replaces that obsolete explanation with the
+reviewed evidence note. No private document text or arbitrary JSON details leave
+the database. Validation precedes atomic replacement; `--check` never writes.
+
+After this correction, 315 of 1,356 canonical candidates have direct numeric
+observations, 1,015 have numbers only through linked profiles, and 26 have neither.
+The latter include 19 Italian formation candidates and seven special/support
+identities. Blank ID-code cells on the unassigned Italian tank chart are not
+guessed. **Profile values are base characteristics, not current scenario values.**
+The frontend must show them separately instead of silently merging them into a
+formation's direct observations. The data correction alone does not change UI
+rendering; consumers still require a Wasm rebuild.
+
 The source command verifies `docs/sources.lock.json`, runs the existing Rust
 `vassal-census` against `docs/CNAv2.1.0/buildFile.xml`, and loads its temporary
 output. It does not reparse VASSAL independently or use the committed JSON census
 as the import source. Images remain files: SQLite stores paths, hashes, existence,
 layer labels and source locators, not image bytes or decoded save state.
 
-Add `data/sql/patches/003-<description>.sql` (then 004, etc.). Filenames sort
+Add `data/sql/patches/004-<description>.sql` (then 005, etc.). Filenames sort
 lexically, so keep the padded numbering. Use `counter_correction` for corrected
 counter labels, `stat_correction` for reviewed numeric/not-applicable overrides,
 and `correction_evidence` for exact source path, locator, quotation and rationale.
@@ -175,7 +211,7 @@ not filter `public/`, so the no-copy/no-embed boundary above remains essential.
 
 No SQLite browser loader or HTTP endpoint is implemented here. The current UI
 still embeds catalog/inventory JSON at Wasm compile time. Classification changes
-reach it only after the bounded projection, sidecar regeneration and Wasm rebuild;
+and reviewed profile links reach it only after their bounded projections, sidecar regeneration and Wasm rebuild;
 other SQL corrections still do **not** change that UI. A broader consumer migration
 must explicitly project allowed columns/rows, omit private text and local
 source-token routes, preserve IDs/redirects/order/null semantics, then change the
@@ -200,6 +236,9 @@ It also verifies classification-patch scope/failure/rerun behavior, type-only
 projection with unknown/zero preservation and private-field exclusion, and
 committed DB/catalog/sidecar type parity. The first command is included in
 `test:functional` and the second in `test:source-data`, retaining `test_unit_data.py`.
+Profile tests cover patch preconditions/atomic failure/rerun, unchanged numeric
+observations/identity/art, explicit chart-code examples, linked numeric coverage,
+catalog/sidecar parity, and projection field bounds, unknowns and private-text exclusion.
 `tests/private-review.test.mjs` exercises HTTP denial with both opt-in states,
 encoded/query forms and SQLite sidecars, while checking safe assets and review routes.
 Run `npm run check`, `npm run test:e2e` and, with hydrated sources, `npm run test:sources`.

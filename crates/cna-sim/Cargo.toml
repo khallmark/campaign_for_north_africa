@@ -13,3 +13,4 @@ serde_json = "1.0.154"
 cna-map = { path = "../cna-map" }
 cna-catalog = { path = "../cna-catalog" }
 sha2 = "0.10"
+rand_chacha = { version = "=0.3.1", default-features = false }

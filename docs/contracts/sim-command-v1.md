@@ -1,9 +1,12 @@
 # Simulation command boundary v1
 
 Status: command wire contract (CNA-160), with state representation and calendar
-arithmetic in `cna_sim::official::state` (CNA-260). The sandbox is unchanged.
-The official reducer, rules kernels and replay verifier remain later deliverables;
-their obligations below are not assertions of implemented game behavior.
+arithmetic in `cna_sim::official::state` (CNA-260), and transactional execution in
+`cna_sim::official::reducer` (CNA-261). `official::initiative` executes weekly
+initiative and per-stage player-order choices (§7); see the
+[source comparison and integration limits](../rules/initiative.md).
+Other game rules and the save/replay verifier remain later deliverables. The
+sandbox is unchanged. Protocol tests are not assertions of implemented game rules.
 
 ## Authoritative state representation
 
@@ -32,14 +35,68 @@ Stage command. The future phase engine owns those transitions and scenario limit
 
 Stored mode names identify the planned four profiles, not implemented kernels or
 an approved mode matrix. RNG fields preserve the command contract's ChaCha8
-stream-0 seed and word cursor, but do not yet draw words. Pending ADJ-SHIP and
-ADJ-MODES decisions are not resolved by storing these fields.
+stream-0 seed and word cursor; `official::rng` now supplies recorded draws.
+Pending ADJ-SHIP and ADJ-MODES decisions are not resolved by storing these fields.
 
 `cargo test --locked -p cna-sim --test official_state` checks deterministic state
 round trips, exact fractional quantities, dangling references and all 333 calendar
 positions. `cargo test --locked -p cna-map --test hex` covers the additive string
 serialization of `MapLocation` through its existing strict parser, including
 off-map boxes; no aliases or adjacency semantics change.
+
+## Transactional execution (CNA-261)
+
+`Session<P, E>` owns state, ordered events, the next event index and accepted
+command receipts. `Session::new` validates the initial state's references and
+takes an authorized actor-to-side map plus the selected catalog ID set. It
+starts a new event history; it is **not** a save loader. Reconstructing a running
+session from `GameState` alone loses receipts and would break retry safety.
+The session's serialization is an internal diagnostic snapshot, not a public
+projection or versioned save format; deserialization is intentionally absent.
+
+`Session::reduce(authenticated_actor, command, kernel)` checks the supplied
+principal against the session's actor map and command before looking up a receipt.
+The host must supply the authenticated principal independently of the request,
+and bind the trusted Rust kernel to the loaded ruleset. This API does not perform
+login, accept callbacks from clients, or make authoritative events safe to expose
+to a viewer. Kernel payload equality must include every field, including optional
+annotations, for complete-command retry comparison.
+
+The kernel receives a `Transaction<E>` containing a copied game state and emits
+ordered events through `tx.emit`. Its event callback receives a `RecordedRng`;
+every consumed word attaches to that event. A failed event poisons the transaction
+even if its error is ignored. State, cursor, events, receipt and revision commit
+together, only after the kernel succeeds and reference validation passes. Direct
+kernel edits to revision, reference digests or the stored RNG reject. The kernel
+must not perform I/O or mutate anything outside the transaction.
+
+`Noop {}` and the `noop` diagnostic kernel acknowledge a command with one empty
+event and advance revision, but do not change calendar, resources or RNG.
+`InitiativeRules::execute` also runs through this transaction boundary. No browser
+consumer is migrated to this API. Synthetic test kernels separately exercise
+random draws and rejection after tentative mutations; they are not game orders.
+
+The implementation pins `rand_chacha = 0.3.1` with default features disabled
+(no OS randomness). `RecordedRng::bounded(upper)` returns `0..upper`, discarding
+words below `(2^32 mod upper)` and recording the discarded words too. The retained
+range has a count divisible by `upper`, so modulo introduces no bias. Even an
+upper bound of one consumes a word. Game kernels define their own die offsets.
+The stored u64 word cursor rejects exhaustion rather than wrapping the library's
+wider stream position.
+
+Golden vectors use independently published [Strombergson draft -01 §3 TC1/TC2](https://www.ietf.org/archive/id/draft-strombergson-chacha-test-vectors-01.txt),
+256-bit keys, 8 rounds, zero IV: two full blocks for the zero key and nonzero-key
+words, interpreted little-endian. The source is an expired informational draft,
+not an IETF standard. Tests also resume at word positions across block boundaries.
+
+`cargo test --locked -p cna-sim official::reducer` and
+`cargo test --locked -p cna-sim --test official_traces` execute the same public
+integration suite. Its bounded property test exhausts 256 seeds/private stocks
+and ten rejection causes, checking byte-identical session rollback and a single
+public rejection shape. Named command traces compare events against explicit
+golden words and event digests across runs, including retries, rejected draws,
+empty-event acceptance and non-semantic annotations. They do not yet verify
+untrusted saved replay streams; that remains the save/replay leaf.
 
 ## Envelopes and versioning
 
@@ -116,8 +173,8 @@ state. Validation failures consume no RNG; they cannot be used to probe rolls.
   Explicit player choices remain explicit; deterministic ordering must not
   silently replace a choice required by a rule. Route-specific ties are CNA-163.
 - The official PRNG contract is ChaCha8 with a 32-byte seed, stream 0, initial
-  word position 0, consuming consecutive `next_u32` words. The reducer leaf must
-  pin the implementation/version and publish golden vectors before acceptance.
+  word position 0, consuming consecutive `next_u32` words. CNA-261 pins the
+  implementation/version and verifies independent golden vectors as above.
   No OS RNG, `usize`-dependent sampling, floating RNG or implicit reseeding.
 - A `RandomDraw` stores `word_index` (zero-based global word position) and raw
   `value` (u32). Record every consumed word, including rejection-sampling words,
@@ -139,5 +196,6 @@ certified historical rule behavior.
 `cargo test -p cna-sim contract::command` checks command/state/accepted/rejected
 fixtures, ordered event and draw preservation, unsupported major versions,
 strict unknown-field boundaries, and the explicitly extensible annotation map.
-State/RNG rollback, idempotency, authorization and redaction require reducer
-integration tests in CNA-261; this leaf cannot prove them without that engine.
+State/RNG rollback, idempotency, actor gating and uniform rejection are tested by
+the CNA-261 reducer integration suite. Login and viewer projections are separate
+boundaries; these tests do not certify them.

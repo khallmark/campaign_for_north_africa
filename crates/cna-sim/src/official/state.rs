@@ -1,4 +1,5 @@
 //! State representation, not a scenario loader or a certification of rule legality.
+use super::initiative::InitiativeState;
 use crate::contract::route::Points;
 use cna_catalog::{CanonicalUnitId, StateVersion};
 use cna_map::hex::MapLocation;
@@ -206,8 +207,8 @@ pub struct Commitment {
     pub cargo_batches: BTreeSet<String>,
 }
 
-/// Serializable ChaCha8 stream-0 cursor per the command contract. This state
-/// representation does not draw random words; CNA-261 supplies that behavior.
+/// Serializable ChaCha8 stream-0 cursor per the command contract. Recorded
+/// draws are supplied by `official::rng`, not by this representation itself.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct RngState {
@@ -230,6 +231,8 @@ pub struct GameState {
     pub revision: u64,
     pub calendar: Calendar,
     pub mode: Mode,
+    #[serde(default)]
+    pub initiative: Option<InitiativeState>,
     pub instances: BTreeMap<String, UnitInstance>,
     /// Key is the member instance; values point at its assigned/attached parent.
     pub organizations: BTreeMap<String, Organization>,
@@ -245,6 +248,13 @@ impl GameState {
     /// match: loaders must also compare the selected reference bundle (CNA-270).
     /// Errors are internal diagnostics, NEVER viewer-facing command rejections.
     pub fn validate(&self, catalog_ids: &BTreeSet<CanonicalUnitId>) -> Result<(), String> {
+        if self
+            .initiative
+            .as_ref()
+            .is_some_and(|i| !i.valid_at(self.calendar))
+        {
+            return Err("initiative or order declaration is outside the calendar".into());
+        }
         let require_instance = |id: &str| {
             if self.instances.contains_key(id) {
                 Ok(())

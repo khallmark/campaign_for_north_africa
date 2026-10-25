@@ -129,25 +129,62 @@ test('catalog controls wire search, selects and pagination into visible results'
   await page.goto('/');
   await page.getByRole('button', { name: 'Unit catalog', exact: true }).click();
   const count = page.locator('.catalog-count');
-  const firstPage = await count.innerText();
+  const search = page.getByRole('searchbox', { name: 'Search records' });
+  const unitType = page.getByRole('combobox', { name: 'Unit type', exact: true });
+  const nationality = page.getByRole('combobox', { name: 'Nationality', exact: true });
+  await expect(count).toContainText('Unit types:');
+  await expect(page.locator('.catalog-entry')).toHaveCount(0);
+  const cruiser = page.getByRole('button', { name: 'Explore Anti air cruiser', exact: true });
+  await cruiser.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('heading', { name: 'Anti air cruiser', exact: true })).toBeFocused();
+  await expect(count).toContainText('Showing 1–3 of 3 records');
+  await expect(page.locator('.catalog-list .catalog-name strong')).toHaveText(['Euryalus', 'Dido', 'Naiad']);
+  for (const text of await page.locator('.catalog-list .catalog-name > span').allTextContents()) {
+    expect(text).toBe('Anti air cruiser · Naval unit · Commonwealth · Allies');
+  }
+  const dido = page.locator('.catalog-list .catalog-entry').filter({ hasText: 'Dido' });
+  await dido.locator('summary').first().click();
+  await expect(dido.locator('table')).toBeVisible();
+  await page.getByRole('button', { name: 'Back to unit types', exact: true }).click();
+  await expect(cruiser).toBeFocused();
+  await search.fill('Dido');
+  await expect(page.locator('.catalog-type')).toHaveCount(1);
+  await cruiser.click();
+  await expect(count).toContainText('Showing 1–1 of 1 records');
+  await page.getByRole('button', { name: 'Back to unit types', exact: true }).click();
+  await expect(search).toHaveValue('Dido');
+  await search.fill('');
+  await page.getByRole('button', { name: 'Explore Infantry', exact: true }).click();
+  await search.fill('1st Rifle Brigade');
+  await page.getByRole('combobox', { name: 'Record type', exact: true }).selectOption('formation');
+  await page.getByRole('combobox', { name: 'Side', exact: true }).selectOption({ label: 'Allies' });
+  await nationality.selectOption({ label: 'Commonwealth' });
+  await expect(count).toContainText('Showing 1–1 of 1 records');
+  await expect(page.locator('.catalog-list .catalog-name > span')).toHaveText('Infantry · Formation · Commonwealth · Allies');
+  await nationality.selectOption({ label: 'German' });
+  await expect(count).toContainText('No matching records');
+  await nationality.selectOption('commonwealth');
+  await page.getByRole('combobox', { name: 'Side', exact: true }).selectOption('axis');
+  await expect(count).toContainText('No matching records');
+  await page.getByRole('combobox', { name: 'Side', exact: true }).selectOption('allied');
+  await search.fill('');
+  await expect(count).toContainText('Showing 1–24');
   await page.getByRole('button', { name: 'Next', exact: true }).click();
   await expect(count).toContainText('Showing 25–48');
   await expect(count).toBeFocused();
-  await page.getByRole('button', { name: 'Previous', exact: true }).click();
-  await expect(count).toHaveText(firstPage);
-  await page.getByRole('button', { name: 'Next', exact: true }).click();
-  await page.getByRole('searchbox', { name: 'Search records' }).fill('type-infantry');
-  await expect(count).toContainText('Showing 1–1 of 1 records');
-  await expect(page.locator('.catalog-list')).toContainText('Infantry');
-  await expect(page.getByRole('button', { name: 'Next', exact: true })).toHaveCount(0);
-  await page.getByRole('combobox', { name: 'Record type', exact: true }).selectOption('formation');
+  const metadata = page.locator('.catalog-list .catalog-name > span');
+  expect(await metadata.count()).toBe(24);
+  for (const text of await metadata.allTextContents()) {
+    expect(text).toBe('Infantry · Formation · Commonwealth · Allies');
+  }
+  await unitType.selectOption('headquarters');
+  await expect(count).toContainText('Showing 1–');
+  for (const text of await metadata.allTextContents()) {
+    expect(text).toBe('Headquarters · Formation · Commonwealth · Allies');
+  }
+  await page.getByRole('combobox', { name: 'Record type', exact: true }).selectOption('equipment');
   await expect(count).toContainText('No matching records');
-  await page.getByRole('combobox', { name: 'Record type', exact: true }).selectOption('unit_type');
-  await expect(count).toContainText('Showing 1–1 of 1 records');
-  await page.getByRole('combobox', { name: 'Side', exact: true }).selectOption('axis');
-  await expect(count).toContainText('No matching records');
-  await page.getByRole('combobox', { name: 'Side', exact: true }).selectOption('unspecified');
-  await expect(count).toContainText('Showing 1–1 of 1 records');
   expect(errors).toEqual([]);
 });
 

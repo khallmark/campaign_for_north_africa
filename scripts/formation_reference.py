@@ -176,8 +176,8 @@ def stat(value, raw, refs, note, *, conditional=False, unit=None):
 def formation_references(db):
     """Return only public typed reference fields, computed from DB observations."""
     units = dict(db.execute("SELECT id,unit FROM stat_definition"))
-    records = {r[0]: {"name": r[1], "kind": r[2], "note": r[3], "details": json.loads(r[4]), "stats": {}}
-               for r in db.execute("SELECT id,name,kind,note,details_json FROM catalog_record")}
+    records = {r[0]: {"name": r[1], "kind": r[2], "note": r[3], "details": json.loads(r[4]), "unit_type": r[5], "stats": {}}
+               for r in db.execute("SELECT id,name,kind,note,details_json,unit_type_id FROM catalog_record")}
     for record_id, stat_id, value, status, raw, conditional, note, refs, evidence in db.execute(
             "SELECT record_id,stat_id,value,status,raw,conditional,note,original_source_refs_json,evidence_id FROM effective_stat"):
         records[record_id]["stats"][stat_id] = {
@@ -245,6 +245,7 @@ def formation_references(db):
             total_refs = [*refs, rule]
             terms, reasons, conditions = [], [], []
             total = 0
+            excluded_assault = False
             if options.get("calculation_note"):
                 reasons.append(options["calculation_note"])
             if key == "close_assault_offensive" and options.get("no_assault"):
@@ -260,6 +261,14 @@ def formation_references(db):
                     quantity = item["land_barrage_toe"]
                     conditions.append("Only the printed land-target subset contributes to this barrage total.")
                 total_refs += item["toe"]["source_refs"] + rating.get("source_refs", [])
+                if item["record_id"] == "it-g":
+                    reasons.append("Profile g: no assigned weapon model is printed (4.46).")
+                    continue
+                if (options.get("no_assault") and key in ("close_assault_offensive", "close_assault_defensive")
+                        and records[item["record_id"]]["unit_type"] in ("artillery", "airborne-artillery")):
+                    excluded_assault = True
+                    conditions.append("Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions.")
+                    continue
                 value = rating.get("value") if rating.get("status") == "sourced" else None
                 # A known N/A combat cell supplies no intrinsic points. This
                 # applies only to a specified component, never an unknown
@@ -313,8 +322,9 @@ def formation_references(db):
             totals[key] = stat(total if not reasons else None, " + ".join(terms) or None, total_refs,
                                " ".join(dict.fromkeys(reasons + conditions)) if reasons or conditions else "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
                                conditional=bool(conditions), unit="Actual AA points" if key == "anti_air" else "Raw combat points (before ÷10)")
-            if key == "close_assault_offensive" and options.get("no_assault"):
-                totals[key].update(status="not_applicable", raw="May not assault")
+            if (key == "close_assault_offensive" and options.get("no_assault")
+                    or excluded_assault and not contributions and not reasons):
+                totals[key].update(value=None, status="not_applicable", raw="May not assault")
         morale = arrival["morale_raw"]
         match = re.fullmatch(r"([+-]?\d+)(?: \((?:([+-]?\d+)|[a-z])\))?", morale or "")
         morale_value = int(match[2] or match[1]) if match else None

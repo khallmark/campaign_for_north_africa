@@ -599,6 +599,45 @@ class CommittedDatabaseContracts(unittest.TestCase):
             db.execute("UPDATE catalog_record SET details_json=json_set(details_json,'$.formation_arrival.components[0].toe',NULL) WHERE id='oa-124-002-13th-light-aa-regt'")
             self.assertIsNone(catalog.formation_references(db)['oa-124-002-13th-light-aa-regt']['arrival_totals']['anti_armor']['value'])
 
+    def test_assignment_capacity_is_not_an_assigned_weapon_rating(self):
+        with closing(catalog.connect(catalog.DATABASE, readonly=True)) as db:
+            references = catalog.formation_references(db)
+        for record_id in ('oa-159-028-2nd-ccnn-div-hq', 'oa-160-041-1st-ccnn-div-hq',
+                          'oa-160-055-250th-legion-hq'):
+            reference = references[record_id]
+            self.assertEqual(reference['arrival']['toe_strength']['value'], 1)
+            self.assertEqual(reference['base_stats']['capability_points']['value'], 20)
+            for key, rating in reference['arrival_totals'].items():
+                with self.subTest(record_id=record_id, stat=key):
+                    self.assertIsNone(rating['value'])
+                    self.assertEqual(rating['status'], 'unresolved')
+                    self.assertIn('assigned weapon', rating['note'])
+        # A real infantry component's absent intrinsic AA remains distinct.
+        self.assertEqual(references['oa-116-006-1st-rifle-brigade']['arrival_totals']['anti_air']['value'], 0)
+
+    def test_emplaced_artillery_cannot_supply_or_suppress_defensive_assault(self):
+        with closing(sqlite3.connect(':memory:')) as db, closing(catalog.connect(catalog.DATABASE, readonly=True)) as source:
+            source.backup(db)
+            references = catalog.formation_references(db)
+            for number, row, expected in ((2, '022', 6), (3, '023', 8), (4, '024', 4), (5, '025', 2)):
+                record_id = f'oa-155-{row}-{number}' + {2: 'nd', 3: 'rd', 4: 'th', 5: 'th'}[number] + '-tobruk-cd-arty-group'
+                with self.subTest(record_id=record_id):
+                    rating = references[record_id]['arrival_totals']['close_assault_defensive']
+                    self.assertEqual(rating['value'], expected)  # Only AA TOE × (1), never emplaced guns.
+                    self.assertEqual(rating['raw'], f'{expected} × 1')
+                    self.assertTrue(rating['conditional'])
+                    self.assertIn('only when attacked', rating['note'])
+                    self.assertIn('Emplaced artillery', rating['note'])
+            for record_id in ('oa-155-021-1st-tobruk-cd-arty-group', 'oa-156-037-v-coastal-defense-arty-group',
+                              'oa-156-040-iv-coastal-def-arty-group', 'oa-156-041-vi-coastal-def-arty-group'):
+                with self.subTest(record_id=record_id):
+                    rating = references[record_id]['arrival_totals']['close_assault_defensive']
+                    self.assertIsNone(rating['value'])
+                    self.assertEqual(rating['status'], 'not_applicable')
+            # A prohibited normal-rated gun must not conceal an unknown eligible AA rating.
+            db.execute("UPDATE stat_observation SET value=NULL,status='unresolved',raw='?' WHERE record_id='weapons-it-i-heavy-aa' AND stat_id='close_assault_defensive'")
+            self.assertIsNone(catalog.formation_references(db)['oa-155-024-4th-tobruk-cd-arty-group']['arrival_totals']['close_assault_defensive']['value'])
+
     def test_reviewed_patch_changes_only_twelve_types_and_rejects_wrong_baseline(self):
         with tempfile.TemporaryDirectory() as directory:
             database = Path(directory) / "catalog.sqlite"

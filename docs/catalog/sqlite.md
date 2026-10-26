@@ -211,6 +211,10 @@ their existing contract; no new field is added to their emitted data.
   contributes no intrinsic points; its nullable source cell is unchanged. This
   does not turn an unknown loadout, a maximum TOE dash, or armor/vulnerability
   into zero. Missing or unverified inputs block the entire total.
+  Italian HQ profile `g` permits one artillery TOE, but its `g/N` OA rows do not
+  identify an assigned gun. Their five combat totals therefore remain nonnumeric
+  under 4.46; the printed capacity and CPA remain available. No neighboring
+  artillery row is treated as their assignment.
   Parenthesized ratings now produce conditional reference numbers under 3.3–3.4,
   4.46 and chart legends, with the exact restrictions in `note`. For a mixed
   loadout, the supplied non-parenthesized fire case excludes parenthesized terms:
@@ -228,6 +232,13 @@ their existing contract; no new field is added to their emitted data.
   reference totals, not all-target/current strength. Other unsupported restrictions
   still block numbers. Sourced morale has no missing-value caveat; missing TOE/profile/morale
   explanations cite the particular row, profile symbol or attachment.
+  Tobruk note b(3), Bardia note c and Derna note b prohibit emplaced artillery
+  participation in **either** assault direction. Those components are excluded
+  before selecting eligible normal/parenthesized fire. Tobruk groups 2/3/4/5 have
+  conditional defensive totals **6/8/4/2**, from non-emplaced AA alone; the 4th
+  group's six 105/28 TOE cannot supply six defensive points or suppress the AA.
+  All-artillery groups have no applicable defensive assault total. An unknown
+  eligible AA rating still blocks the whole total.
 
 Consumers should use the arrival notes/limitations instead of the legacy record
 note's old "not transcribed" paragraph, and avoid duplicating the ordinary linked

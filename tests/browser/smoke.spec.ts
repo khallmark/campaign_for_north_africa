@@ -562,9 +562,10 @@ test('planning selection and icon actions track pan and zoom; hover waits one se
   expect(errors).toEqual([]);
 });
 
-test('selected actions stay reachable at bottom, sides and corners after panning', async ({ page }) => {
-  const errors = collectErrors(page);
-  for (const viewport of [page.viewportSize()!, { width: 390, height: 844 }]) {
+for (const viewportCase of ['project viewport', '390px viewport'] as const) {
+  test(`selected actions stay reachable at bottom, sides and corners after panning (${viewportCase})`, async ({ page }) => {
+    const errors = collectErrors(page);
+    const viewport = viewportCase === 'project viewport' ? page.viewportSize()! : { width: 390, height: 844 };
     await page.setViewportSize(viewport);
     await page.goto('/');
     await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
@@ -619,9 +620,9 @@ test('selected actions stay reachable at bottom, sides and corners after panning
       await expect(page.getByRole('dialog')).toContainText('No active simulation');
       await page.keyboard.press('Escape');
     }
-  }
-  expect(errors).toEqual([]);
-});
+    expect(errors).toEqual([]);
+  });
+}
 
 test('open floating panels do not intercept selected actions', async ({ page }) => {
   const errors = collectErrors(page);

@@ -2,6 +2,29 @@
 
 A full-board review workspace for SPI's _The Campaign for North Africa_: pan and zoom the supplied map, browse source records, arrange explicitly user-placed planning counters, and inspect the 111-Game-Turn calendar. The old fictional Tobruk teaching scenario is no longer mounted. An official simulation and historical deployments are not loaded.
 
+## Rulebook hot-seat play
+
+Use **Reinforcements** to place counters for both sides, set the starting calendar,
+then open **Play / Save**. Name the operation and choose the first player after
+adjudicating setup and initiative from the rulebook. This is local, open-information
+play for two people sharing a browser, not an AI opponent or certified simulation.
+
+Select an active-side counter to record a move, combat result, supply ledger or
+construction. Players resolve terrain, CP, reactions, combat, partial losses and
+other rule-specific effects themselves. Whole-counter eliminations leave the map;
+exact fuel costs debit the entered ledger and reject insufficient stock. Unknown
+supplies stay unknown. Dice use the recorded ChaCha8 stream and public setup seed.
+Both players complete their portion before the next stage can begin. Preliminary
+phases and initiative are confirmed explicitly; they are not silently executed.
+Concession ends the game. Scenario victory conditions are not automatically checked.
+
+Accepted orders autosave in this browser. **Play / Save** contains the order log
+and JSON backup/import; loading validates and replays the orders, including dice.
+An invalid import preserves the running game. A new operation clears the browser
+save, so export first. The save contains both sides' information and notes: never
+enter passwords or private source-save credentials. Review-only counters remain
+temporary and separate from a started game.
+
 ## Run
 
 Use Node.js 24.22.1 (pinned in `.node-version`) and its bundled npm, plus Rust 1.99.1 and the WebAssembly target (pinned in `rust-toolchain.toml`). Application state, simulation, DOM/SVG rendering, input handling, and sprite motion are authored in Rust. JavaScript is limited to generated Wasm bindings and their loader; Vite serves the browser assets.
@@ -15,7 +38,7 @@ npm test
 npm run build
 ```
 
-`npm run dev` builds Rust/Wasm before starting Vite, which prints the development URL. After editing Rust, run `npm run wasm` and reload the page. `npm run preview` serves the production build. No game account, backend, or API key is needed. Fonts use Google Fonts with local system fallbacks. Play is session-only: reloading starts again.
+`npm run dev` builds Rust/Wasm before starting Vite, which prints the development URL. After editing Rust, run `npm run wasm` and reload the page. `npm run preview` serves the production build. No game account, backend, or API key is needed. Fonts use Google Fonts with local system fallbacks. Rulebook games resume from browser storage; review-only counters reset on reload.
 
 ## Validation
 

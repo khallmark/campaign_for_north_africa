@@ -5,7 +5,7 @@ use cna_map::{
     geometry::{center, corners, edge, hexes},
     hex::HexId,
     model::{model, Coverage},
-    terrain::{MapRecord, Observation},
+    terrain::{MapRecord, Observation, TransportDepiction},
     viewport::Viewport,
 };
 use std::{collections::BTreeMap, fmt::Write};
@@ -117,12 +117,21 @@ impl Geography {
                         serde_json::to_value(&record.observation).unwrap(),
                         "Location".to_string(),
                     ),
-                    MapRecord::Hexside { side, record, .. } => {
+                    MapRecord::Hexside {
+                        side,
+                        record,
+                        depiction,
+                    } => {
                         let other = side.hex().neighbor(side.direction()).unwrap();
+                        let depiction_label = match depiction {
+                            Some(TransportDepiction::UnfinishedRoad) => " · Unfinished road depiction — schematic, not an operational link",
+                            Some(TransportDepiction::UnfinishedRailroad) => " · Unfinished railroad depiction — schematic, not an operational link",
+                            None => "",
+                        };
                         (
                             hex == side.hex() || hex == other,
                             serde_json::to_value(&record.observation).unwrap(),
-                            format!("Side {} ↔ {other}", side.hex()),
+                            format!("Side {} ↔ {other}{depiction_label}", side.hex()),
                         )
                     }
                 };
@@ -330,6 +339,7 @@ impl Geography {
         if self.features {
             let mut links: BTreeMap<&str, String> = BTreeMap::new();
             let mut railroads = String::new();
+            let mut construction = String::new();
             let mut locations = String::new();
             let mut water: BTreeMap<&str, String> = BTreeMap::new();
             for (&hex, examination) in &model().examinations {
@@ -384,7 +394,32 @@ impl Geography {
                             };
                             write!(html, "<polygon class=geography-terrain data-hex=\"{hex}\" points=\"{}\" fill=\"{color}\"/>", polygon(*hex)).unwrap();
                         }
-                        MapRecord::Hexside { side, record, .. } if visible(side.hex()) => {
+                        MapRecord::Hexside {
+                            side,
+                            record,
+                            depiction,
+                        } if visible(side.hex()) => {
+                            if let Some(depiction) = depiction {
+                                // Source-backed depictions remain unresolved. These
+                                // center-to-center strokes do not create network links.
+                                let (class, label) = match depiction {
+                                    TransportDepiction::UnfinishedRoad => {
+                                        ("unfinished-road", "Unfinished road")
+                                    }
+                                    TransportDepiction::UnfinishedRailroad => {
+                                        ("unfinished-railroad", "Unfinished railroad")
+                                    }
+                                };
+                                let other = side.hex().neighbor(side.direction()).unwrap();
+                                let a = viewport.to_screen(center(side.hex()));
+                                let b = viewport.to_screen(center(other));
+                                let path = format!("M{:.2},{:.2}L{:.2},{:.2}", a.x, a.y, b.x, b.y);
+                                write!(construction, "<path class=\"geography-construction {class}\" data-from=\"{}\" data-to=\"{other}\" d=\"{path}\"><title>{label} depiction · unresolved · schematic, not an operational link</title></path>", side.hex()).unwrap();
+                                if matches!(depiction, TransportDepiction::UnfinishedRailroad) {
+                                    write!(construction, "<path class=\"geography-construction construction-ties\" d=\"{path}\"/>").unwrap();
+                                }
+                                continue;
+                            }
                             let value = match &record.observation {
                                 Observation::Provisional { value }
                                 | Observation::Reviewed { value } => value,
@@ -456,6 +491,7 @@ impl Geography {
             if !railroads.is_empty() {
                 write!(html, "<path class=\"geography-link railroad\" d=\"{railroads}\"/><path class=\"geography-link railroad railroad-ties\" d=\"{railroads}\"/>").unwrap();
             }
+            html.push_str(&construction);
             html.push_str(&locations);
             html.push_str(&art_locations);
         }

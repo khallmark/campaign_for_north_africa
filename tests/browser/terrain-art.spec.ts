@@ -123,3 +123,35 @@ test('source scan and original terrain can be compared together or independently
   await expect(page.locator('.research-tile')).toHaveCount(0);
   expect(await camera()).toEqual(initialCamera);
 });
+
+test('source-backed unfinished routes are visible without becoming completed links', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'No private scan' }));
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Fit full board', exact: true }).click();
+  // Exact source-backed counts also reject classifying thousands of generic
+  // unresolved ink candidates (including blue bars) as construction routes.
+  await expect(page.locator('.geography-construction.unfinished-railroad')).toHaveCount(27);
+  await expect(page.locator('.geography-construction.unfinished-road')).toHaveCount(11);
+  await expect(page.locator('.geography-link.unfinished-railroad, .geography-link.unfinished-road')).toHaveCount(0);
+  for (const [hex, kind, label] of [
+    ['C4217', 'unfinished-railroad', 'Unfinished railroad'],
+    ['C3823', 'unfinished-road', 'Unfinished road'],
+  ]) {
+    await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill(hex);
+    await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+    const path = page.locator(`.geography-construction.${kind}[data-from="${hex}"]`);
+    // Horizontal SVG strokes have zero-height geometric bounds, so Playwright's
+    // visibility predicate rejects them even when the stroke is painted.
+    await expect(path).toBeAttached();
+    expect(await path.evaluate((node: SVGPathElement) => node.getTotalLength())).toBeGreaterThan(80);
+    await expect(path).toHaveCSS('visibility', 'visible');
+    await expect(path).toHaveCSS('stroke', 'rgb(113, 68, 160)');
+    await expect(path.locator('title')).toHaveText(`${label} depiction · unresolved · schematic, not an operational link`);
+    const details = page.locator('.geography-inspector details').filter({ hasText: `${label} depiction — schematic` }).first();
+    await expect(details).toContainText('unresolved');
+    await expect(details).toContainText('not an operational link');
+  }
+  expect(errors).toEqual([]);
+});

@@ -19,6 +19,10 @@ source evidence remain unchanged. This work began from `origin/main`, not the
 owner's unpublished map branch, and was then rebased onto the published full
 survey in [PR #27](https://github.com/khallmark/campaign_for_north_africa/pull/27)
 at [e5af0e7](https://github.com/khallmark/campaign_for_north_africa/commit/e5af0e7ed0a15c6c791c9654e258b76a1e796b27).
+The expanded survey and shared-main rules were subsequently merged from
+[fd497c8](https://github.com/khallmark/campaign_for_north_africa/commit/fd497c87883bd30d113f9c126edb1fc7b2e9ccd9),
+preserving this renderer. That update changes transport evidence, not terrain
+or geometry; the existing ground cache still verifies against its inputs.
 The integration retains raster examinations, water-evidence tints and the owner's
 terrain → links → railroad spine/ties → locations paint order.
 
@@ -42,9 +46,13 @@ the original provenance and review status. Try **B0526** for desert or **B5614**
 for mountain using the Hex identity control.
 
 Transport and rivers remain the map owner's **schematic lines**, not the artwork
-strips: the model does not supply authored path centerlines. Unfinished strips
-remain library-only because construction state is not yet typed. Minefield art
-also remains library-only without viewer-relative simulation state.
+strips: the model does not supply authored path centerlines. Explicit
+`MapRecord::Hexside.depiction` hints now draw violet dashed unfinished-road or
+unfinished-railroad strokes (rail adds separated ties), with inspector and legend
+labels. All 38 source-backed hints remain unresolved and excluded from operational
+`network_links`. Untagged ink remains unclassified; labels are never parsed to
+choose a depiction. The transparent unfinished strips remain library-only until
+authored paths exist. Minefield art also requires viewer-relative simulation state.
 
 ## Coverage is layered, not a terrain Cartesian product
 
@@ -125,8 +133,9 @@ Railroad. Neither this pack nor its preview assigns them a transport sprite.
 Review status (`reviewed`, `provisional`, `fixture`, `unresolved`) and construction
 completion are separate concepts. A provisional road is not automatically an
 unfinished road. `construction_variants` is a presentation extension, not a new
-geography enum: use it only after the owner supplies explicit construction
-evidence. If completion remains unknown, retain an uncertainty indicator instead
+operational feature enum. The source-backed `TransportDepiction` contract supplies
+explicit drawing evidence without resolving construction completion or movement.
+If completion remains unknown, retain an uncertainty indicator instead
 of choosing finished-looking artwork. A finished strip in the library does not
 certify any real road or railroad as complete.
 

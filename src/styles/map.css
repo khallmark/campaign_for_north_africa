@@ -406,6 +406,9 @@
 .geography-link.railroad-ties { stroke-width: 8; stroke-dasharray: 2 9; }
 .geography-link.track { stroke: #805a32; stroke-dasharray: 2 4; }
 .geography-link.unresolved { stroke: #ac3c65; stroke-width: 2; stroke-dasharray: 2 5; opacity: 0.8; }
+.geography-construction { fill: none; stroke: #7144a0; stroke-width: 2; stroke-dasharray: 10 10; }
+.geography-construction.unfinished-road { stroke-width: 4; stroke-dasharray: 8 8; }
+.geography-construction.construction-ties { stroke-width: 8; stroke-dasharray: 2 18; }
 .geography-location { fill: #f8e6a2; stroke: #24594f; stroke-width: 2; }
 .geography-location.unresolved { fill: none; stroke: #ac3c65; }
 .terrain-art-key { color: #4b5b58; margin: 8px 0; line-height: 1.45; }

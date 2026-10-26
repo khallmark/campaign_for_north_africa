@@ -70,11 +70,13 @@ test('a small overview covers loading tiles until full detail arrives', async ({
     await expect(page.locator('.research-tile').first()).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
     expect(overviewRequests).toBe(1);
     await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
-    await expect(page.getByRole('button', { name: 'Source scan', exact: true })).toHaveAttribute('aria-pressed', 'false');
-    await expect(page.locator('.research-board')).toHaveAttribute('data-source-visible', 'false');
+    await expect(page.getByRole('button', { name: 'Source scan', exact: true })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.research-board')).toHaveAttribute('data-source-visible', 'true');
     await page.getByRole('button', { name: 'Source scan', exact: true }).click();
     await expect(page.getByRole('button', { name: 'Original terrain', exact: true })).toHaveAttribute('aria-pressed', 'false');
-    await expect(page.locator('.research-board')).toHaveAttribute('data-source-visible', 'true');
+    await expect(page.locator('.research-board')).toHaveAttribute('data-source-visible', 'false');
+    await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Source scan', exact: true })).toHaveAttribute('aria-pressed', 'false');
   } finally {
     release();
   }
@@ -96,7 +98,8 @@ test('tiles follow drag, cursor zoom and a bounded visible ring', async ({ page 
   });
   await open(page);
   await page.getByRole('button', { name: 'Source scan', exact: true }).click();
-  await expect(page.locator('.research-status')).toContainText('Source map loaded');
+  await expect(page.locator('.research-status')).toContainText('Source scan + original terrain');
+  await expect(page.getByRole('button', { name: 'Original terrain', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('.research-unavailable')).toBeHidden();
   await expect(page.locator('.research-tile[data-ready=true]').first()).toBeVisible();
   await page.locator('#map-research').screenshot({ path: testInfo.outputPath('overview.png') });

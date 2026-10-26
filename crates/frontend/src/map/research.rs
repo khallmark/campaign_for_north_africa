@@ -130,16 +130,10 @@ impl Research {
             }
             "art" => {
                 self.geography.original_art = !self.geography.original_art;
-                if self.geography.original_art {
-                    self.source_visible = false;
-                }
                 Some(self.geography.original_art)
             }
             "source" if self.manifest.is_some() => {
                 self.source_visible = !self.source_visible;
-                if self.source_visible {
-                    self.geography.original_art = false;
-                }
                 Some(self.source_visible)
             }
             _ => None,
@@ -228,8 +222,16 @@ impl Research {
                 if self.source_visible { "true" } else { "false" },
             )
             .unwrap();
-        self.status.set_text_content(Some(if self.geography.original_art {
-            "Original terrain art · inset textures show presence, not extent · gray = unknown · routes schematic"
+        self.surface
+            .set_attribute(
+                "data-source-visible",
+                if self.source_visible { "true" } else { "false" },
+            )
+            .unwrap();
+        self.status.set_text_content(Some(if self.geography.original_art && self.source_visible {
+            "Source scan + original terrain · translucent illustrative art · routes schematic"
+        } else if self.geography.original_art {
+            "Original terrain art · illustrative blends, not surveyed boundaries · gray = unknown · routes schematic"
         } else if self.source_visible {
             "Source map loaded · terrain and seams unverified"
         } else {
@@ -265,6 +267,15 @@ impl Research {
         )));
         self.geography.render(v);
         crate::board::overlay(v);
+        // Comparison imagery should not compete with the original terrain for
+        // requests or decoded image memory while that mode is hidden.
+        if !self.source_visible {
+            for tile in self.tiles.values() {
+                tile.remove();
+            }
+            self.tiles.clear();
+            return;
+        }
         let Some(manifest) = &self.manifest else {
             return;
         };
@@ -429,7 +440,7 @@ pub fn mount() -> Result<(), JsValue> {
         <form class="geography-search"><label for="geography-id">Hex identity</label><input id="geography-id" placeholder="D3714" maxlength="10" autocomplete="off"><button type="submit">Inspect hex</button></form>
         <p class="geography-coverage"></p>
         <details class="geography-details"><summary>Hex evidence</summary>
-          <p class="terrain-art-key">Inset art = presence, not extent. Gray = unknown. Try B0526 (desert) / B5614 (mountain).</p>
+          <p class="terrain-art-key">Terrain blends are illustrative, not surveyed extents. Gray = unknown. Compare Source scan at the same camera position.</p>
           <p class="geography-key">Terrain/water tint = provisional · orange road / dark railroad with ties / dotted track · blue hexside · magenta side/dot = unresolved · links show connectivity, not exact linework · raster examination is not complete transcription</p>
           <div class="geography-inspector" aria-live="polite">Enable Inspect mode and click a hex, or enter its section-local identity. Enter inspects the viewport center. Grid labels appear at detail scale.</div>
         </details>
@@ -460,7 +471,7 @@ pub fn mount() -> Result<(), JsValue> {
         pointers: BTreeMap::new(),
         press: None,
         dragged: false,
-        geography: Geography::new(&root, board_size),
+        geography: Geography::new(&root),
         source_visible: false,
     }));
     RESEARCH.with(|current| *current.borrow_mut() = Some(state.clone()));

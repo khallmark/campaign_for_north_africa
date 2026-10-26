@@ -26,14 +26,17 @@ terrain → links → railroad spine/ties → locations paint order.
 
 **Original terrain** is enabled by default, even with no private tile manifest.
 There is no missing-source-artwork banner. Source scan is an optional, initially
-off mode, shown only when a valid local scan manifest exists; selecting either
-art mode turns the other off. Turning original art off leaves the schematic
-geography mode usable without scans.
+off layer, shown only when a valid local scan manifest exists. The two toggles
+are independent: with both enabled, original ground is 55% opaque over the source
+scan for aligned comparison. Either layer alone remains opaque. Turning both
+off leaves the schematic geography mode usable without scans.
 
-The renderer displays inset material swatches for typed reviewed/provisional
-terrain observations and original stamps for typed points. A neutral gray rim
-preserves unknown extent. Multiple materials appear as equal illustrative swatches,
-not measured area proportions or internal boundaries. Unknown cells remain gray;
+The renderer displays continuous, blended materials for typed reviewed/provisional
+terrain observations and original stamps for typed points. Materials use global
+board coordinates rather than restarting in each hex; transitions soften across
+observed cells. Multiple materials use equal illustrative weights, not measured
+area proportions or internal boundaries. **These fills are decorative presence
+indicators, not claims of full-cell coverage.** Unknown cells remain gray;
 fixture and unresolved values never select specific artwork. Hex evidence retains
 the original provenance and review status. Try **B0526** for desert or **B5614**
 for mountain using the Hex identity control.
@@ -77,10 +80,12 @@ with a textual friendly/enemy label; circle/diamond shapes distinguish the color
 - Delivery raster tiles being 512px does **not** establish per-hex art dimensions.
   Actual ground images are 402×402 texture swatches. Typical calibrated cell bounds
   are approximately 85.25×97.86 board pixels, but derive each bound from `corners`.
-- Cover a cell's bounding box with the ground texture, preserving aspect ratio,
-  then clip to its exact six corners. These textures are **not guaranteed seamless**;
-  v1 is suitable for discrete clipped cells. Continuous terrain regions require
-  a separate blending/texture-atlas decision, not stretching this atlas across the board.
+- The reusable source textures are not inherently seamless. The display baker
+  overlaps deterministic rotated 256-board-pixel patches with cosine weights,
+  then blends material masks with a 12-pixel radius. Texture coordinates are global,
+  so neither hexes nor delivery tiles restart the pattern.
+  Masks derive from actual cell corners; a final known-cell mask prevents the
+  blur from classifying unknown neighbors. No section identities or seams are merged.
 - Every asset declares its native `size`, `pivot`, `kind`, alpha mode and path
   relative to the pack root. Normalized coordinates have origin at top-left,
   +x right and +y down. Multiply normalized coordinates by native dimensions.
@@ -130,8 +135,28 @@ not geographic centerlines or legal movement. **Do not replace those schematic
 connections with precise-looking art paths**. Keep the existing schematic mode
 labeled as such until authored path geometry and evidence are available.
 Non-detection is not absence, and a partial terrain patch does not establish
-full-cell coverage. Preserve unresolved extents or use a separately evidenced
-mask rather than filling a whole cell from partial evidence.
+full-cell coverage. The blended display is explicitly illustrative; do not export
+its material boundaries as geography or use them to determine movement. Inspect
+the unchanged evidence records and compare the private source view for extent.
+
+## Buffered raster display
+
+`scripts/terrain-art/raster.py` uses the `map-model` export and original surface
+assets only. It emits a six-level lossless WebP pyramid in `ground/`, separate
+from private source tiles. The 382 tiles are bundled; no runtime image generation
+or private scan is required. The manifest fingerprints geometry, typed material
+assignments, original surface hashes and generator, and records every tile hash.
+
+Original ground loads at most 100 detail images plus one overview; enabling
+Source scan also loads its separate bounded tile ring. Ground and SVG
+evidence keep a quarter-viewport buffer on each side. Both SVG drawing surfaces
+are bounded to that buffered viewport, not the full board. Panning translates those layers;
+leaving the buffer, zooming, resizing or changing evidence controls refreshes them.
+Unknown gray, labels, selection, route ordering and hit testing remain independent
+of the raster. Source scan retains its own private tile loader and the same camera;
+hidden source detail tiles are removed rather than downloaded in the background.
+Disabling original terrain also releases its ground nodes; enabling the source
+layer does not disable or release the original terrain layer.
 
 ## Rebuild and verify
 
@@ -140,6 +165,9 @@ From the repository root, with `uv` and the existing Rust toolchain:
 ```sh
 uv run scripts/terrain-art/build.py --write
 uv run scripts/terrain-art/build.py --check
+uv run scripts/terrain-art/raster.py --write
+uv run scripts/terrain-art/raster.py --check
+uv run --with Pillow==12.0.0 --with numpy==2.3.4 python -m unittest discover -s scripts/terrain-art
 cargo run --quiet --locked -p cna-map --bin map-model > /tmp/terrain-art-geometry.json
 uv run scripts/terrain-art/preview.py \
   --geometry /tmp/terrain-art-geometry.json --output .amp/in/artifacts

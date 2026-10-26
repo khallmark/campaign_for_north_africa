@@ -374,21 +374,25 @@
   position: absolute;
   top: 0;
   left: 0;
-  overflow: visible;
+  overflow: hidden;
   pointer-events: none;
   transform-origin: 0 0;
   will-change: transform;
   z-index: 1;
 }
+.research-viewport[data-source-visible=true] .terrain-art-board { opacity: 0.55; }
 .geography-overlay {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
+  will-change: transform;
+  transform-origin: 0 0;
   z-index: 1;
 }
 .geography-hex { fill: none; stroke: #21575b; stroke-width: 0.7; opacity: 0.55; }
+.geography-overlay[data-original-art=true] .geography-hex { stroke: #62553e; opacity: 0.24; }
 .geography-id { fill: #24484b; stroke: #fff9e8; stroke-width: 2.5; paint-order: stroke; text-anchor: middle; font: 10px monospace; }
 .geography-terrain { opacity: 0.35; stroke: #534b35; stroke-width: 1; stroke-dasharray: 3 2; }
 .geography-water { fill: #488fb0; opacity: 0.35; }

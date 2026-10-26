@@ -8,7 +8,7 @@ use cna_map::{
     terrain::{MapRecord, Observation},
     viewport::Viewport,
 };
-use std::fmt::Write;
+use std::{collections::BTreeMap, fmt::Write};
 use web_sys::Element;
 
 pub(super) struct Geography {
@@ -27,7 +27,7 @@ pub(super) struct Geography {
 }
 
 impl Geography {
-    pub fn new(root: &Element, board_size: [f64; 2]) -> Self {
+    pub fn new(root: &Element) -> Self {
         let svg = document()
             .create_element_ns(Some("http://www.w3.org/2000/svg"), "svg")
             .unwrap();
@@ -60,12 +60,6 @@ impl Geography {
             .unwrap();
         ground.set_attribute("class", "terrain-art-board").unwrap();
         ground.set_attribute("aria-hidden", "true").unwrap();
-        ground
-            .set_attribute("width", &board_size[0].to_string())
-            .unwrap();
-        ground
-            .set_attribute("height", &board_size[1].to_string())
-            .unwrap();
         svg.parent_node()
             .unwrap()
             .insert_before(&ground, Some(&svg))
@@ -190,16 +184,13 @@ impl Geography {
             [self.original_art, self.grid, self.features],
             self.selected,
         );
-        // Dialog/counter refreshes must not rebuild thousands of unchanged map cells.
-        if self.last_render == Some(state) {
-            return;
-        }
         let [width, height] = viewport.css_size();
         // Retain a quarter-viewport overscan on each side. Rebuild only when
         // the visible rectangle leaves that buffer, not on every pointer move.
         let ground_covers_viewport = self.ground_viewport.is_some_and(|old| {
             old.zoom() == viewport.zoom()
                 && old.css_size() == viewport.css_size()
+                && old.device_pixel_ratio() == viewport.device_pixel_ratio()
                 && (old.center().x - viewport.center().x).abs() * viewport.zoom() <= width * 0.25
                 && (old.center().y - viewport.center().y).abs() * viewport.zoom() <= height * 0.25
         });
@@ -207,26 +198,100 @@ impl Geography {
             self.ground
                 .set_inner_html(&self.artwork.render_ground(viewport));
             self.ground_viewport = Some(viewport);
+            // Bound the SVG raster surface to the screen, not the 66MP board.
+            self.ground
+                .set_attribute("width", &(width * 1.5).to_string())
+                .unwrap();
+            self.ground
+                .set_attribute("height", &(height * 1.5).to_string())
+                .unwrap();
+            self.ground
+                .set_attribute(
+                    "viewBox",
+                    &format!(
+                        "{} {} {} {}",
+                        viewport.center().x - width * 0.75 / viewport.zoom(),
+                        viewport.center().y - height * 0.75 / viewport.zoom(),
+                        width * 1.5 / viewport.zoom(),
+                        height * 1.5 / viewport.zoom()
+                    ),
+                )
+                .unwrap();
+        } else if !self.original_art && self.ground_viewport.take().is_some() {
+            self.ground.set_inner_html("");
+        }
+        if let Some(old) = self.ground_viewport {
+            self.ground
+                .set_attribute(
+                    "style",
+                    &format!(
+                        "transform:translate({}px,{}px)",
+                        (old.center().x - viewport.center().x) * viewport.zoom() - width * 0.25,
+                        (old.center().y - viewport.center().y) * viewport.zoom() - height * 0.25
+                    ),
+                )
+                .unwrap();
+        }
+        self.ground
+            .set_attribute("display", if self.original_art { "inline" } else { "none" })
+            .unwrap();
+        self.svg
+            .set_attribute(
+                "data-original-art",
+                if self.original_art { "true" } else { "false" },
+            )
+            .unwrap();
+        // Keep evidence and labels at their painted coordinates during a pan.
+        // A CSS translation moves the buffered layer; zoom or state changes
+        // repaint so screen-space strokes and labels retain their intended size.
+        if let Some((old, flags, selected)) = self.last_render {
+            let dx = (old.center().x - viewport.center().x) * viewport.zoom();
+            let dy = (old.center().y - viewport.center().y) * viewport.zoom();
+            if old.zoom() == viewport.zoom()
+                && old.css_size() == viewport.css_size()
+                && flags == state.1
+                && selected == self.selected
+                && dx.abs() <= width * 0.25
+                && dy.abs() <= height * 0.25
+            {
+                self.svg
+                    .set_attribute(
+                        "style",
+                        &format!(
+                            "width:{}px;height:{}px;transform:translate({}px,{}px)",
+                            width * 1.5,
+                            height * 1.5,
+                            dx - width * 0.25,
+                            dy - height * 0.25
+                        ),
+                    )
+                    .unwrap();
+                return;
+            }
         }
         self.svg
-            .set_attribute("viewBox", &format!("0 0 {width} {height}"))
-            .unwrap();
-        let origin = viewport.to_screen(cna_map::geometry::BoardPoint { x: 0.0, y: 0.0 });
-        // A separate composited SVG keeps pan translations from repainting every
-        // textured cell when the screen-space evidence overlay changes.
-        self.ground
             .set_attribute(
-                "style",
+                "viewBox",
                 &format!(
-                    "transform:translate({}px,{}px) scale({})",
-                    origin.x,
-                    origin.y,
-                    viewport.zoom()
+                    "{} {} {} {}",
+                    -width * 0.25,
+                    -height * 0.25,
+                    width * 1.5,
+                    height * 1.5
                 ),
             )
             .unwrap();
-        self.ground
-            .set_attribute("display", if self.original_art { "inline" } else { "none" })
+        self.svg
+            .set_attribute(
+                "style",
+                &format!(
+                    "width:{}px;height:{}px;transform:translate({}px,{}px)",
+                    width * 1.5,
+                    height * 1.5,
+                    -width * 0.25,
+                    -height * 0.25
+                ),
+            )
             .unwrap();
         self.svg
             .set_attribute(
@@ -241,7 +306,10 @@ impl Geography {
         let visible = |hex| {
             let c = viewport.to_screen(center(hex));
             let margin = 90.0 * viewport.zoom();
-            c.x > -margin && c.x < width + margin && c.y > -margin && c.y < height + margin
+            c.x > -width * 0.25 - margin
+                && c.x < width * 1.25 + margin
+                && c.y > -height * 0.25 - margin
+                && c.y < height * 1.25 + margin
         };
         let polygon = |hex| {
             corners(hex)
@@ -260,13 +328,23 @@ impl Geography {
             String::new()
         };
         if self.features {
-            let mut links = String::new();
+            let mut links: BTreeMap<&str, String> = BTreeMap::new();
             let mut railroads = String::new();
             let mut locations = String::new();
+            let mut water: BTreeMap<&str, String> = BTreeMap::new();
             for (&hex, examination) in &model().examinations {
                 if visible(hex)
                     && matches!(examination.surface.as_str(), "water" | "mixed_water_land")
                 {
+                    if viewport.zoom() < 0.65 {
+                        write!(
+                            water.entry(&examination.surface).or_default(),
+                            "M{}Z",
+                            polygon(hex).replace(' ', "L")
+                        )
+                        .unwrap();
+                        continue;
+                    }
                     write!(
                         html,
                         "<polygon class=\"geography-water {}\" data-hex=\"{hex}\" points=\"{}\"/>",
@@ -275,6 +353,13 @@ impl Geography {
                     )
                     .unwrap();
                 }
+            }
+            for (class, path) in water {
+                write!(
+                    html,
+                    "<path class=\"geography-water {class}\" d=\"{path}\"/>"
+                )
+                .unwrap();
             }
             for records in &self.records {
                 for assignment in records {
@@ -307,7 +392,15 @@ impl Geography {
                                     let (a, b) = edge(*side);
                                     let a = viewport.to_screen(a);
                                     let b = viewport.to_screen(b);
-                                    write!(links, "<path class=\"geography-link unresolved\" d=\"M{:.2},{:.2}L{:.2},{:.2}\"/>",a.x,a.y,b.x,b.y).unwrap();
+                                    write!(
+                                        links.entry("unresolved").or_default(),
+                                        "M{:.2},{:.2}L{:.2},{:.2}",
+                                        a.x,
+                                        a.y,
+                                        b.x,
+                                        b.y
+                                    )
+                                    .unwrap();
                                     continue;
                                 }
                                 _ => continue,
@@ -334,12 +427,9 @@ impl Geography {
                             let layer = if matches!(value, Railroad) {
                                 &mut railroads
                             } else {
-                                &mut links
+                                links.entry(class).or_default()
                             };
-                            write!(layer, "<path class=\"geography-link {class}\" d=\"M{:.2},{:.2}L{:.2},{:.2}\"/>",a.x,a.y,b.x,b.y).unwrap();
-                            if matches!(value, Railroad) {
-                                write!(layer, "<path class=\"geography-link railroad railroad-ties\" d=\"M{:.2},{:.2}L{:.2},{:.2}\"/>",a.x,a.y,b.x,b.y).unwrap();
-                            }
+                            write!(layer, "M{:.2},{:.2}L{:.2},{:.2}", a.x, a.y, b.x, b.y).unwrap();
                         }
                         MapRecord::Point { hex, record } if visible(*hex) => {
                             let c = viewport.to_screen(center(*hex));
@@ -356,15 +446,28 @@ impl Geography {
             }
             // Terrain must not tint routes; the wider road stroke must not hide
             // a coincident railroad. Keep both visible regardless of survey order.
-            html.push_str(&links);
-            html.push_str(&railroads);
+            for (class, path) in links {
+                write!(
+                    html,
+                    "<path class=\"geography-link {class}\" d=\"{path}\"/>"
+                )
+                .unwrap();
+            }
+            if !railroads.is_empty() {
+                write!(html, "<path class=\"geography-link railroad\" d=\"{railroads}\"/><path class=\"geography-link railroad railroad-ties\" d=\"{railroads}\"/>").unwrap();
+            }
             html.push_str(&locations);
             html.push_str(&art_locations);
         }
         // Fine grid/IDs appear only when readable; full inventory still exists at fit.
         if self.grid && viewport.zoom() >= 0.22 {
             let mut label_centers: Vec<cna_map::viewport::ScreenPoint> = Vec::new();
+            let mut grid_path = String::new();
             for &hex in hexes().iter().filter(|&&h| visible(h)) {
+                if viewport.zoom() < 0.65 {
+                    write!(grid_path, "M{}Z", polygon(hex).replace(' ', "L")).unwrap();
+                    continue;
+                }
                 write!(
                     html,
                     "<polygon class=geography-hex data-hex=\"{hex}\" points=\"{}\"/>",
@@ -387,6 +490,9 @@ impl Geography {
                     )
                     .unwrap();
                 }
+            }
+            if !grid_path.is_empty() {
+                write!(html, "<path class=geography-hex d=\"{grid_path}\"/>").unwrap();
             }
         }
         if let Some(hex) = self.selected.filter(|&h| visible(h)) {

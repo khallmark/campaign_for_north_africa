@@ -10,6 +10,7 @@ use wasm_bindgen::{closure::Closure, JsCast, JsValue};
 use web_sys::{Element, Event, HtmlDialogElement, HtmlElement, HtmlInputElement, KeyboardEvent};
 
 mod calendar;
+mod play;
 mod view;
 
 struct Counter {
@@ -21,6 +22,7 @@ struct Counter {
 struct Board {
     inventory: Inventory,
     catalog: Catalog,
+    game: Option<cna_sim::tabletop::Game>,
     counters: Vec<Counter>,
     next_id: usize,
     selected: Option<usize>,
@@ -43,6 +45,7 @@ impl Board {
         Self {
             inventory,
             catalog,
+            game: None,
             counters: Vec::new(),
             next_id: 1,
             selected: None,
@@ -130,7 +133,7 @@ impl Board {
     }
 
     fn place(&mut self, point: BoardPoint) {
-        if !self.placing {
+        if !self.placing || self.game.is_some() {
             return;
         }
         let Some(hex) = geometry::hex_at(point) else {
@@ -174,6 +177,57 @@ impl Board {
             return self.selected().and_then(|c| c.hex).map(geometry::center);
         }
         let action = element.get_attribute("data-action").unwrap_or_default();
+        if action == "play" {
+            self.open("play");
+            return None;
+        }
+        if action.starts_with("play-") {
+            self.play_action(&action);
+            if action == "play-move" && self.modal.is_none() {
+                return self.selected().and_then(|c| c.hex).map(geometry::center);
+            }
+            return None;
+        }
+        if self.game.is_some() {
+            let dialog = match action.as_str() {
+                "calendar" => Some("play"),
+                "end" if self.game.as_ref().unwrap().winner.is_some() => Some("play"),
+                "end" => Some("play-end"),
+                "concede" => Some("play-concede"),
+                "move-counter" => Some("play-move"),
+                "attack" => Some("play-combat"),
+                "resupply" => Some("play-supplies"),
+                "digin" => Some("play-digin"),
+                _ => None,
+            };
+            if let Some(dialog) = dialog {
+                if matches!(
+                    action.as_str(),
+                    "move-counter" | "attack" | "resupply" | "digin"
+                ) && !self.selected.is_some_and(|id| self.can_order(id))
+                {
+                    self.message =
+                        "Select a surviving counter of the active player before issuing an order."
+                            .into();
+                    self.render();
+                } else {
+                    self.open(dialog);
+                }
+                return None;
+            }
+            if matches!(
+                action.as_str(),
+                "reinforcements"
+                    | "deploy-identity"
+                    | "remove-counter"
+                    | "choose-turn"
+                    | "choose-stage"
+            ) {
+                self.message = "The active game owns this position. Start a new review board to change its setup; export the game first.".into();
+                self.render();
+                return None;
+            }
+        }
         match action.as_str() {
             "help" => self.open("help"),
             "catalog" => self.open("catalog"),
@@ -183,6 +237,7 @@ impl Board {
             "end" | "attack" | "resupply" | "digin" => self.open("unavailable"),
             "close" => self.close(),
             "confirm-reset" => {
+                self.clear_game();
                 self.counters.clear();
                 self.selected = None;
                 self.placing = false;
@@ -478,7 +533,12 @@ pub fn mount() -> Result<(), JsValue> {
     let root = document().get_element_by_id("app").unwrap();
     root.set_inner_html(r#"<main class="board-workspace" aria-label="Campaign for North Africa review board"><div id="board-top"></div><details class="floating-panel order-panel" open><summary>Order of battle</summary><div id="board-roster"></div></details><details class="floating-panel unit-panel" open><summary>Unit information</summary><div id="board-detail"></div></details><div id="board-placement"></div><p id="board-message" role="status"></p><div id="board-dialog"></div></main>"#);
     crate::map::mount_research()?;
-    BOARD.with(|b| b.borrow().render());
+    BOARD.with(|b| {
+        let mut b = b.borrow_mut();
+        b.restore_game();
+        b.render();
+    });
+    crate::map::refresh_board();
     let click = Closure::<dyn FnMut(web_sys::MouseEvent)>::new(|event: web_sys::MouseEvent| {
         let Some(target) = event.target().and_then(|t| t.dyn_into::<Element>().ok()) else {
             return;
@@ -536,7 +596,9 @@ pub fn mount() -> Result<(), JsValue> {
         if event.key() == "Tab" {
             if let Some(dialog) = document().query_selector("dialog[open]").unwrap() {
                 let nodes = dialog
-                    .query_selector_all("button:not([disabled]), input, select, summary, a[href]")
+                    .query_selector_all(
+                        "button:not([disabled]), input, select, textarea, summary, a[href]",
+                    )
                     .unwrap();
                 let controls: Vec<Element> = (0..nodes.length())
                     .map(|i| nodes.item(i).unwrap().unchecked_into::<Element>())

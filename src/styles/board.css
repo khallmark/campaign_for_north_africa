@@ -127,6 +127,20 @@
 .calendar-notes h3 { margin-top: 18px; }
 .calendar-notes button { margin-top: 14px; }
 .reference-note { color: #647058; }
+.play-panel { font-size: 14px; line-height: 1.6; }
+.play-panel p, .play-panel h3, .play-panel details { margin-top: 16px; }
+.play-panel label { display: block; margin: 14px 0; }
+.play-panel input:not([type=checkbox]), .play-panel textarea, .play-panel select { display: block; width: 100%; margin-top: 5px; padding: 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--paper); color: inherit; font: inherit; }
+.play-panel textarea { min-height: 90px; resize: vertical; }
+.play-panel input[type=checkbox] { margin-right: 8px; }
+.play-panel summary { cursor: pointer; }
+.play-panel .dialog-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.play-summary { color: var(--olive); font-weight: 700; }
+.play-log { padding-left: 24px; max-height: 32vh; overflow: auto; overflow-wrap: anywhere; }
+.play-log li { margin: 10px 0; }
+.play-unit-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.play-unit-actions button { font-size: 12px; }
+#play-error { color: #8d291d; }
 @media (max-width: 1000px) {
   .floating-panel { width: 210px; }
   .unit-panel { width: 240px; }

@@ -504,7 +504,7 @@ def project_formations(database, destination, *, check=False):
                                         for gap in document['coverage']['gaps']]
         sources = {s["id"]: s for s in document["sources"]}
         for source_id, title, path, details in db.execute(
-                "SELECT id,title,path,details_json FROM source_citation WHERE id LIKE 'oa-arrival:%' OR id IN ('rules-oa-reference','rules-arrival-raw-strength','rules-arrival-aa-strength') ORDER BY id"):
+                "SELECT id,title,path,details_json FROM source_citation WHERE id LIKE 'oa-arrival:%' OR id IN ('rules-oa-reference','rules-arrival-raw-strength','rules-arrival-aa-strength','rules-arrival-parenthesized','rules-arrival-naval') ORDER BY id"):
             details = json.loads(details)
             citation = {"id": source_id, "title": title, "path": path,
                         **{k: details[k] for k in ("section", "note", "sha256") if k in details}}

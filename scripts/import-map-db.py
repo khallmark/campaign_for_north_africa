@@ -67,7 +67,7 @@ def populate(db, model):
     fingerprints = {path: digest(ROOT / path) for path in INPUTS}
     db.executemany("INSERT INTO metadata VALUES (?,?)", [
         ("generator", "cna-map-model"),
-        ("schema_version", "2"), ("membership", model["membership"]),
+        ("schema_version", "3"), ("membership", model["membership"]),
         ("input_fingerprints", encode(fingerprints)),
         ("model_sha256", hashlib.sha256(encode(model).encode()).hexdigest()),
         ("seams", "unresolved; no cross-section movement or identity equivalence"),
@@ -103,9 +103,10 @@ def populate(db, model):
             value = observation.get("value")
             if isinstance(value, dict):
                 value = encode(value)
-            db.execute("INSERT INTO observations VALUES (?,?,?,?,?,?,?,?,?)", (
+            db.execute("INSERT INTO observations VALUES (?,?,?,?,?,?,?,?,?,?)", (
                 identifier, survey["id"], assignment["kind"], location["hex"], location.get("direction"),
                 observation["status"], value, observation.get("source_label"), encode(provenance),
+                assignment.get("depiction"),
             ))
             for reference in provenance["source_refs"]:
                 db.execute("INSERT INTO observation_sources VALUES (?,?,?)", (identifier, reference.split("#")[0], reference))

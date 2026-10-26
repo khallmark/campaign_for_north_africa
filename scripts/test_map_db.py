@@ -55,6 +55,43 @@ class MapDatabaseTests(unittest.TestCase):
         self.assertEqual(self.db.execute("SELECT count(*) FROM observations WHERE survey='matruh-rail-west' AND status='unresolved'").fetchone()[0], 4)
         self.assertEqual(self.db.execute("SELECT count(*) FROM network_links WHERE status='reviewed'").fetchone()[0], 0)
 
+    def test_unfinished_depictions_preserve_observed_crossings_without_network_links(self):
+        # Independently traced source symbols, including short bends which an
+        # endpoint-only reachability assertion would miss. These are not routes
+        # available to movement: the join only recovers each depicted shared side.
+        for survey, depiction, route in (
+            ('sollum-buq-buq-unfinished-road', 'unfinished_road',
+             'C4021 C3922 C3822 C3823 C3824 C3825 C3926 C3927 C4027 C4028 C4029 C4130'),
+            ('capuzzo-sofafi-unfinished-railroad', 'unfinished_railroad',
+             'C4217 C4218 C4119 C4019 C4020 C3921 C3821 C3722 C3622 C3523 C3423 '
+             'C3324 C3325 C3326 C3226 C3227 C3328 C3329 C3429 C3430 C3531 C3631 C3632 C3633'),
+        ):
+            cells = route.split()
+            self.assertEqual(self.db.execute(
+                'SELECT count(*) FROM observations WHERE survey=? AND depiction=? AND status=\'unresolved\' AND value IS NULL',
+                (survey, depiction)).fetchone()[0], len(cells) - 1)
+            self.assertEqual(self.db.execute(
+                'SELECT count(*) FROM network_links WHERE survey=?', (survey,)).fetchone()[0], 0)
+            for start, end in zip(cells, cells[1:]):
+                with self.subTest(start=start, end=end, depiction=depiction):
+                    self.assertIsNotNone(self.db.execute('''
+                        SELECT 1 FROM observations o JOIN hexsides s USING(hex,direction)
+                        WHERE o.survey=? AND ((s.hex=? AND s.other=?) OR (s.hex=? AND s.other=?))
+                    ''', (survey, start, end, end, start)).fetchone())
+        self.assertEqual(self.db.execute("""
+            SELECT DISTINCT depiction FROM observations WHERE survey='matruh-rail-west'
+        """).fetchall(), [('unfinished_railroad',)])
+        for update in (
+            "UPDATE observations SET status='provisional',value='railroad',source_label=NULL WHERE depiction IS NOT NULL",
+            "UPDATE observations SET depiction='unfinished_road' WHERE kind='terrain'",
+            "UPDATE observations SET depiction='finished_road' WHERE depiction IS NOT NULL",
+        ):
+            with self.assertRaises(sqlite3.IntegrityError):
+                self.db.execute(update)
+        self.assertEqual(self.db.execute("""
+            SELECT depiction FROM observations WHERE hex='C3019' AND direction='east' AND depiction IS NOT NULL
+        """).fetchall(), [])
+
     def test_whole_map_evidence_preserves_uncertainty_and_source_controls(self):
         self.assertEqual(self.db.execute("SELECT count(*) FROM cell_measurements").fetchone()[0], 7180)
         self.assertEqual(self.db.execute("SELECT count(*) FROM side_examinations").fetchone()[0], 20684)
@@ -74,6 +111,9 @@ class MapDatabaseTests(unittest.TestCase):
             ('D3514', 'east', 'railroad', False),
             ('C3226', 'north_west', 'railroad', False),
             ('D2224', 'north_east', 'railroad', False),  # Escarpment fringe, not ties.
+            ('C3226', 'north_west', 'track', False),  # Disconnected cross-ties, not dashes.
+            ('D2224', 'north_east', 'track', False),
+            ('C3922', 'north_west', 'track', False),  # Unfinished double road capsules.
             ('E2520', 'east', 'railroad', True),
             ('B5409', 'east', 'road', True),
             ('B5405', 'east', 'road', True),
@@ -99,6 +139,33 @@ class MapDatabaseTests(unittest.TestCase):
                 ) SELECT hex FROM reach
             """, (start, feature))}
             self.assertIn(destination, reachable)
+        # Check each source crossing, not reachability through an alternate path.
+        # The first seven traces cover gray dashed routes in the Maddelenna / Bir
+        # el'esc Scegga crop (6950,2010,770,760); the rest cover C3008 and Sidi Azeiz.
+        # A grid-overprinted dash is still a track; blue barred sides are not
+        # evidence for joining the two independent north/south routes.
+        for route in (
+            'C3015 C3016 C3017 C3018 C3019',
+            'C3020 C3021 C3022 C3023 C3024',
+            'C3018 C2918 C2817 C2717 C2616 C2516',
+            'C3518 C3418 C3318 C3218 C3119 C3019 C2919 C2819 C2720 C2619 C2519',
+            'C3519 C3419 C3319 C3219 C3120 C3020 C2921 C2820 C2721 C2621 C2522',
+            'C3516 C3416 C3417 C3418 C3419 C3420 C3321 C3322 C3222 C3223 C3224',
+            'C3319 C3419 C3520',
+            'C2908 C3008 C3009',
+            'C4216 C4217 C4218 C4219 C4220',
+            'C4017 C4118 C4218 C4319',
+        ):
+            cells = route.split()
+            for start, destination in zip(cells, cells[1:]):
+                with self.subTest(start=start, destination=destination):
+                    self.assertIsNotNone(self.db.execute("""
+                        SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=?
+                        AND feature='track' AND status='provisional'
+                    """, (start, destination)).fetchone())
+        self.assertEqual(self.db.execute("""
+            SELECT feature FROM network_links WHERE from_hex='C3019' AND to_hex='C3020'
+        """).fetchall(), [])
         self.assertEqual(self.db.execute("""
             SELECT n.id FROM network_links n JOIN hexes a ON a.id=n.from_hex JOIN hexes b ON b.id=n.to_hex
             WHERE a.section<>b.section

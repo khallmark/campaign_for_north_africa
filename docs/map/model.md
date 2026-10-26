@@ -88,8 +88,8 @@ automated or agent-visual record is human-reviewed.
 | D | 1,253 | 1,179 / 37 / 36 / 1 | 786 |
 | E | 1,313 | 994 / 273 / 41 / 5 | 956 |
 
-The current combined model has **237 surveys / 13,695 observations**: 4,792 terrain,
-8,757 hexside and 146 point observations. **7,446 are provisional, 6,249 unresolved,
+The current combined model has **242 surveys / 13,737 observations**: 4,792 terrain,
+8,799 hexside and 146 point observations. **7,685 are provisional, 6,052 unresolved,
 none human-reviewed.** Terrain observations cover 4,652 cells; 2,528 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
@@ -105,7 +105,7 @@ Clear requires at least 99.5% matching blank background in the inset polygon and
 fewer than five terrain/water-ink pixels in the full polygon. Transport/grid
 antialiasing is excluded from that terrain test; failed matches stay unresolved.
 
-Transportation extraction currently yields 370 Road, 206 Railroad and 1,325 Track
+Transportation extraction currently yields 370 Road, 205 Railroad and 1,557 Track
 crossings; 707 Wadi side candidates are typed provisionally. Gray grid occlusion
 may be bridged, but light gaps between unfinished dashes/crosses may not. Known
 terrain swatches take precedence over interpolation that resembles road ink.
@@ -117,9 +117,32 @@ Source controls cover finished roads/railroads, unfinished construction and a
 false railroad candidate at D2224 NE. Separate visual surveys recover the Bardia
 and Sollum road branches obscured by blue symbols. Connectivity tests cover the
 Bardia–Sollum road and Fort Maddelenna–Bir el Sheferzen track examples.
-Conservative detection leaves many obvious routes fragmented and uncertain.
-**9,019 side ink findings remain untyped**, with individual crops and measurements;
-6,128 unresolved side observations expose the relevant candidates in the overlay.
+An additional visual survey corrects five grid-contaminated track crossings near
+Fort Maddelenna and Bir el'esc Scegga (C3018 E, C3020 E, C2717 NE, C2820 NE,
+C3417 E). All seven gray-dashed route traces in source crop (6950,2010,770,760)
+are checked crossing by crossing, including branches; endpoint reachability alone
+had missed these gaps. A wider-context dash classifier now recovers those same
+five crossings and 227 other previously untyped track findings across A–E. It
+fits narrow dashes on both sides of the grid and requires three source-ink runs
+with short gaps; it does not join disconnected graph endpoints. All 232 additions
+were agent-inspected in source-side contact sheets, not human-reviewed. Existing
+pixel counts and narrow-strip measurements are retained alongside new context
+evidence. The sharp bend at C3008 E and two Sidi Azeiz track crossings beside
+unfinished railroad symbols (C4217 E, C4118 NE) are supplied by source-cited manual
+observations instead. The C2908–C3008–C3009 and Sidi Azeiz west/east and southwest/northeast
+routes have consecutive-crossing tests.
+No track is invented across C3019–C3020's blue barred side. At B4902 E, nearby
+continuous rail and dashed track both trigger; the mixed detector finding now
+stays unresolved instead of selecting Railroad. Its raw measurements remain.
+Conservative detection still leaves routes fragmented and uncertain.
+**8,788 side ink findings remain untyped**, with individual crops and measurements;
+5,893 extracted unresolved side observations expose the relevant candidates.
+Separately, 38 source-cited unresolved observations carry explicit unfinished
+construction depictions: 11 road crossings from Sollum toward Sidi Barani, 23 rail
+crossings from Sidi Azeiz through Capuzzo toward Sofafi, and four existing Matruh
+sample sides. They are excluded from network links, not counted as completed
+Road/Railroad, and do not establish scenario completion. Their separate renderer
+integration is pending; this model change does not yet display construction art.
 Slopes/escarpments still need directional interpretation; most river/coast sides
 need classification. There are no cross-section links or assumed operational
 junctions. Network endpoints are transcription limits, not real termini.
@@ -128,11 +151,11 @@ Combined distinct typed crossings (manual plus extracted; duplicates removed):
 
 | Section | Road | Railroad | Track |
 | --- | ---: | ---: | ---: |
-| A | 76 | 7 | 220 |
-| B | 57 | 6 | 399 |
-| C | 32 | 0 | 337 |
-| D | 36 | 26 | 236 |
-| E | 171 | 167 | 133 |
+| A | 76 | 7 | 248 |
+| B | 57 | 5 | 459 |
+| C | 32 | 0 | 412 |
+| D | 36 | 26 | 284 |
+| E | 171 | 167 | 157 |
 | Malta | 0 | 0 | 0 |
 
 Zero means no typed crossings, not confirmed absence. In particular, disconnected
@@ -156,8 +179,10 @@ city level, movement cost, water amount, bridge rule or legal movement is inferr
 `hexsides` contains canonical endpoints and JSON edge geometry. `observations`
 joins surveys and provenance, with normalized `observation_sources` pointing to
 hash-pinned `sources`. `coverage` reports per-section geometry/terrain counts.
-Schema version 2 adds `cell_measurements`, `side_examinations`, `examinations` and
+Schema version 2 added `cell_measurements`, `side_examinations`, `examinations` and
 the `examination_coverage` view. These are detector coverage, not review approval.
+Schema version 3 adds nullable `observations.depiction`, restricted to unresolved
+hexside observations; see the [depiction contract](terrain-schema.md#unfinished-transportation-depiction).
 
 `network_links` exposes both directions of each road/railroad/track/pipeline
 crossing, including its observation ID, survey and review status. It supports

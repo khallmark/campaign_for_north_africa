@@ -182,6 +182,68 @@ def examine_cell(image, cell, rules, templates=()):
             "terrain": terrain, "points": points, "families": states}
 
 
+def dashed_route_context(mask, bounds, a, b):
+    """Recognize repeated narrow dashes across a grid-contaminated crossing.
+
+    The strip alone can contain only a grid-merged dash and two clipped dashes.
+    Use the surrounding source pixels, not graph endpoints, to recover it.
+    """
+    along = (b-a) / np.linalg.norm(b-a)
+    normal = np.array([-along[1], along[0]])
+    y, x = np.indices(mask.shape)
+    world = np.stack((x+bounds[0]-a[0], y+bounds[1]-a[1]), axis=-1)
+    across = world @ normal
+    clean = mask.copy()
+    # Exclude the calibrated grid band from dash-shape fitting only. The ink
+    # profile below still checks the unmodified source mask across this band.
+    clean[np.abs(across) < 3] = 0
+    n, labels, stats, _ = cv2.connectedComponentsWithStats(clean)
+    fragments = []
+    for component in range(1, n):
+        if not 12 <= stats[component, cv2.CC_STAT_AREA] <= 85:
+            continue
+        points = world[labels == component]
+        values, axes = np.linalg.eigh(np.cov(points.T))
+        axis = axes[:, -1]
+        length = np.ptp(points @ axis)
+        width = np.ptp(points @ axes[:, 0])
+        if 8 <= length <= 24 and width < 3.5 and values[-1] > 12 * values[0]:
+            fragments.append((points.mean(axis=0), axis))
+    for i, (p, p_axis) in enumerate(fragments):
+        for q, q_axis in fragments[i+1:]:
+            pn, qn = p @ normal, q @ normal
+            distance = np.linalg.norm(q-p)
+            if pn * qn >= 0 or not 12 < distance < 65 or abs(pn-qn) < 10:
+                continue
+            axis = (q-p) / distance
+            if min(abs(axis @ p_axis), abs(axis @ q_axis)) < .97:
+                continue
+            crossing = p + (q-p) * (-pn/(qn-pn))
+            t = (crossing @ along) / np.linalg.norm(b-a)
+            if not .12 < t < .88:
+                continue
+            transverse = np.array([-axis[1], axis[0]])
+            relative = world-p
+            u, v = relative @ axis, relative @ transverse
+            corridor = (u >= -8) & (u <= distance+8) & (np.abs(v) < 5)
+            ink = (mask > 0) & corridor
+            bins = np.floor(u[ink]+8).astype(int)
+            occupied = np.bincount(bins, minlength=int(distance)+17) > 0
+            profile = "".join("1" if value else "0" for value in occupied)
+            runs = [len(run) for run in profile.split("0") if run]
+            gaps = [len(run) for run in profile.strip("0").split("1") if run]
+            # Three observed dashes with short gaps, not arbitrary gap filling.
+            # Continuous spines and isolated unfinished crosses fail this test.
+            if sum(length >= 7 for length in runs) < 3 or not gaps or max(gaps) > 9:
+                continue
+            wide = ink & (np.abs(v) > 2.6) & (np.abs(across) > 3)
+            if np.count_nonzero(wide) > 8:
+                continue
+            return [{"span": round(float(distance), 2), "t": round(float(t), 3),
+                     "runs": runs, "gaps": gaps}]
+    return []
+
+
 def continuous_route_context(image, a, b, rules, ink):
     """Trace long source strokes across a side, including curves and termini.
 
@@ -218,7 +280,8 @@ def continuous_route_context(image, a, b, rules, ink):
         peaks = sum(bool(run) for run in "".join("1" if w >= 6 else "0" for w in widths).split("0"))
         if ink == "road" or peaks >= 4:
             evidence.append({"length": round(length, 2), "tie_peaks": peaks})
-    return {"crop": bounds, "strokes": evidence}
+    return {"crop": bounds, "strokes": evidence,
+            "dashes": dashed_route_context(mask, bounds, a, b) if ink == "rail_track" else []}
 
 
 def examine_side(image, side, rules):
@@ -309,6 +372,8 @@ def examine_side(image, side, rules):
                             if (aspect > 3 and other_aspect > 3 and mass < 80 and other_mass < 80
                                     and abs(axis @ direction) > .96 and abs(other_axis @ direction) > .96):
                                 patterns.add("track")
+            if context["dashes"]:
+                patterns.add("track")
             if context["strokes"]:
                 patterns.add("railroad")
         value = "road" if ink == "road" and context["strokes"] else "wadi" if ink == "wadi" and side_band else next(iter(patterns)) if len(patterns) == 1 else None

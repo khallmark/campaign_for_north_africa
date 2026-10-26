@@ -42,8 +42,10 @@ CREATE TABLE observations (
   hex TEXT NOT NULL REFERENCES hexes(id), direction TEXT,
   status TEXT NOT NULL CHECK(status IN ('reviewed','provisional','unresolved')),
   value TEXT, source_label TEXT, provenance TEXT NOT NULL CHECK(json_valid(provenance)),
+  depiction TEXT CHECK(depiction IN ('unfinished_road','unfinished_railroad')),
   FOREIGN KEY(hex,direction) REFERENCES hexsides(hex,direction),
   CHECK((kind='hexside' AND direction IS NOT NULL) OR (kind<>'hexside' AND direction IS NULL)),
+  CHECK(depiction IS NULL OR (kind='hexside' AND status='unresolved')),
   CHECK((status='unresolved' AND value IS NULL AND source_label IS NOT NULL AND length(source_label)>0)
      OR (status<>'unresolved' AND value IS NOT NULL AND source_label IS NULL))
 ) STRICT;
@@ -57,11 +59,11 @@ CREATE TABLE observation_sources (
 CREATE VIEW network_links AS
 SELECT o.id, o.survey, s.hex AS from_hex, s.other AS to_hex, o.value AS feature, o.status
 FROM observations o JOIN hexsides s ON (o.hex=s.hex AND o.direction=s.direction)
-WHERE o.kind='hexside' AND o.value IN ('road','railroad','track','pipeline')
+WHERE o.kind='hexside' AND o.depiction IS NULL AND o.value IN ('road','railroad','track','pipeline')
 UNION ALL
 SELECT o.id, o.survey, s.other, s.hex, o.value, o.status
 FROM observations o JOIN hexsides s ON (o.hex=s.hex AND o.direction=s.direction)
-WHERE o.kind='hexside' AND o.value IN ('road','railroad','track','pipeline');
+WHERE o.kind='hexside' AND o.depiction IS NULL AND o.value IN ('road','railroad','track','pipeline');
 CREATE VIEW coverage AS
 SELECT section, count(*) AS geometry_hexes,
   sum(terrain_status='partial') AS partially_transcribed_hexes,

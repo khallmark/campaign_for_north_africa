@@ -2,7 +2,7 @@ use cna_map::{
     geometry::{center, contains_hex, hexes},
     hex::{Direction, HexId, MapSection},
     model::{model, Model},
-    terrain::{MapRecord, Observation},
+    terrain::{MapRecord, Observation, TransportDepiction},
 };
 use std::collections::BTreeSet;
 
@@ -53,8 +53,31 @@ fn source_surveys_expand_into_map_v1_without_promoting_uncertainty() {
         .records();
     assert!(matches!(&port[0], MapRecord::Point { hex, record }
         if hex.to_string() == "D3814" && matches!(record.observation, Observation::Unresolved { .. })));
+    let unfinished = model()
+        .surveys
+        .iter()
+        .find(|s| s.id == "matruh-rail-west")
+        .unwrap()
+        .records();
+    assert!(!unfinished.is_empty());
+    assert!(unfinished.iter().all(|r| matches!(r, MapRecord::Hexside {
+        depiction: Some(TransportDepiction::UnfinishedRailroad), record, ..
+    } if matches!(record.observation, Observation::Unresolved { .. }))));
     // A parseable offboard location and a duplicate assignment must fail import.
     let original = serde_json::to_value(model()).unwrap();
+    let mut contradictory = original.clone();
+    let survey = contradictory["surveys"]
+        .as_array_mut()
+        .unwrap()
+        .iter_mut()
+        .find(|s| s["id"] == "matruh-rail-west")
+        .unwrap();
+    survey["coverage"]["observation"] =
+        serde_json::json!({"status":"provisional","value":"railroad"});
+    assert!(serde_json::from_value::<Model>(contradictory)
+        .unwrap()
+        .validate()
+        .is_err());
     for locations in [
         serde_json::json!(["C9999"]),
         serde_json::json!(["D3714", "D3714"]),

@@ -68,6 +68,50 @@ It cannot be promoted to reviewed/provisional/fixture merely by changing status:
 those statuses require a typed known value, while unresolved records forbid one.
 Unknown terrain uses the same unresolved representation, never null or Clear.
 
+## Unfinished transportation depiction
+
+`MapRecord::Hexside.depiction` optionally records `unfinished_road` or
+`unfinished_railroad`. It is a sibling of `side` and `record`; survey inputs place
+it on `coverage` alongside `sides` and `observation`. The JSON schema, production
+model validator and SQLite constraints require an **unresolved** observation
+without a typed feature value. This describes the source symbol, not scenario
+completion, operability, capacity, a junction or movement permission. Missing
+hints stay generic unresolved; source-label text must not select a depiction.
+Blue barred marks remain unclassified.
+
+For example, this source-backed side is one of the Sollum–Buq Buq unfinished-road
+crossings (agent transcription, not human review):
+
+```json
+{
+  "kind": "hexside",
+  "side": {"hex": "C3823", "direction": "east"},
+  "depiction": "unfinished_road",
+  "record": {
+    "observation": {
+      "status": "unresolved",
+      "source_label": "Unfinished Road depicted; scenario completion and operational interpretation unresolved"
+    },
+    "provenance": {
+      "source_refs": [
+        "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=7300,1500,1170,500",
+        "docs/CNAv2.1.0/images/TEC.png#legend/Unfinished-Road"
+      ],
+      "reviewer": "Amp visual transcription; human review pending",
+      "date": "2026-10-25"
+    }
+  }
+}
+```
+
+SQLite schema version 3 persists `observations.depiction` separately from `value`.
+These observations never enter `network_links`. Source-backed tests cover every
+consecutive side of the 11-crossing Sollum–Buq Buq–Sidi Barani road depiction and
+23-crossing Sidi Azeiz–Capuzzo–Sofafi rail depiction, plus the existing four-side
+Matruh sample. Renderer consumers may draw explicitly labelled schematic
+construction strokes, not finished links or exact route paths. The transparent
+art strips do not establish authored paths.
+
 ## Synthetic examples
 
 [terrain-example.json](examples/terrain-example.json) is deliberately hand-written

@@ -3,7 +3,10 @@
 use crate::{
     geometry::{contains_hex, hexes},
     hex::{HexId, HexsideId},
-    terrain::{HexsideFeature, MapRecord, Observation, PointFeature, Provenance, Record, Terrain},
+    terrain::{
+        HexsideFeature, MapRecord, Observation, PointFeature, Provenance, Record, Terrain,
+        TransportDepiction,
+    },
 };
 use serde::{Deserialize, Serialize};
 use std::{
@@ -35,6 +38,8 @@ pub enum Coverage {
     Hexside {
         sides: Vec<HexsideId>,
         observation: Observation<HexsideFeature>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        depiction: Option<TransportDepiction>,
     },
 }
 
@@ -83,10 +88,15 @@ impl Survey {
                     },
                 })
                 .collect(),
-            Coverage::Hexside { sides, observation } => sides
+            Coverage::Hexside {
+                sides,
+                observation,
+                depiction,
+            } => sides
                 .iter()
                 .map(|&side| MapRecord::Hexside {
                     side,
+                    depiction: *depiction,
                     record: Record {
                         observation: observation.clone(),
                         provenance: self.provenance.clone(),
@@ -131,6 +141,14 @@ impl Model {
         }
         let mut ids = BTreeSet::new();
         for survey in &self.surveys {
+            if matches!(&survey.coverage, Coverage::Hexside { depiction: Some(_), observation, .. }
+                if !matches!(observation, Observation::Unresolved { .. }))
+            {
+                return Err(format!(
+                    "construction depiction requires unresolved observation in {}",
+                    survey.id
+                ));
+            }
             if survey.id.trim().is_empty()
                 || !ids.insert(&survey.id)
                 || survey.label.trim().is_empty()
@@ -165,7 +183,7 @@ impl Model {
                         hex.to_string(),
                         serde_json::to_value(record.observation).unwrap(),
                     ),
-                    MapRecord::Hexside { side, record } => (
+                    MapRecord::Hexside { side, record, .. } => (
                         side.hex(),
                         side.hex().neighbor(side.direction()),
                         format!("{}:{:?}", side.hex(), side.direction()),

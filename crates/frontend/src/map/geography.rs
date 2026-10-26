@@ -117,7 +117,7 @@ impl Geography {
                         serde_json::to_value(&record.observation).unwrap(),
                         "Location".to_string(),
                     ),
-                    MapRecord::Hexside { side, record } => {
+                    MapRecord::Hexside { side, record, .. } => {
                         let other = side.hex().neighbor(side.direction()).unwrap();
                         (
                             hex == side.hex() || hex == other,
@@ -384,7 +384,7 @@ impl Geography {
                             };
                             write!(html, "<polygon class=geography-terrain data-hex=\"{hex}\" points=\"{}\" fill=\"{color}\"/>", polygon(*hex)).unwrap();
                         }
-                        MapRecord::Hexside { side, record } if visible(side.hex()) => {
+                        MapRecord::Hexside { side, record, .. } if visible(side.hex()) => {
                             let value = match &record.observation {
                                 Observation::Provisional { value }
                                 | Observation::Reviewed { value } => value,

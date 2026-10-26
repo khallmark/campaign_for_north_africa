@@ -25,10 +25,11 @@ Duplicate characteristics sheets on 167–168/171 and weapons sheets on 172–17
 
 ## What remains unknown
 
-- Initial TOE, basic morale, weapon mix, arrival/withdrawal dates, map placement, readiness, pilots and supply inventories have **not** been transcribed. Their charts are often present; this is unfinished data work, not a claim that all those sources are missing.
-- Sirte, Marmarica and Cirene appear on counter page 182 but their Organization-at-Arrival tables were not located in the supplied OA sequence. Their 41 rows have identities and illustrations but **no inferred profile or numeric characteristics**.
+- Historical arrival TOE, morale, weapon mix and arrival dates are now transcribed for all **1,052 existing formation rows**, where printed, through [the SQLite-backed arrival reference](catalog/sqlite.md#all-catalogued-formation-arrival-references). Current strength, withdrawal, map placement, readiness, pilots and supply inventories still require scenario data.
+- Sirte, Marmarica and Cirene's 41 counter-page rows now have reviewed profile and arrival references from the supplied VASSAL OA sheets; these were absent from the original PDF OA sequence.
 - Attached, replacement, alternative-organization and battlegroup rows can refer to the same historical unit. OA IDs identify source rows, not deduplicated counters. Some Italian battlegroups explicitly have no provided counters; German possible battlegroups outnumber the seven printed counters.
-- The scan leaves Pz III E shifted cells, 7.62cm Pak/Marder III CPA, Cant Z506B range, Gladiator II fuel and German profile `v` close assault unresolved. Italian `pp` capacity is emplaced guns plus up to eight AA TOE, not one aggregate numeric maximum.
+- Supplied errata recover the shifted Pz III E cells, 7.62cm Pak/Marder III CPA, Cant Z506B range and Gladiator II fuel. German profile `v` close assault prints `*`, not a number. Italian `pp` capacity prints `8AA`: emplaced guns plus up to eight AA TOE, not one aggregate numeric maximum.
+- **113 rows have no independent numeric TOE and 26 have no independent numeric morale**: HQ attachment strengths, replacement/refit conditions, duplicate attachment rows and ad hoc organizations do not establish another fixed loadout. Twenty-two rows lack a sourced base profile: nine optional Italian HQs, nine blank-code tank rows, two attachments to those tank rows, a descriptive artillery heading and San Giorgio (which instead has naval counter values). These are not licenses to copy a similar unit's profile or create zero-strength units.
 - Exact reconciliation of all 1,800 counter pieces and chart/counter spelling/identity aliases is not certified. A verified identity does not certify every deployment or establish a unique historical entity.
 - Chart restrictions, refits, augmentations and scenario exceptions remain essential. Aircraft mission strings are transcriptions, not executable eligibility rules.
 

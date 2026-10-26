@@ -74,6 +74,8 @@ RULES = {
     "rules-oa-reference": "3.5, 4.42, 4.45–4.46: OA quantities, characteristics and assigned weapon systems",
     "rules-arrival-raw-strength": "11.31–11.38: rating × TOE gives Raw Points; combine before conversion/rounding",
     "rules-arrival-aa-strength": "11.37, 46.11: AA rating × TOE gives Actual AA Points, without dividing by ten",
+    "rules-arrival-parenthesized": "3.3–3.4, 4.46 and national chart legends: parenthesized combat ratings; ammunition and other friendly units restrict use",
+    "rules-arrival-naval": "30.12–30.17, 30.39; Tobruk OA note c: naval points, damage and immobile San Giorgio; not land TOE",
 }
 
 
@@ -120,7 +122,10 @@ def import_arrivals(db, root):
             profile = sheet.get("arrival_profile_overrides", {}).get(key, printed_profile)
             require(profile is None or profile in records and records[profile][1] == "profile", f"Unknown arrival profile: {profile}")
             reference = sheet.get("row_references", {}).get(key)
-            require(reference is None or reference in keys, f"Unknown attached-row reference: {reference}")
+            reference = keys.get(reference, reference)
+            require(reference is None or reference in records and records[reference][1] in ("formation", "counter_formation", "naval_unit")
+                    and records[reference][2] == nationality and reference != record_id,
+                    f"Invalid same-unit reference: {reference}")
             components = []
             for part in (toe or "").replace(" + ", ", ").split(", "):
                 if part in ("", "-"):
@@ -148,7 +153,7 @@ def import_arrivals(db, root):
                 "morale_raw": sheet.get("morale_overrides", {}).get(key, sheet["morale_raw"]),
                 "note": " ".join(filter(None, (sheet.get("note"), note))),
                 "source_refs": [citation, "rules-oa-reference"], "components": components,
-                "related_record_id": keys[reference] if reference else None,
+                "related_record_id": reference,
                 "options": document.get("row_options", {}).get(key, {}),
             }
             db.execute("UPDATE catalog_record SET details_json=? WHERE id=?", (json.dumps(details, sort_keys=True), record_id))
@@ -187,8 +192,20 @@ def formation_references(db):
         arrival = record["details"]["formation_arrival"]
         refs = arrival["source_refs"]
         profile_id = arrival["profile_id"]
+        related = records.get(arrival["related_record_id"])
+        related_arrival = related["details"].get("formation_arrival") if related else None
+        profile_note = None
+        # A reviewed same-unit reference can supply characteristics, never a
+        # second arrival/loadout or the attachment's later current strength.
+        if profile_id is None and related_arrival and related_arrival["profile_id"]:
+            profile_id = related_arrival["profile_id"]
+            profile_note = (f"Base characteristics from the same unit's cited row {arrival['related_record_id']}. "
+                            "This attachment row prints no ID code; its blank TOE is not a second loadout. " + arrival["note"])
         profile = records.get(profile_id)
         base = copy.deepcopy(profile["stats"]) if profile else {}
+        if profile_note:
+            for rating in base.values():
+                rating["source_refs"] = list(dict.fromkeys([*rating["source_refs"], *refs, *related_arrival["source_refs"]]))
         options = arrival["options"]
         # These row-specific truck notes change the printed base marker, not CP
         # remaining or the numeric motorized allowance.
@@ -232,11 +249,10 @@ def formation_references(db):
                 reasons.append(options["calculation_note"])
             if key == "close_assault_offensive" and options.get("no_assault"):
                 reasons.append("Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings.")
-            if components and (base.get("maximum_toe", {}).get("raw") or "").startswith("("):
-                conditions.append("Profile maximum is parenthesized: assigned TOE uses parenthesized combat ratings under 4.46/3.4.")
-                reasons.append(conditions[-1])
+            parenthesized_unit = bool(components and re.fullmatch(r"\(\d+\)", base.get("maximum_toe", {}).get("raw") or ""))
             if not components:
                 reasons.append("No independent quantified loadout is printed. " + arrival['note'])
+            contributions = []
             for item in components:
                 rating = item["per_toe_stats"].get(key, {})
                 quantity = item["toe"]["value"]
@@ -245,9 +261,11 @@ def formation_references(db):
                     conditions.append("Only the printed land-target subset contributes to this barrage total.")
                 total_refs += item["toe"]["source_refs"] + rating.get("source_refs", [])
                 value = rating.get("value") if rating.get("status") == "sourced" else None
-                # An equipment-chart dash is N/A or zero, hence contributes no
-                # points to this sum. Its original nullable per-TOE cell survives.
-                if item["kind"] == "equipment" and rating.get("status") == "not_applicable" and rating.get("raw") == "-":
+                # A known N/A combat cell supplies no intrinsic points. This
+                # applies only to a specified component, never an unknown
+                # loadout, maximum TOE, vulnerability or armor protection.
+                # Preserve the original nullable per-TOE chart cell.
+                if rating.get("status") == "not_applicable" and rating.get("raw") == "-":
                     value = 0
                 if quantity is None or value is None:
                     if quantity is None:
@@ -255,17 +273,48 @@ def formation_references(db):
                     if value is None:
                         reasons.append(f"{item['label']}: {key} prints {rating.get('raw') or 'no cell'}, not a single numeric rating. {rating.get('note', '')}")
                     continue
-                if rating.get("conditional") or item["toe"]["conditional"]:
-                    conditions.append(f"{item['label']}: {rating.get('raw')}; {rating.get('note', '')}")
-                    reasons.append(conditions[-1])
-                terms.append(f"{quantity:g} × {value:g}")
-                total += quantity * value
-            # Only the explicit land-target TOE subset has been applied here.
-            # Date/parenthesized ratings still block a numeric total; a partial
-            # sum never becomes a number just because another term is known.
+                parenthesized_rating = bool(re.fullmatch(r"\(\d+\)", rating.get("raw") or ""))
+                parenthesized = parenthesized_unit or parenthesized_rating
+                date_applied = False
+                if key == "anti_armor" and rating.get("conditional") and item["record_id"] in (
+                        "weapons-it-75-27-gun", "weapons-ge-7-5cm-ig18-light-infantry-gun"):
+                    date = re.fullmatch(r"[123]/(\d+)", arrival["arrives_raw"] or "")
+                    turn = int(date[1]) if date else 1 if arrival["arrives_raw"] == "D" else None
+                    if turn is not None:
+                        value = 0 if turn < 63 else value
+                        date_applied = True
+                        conditions.append(f"{item['label']}: anti-armor {value:g} at printed arrival {arrival['arrives_raw']}; "
+                                          "chart footnote ** changes the rating at 1/63. Not a rating for every scenario date.")
+                if rating.get("conditional") and not parenthesized_rating and not date_applied:
+                    reasons.append(f"{item['label']}: {rating.get('raw')}; {rating.get('note', '')}")
+                    conditions.append(reasons[-1])
+                if item["toe"]["conditional"] and not re.fullmatch(r"\(\d+\)", item["per_toe_stats"].get("maximum_toe", {}).get("raw") or ""):
+                    reasons.append(f"{item['label']}: {item['toe']['note']}")
+                    conditions.append(reasons[-1])
+                contributions.append((quantity, value, parenthesized))
+            # The chart prohibits adding a conditional gun to a supplied,
+            # non-parenthesized rating in the same hex. Publish that supplied
+            # loadout case, not the impossible sum of both kinds of fire.
+            normal_fire = any(q > 0 and v > 0 and not p for q, v, p in contributions)
+            if any(p for _, _, p in contributions):
+                total_refs.append("rules-arrival-parenthesized")
+                if normal_fire:
+                    conditions.append("With ammunition for this loadout's non-parenthesized rating, parenthesized contributions are excluded by the chart legend; they cannot be added to that fire.")
+                else:
+                    conditions.append("Parenthesized ratings apply only when attacked without a friendly unit in the hex possessing ammunition and an appropriate non-parenthesized rating (3.4/chart legend). This does not authorize a voluntary attack; HQ restrictions in 3.3 also apply.")
+            for quantity, value, parenthesized in contributions:
+                if parenthesized and normal_fire:
+                    terms.append(f"{quantity:g} × 0 (parenthesized rating excluded)")
+                else:
+                    terms.append(f"{quantity:g} × {value:g}")
+                    total += quantity * value
+            # Unknown inputs still block the whole total; no partial sum is
+            # promoted merely because a different condition has been resolved.
             totals[key] = stat(total if not reasons else None, " + ".join(terms) or None, total_refs,
-                               " ".join(dict.fromkeys(reasons + conditions)) if reasons or conditions else "Sum of printed arrival TOE × rating. Equipment-chart dashes contribute no points without replacing their source cells. No combat modifiers or scenario losses applied.",
+                               " ".join(dict.fromkeys(reasons + conditions)) if reasons or conditions else "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
                                conditional=bool(conditions), unit="Actual AA points" if key == "anti_air" else "Raw combat points (before ÷10)")
+            if key == "close_assault_offensive" and options.get("no_assault"):
+                totals[key].update(status="not_applicable", raw="May not assault")
         morale = arrival["morale_raw"]
         match = re.fullmatch(r"([+-]?\d+)(?: \((?:([+-]?\d+)|[a-z])\))?", morale or "")
         morale_value = int(match[2] or match[1]) if match else None
@@ -280,10 +329,17 @@ def formation_references(db):
         if "arrival_cpa_raw" in options:
             require(options["arrival_cpa_raw"] == "0", "Unsupported reviewed arrival-CPA override")
             arrival_stats["capability_points"] = stat(0, "0", refs, arrival["note"], conditional=True, unit="Capability points")
+        if related and related["kind"] == "naval_unit":
+            for key in ("naval_barrage", "naval_anti_air"):
+                arrival_stats[key] = copy.deepcopy(related["stats"][key])
+                arrival_stats[key]["source_refs"] = list(dict.fromkeys([*arrival_stats[key]["source_refs"], *refs, "rules-arrival-naval"]))
+                arrival_stats[key]["note"] = "Printed naval counter reference; actual points, not land TOE × rating. Damage reduces these strengths (30.13). " + arrival["note"]
+            if "capability_points" in arrival_stats:
+                arrival_stats["capability_points"]["source_refs"].append("rules-arrival-naval")
         result[record_id] = {
             "schema_version": 1, "scope": "historical_arrival_reference_not_current_state",
             "base_profile_id": profile_id, "base_profile_name": profile["name"] if profile else None,
-            "base_profile_note": profile["note"] if profile else missing_profile_note,
+            "base_profile_note": profile_note or (profile["note"] if profile else missing_profile_note),
             "base_stats": base, "printed_profile_code": arrival["printed_profile_code"],
             "catalog_profile_id": arrival["previous_profile_id"],
             "arrival": {

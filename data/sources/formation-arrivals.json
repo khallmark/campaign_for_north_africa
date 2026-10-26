@@ -15,6 +15,7 @@
     "oa-155-024": {"arrival_cpa_raw": "0", "no_assault": true},
     "oa-155-025": {"arrival_cpa_raw": "0", "no_assault": true},
     "oa-155-026": {"arrival_cpa_raw": "0"},
+    "oa-155-027": {"arrival_cpa_raw": "0"},
     "oa-156-037": {"arrival_cpa_raw": "0", "no_assault": true},
     "oa-156-040": {"arrival_cpa_raw": "0", "no_assault": true},
     "oa-156-041": {"arrival_cpa_raw": "0", "no_assault": true}
@@ -1158,6 +1159,7 @@
     },
     {
       "image": "IT Tobruk Garrison.png", "formation": "Tobruk Garrison", "morale_raw": "-3",
+      "row_references": {"oa-155-027": "naval-san-giorgio"},
       "rows": [
         ["oa-155-005", "f", "N", "D", ""], ["oa-155-006", "x", "N", "D", ""],
         ["oa-155-007", "x", "N", "D", ""], ["oa-155-008", "x", "N", "D", ""],

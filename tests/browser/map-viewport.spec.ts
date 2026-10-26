@@ -195,6 +195,7 @@ test('source geometry and evidence remain inspectable without artwork or movemen
   await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'Unavailable' }));
   await open(page);
   await expect(page.locator('.geography-coverage')).toContainText('7180 source-grid hexes');
+  await expect(page.locator('.geography-coverage')).toContainText('7180 raster examinations');
   const input = page.getByRole('textbox', { name: 'Hex identity', exact: true });
   const inspect = async (id: string) => {
     await input.fill(id);
@@ -234,6 +235,14 @@ test('source geometry and evidence remain inspectable without artwork or movemen
   const dLabel = (await page.locator('.geography-id').filter({ hasText: /^D3033$/ }).boundingBox())!;
   const eLabel = (await page.locator('.geography-id').filter({ hasText: /^E3000$/ }).boundingBox())!;
   expect(eLabel.y).toBeGreaterThanOrEqual(dLabel.y + dLabel.height);
+  await inspect('E3525');
+  await page.locator('.geography-examination > summary').click();
+  await expect(page.locator('.geography-examination')).toContainText('mixed_water_land');
+  await expect(page.locator('.geography-examination')).toContainText('Automated evidence, not human-reviewed');
+  await expect(page.locator('.geography-examination')).toContainText('Not detected does not mean absent');
+  await expect(page.locator('.geography-water.mixed_water_land[data-hex=E3525]')).toHaveCount(1);
+  await inspect('Malta 0805');
+  await expect(page.locator('.geography-examination')).toContainText('Raster examination');
   await inspect('C9999');
   await expect(page.locator('.geography-inspector')).toContainText('No source-grid hex here');
   await expect(page.locator('.geography-selected')).toHaveCount(0);

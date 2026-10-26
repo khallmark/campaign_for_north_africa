@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "method": "source-ink-survey-v1",
+  "source": "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+  "sha256": "e82f995e213da486004d006e5b7fd1f6e49e7464fb7fd2db23f36bbbc57b14b4",
+  "legend": "docs/CNAv2.1.0/images/TEC.png",
+  "legend_sha256": "e0ab25e590efae1e564df71a6a229dcdf4e3f0c18bfd82ea2a656ef34baa39c7",
+  "tolerance": 2,
+  "rail_track_opacity": 0.9,
+  "blue_barred_opacity": 0.9,
+  "templates": [
+    {"symbol":"oasis","ink":"blue_symbols_text","crop":[6968,4037,75,65],"minimum_score":0.88},
+    {"symbol":"port_icon","ink":"background","crop":[9661,1810,31,31],"minimum_score":0.88}
+  ],
+  "inks": {
+    "background": [251,250,239],
+    "water": [138,181,207],
+    "desert": [223,207,100],
+    "gravel": [170,157,97],
+    "rough": [194,185,149],
+    "salt_marsh": [186,175,129],
+    "mountain": [151,136,66],
+    "slope_ridge": [160,146,80],
+    "delta": [164,178,171],
+    "wadi": [127,148,142],
+    "escarpment": [94,97,98],
+    "rail_track": [84,88,89],
+    "road": [72,63,34],
+    "road_fill": [233,232,223],
+    "grid": [51,53,51],
+    "blue_symbols_text": [74,138,179],
+    "blue_barred": [91,149,185],
+    "vegetation": [56,142,87],
+    "swamp": [91,161,102]
+  },
+  "notes": "Ink samples compared with TEC and source crops, by agent, not human-reviewed. Palette detection is not a complete symbol classifier. Shared inks, text, unfinished construction, corner crossings and tiny slivers remain uncertain. White background is measured but never a default Clear assignment. No negative detection certifies feature absence."
+}

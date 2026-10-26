@@ -215,6 +215,15 @@ pub struct Record<T> {
     pub adjudication_id: Option<String>,
 }
 
+/// What the source draws, not construction completion or operational connectivity.
+/// Production hints accompany unresolved observations, never typed movement links.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum TransportDepiction {
+    UnfinishedRoad,
+    UnfinishedRailroad,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum MapRecord {
@@ -225,6 +234,8 @@ pub enum MapRecord {
     Hexside {
         side: HexsideId,
         record: Record<HexsideFeature>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        depiction: Option<TransportDepiction>,
     },
     Point {
         hex: HexId,

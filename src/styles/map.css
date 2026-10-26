@@ -381,11 +381,17 @@
 .geography-hex { fill: none; stroke: #21575b; stroke-width: 0.7; opacity: 0.55; }
 .geography-id { fill: #24484b; stroke: #fff9e8; stroke-width: 2.5; paint-order: stroke; text-anchor: middle; font: 10px monospace; }
 .geography-terrain { opacity: 0.35; stroke: #534b35; stroke-width: 1; stroke-dasharray: 3 2; }
+.geography-water { fill: #488fb0; opacity: 0.35; }
+.geography-water.mixed_water_land { fill: #86acaa; stroke: #376c86; stroke-dasharray: 4 3; }
+.geography-overlay[data-detail=false] .geography-terrain,
+.geography-overlay[data-detail=false] .geography-water { stroke: none; }
 .geography-selected { fill: #fff8cf22; stroke: #ba452d; stroke-width: 3; }
 .geography-link { fill: none; stroke-width: 3; stroke: #34839a; }
 .geography-link.road { stroke: #bf741d; stroke-width: 5; }
-.geography-link.railroad { stroke: #293d3a; stroke-dasharray: 6 3; }
+.geography-link.railroad { stroke: #293d3a; stroke-width: 1.5; }
+.geography-link.railroad-ties { stroke-width: 8; stroke-dasharray: 2 9; }
 .geography-link.track { stroke: #805a32; stroke-dasharray: 2 4; }
+.geography-link.unresolved { stroke: #ac3c65; stroke-width: 2; stroke-dasharray: 2 5; opacity: 0.8; }
 .geography-location { fill: #f8e6a2; stroke: #24594f; stroke-width: 2; }
 .geography-location.unresolved { fill: none; stroke: #ac3c65; }
 .research-board[data-source-visible=false] { visibility: hidden; }

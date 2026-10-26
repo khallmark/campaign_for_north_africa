@@ -13,6 +13,7 @@ use web_sys::Element;
 pub(super) struct Geography {
     svg: Element,
     inspector: Element,
+    records: Vec<Vec<MapRecord>>,
     pub grid: bool,
     pub features: bool,
     pub inspecting: bool,
@@ -40,10 +41,15 @@ impl Geography {
             })
             .sum();
         root.query_selector(".geography-coverage").unwrap().unwrap().set_text_content(Some(&format!(
-            "{} source-grid hexes · {terrain_count} terrain observations · transcription incomplete · seams unresolved", hexes().len()
+            "{} source-grid hexes · {} raster examinations · {terrain_count} terrain observations · transcription incomplete · seams unresolved", hexes().len(), model().examinations.len()
         )));
         Self {
             svg,
+            records: model()
+                .surveys
+                .iter()
+                .map(|survey| survey.records())
+                .collect(),
             inspector: root
                 .query_selector(".geography-inspector")
                 .unwrap()
@@ -62,31 +68,38 @@ impl Geography {
             return;
         };
         let mut html = format!("<strong>{hex} · section-local identity</strong><p>Geometry: center inside source polygon. Playability unknown; printed identity and seams unresolved.</p>");
+        if let Some(examination) = model().examinations.get(&hex) {
+            write!(html, "<details class=geography-examination><summary>Raster examination · {}</summary><p>Automated evidence, not human-reviewed. Water includes sea and inland water; mixed cells are not automatically coast. Not detected does not mean absent.</p><p>Source crop xywh={:?}</p>", escape(&examination.surface), examination.crop).unwrap();
+            for (family, status) in &examination.families {
+                write!(html, "<p>{}: {}</p>", escape(family), escape(status)).unwrap();
+            }
+            html.push_str("</details>");
+        }
         let mut terrain = false;
         let mut count = 0;
-        for survey in &model().surveys {
-            for assignment in survey.records() {
+        for (survey, records) in model().surveys.iter().zip(&self.records) {
+            for assignment in records {
                 let (matches, observation, detail) = match assignment {
                     MapRecord::Terrain { hex: h, record } => {
-                        if h == hex {
+                        if *h == hex {
                             terrain = true;
                         }
                         (
-                            h == hex,
-                            serde_json::to_value(record.observation).unwrap(),
+                            *h == hex,
+                            serde_json::to_value(&record.observation).unwrap(),
                             "Terrain".to_string(),
                         )
                     }
                     MapRecord::Point { hex: h, record } => (
-                        h == hex,
-                        serde_json::to_value(record.observation).unwrap(),
+                        *h == hex,
+                        serde_json::to_value(&record.observation).unwrap(),
                         "Location".to_string(),
                     ),
-                    MapRecord::Hexside { side, record } => {
+                    MapRecord::Hexside { side, record, .. } => {
                         let other = side.hex().neighbor(side.direction()).unwrap();
                         (
                             hex == side.hex() || hex == other,
-                            serde_json::to_value(record.observation).unwrap(),
+                            serde_json::to_value(&record.observation).unwrap(),
                             format!("Side {} ↔ {other}", side.hex()),
                         )
                     }
@@ -148,6 +161,16 @@ impl Geography {
         self.svg
             .set_attribute("viewBox", &format!("0 0 {width} {height}"))
             .unwrap();
+        self.svg
+            .set_attribute(
+                "data-detail",
+                if viewport.zoom() >= 0.22 {
+                    "true"
+                } else {
+                    "false"
+                },
+            )
+            .unwrap();
         let visible = |hex| {
             let c = viewport.to_screen(center(hex));
             let margin = 90.0 * viewport.zoom();
@@ -165,27 +188,54 @@ impl Geography {
         };
         let mut html = String::new();
         if self.features {
-            for survey in &model().surveys {
-                for assignment in survey.records() {
+            let mut links = String::new();
+            let mut railroads = String::new();
+            let mut locations = String::new();
+            for (&hex, examination) in &model().examinations {
+                if visible(hex)
+                    && matches!(examination.surface.as_str(), "water" | "mixed_water_land")
+                {
+                    write!(
+                        html,
+                        "<polygon class=\"geography-water {}\" data-hex=\"{hex}\" points=\"{}\"/>",
+                        examination.surface,
+                        polygon(hex)
+                    )
+                    .unwrap();
+                }
+            }
+            for records in &self.records {
+                for assignment in records {
                     match assignment {
-                        MapRecord::Terrain { hex, record } if visible(hex) => {
-                            let color = match record.observation {
+                        MapRecord::Terrain { hex, record } if visible(*hex) => {
+                            let color = match &record.observation {
                                 Observation::Provisional { value }
                                 | Observation::Reviewed { value } => match value {
                                     cna_map::terrain::Terrain::Desert => "#d9a92e",
                                     cna_map::terrain::Terrain::Mountain => "#806044",
                                     cna_map::terrain::Terrain::Delta => "#3d877b",
                                     cna_map::terrain::Terrain::SaltMarsh => "#9b83af",
+                                    cna_map::terrain::Terrain::Clear => "#eee9d2",
+                                    cna_map::terrain::Terrain::Gravel => "#b7a77a",
+                                    cna_map::terrain::Terrain::HeavyVegetation
+                                    | cna_map::terrain::Terrain::Swamp => "#629659",
                                     _ => "#ad8c58",
                                 },
                                 _ => "#a65e72",
                             };
-                            write!(html, "<polygon class=geography-terrain data-hex=\"{hex}\" points=\"{}\" fill=\"{color}\"/>", polygon(hex)).unwrap();
+                            write!(html, "<polygon class=geography-terrain data-hex=\"{hex}\" points=\"{}\" fill=\"{color}\"/>", polygon(*hex)).unwrap();
                         }
-                        MapRecord::Hexside { side, record } if visible(side.hex()) => {
-                            let value = match record.observation {
+                        MapRecord::Hexside { side, record, .. } if visible(side.hex()) => {
+                            let value = match &record.observation {
                                 Observation::Provisional { value }
                                 | Observation::Reviewed { value } => value,
+                                Observation::Unresolved { .. } if viewport.zoom() >= 0.65 => {
+                                    let (a, b) = edge(*side);
+                                    let a = viewport.to_screen(a);
+                                    let b = viewport.to_screen(b);
+                                    write!(links, "<path class=\"geography-link unresolved\" d=\"M{:.2},{:.2}L{:.2},{:.2}\"/>",a.x,a.y,b.x,b.y).unwrap();
+                                    continue;
+                                }
                                 _ => continue,
                             };
                             use cna_map::terrain::HexsideFeature::*;
@@ -202,23 +252,36 @@ impl Geography {
                                         },
                                     )
                                 } else {
-                                    let (a, b) = edge(side);
+                                    let (a, b) = edge(*side);
                                     (a, b, "side")
                                 };
                             let a = viewport.to_screen(a);
                             let b = viewport.to_screen(b);
-                            write!(html, "<path class=\"geography-link {class}\" d=\"M{:.2},{:.2}L{:.2},{:.2}\"/>",a.x,a.y,b.x,b.y).unwrap();
+                            let layer = if matches!(value, Railroad) {
+                                &mut railroads
+                            } else {
+                                &mut links
+                            };
+                            write!(layer, "<path class=\"geography-link {class}\" d=\"M{:.2},{:.2}L{:.2},{:.2}\"/>",a.x,a.y,b.x,b.y).unwrap();
+                            if matches!(value, Railroad) {
+                                write!(layer, "<path class=\"geography-link railroad railroad-ties\" d=\"M{:.2},{:.2}L{:.2},{:.2}\"/>",a.x,a.y,b.x,b.y).unwrap();
+                            }
                         }
-                        MapRecord::Point { hex, record } if visible(hex) => {
-                            let c = viewport.to_screen(center(hex));
+                        MapRecord::Point { hex, record } if visible(*hex) => {
+                            let c = viewport.to_screen(center(*hex));
                             let unresolved =
                                 matches!(record.observation, Observation::Unresolved { .. });
-                            write!(html, "<circle class=\"geography-location{}\" cx=\"{:.2}\" cy=\"{:.2}\" r=\"4\"/>", if unresolved {" unresolved"} else {""}, c.x,c.y).unwrap();
+                            write!(locations, "<circle class=\"geography-location{}\" cx=\"{:.2}\" cy=\"{:.2}\" r=\"4\"/>", if unresolved {" unresolved"} else {""}, c.x,c.y).unwrap();
                         }
                         _ => {}
                     }
                 }
             }
+            // Terrain must not tint routes; the wider road stroke must not hide
+            // a coincident railroad. Keep both visible regardless of survey order.
+            html.push_str(&links);
+            html.push_str(&railroads);
+            html.push_str(&locations);
         }
         // Fine grid/IDs appear only when readable; full inventory still exists at fit.
         if self.grid && viewport.zoom() >= 0.22 {

@@ -9,10 +9,10 @@ use std::{collections::BTreeSet, error::Error, io};
 fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<_> = std::env::args().skip(1).collect();
     if args == ["--help"] {
-        println!("Export the complete center-in-section geometry as JSON to stdout.\n\nExample: cargo run --locked -p cna-map --bin map-model > /tmp/map-model.json\nSQLite: python3 scripts/import-map-db.py --write");
+        println!("Export the complete center-in-section geometry as JSON to stdout.\n\nExample: cargo run --locked -p cna-map --bin map-model > /tmp/map-model.json\nUse --geometry-only to regenerate extraction without loading older surveys.\nSQLite: python3 scripts/import-map-db.py --write");
         return Ok(());
     }
-    if !args.is_empty() {
+    if !args.is_empty() && args != ["--geometry-only"] {
         return Err("unexpected arguments; use --help".into());
     }
     let members: BTreeSet<_> = hexes().iter().copied().collect();
@@ -43,6 +43,13 @@ fn main() -> Result<(), Box<dyn Error>> {
             "other":side.hex().neighbor(side.direction()).unwrap(),"edge":[[a.x,a.y],[b.x,b.y]]})
         })
         .collect();
+    if args == ["--geometry-only"] {
+        serde_json::to_writer(
+            io::stdout().lock(),
+            &json!({"hexes":cells,"hexsides":sides}),
+        )?;
+        return Ok(());
+    }
     let model = cna_map::model::model();
     let surveys: Vec<_> = model
         .surveys
@@ -58,7 +65,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         io::stdout().lock(),
         &json!({
             "version":1,"membership":"calibrated_center_in_source_section_polygon",
-            "hexes":cells,"hexsides":sides,"sources":model.sources,"surveys":surveys
+            "hexes":cells,"hexsides":sides,"sources":model.sources,"surveys":surveys,
+            "examinations":model.examinations
         }),
     )?;
     Ok(())

@@ -406,7 +406,7 @@ pub fn mount() -> Result<(), JsValue> {
         <form class="geography-search"><label for="geography-id">Hex identity</label><input id="geography-id" placeholder="D3714" maxlength="10" autocomplete="off"><button type="submit">Inspect hex</button></form>
         <p class="geography-coverage"></p>
         <details class="geography-details"><summary>Hex evidence</summary>
-          <p class="geography-key">Terrain tint = provisional · orange road / dashed dark railroad / dotted track · blue hexside · outlined dot = unresolved · links show connectivity, not exact linework</p>
+          <p class="geography-key">Terrain/water tint = provisional · orange road / dark railroad with ties / dotted track · blue hexside · magenta side/dot = unresolved · links show connectivity, not exact linework · raster examination is not complete transcription</p>
           <div class="geography-inspector" aria-live="polite">Enable Inspect mode and click a hex, or enter its section-local identity. Enter inspects the viewport center. Grid labels appear at detail scale.</div>
         </details>
       </div>

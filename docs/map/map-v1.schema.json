@@ -88,8 +88,10 @@
     },
     "hexsideRecord": {
       "type": "object", "additionalProperties": false, "required": ["kind", "side", "record"],
+      "allOf": [{"if": {"required": ["depiction"]}, "then": {"properties": {"record": {"properties": {"observation": {"properties": {"status": {"const": "unresolved"}}}}}}}}],
       "properties": {
         "kind": {"const": "hexside"}, "side": {"$ref": "#/$defs/side"},
+        "depiction": {"enum": ["unfinished_road", "unfinished_railroad"], "description": "Source drawing only; not construction completion, operability or movement connectivity. Production observations must remain unresolved."},
         "record": {"allOf": [{"$ref": "#/$defs/record"}, {"properties": {"observation": {"properties": {"value": {"$ref": "#/$defs/hexside"}}}}}]}
       }
     },

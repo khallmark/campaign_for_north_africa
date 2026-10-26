@@ -31,7 +31,11 @@ class MapDatabaseTests(unittest.TestCase):
         self.assertEqual(self.db.execute("PRAGMA foreign_key_check").fetchall(), [])
         self.assertEqual(self.db.execute("SELECT terrain_status FROM hexes WHERE id='A4829'").fetchone()[0], "unmapped")
         self.assertEqual(self.db.execute("SELECT value FROM observations WHERE survey='matruh-port-location'").fetchone()[0], None)
-        self.assertEqual(self.db.execute("SELECT count(*) FROM observation_sources os JOIN sources s ON os.source=s.path WHERE length(s.sha256)=64").fetchone()[0], 204)
+        self.assertEqual(self.db.execute("""
+            SELECT o.id FROM observations o LEFT JOIN observation_sources os ON os.observation=o.id
+            LEFT JOIN sources s ON os.source=s.path GROUP BY o.id
+            HAVING count(os.reference)<2 OR min(length(s.sha256))<>64
+        """).fetchall(), [])
         with self.assertRaises(sqlite3.IntegrityError):
             self.db.execute("UPDATE observations SET source_label=NULL WHERE survey='matruh-port-location'")
         for feature in ("road", "railroad"):
@@ -39,6 +43,7 @@ class MapDatabaseTests(unittest.TestCase):
                 WITH RECURSIVE reach(hex) AS (
                   VALUES ('D3714') UNION SELECT n.to_hex FROM network_links n JOIN reach r ON n.from_hex=r.hex
                   WHERE n.feature=? AND n.status='provisional'
+                    AND n.survey IN ('matruh-road-east','matruh-rail-east')
                 ) SELECT hex FROM reach
             """, (feature,))}
             self.assertIn("D3519", reachable)
@@ -49,6 +54,122 @@ class MapDatabaseTests(unittest.TestCase):
         self.assertEqual(self.db.execute("SELECT count(*) FROM network_links WHERE survey='matruh-rail-west'").fetchone()[0], 0)
         self.assertEqual(self.db.execute("SELECT count(*) FROM observations WHERE survey='matruh-rail-west' AND status='unresolved'").fetchone()[0], 4)
         self.assertEqual(self.db.execute("SELECT count(*) FROM network_links WHERE status='reviewed'").fetchone()[0], 0)
+
+    def test_unfinished_depictions_preserve_observed_crossings_without_network_links(self):
+        # Independently traced source symbols, including short bends which an
+        # endpoint-only reachability assertion would miss. These are not routes
+        # available to movement: the join only recovers each depicted shared side.
+        for survey, depiction, route in (
+            ('sollum-buq-buq-unfinished-road', 'unfinished_road',
+             'C4021 C3922 C3822 C3823 C3824 C3825 C3926 C3927 C4027 C4028 C4029 C4130'),
+            ('capuzzo-sofafi-unfinished-railroad', 'unfinished_railroad',
+             'C4217 C4218 C4119 C4019 C4020 C3921 C3821 C3722 C3622 C3523 C3423 '
+             'C3324 C3325 C3326 C3226 C3227 C3328 C3329 C3429 C3430 C3531 C3631 C3632 C3633'),
+        ):
+            cells = route.split()
+            self.assertEqual(self.db.execute(
+                'SELECT count(*) FROM observations WHERE survey=? AND depiction=? AND status=\'unresolved\' AND value IS NULL',
+                (survey, depiction)).fetchone()[0], len(cells) - 1)
+            self.assertEqual(self.db.execute(
+                'SELECT count(*) FROM network_links WHERE survey=?', (survey,)).fetchone()[0], 0)
+            for start, end in zip(cells, cells[1:]):
+                with self.subTest(start=start, end=end, depiction=depiction):
+                    self.assertIsNotNone(self.db.execute('''
+                        SELECT 1 FROM observations o JOIN hexsides s USING(hex,direction)
+                        WHERE o.survey=? AND ((s.hex=? AND s.other=?) OR (s.hex=? AND s.other=?))
+                    ''', (survey, start, end, end, start)).fetchone())
+        self.assertEqual(self.db.execute("""
+            SELECT DISTINCT depiction FROM observations WHERE survey='matruh-rail-west'
+        """).fetchall(), [('unfinished_railroad',)])
+        for update in (
+            "UPDATE observations SET status='provisional',value='railroad',source_label=NULL WHERE depiction IS NOT NULL",
+            "UPDATE observations SET depiction='unfinished_road' WHERE kind='terrain'",
+            "UPDATE observations SET depiction='finished_road' WHERE depiction IS NOT NULL",
+        ):
+            with self.assertRaises(sqlite3.IntegrityError):
+                self.db.execute(update)
+        self.assertEqual(self.db.execute("""
+            SELECT depiction FROM observations WHERE hex='C3019' AND direction='east' AND depiction IS NOT NULL
+        """).fetchall(), [])
+
+    def test_whole_map_evidence_preserves_uncertainty_and_source_controls(self):
+        self.assertEqual(self.db.execute("SELECT count(*) FROM cell_measurements").fetchone()[0], 7180)
+        self.assertEqual(self.db.execute("SELECT count(*) FROM side_examinations").fetchone()[0], 20684)
+        self.assertEqual(self.db.execute("SELECT count(*) FROM examinations").fetchone()[0], 35900)
+        self.assertEqual(self.db.execute("""
+            SELECT section,family FROM examination_coverage GROUP BY section,family
+            HAVING sum(hexes)<>(SELECT count(*) FROM hexes h WHERE h.section=examination_coverage.section)
+        """).fetchall(), [])
+        self.assertEqual(self.db.execute("SELECT count(*) FROM observations WHERE status='reviewed'").fetchone()[0], 0)
+        # A blue dot is not permission to infer a Village/Bir water rule.
+        self.assertEqual(self.db.execute("SELECT status,value FROM observations WHERE survey='label-B3406'").fetchone(), ('unresolved', None))
+        self.assertIn('Benina', self.db.execute("SELECT source_label FROM observations WHERE survey='label-A4829'").fetchone()[0])
+        self.assertEqual(self.db.execute("SELECT value FROM observations WHERE survey='malta-luqa'").fetchone()[0], '{"type":"airfield"}')
+        # Independently inspected TEC controls: pale gaps are unfinished, dark
+        # grid interruptions are not. Check all surveys, not only the manual one.
+        for hex_id, direction, feature, present in (
+            ('D3514', 'east', 'railroad', False),
+            ('C3226', 'north_west', 'railroad', False),
+            ('D2224', 'north_east', 'railroad', False),  # Escarpment fringe, not ties.
+            ('C3226', 'north_west', 'track', False),  # Disconnected cross-ties, not dashes.
+            ('D2224', 'north_east', 'track', False),
+            ('C3922', 'north_west', 'track', False),  # Unfinished double road capsules.
+            ('E2520', 'east', 'railroad', True),
+            ('B5409', 'east', 'road', True),
+            ('B5405', 'east', 'road', True),
+            ('B5404', 'east', 'road', True),
+            ('C4320', 'east', 'road', True),
+            ('C4020', 'east', 'road', True),
+            ('D3710', 'east', 'road', True),
+            ('D3512', 'north_east', 'road', False),
+        ):
+            found = self.db.execute("SELECT 1 FROM observations WHERE hex=? AND direction=? AND value=?",
+                                    (hex_id, direction, feature)).fetchone() is not None
+            self.assertEqual(found, present, (hex_id, direction, feature))
+        # Source-inspected routes in the reported gaps: Bardia–Sollum road and
+        # Fort Maddelenna–Bir el Sheferzen track. This is evidence connectivity,
+        # not movement permission or authority for within-hex junctions.
+        for feature, start, destination in (
+            ('road', 'C4321', 'C4021'), ('track', 'C3019', 'C3419'),
+        ):
+            reachable = {row[0] for row in self.db.execute("""
+                WITH RECURSIVE reach(hex) AS (
+                  VALUES (?) UNION SELECT n.to_hex FROM network_links n JOIN reach r ON n.from_hex=r.hex
+                  WHERE n.feature=? AND n.status='provisional'
+                ) SELECT hex FROM reach
+            """, (start, feature))}
+            self.assertIn(destination, reachable)
+        # Check each source crossing, not reachability through an alternate path.
+        # The first seven traces cover gray dashed routes in the Maddelenna / Bir
+        # el'esc Scegga crop (6950,2010,770,760); the rest cover C3008 and Sidi Azeiz.
+        # A grid-overprinted dash is still a track; blue barred sides are not
+        # evidence for joining the two independent north/south routes.
+        for route in (
+            'C3015 C3016 C3017 C3018 C3019',
+            'C3020 C3021 C3022 C3023 C3024',
+            'C3018 C2918 C2817 C2717 C2616 C2516',
+            'C3518 C3418 C3318 C3218 C3119 C3019 C2919 C2819 C2720 C2619 C2519',
+            'C3519 C3419 C3319 C3219 C3120 C3020 C2921 C2820 C2721 C2621 C2522',
+            'C3516 C3416 C3417 C3418 C3419 C3420 C3321 C3322 C3222 C3223 C3224',
+            'C3319 C3419 C3520',
+            'C2908 C3008 C3009',
+            'C4216 C4217 C4218 C4219 C4220',
+            'C4017 C4118 C4218 C4319',
+        ):
+            cells = route.split()
+            for start, destination in zip(cells, cells[1:]):
+                with self.subTest(start=start, destination=destination):
+                    self.assertIsNotNone(self.db.execute("""
+                        SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=?
+                        AND feature='track' AND status='provisional'
+                    """, (start, destination)).fetchone())
+        self.assertEqual(self.db.execute("""
+            SELECT feature FROM network_links WHERE from_hex='C3019' AND to_hex='C3020'
+        """).fetchall(), [])
+        self.assertEqual(self.db.execute("""
+            SELECT n.id FROM network_links n JOIN hexes a ON a.id=n.from_hex JOIN hexes b ON b.id=n.to_hex
+            WHERE a.section<>b.section
+        """).fetchall(), [])
 
     def test_regeneration_is_logically_identical_and_changes_are_detectable(self):
         with sqlite3.connect(":memory:") as second:

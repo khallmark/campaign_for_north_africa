@@ -1,0 +1,4 @@
+# Private raster regeneration only; normal SQLite/model tests need no extra packages.
+numpy==2.4.6
+opencv-python-headless==5.0.0.93
+Pillow==13.0.0

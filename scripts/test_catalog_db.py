@@ -436,11 +436,17 @@ class CommittedDatabaseContracts(unittest.TestCase):
         self.assertEqual(aa['arrival_totals']['anti_air']['unit'], 'Actual AA points')
         self.assertEqual(aa['components'][0]['per_toe_stats']['anti_air']['value'], 1)
         self.assertIsNone(aa['base_stats']['anti_air']['value'])
+        self.assertEqual(aa['arrival_totals']['anti_armor']['value'], 6)
+        self.assertTrue(aa['arrival_totals']['anti_armor']['conditional'])
+        self.assertIn('only when attacked', aa['arrival_totals']['anti_armor']['note'])
+        self.assertIn('rules-arrival-parenthesized', aa['arrival_totals']['anti_armor']['source_refs'])
         # Asymmetric mix: two AT TOE contribute no AA; two Bofors TOE contribute two.
         mixed = ref('oa-117-024-')
         self.assertEqual(mixed['arrival']['toe_strength']['value'], 4)
         self.assertEqual(mixed['arrival_totals']['anti_air']['value'], 2)
-        self.assertIsNone(mixed['arrival_totals']['anti_armor']['value'])
+        # Two 2-pounders × 4, not 10: supplied normal fire excludes Bofors (1).
+        self.assertEqual(mixed['arrival_totals']['anti_armor']['value'], 8)
+        self.assertIn('excluded', mixed['arrival_totals']['anti_armor']['raw'])
         self.assertTrue(mixed['arrival_totals']['anti_armor']['conditional'])
         # A conditional maximum (US tank capacity) is not a parenthesized combat rating.
         tank = ref('oa-116-003-')
@@ -452,8 +458,17 @@ class CommittedDatabaseContracts(unittest.TestCase):
         self.assertEqual(rifle['arrival']['toe_strength']['value'], 6)
         self.assertEqual(rifle['arrival_totals']['close_assault_offensive']['value'], 12)
         self.assertEqual(rifle['arrival_totals']['close_assault_offensive']['unit'], 'Raw combat points (before ÷10)')
+        # N/A is no intrinsic AA contribution, not an unknown equipment loadout.
+        self.assertEqual(rifle['arrival_totals']['anti_air']['value'], 0)
+        self.assertIsNone(rifle['base_stats']['anti_air']['value'])
+        self.assertEqual(rifle['base_stats']['anti_air']['status'], 'not_applicable')
         self.assertEqual(ref('oa-116-001-')['arrival']['morale']['value'], 1)
-        self.assertIsNone(ref('oa-116-001-')['arrival_totals']['anti_air']['value'])
+        self.assertEqual(ref('oa-116-001-')['arrival_totals']['anti_air']['value'], 1)
+        self.assertTrue(ref('oa-116-001-')['arrival_totals']['anti_air']['conditional'])
+        # Five Ramcke battalions: seven infantry TOE have no intrinsic AA;
+        # the 7.5cm gun supplies three anti-armor points after 1/63.
+        self.assertEqual(ref('oa-164-055-')['arrival_totals']['anti_armor']['value'], 3)
+        self.assertEqual(ref('oa-148-037-')['arrival_totals']['anti_armor']['value'], 0)
         # Alphabetic note (a) is not untrained morale: only 20th Brigade arrives at zero.
         self.assertEqual(ref('oa-125-044-')['arrival']['morale']['raw'], '+1 (a)')
         self.assertEqual(ref('oa-125-044-')['arrival']['morale']['value'], 1)
@@ -465,14 +480,31 @@ class CommittedDatabaseContracts(unittest.TestCase):
         attached = ref('oa-147-013-')
         self.assertTrue(attached['arrival']['related_record_id'].startswith('oa-157-056-'))
         self.assertEqual(attached['components'], [])
+        lancers = ref('oa-128-016-')
+        self.assertEqual(lancers['base_profile_id'], 'cw-ll')
+        self.assertEqual(lancers['base_stats']['capability_points']['value'], 45)
+        self.assertIsNone(lancers['printed_profile_code'])
+        self.assertIsNone(lancers['catalog_profile_id'])
+        self.assertIsNone(lancers['arrival']['toe_strength']['value'])
+        self.assertEqual(lancers['components'], [])
+        self.assertIn('oa-arrival:oa-127-124', lancers['base_stats']['capability_points']['source_refs'])
+        self.assertIn('oa-arrival:oa-128-016', lancers['base_stats']['capability_points']['source_refs'])
         unassigned = ref('oa-157-056-')
         self.assertIsNone(unassigned['base_profile_id'])
         self.assertEqual(unassigned['arrival']['toe_strength']['value'], 4)
         self.assertEqual(unassigned['arrival_totals']['anti_air']['value'], 0)
+        naval = ref('oa-155-027-')['arrival']['stats']
+        self.assertEqual(naval['naval_barrage']['value'], 2)
+        self.assertEqual(naval['naval_anti_air']['value'], 6)
+        self.assertEqual(naval['capability_points']['value'], 0)
+        self.assertIn('scan-183', naval['naval_anti_air']['source_refs'])
+        self.assertIn('not land TOE', naval['naval_anti_air']['note'])
         coast = ref('oa-155-022-')
         self.assertEqual(coast['components'][0]['land_barrage_toe'], 4)
         self.assertEqual(coast['arrival']['stats']['capability_points']['value'], 0)
         self.assertIsNone(coast['arrival_totals']['close_assault_offensive']['value'])
+        self.assertEqual(coast['arrival_totals']['close_assault_offensive']['status'], 'not_applicable')
+        self.assertEqual(coast['arrival_totals']['close_assault_offensive']['raw'], 'May not assault')
         # Note b limits land-target barrage to 4/2/2 artillery TOE, not all six.
         for prefix, value, expression in (('oa-155-022-', 32, '4 × 8 + 6 × 0'),
                                           ('oa-155-024-', 18, '2 × 9 + 4 × 0'),
@@ -542,6 +574,30 @@ class CommittedDatabaseContracts(unittest.TestCase):
                 self.assertEqual(barrage['raw'], '4 × 8')
                 self.assertTrue(barrage['conditional'])
                 self.assertIn('not a single numeric rating', barrage['note'])
+
+    def test_arrival_conditions_do_not_fill_unknown_inputs_or_ignore_date_boundary(self):
+        with closing(sqlite3.connect(':memory:')) as db, closing(catalog.connect(catalog.DATABASE, readonly=True)) as source:
+            source.backup(db)
+            italian = 'oa-148-037-1st-libyan-artillery-regt'
+            german = 'oa-163-016-i-115-artillery-bn'
+            for date, italian_total, german_total in [('3/62', 0, 0), ('1/63', 12, 12), ('D', 0, 0), (None, None, None)]:
+                db.execute("UPDATE catalog_record SET details_json=json_set(details_json,'$.formation_arrival.arrives_raw',?) WHERE id IN (?,?)",
+                           (date, italian, german))
+                references = catalog.formation_references(db)
+                for record_id, expected in ((italian, italian_total), (german, german_total)):
+                    with self.subTest(date=date, record_id=record_id):
+                        total = references[record_id]['arrival_totals']['anti_armor']
+                        self.assertEqual(total['value'], expected)
+                        self.assertTrue(total['conditional'])
+            # A parenthesized HQ maximum must not hide an unknown effective date.
+            db.execute("UPDATE catalog_record SET details_json=json_set(details_json,'$.formation_arrival.profile_id','ge-c') WHERE id=?", (german,))
+            self.assertIsNone(catalog.formation_references(db)[german]['arrival_totals']['anti_armor']['value'])
+            # Dropping a known intrinsic N/A cell to unknown must block the sum.
+            db.execute("UPDATE stat_observation SET status='unresolved',raw='?' WHERE record_id='ge-h' AND stat_id='anti_armor'")
+            self.assertIsNone(catalog.formation_references(db)['oa-164-055-i-bn-kroh']['arrival_totals']['anti_armor']['value'])
+            # Known conditional ratings cannot rescue an unknown TOE quantity.
+            db.execute("UPDATE catalog_record SET details_json=json_set(details_json,'$.formation_arrival.components[0].toe',NULL) WHERE id='oa-124-002-13th-light-aa-regt'")
+            self.assertIsNone(catalog.formation_references(db)['oa-124-002-13th-light-aa-regt']['arrival_totals']['anti_armor']['value'])
 
     def test_reviewed_patch_changes_only_twelve_types_and_rejects_wrong_baseline(self):
         with tempfile.TemporaryDirectory() as directory:

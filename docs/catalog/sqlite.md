@@ -186,11 +186,18 @@ their existing contract; no new field is added to their emitted data.
   `ge-x`) uses `ge-w` **only in this arrival reference**, retaining `catalog_profile_id`.
   Central India Horse uses the chart note's arrival infantry profile; its later
   trained-profile disagreement remains explicit. Trieste/Trento row notes preserve `10+`.
+  Twelve attachment rows also resolve base characteristics through their reviewed
+  same-unit OA cross-reference. Both row citations accompany each base Stat;
+  printed/catalog profile codes, blank arrival TOE and empty loadouts stay intact.
 - `arrival`: original `toe_raw`, `arrives_raw` (stage/turn, `D`, text or null),
   sourced `morale` and `toe_strength` Stats, row notes, citations and nullable
   `related_record_id`. `arrival.stats` holds explicit coastal CPA overrides with
   their restrictions; it is not current scenario state. Parenthesized morale is
   the untrained value at arrival (4.45). Quantities are **TOE points, not vehicles**.
+  San Giorgio links to its naval counter (physical PDF p.183, `CL 2/6`):
+  `arrival.stats` supplies naval gun **2**, naval AA **6**, and immobile CPA **0**.
+  These are actual naval points, not a fabricated land TOE or land barrage sum.
+  Damage changes strength under 30.13; Tobruk OA note c forbids land targets.
 - `components[]`: exact existing `record_id`, printed `label`, `name`, `kind`,
   TOE Stat, `per_toe_stats` and nullable `land_barrage_toe`. The stat map contains
   chart ratings and allowances with explicit units: CPA, armor and vulnerability
@@ -200,14 +207,26 @@ their existing contract; no new field is added to their emitted data.
 - `arrival_totals`: five Stat-shaped rule calculations. AA is Actual AA points
   under 11.37/46.11; the four other combat sums are **Raw Points**, before division
   by ten and action-level rounding (11.31–11.38). `raw` is the arithmetic expression,
-  not a claim of a printed total. Equipment-chart dashes contribute no points to
-  a sum (legend: N/A or zero); original nullable cells remain unchanged. Missing,
-  unverified, unapplied date/target-dependent or parenthesized inputs yield null
-  with a reason, not a partial numeric total. The explicit land-target TOE subsets
+  not a claim of a printed total. A known component's not-applicable combat cell
+  contributes no intrinsic points; its nullable source cell is unchanged. This
+  does not turn an unknown loadout, a maximum TOE dash, or armor/vulnerability
+  into zero. Missing or unverified inputs block the entire total.
+  Parenthesized ratings now produce conditional reference numbers under 3.3–3.4,
+  4.46 and chart legends, with the exact restrictions in `note`. For a mixed
+  loadout, the supplied non-parenthesized fire case excludes parenthesized terms:
+  102nd NH AT/AA has **8**, not 10, raw anti-armor points in that case. A pure
+  Bofors unit can use its parenthesized anti-armor rating only under the cited
+  defensive conditions; a number is not permission to attack voluntarily.
+  Italian 75/27 and German 7.5cm IG18 anti-armor ratings are resolved against the
+  printed arrival date: zero before **1/63**, their sourced 2/3 afterward. `D`
+  means initially deployed (4.45). Missing or unparsed dates still block totals.
+  Original per-TOE ratings retain their effective-date conditions. No current
+  scenario date or ammunition inventory is assumed by these reference cases.
+  The explicit land-target TOE subsets
   in Tobruk note b are applied: 2nd/4th/5th coastal groups have conditional barrage
   totals of **32/18/30 raw points**, respectively. These are land-target historical
-  reference totals, not all-target/current strength. Other restrictions still block
-  numbers. Sourced morale has no missing-value caveat; missing TOE/profile/morale
+  reference totals, not all-target/current strength. Other unsupported restrictions
+  still block numbers. Sourced morale has no missing-value caveat; missing TOE/profile/morale
   explanations cite the particular row, profile symbol or attachment.
 
 Consumers should use the arrival notes/limitations instead of the legacy record
@@ -221,7 +240,7 @@ Representative contract fixtures (real catalog records; assertions in the fast t
 | Record | Expected distinction |
 | --- | --- |
 | `oa-124-002-13th-light-aa-regt` | 6 Bofors TOE × 1 = 6 AA points; profile AA dash stays null |
-| `oa-117-024-102nd-nh-light-anti-aircraft-anti-tank-regt` | 2 AT + 2 Bofors TOE; 2 AA points, conditional anti-armor withheld |
+| `oa-117-024-102nd-nh-light-anti-aircraft-anti-tank-regt` | 2 AT + 2 Bofors TOE; 2 AA points, 8 conditional raw anti-armor points; supplied normal fire excludes parenthesized fire |
 | `oa-116-003-2nd-bays` | 8 Crusaders + 2 A13; 8 AA and 28 raw offensive assault points |
 | `oa-116-006-1st-rifle-brigade` | `10+` base CPA, 6 TOE, 12 raw offensive assault points |
 | `oa-165-065-gruppe-badde` | No printed loadout; profile maximum is not an assignment |

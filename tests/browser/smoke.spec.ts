@@ -307,6 +307,16 @@ test('formation references distinguish base CPA, arrival totals, conditional and
   await expect(totals.locator('td strong')).toHaveCount(0);
   await expect(detail.locator('.catalog-arrival')).toContainText('That of the attached units');
   await expect(detail.locator('.catalog-arrival-components')).toContainText('A profile maximum is not an assignment');
+  await open('oa-159-028-2nd-ccnn-div-hq', 'headquarters');
+  await expect(totals.locator('td strong')).toHaveCount(0);
+  await expect(totals).toContainText('no assigned weapon model');
+  await expect(detail).not.toContainText(/unresolved/i);
+  await open('oa-155-024-4th-tobruk-cd-arty-group', 'coast-defense-artillery');
+  const coastalDefense = totals.getByRole('row', { name: /^Defensive close assault/ });
+  await expect(coastalDefense.locator('td strong')).toHaveText('4');
+  await expect(coastalDefense).toContainText('4 × 1');
+  await expect(coastalDefense).toContainText('Emplaced artillery TOE cannot participate');
+  await expect(coastalDefense).toContainText('only when attacked');
   await open('oa-123-096-11th-royal-horse-arty-regt-bishop-refit-counter', 'artillery');
   await expect(detail.locator('.catalog-arrival')).toContainText(/optional/i);
   await expect(totals.locator('td strong')).toHaveCount(0);

@@ -33,8 +33,8 @@
     },
     {
       "source_path": "public/data/unit-catalog.json",
-      "sha256": "10927c58ba4a3a5f5a850d1d61d75fb00968bc6266286b69aba175a4f6b1f869",
-      "size": 17930761
+      "sha256": "196a1c5914100c9314b7f4e8fab7913d1bf5affcda685f1fc2ed67ef30fba661",
+      "size": 17932080
     },
     {
       "source_path": "public/data/unit-identities.json",
@@ -466544,28 +466544,28 @@
             "value": null,
             "raw": "May not assault",
             "status": "not_applicable",
-            "conditional": false,
+            "conditional": true,
             "source_refs": [
               "oa-arrival:oa-155-021",
               "rules-oa-reference",
               "rules-arrival-raw-strength",
               "scan-139"
             ],
-            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings.",
+            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings. Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions.",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_defensive": {
-            "value": 0.0,
-            "raw": "2 × 0",
-            "status": "sourced",
-            "conditional": false,
+            "value": null,
+            "raw": "May not assault",
+            "status": "not_applicable",
+            "conditional": true,
             "source_refs": [
               "oa-arrival:oa-155-021",
               "rules-oa-reference",
               "rules-arrival-raw-strength",
               "scan-139"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions.",
             "unit": "Raw combat points (before ÷10)"
           }
         },
@@ -467091,12 +467091,12 @@
               "scan-139",
               "rules-arrival-parenthesized"
             ],
-            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings. With ammunition for this loadout's non-parenthesized rating, parenthesized contributions are excluded by the chart legend; they cannot be added to that fire.",
+            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings. Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions. Parenthesized ratings apply only when attacked without a friendly unit in the hex possessing ammunition and an appropriate non-parenthesized rating (3.4/chart legend). This does not authorize a voluntary attack; HQ restrictions in 3.3 also apply.",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_defensive": {
             "value": 6.0,
-            "raw": "6 × 0 + 6 × 1",
+            "raw": "6 × 1",
             "status": "sourced",
             "conditional": true,
             "source_refs": [
@@ -467106,7 +467106,7 @@
               "scan-139",
               "rules-arrival-parenthesized"
             ],
-            "note": "Parenthesized ratings apply only when attacked without a friendly unit in the hex possessing ammunition and an appropriate non-parenthesized rating (3.4/chart legend). This does not authorize a voluntary attack; HQ restrictions in 3.3 also apply.",
+            "note": "Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions. Parenthesized ratings apply only when attacked without a friendly unit in the hex possessing ammunition and an appropriate non-parenthesized rating (3.4/chart legend). This does not authorize a voluntary attack; HQ restrictions in 3.3 also apply.",
             "unit": "Raw combat points (before ÷10)"
           }
         },
@@ -467632,12 +467632,12 @@
               "scan-139",
               "rules-arrival-parenthesized"
             ],
-            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings. With ammunition for this loadout's non-parenthesized rating, parenthesized contributions are excluded by the chart legend; they cannot be added to that fire.",
+            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings. Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions. Parenthesized ratings apply only when attacked without a friendly unit in the hex possessing ammunition and an appropriate non-parenthesized rating (3.4/chart legend). This does not authorize a voluntary attack; HQ restrictions in 3.3 also apply.",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_defensive": {
             "value": 8.0,
-            "raw": "4 × 0 + 8 × 1",
+            "raw": "8 × 1",
             "status": "sourced",
             "conditional": true,
             "source_refs": [
@@ -467647,7 +467647,7 @@
               "scan-139",
               "rules-arrival-parenthesized"
             ],
-            "note": "Parenthesized ratings apply only when attacked without a friendly unit in the hex possessing ammunition and an appropriate non-parenthesized rating (3.4/chart legend). This does not authorize a voluntary attack; HQ restrictions in 3.3 also apply.",
+            "note": "Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions. Parenthesized ratings apply only when attacked without a friendly unit in the hex possessing ammunition and an appropriate non-parenthesized rating (3.4/chart legend). This does not authorize a voluntary attack; HQ restrictions in 3.3 also apply.",
             "unit": "Raw combat points (before ÷10)"
           }
         },
@@ -468174,12 +468174,12 @@
               "scan-139",
               "rules-arrival-parenthesized"
             ],
-            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings. With ammunition for this loadout's non-parenthesized rating, parenthesized contributions are excluded by the chart legend; they cannot be added to that fire.",
+            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings. Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions. Parenthesized ratings apply only when attacked without a friendly unit in the hex possessing ammunition and an appropriate non-parenthesized rating (3.4/chart legend). This does not authorize a voluntary attack; HQ restrictions in 3.3 also apply.",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_defensive": {
-            "value": 6.0,
-            "raw": "6 × 1 + 4 × 0 (parenthesized rating excluded)",
+            "value": 4.0,
+            "raw": "4 × 1",
             "status": "sourced",
             "conditional": true,
             "source_refs": [
@@ -468189,7 +468189,7 @@
               "scan-139",
               "rules-arrival-parenthesized"
             ],
-            "note": "With ammunition for this loadout's non-parenthesized rating, parenthesized contributions are excluded by the chart legend; they cannot be added to that fire.",
+            "note": "Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions. Parenthesized ratings apply only when attacked without a friendly unit in the hex possessing ammunition and an appropriate non-parenthesized rating (3.4/chart legend). This does not authorize a voluntary attack; HQ restrictions in 3.3 also apply.",
             "unit": "Raw combat points (before ÷10)"
           }
         },
@@ -468716,12 +468716,12 @@
               "scan-139",
               "rules-arrival-parenthesized"
             ],
-            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings. With ammunition for this loadout's non-parenthesized rating, parenthesized contributions are excluded by the chart legend; they cannot be added to that fire.",
+            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings. Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions. Parenthesized ratings apply only when attacked without a friendly unit in the hex possessing ammunition and an appropriate non-parenthesized rating (3.4/chart legend). This does not authorize a voluntary attack; HQ restrictions in 3.3 also apply.",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_defensive": {
             "value": 2.0,
-            "raw": "6 × 0 + 2 × 1",
+            "raw": "2 × 1",
             "status": "sourced",
             "conditional": true,
             "source_refs": [
@@ -468731,7 +468731,7 @@
               "scan-139",
               "rules-arrival-parenthesized"
             ],
-            "note": "Parenthesized ratings apply only when attacked without a friendly unit in the hex possessing ammunition and an appropriate non-parenthesized rating (3.4/chart legend). This does not authorize a voluntary attack; HQ restrictions in 3.3 also apply.",
+            "note": "Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions. Parenthesized ratings apply only when attacked without a friendly unit in the hex possessing ammunition and an appropriate non-parenthesized rating (3.4/chart legend). This does not authorize a voluntary attack; HQ restrictions in 3.3 also apply.",
             "unit": "Raw combat points (before ÷10)"
           }
         },
@@ -473704,28 +473704,28 @@
             "value": null,
             "raw": "May not assault",
             "status": "not_applicable",
-            "conditional": false,
+            "conditional": true,
             "source_refs": [
               "oa-arrival:oa-156-037",
               "rules-oa-reference",
               "rules-arrival-raw-strength",
               "scan-139"
             ],
-            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings.",
+            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings. Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions.",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_defensive": {
-            "value": 2.0,
-            "raw": "1 × 1 + 1 × 0 + 1 × 1",
-            "status": "sourced",
-            "conditional": false,
+            "value": null,
+            "raw": "May not assault",
+            "status": "not_applicable",
+            "conditional": true,
             "source_refs": [
               "oa-arrival:oa-156-037",
               "rules-oa-reference",
               "rules-arrival-raw-strength",
               "scan-139"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions.",
             "unit": "Raw combat points (before ÷10)"
           }
         },
@@ -474877,28 +474877,28 @@
             "value": null,
             "raw": "May not assault",
             "status": "not_applicable",
-            "conditional": false,
+            "conditional": true,
             "source_refs": [
               "oa-arrival:oa-156-040",
               "rules-oa-reference",
               "rules-arrival-raw-strength",
               "scan-139"
             ],
-            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings.",
+            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings. Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions.",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_defensive": {
-            "value": 0.0,
-            "raw": "5 × 0",
-            "status": "sourced",
-            "conditional": false,
+            "value": null,
+            "raw": "May not assault",
+            "status": "not_applicable",
+            "conditional": true,
             "source_refs": [
               "oa-arrival:oa-156-040",
               "rules-oa-reference",
               "rules-arrival-raw-strength",
               "scan-139"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions.",
             "unit": "Raw combat points (before ÷10)"
           }
         },
@@ -475281,28 +475281,28 @@
             "value": null,
             "raw": "May not assault",
             "status": "not_applicable",
-            "conditional": false,
+            "conditional": true,
             "source_refs": [
               "oa-arrival:oa-156-041",
               "rules-oa-reference",
               "rules-arrival-raw-strength",
               "scan-139"
             ],
-            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings.",
+            "note": "Emplaced guns may not assault; see the OA note. No offensive total inferred from generic gun ratings. Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions.",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_defensive": {
-            "value": 0.0,
-            "raw": "2 × 0",
-            "status": "sourced",
-            "conditional": false,
+            "value": null,
+            "raw": "May not assault",
+            "status": "not_applicable",
+            "conditional": true,
             "source_refs": [
               "oa-arrival:oa-156-041",
               "rules-oa-reference",
               "rules-arrival-raw-strength",
               "scan-139"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Emplaced artillery TOE cannot participate in offensive or defensive assault under the cited OA note. Exclude those guns before selecting eligible normal or parenthesized fire; non-emplaced AA retains its own restrictions.",
             "unit": "Raw combat points (before ÷10)"
           }
         },
@@ -504490,9 +504490,9 @@
         ],
         "arrival_totals": {
           "anti_air": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-159-028",
@@ -504500,13 +504500,13 @@
               "rules-arrival-aa-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Actual AA points"
           },
           "barrage": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-159-028",
@@ -504514,13 +504514,13 @@
               "rules-arrival-raw-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Raw combat points (before ÷10)"
           },
           "anti_armor": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-159-028",
@@ -504528,13 +504528,13 @@
               "rules-arrival-raw-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_offensive": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-159-028",
@@ -504542,13 +504542,13 @@
               "rules-arrival-raw-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_defensive": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-159-028",
@@ -504556,7 +504556,7 @@
               "rules-arrival-raw-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Raw combat points (before ÷10)"
           }
         },
@@ -509707,9 +509707,9 @@
         ],
         "arrival_totals": {
           "anti_air": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-160-041",
@@ -509717,13 +509717,13 @@
               "rules-arrival-aa-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Actual AA points"
           },
           "barrage": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-160-041",
@@ -509731,13 +509731,13 @@
               "rules-arrival-raw-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Raw combat points (before ÷10)"
           },
           "anti_armor": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-160-041",
@@ -509745,13 +509745,13 @@
               "rules-arrival-raw-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_offensive": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-160-041",
@@ -509759,13 +509759,13 @@
               "rules-arrival-raw-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_defensive": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-160-041",
@@ -509773,7 +509773,7 @@
               "rules-arrival-raw-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Raw combat points (before ÷10)"
           }
         },
@@ -515202,9 +515202,9 @@
         ],
         "arrival_totals": {
           "anti_air": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-160-055",
@@ -515212,13 +515212,13 @@
               "rules-arrival-aa-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Actual AA points"
           },
           "barrage": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-160-055",
@@ -515226,13 +515226,13 @@
               "rules-arrival-raw-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Raw combat points (before ÷10)"
           },
           "anti_armor": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-160-055",
@@ -515240,13 +515240,13 @@
               "rules-arrival-raw-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_offensive": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-160-055",
@@ -515254,13 +515254,13 @@
               "rules-arrival-raw-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Raw combat points (before ÷10)"
           },
           "close_assault_defensive": {
-            "value": 0.0,
-            "raw": "1 × 0",
-            "status": "sourced",
+            "value": null,
+            "raw": null,
+            "status": "unresolved",
             "conditional": false,
             "source_refs": [
               "oa-arrival:oa-160-055",
@@ -515268,7 +515268,7 @@
               "rules-arrival-raw-strength",
               "scan-169"
             ],
-            "note": "Sum of printed arrival TOE × rating. Not-applicable combat cells contribute no intrinsic points without replacing their source cells. No combat modifiers or scenario losses applied.",
+            "note": "Profile g: no assigned weapon model is printed (4.46).",
             "unit": "Raw combat points (before ÷10)"
           }
         },

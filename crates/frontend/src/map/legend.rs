@@ -26,7 +26,7 @@ pub(super) fn render() -> String {
         ("swamp", "Swamp"),
         ("heavy_vegetation", "Heavy vegetation"),
     ] {
-        write!(html, r#"<li><img class="legend-swatch" src="/art/terrain-v1/surfaces/{asset}.png" alt="" loading="lazy"><span>{label}</span></li>"#).unwrap();
+        write!(html, r#"<li><img class="legend-swatch" src="art/terrain-v1/surfaces/{asset}.png" alt="" loading="lazy"><span>{label}</span></li>"#).unwrap();
     }
     html.push_str(
         r#"</ul></section><section class="legend-tint-only"><h3>Terrain evidence tints</h3><p>Original terrain is off. Colored hexes show observed terrain, not surveyed extents. Overlapping observations can mix these tints; no tint means unmapped, not Clear.</p><ul class="legend-samples">"#,
@@ -94,7 +94,7 @@ pub(super) fn render() -> String {
         ("fortification_level_two", "Fortification II"),
         ("fortification_level_three", "Fortification III"),
     ] {
-        write!(html, r#"<li><img class="legend-point" src="/art/terrain-v1/overlays/{asset}.png" alt="" loading="lazy"><span>{label}</span></li>"#).unwrap();
+        write!(html, r#"<li><img class="legend-point" src="art/terrain-v1/overlays/{asset}.png" alt="" loading="lazy"><span>{label}</span></li>"#).unwrap();
     }
     html.push_str(
         r#"</ul></section><section class="legend-tint-only"><h3>Locations</h3><ul class="legend-samples"><li><svg viewBox="0 0 60 32" aria-hidden="true"><circle class="legend-location" cx="30" cy="16" r="4"/></svg><span>Location marker<small>Original terrain off</small></span></li></ul></section>

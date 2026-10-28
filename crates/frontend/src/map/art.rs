@@ -155,12 +155,12 @@ impl Artwork {
         let sx = f64::from(ground.board_width) / f64::from(level.width);
         let sy = f64::from(ground.board_height) / f64::from(level.height);
         let mut html = format!(
-            r#"<g class="terrain-art"><image href="/art/terrain-v1/ground/0/0_0.webp" width="{}" height="{}" preserveAspectRatio="none"/>"#,
+            r#"<g class="terrain-art"><image href="art/terrain-v1/ground/0/0_0.webp" width="{}" height="{}" preserveAspectRatio="none"/>"#,
             ground.board_width, ground.board_height
         );
         for y in y0..=y1 {
             for x in x0..=x1 {
-                write!(html, r#"<image class="terrain-art-tile" href="/art/terrain-v1/ground/{}/{x}_{y}.webp" x="{}" y="{}" width="{}" height="{}" preserveAspectRatio="none"/>"#,
+                write!(html, r#"<image class="terrain-art-tile" href="art/terrain-v1/ground/{}/{x}_{y}.webp" x="{}" y="{}" width="{}" height="{}" preserveAspectRatio="none"/>"#,
                     level.z, f64::from(x * 512) * sx, f64::from(y * 512) * sy,
                     f64::from((level.width - x * 512).min(512)) * sx,
                     f64::from((level.height - y * 512).min(512)) * sy).unwrap();
@@ -188,7 +188,7 @@ impl Artwork {
                 for (index, name) in points.iter().enumerate() {
                     let asset = &manifest()["assets"][name];
                     let x = c.x + (index as f64 - (points.len() - 1) as f64 / 2.0) * size * 0.7;
-                    write!(locations, r#"<image class="terrain-art-point" data-hex="{hex}" data-feature="{name}" href="/art/terrain-v1/{}" x="{:.2}" y="{:.2}" width="{size:.2}" height="{size:.2}" preserveAspectRatio="xMidYMid meet"/>"#, asset["path"].as_str().unwrap(), x - size / 2.0, c.y - size / 2.0).unwrap();
+                    write!(locations, r#"<image class="terrain-art-point" data-hex="{hex}" data-feature="{name}" href="art/terrain-v1/{}" x="{:.2}" y="{:.2}" width="{size:.2}" height="{size:.2}" preserveAspectRatio="xMidYMid meet"/>"#, asset["path"].as_str().unwrap(), x - size / 2.0, c.y - size / 2.0).unwrap();
                 }
             }
         }

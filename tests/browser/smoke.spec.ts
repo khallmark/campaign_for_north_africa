@@ -409,7 +409,7 @@ test('catalog original tokens follow reviewed links and survive late responses a
   await search.fill('oa-116-001-1st-armored-div-hq');
   await page.locator('.catalog-list .catalog-card').click();
   await expect(tokens.locator('img')).toHaveCount(1);
-  await expect(tokens.locator('img')).toHaveAttribute('src', '/__source-tokens/BR%201%20-%20none.svg');
+  await expect(tokens.locator('img')).toHaveJSProperty('src', new URL('__source-tokens/BR%201%20-%20none.svg', page.url()).href);
   await expect(tokens.locator('[data-state="loaded"]')).toBeVisible();
   expect((await tokens.locator('img').boundingBox())!.width).toBeGreaterThanOrEqual(160);
   unavailable = true;

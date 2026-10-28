@@ -70,7 +70,7 @@ impl References {
                     continue;
                 }
                 images.push_str(&format!(r#"<figure><div class="catalog-token-image" data-state="loading"><img data-source-token src="{}" alt="Original counter {}" /><span>Loading original token…</span></div><figcaption>{}<small>Source counter GPID {}</small></figcaption></figure>"#,
-                    escape(path), escape(&asset.id), escape(&asset.id), escape(&counter.gpid)));
+                    escape(path.trim_start_matches('/')), escape(&asset.id), escape(&asset.id), escape(&counter.gpid)));
             }
         }
         if images.is_empty() {
@@ -169,7 +169,7 @@ pub(super) fn load() {
 
 fn request() -> Result<(), JsValue> {
     let xhr = XmlHttpRequest::new()?;
-    xhr.open("GET", "/data/unit-reference.json")?;
+    xhr.open("GET", "data/unit-reference.json")?;
     xhr.set_timeout(15_000);
     let request = xhr.clone();
     let loaded = Closure::<dyn FnMut(Event)>::new(move |_| {
@@ -204,7 +204,7 @@ mod tests {
         let record = "oa-116-001-1st-armored-div-hq";
         let html = references.render(record);
         assert_eq!(html.matches("<img ").count(), 1);
-        assert!(html.contains("/__source-tokens/BR%201%20-%20none.svg"));
+        assert!(html.contains("src=\"__source-tokens/BR%201%20-%20none.svg\""));
         assert!(!references
             .render("oa-124-002-13th-light-aa-regt")
             .contains("<img "));

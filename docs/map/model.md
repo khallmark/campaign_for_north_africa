@@ -1,17 +1,19 @@
 # Regenerable source-grid research model
 
-The model now enumerates every representable section-local lattice center inside
-its calibrated VASSAL section polygon: **7,180 identities**, with six board-pixel
-corners each and **20,684 canonical internal shared sides**. Counts are Malta 67,
-A 1,013, B 1,989, C 1,545, D 1,253 and E 1,313. This is a complete enumeration
-under the **center-in-polygon policy**, not a complete terrain or playable-map
+The model enumerates section-local lattice centers inside calibrated VASSAL
+section polygons, excluding row zero: **7,076 identities**, with six board-pixel
+corners each and **20,375 canonical internal shared sides**. Counts are Malta 58,
+A 1,000, B 1,961, C 1,520, D 1,240 and E 1,297. This is a complete enumeration
+under the **center-in-polygon, positive-row policy**, not a complete terrain or playable-map
 transcription. Edge outlines are full Voronoi cells, not clipped coastline shapes.
 Cells whose centers fall outside the polygon are excluded even if a corner enters
 it. Raster-edge cells can extend outside the image. Sea cells are included.
 
 Geometry reuses [calibration](calibration.md) and [identities](hex-identities.md).
-The inventory preserves overlapping identities (for example A3033/B3000) and
-contains no cross-section edges. Neither parsing nor polygon membership confers
+The module-derived row-zero labels do not appear on the original map. Removing
+those 104 cells does not renumber or reposition any retained cell: A3033 remains,
+while B3000 is excluded. The inventory contains no cross-section edges.
+Neither parsing nor polygon membership confers
 playability. Original printed-number equivalence and seams remain unresolved.
 Calibration's 30 measured anchors constrain sampled alignment, not every cell.
 
@@ -81,8 +83,8 @@ retains the existing section priority and does not resolve seam identity.
 
 ## Whole-map raster examination is not complete semantic transcription
 
-All **7,180 cells and 20,684 internal sides** have been examined by the detector,
-with **35,900 cell/family ledger entries**. The five families are surface, terrain,
+All **7,076 cells and 20,375 internal sides** have been examined by the detector,
+with **35,380 cell/family ledger entries**. The five families are surface, terrain,
 transport, hexside and locations. `examination_coverage` reports their states by
 section. `detected` means a provisional interpretation, `candidate` means ink
 needs interpretation, `not_detected` means this detector found none (not confirmed
@@ -92,22 +94,22 @@ automated or agent-visual record is human-reviewed.
 
 | Section | Examined cells | Land / mixed / water / unresolved | Cells with terrain observations |
 | --- | ---: | --- | ---: |
-| Malta | 67 | 18 / 21 / 21 / 7 | 15 |
-| A | 1,013 | 879 / 62 / 64 / 8 | 628 |
-| B | 1,989 | 1,912 / 40 / 35 / 2 | 1,402 |
-| C | 1,545 | 1,462 / 42 / 36 / 5 | 865 |
-| D | 1,253 | 1,179 / 37 / 36 / 1 | 786 |
-| E | 1,313 | 994 / 273 / 41 / 5 | 956 |
+| Malta | 58 | 18 / 16 / 17 / 7 | 14 |
+| A | 1,000 | 866 / 62 / 64 / 8 | 623 |
+| B | 1,961 | 1,885 / 40 / 34 / 2 | 1,386 |
+| C | 1,520 | 1,438 / 41 / 36 / 5 | 859 |
+| D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
+| E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **252 surveys / 24,144 observations**: 4,792 terrain,
-19,206 hexside and 146 point observations. **7,704 are provisional, 16,440 unresolved,
-none human-reviewed.** Terrain observations cover 4,652 cells; 2,528 have none.
+The current combined model has **251 surveys / 23,849 observations**: 4,753 terrain,
+18,951 hexside and 145 point observations. **7,633 are provisional, 16,216 unresolved,
+none human-reviewed.** Terrain observations cover 4,614 cells; 2,462 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
 
-The extracted terrain occurrences are Clear 2,030, Rough 775, Desert 708,
-Gravel 453, Delta 326, Salt Marsh 294, Mountain 102, Swamp 26 and Heavy Vegetation 8.
+The extracted terrain occurrences are Clear 2,025, Rough 765, Desert 694,
+Gravel 447, Delta 326, Salt Marsh 291, Mountain 101, Swamp 26 and Heavy Vegetation 8.
 Broad mountain cores exclude narrow slope bands; partial patches remain evidence,
 not an assignment that an entire hex has one uniform surface. Original manual
 surveys remain separate and may overlap extracted observations.
@@ -116,8 +118,8 @@ Clear requires at least 99.5% matching blank background in the inset polygon and
 fewer than five terrain/water-ink pixels in the full polygon. Transport/grid
 antialiasing is excluded from that terrain test; failed matches stay unresolved.
 
-Transportation extraction currently yields 370 Road, 205 Railroad and 1,568 Track
-crossings; 707 Wadi side candidates are typed provisionally. Gray grid occlusion
+Transportation extraction currently yields 370 Road, 205 Railroad and 1,538 Track
+crossings; 705 Wadi side candidates are typed provisionally. Gray grid occlusion
 may be bridged, but light gaps between unfinished dashes/crosses may not. Known
 terrain swatches take precedence over interpolation that resembles road ink.
 Gray route ink is fitted over the terrain palette; connected stroke length is
@@ -146,14 +148,14 @@ No track is invented across C3019–C3020's blue barred side. At B4902 E, nearby
 continuous rail and dashed track both trigger; the mixed detector finding now
 stays unresolved instead of selecting Railroad. Its raw measurements remain.
 Conservative detection still leaves routes fragmented and uncertain.
-**19,176 side ink findings remain untyped**, with individual crops and measurements;
-16,211 extracted unresolved side observations expose generic candidates. Recovering
+**18,903 side ink findings remain untyped**, with individual crops and measurements;
+15,989 extracted unresolved side observations expose generic candidates. Recovering
 antialiased ink admits more candidates, including ambiguous grid/text strokes;
 these are evidence to inspect, not confirmed routes or operational links.
-Separately, 108 unresolved observations carry explicit unfinished construction
-depictions: 81 road observations (71 distinct sides) and 27 railroad observations.
-The 70 automatically recognized road sides include all 39 checked Siwa–Matruh
-crossings and source-backed stretches near Martuba, El Adem and Sollum. All 70
+Separately, 107 unresolved observations carry explicit unfinished construction
+depictions: 80 road observations (70 distinct sides) and 27 railroad observations.
+The 69 retained automatically recognized road sides include all 38 checked Siwa–Matruh
+crossings and source-backed stretches near Martuba, El Adem and Sollum. All 69
 were agent-inspected against enlarged source crops; ten overlap existing manual
 observations. They are excluded from network links, not counted as completed
 Road/Railroad, and do not establish scenario completion. The construction renderer
@@ -167,10 +169,10 @@ Combined distinct typed crossings (manual plus extracted; duplicates removed):
 | Section | Road | Railroad | Track |
 | --- | ---: | ---: | ---: |
 | A | 76 | 7 | 248 |
-| B | 57 | 5 | 465 |
-| C | 32 | 0 | 423 |
-| D | 36 | 26 | 284 |
-| E | 171 | 167 | 159 |
+| B | 57 | 5 | 448 |
+| C | 32 | 0 | 419 |
+| D | 36 | 26 | 283 |
+| E | 171 | 167 | 151 |
 | Malta | 0 | 0 | 0 |
 
 Zero means no typed crossings, not confirmed absence. In particular, disconnected
@@ -178,7 +180,7 @@ crosses on unfinished lines in C must not become completed railroads. Blue barre
 hexside marks remain unclassified. The renderer paints railroad spines and ties
 above roads, so coincident schematic links remain visible when the scan is hidden.
 
-All 117 detected blue-dot candidates were visually inspected for labels by an
+All 116 retained blue-dot candidates were visually inspected for labels by an
 agent. The combined Village/Bir glyph does not establish a water-source category;
 labels remain unresolved observations, including uncertain spellings and an
 unlabelled dot near Rifi. Additional source inspection records Malta's four named
@@ -190,8 +192,8 @@ city level, movement cost, water amount, bridge rule or legal movement is inferr
 
 ### Source-located symbols and reported track omissions
 
-The compact model's `examinations[hex].points` now retains all 121 detected glyphs
-(117 Village/Bir dots, two oasis and two port symbols) at their measured board-pixel
+The compact model's `examinations[hex].points` retains 120 detected glyphs
+(116 Village/Bir dots, two oasis and two port symbols) at their measured board-pixel
 centers. `symbol` is `village_bir_dot`, `oasis` or `port_icon`; `label` is optional,
 `status` is `unresolved` or `provisional`, and `source_refs` identifies the source
 crop and legend under the model's pinned SHA256 values. For example, C3111 carries
@@ -200,6 +202,7 @@ El Cuasc at `[6567.0, 2324.1]`, with `symbol: village_bir_dot` and
 promoting the operational observation to a town, water supply or port. Positions
 are validated against the owning hex's polygon, not global hit-picking across
 unresolved seams. Raw template scores and label crops remain in the ledger.
+Antelat remains at A3233; its duplicate B3200 association is excluded with row zero.
 
 The October 28 comparison of El Cuasc, the track north of El Grein and Ain Melfa
 found four omitted track crossings across six inspected route sequences. The
@@ -220,7 +223,8 @@ gate after recovery adds 12 source-inspected automatic crossings. Requiring actu
 ink on both sides of the finite edge removes the false C0925 east chord. Two
 source-cited corner corrections add C2414 east and C0825 northwest (to C0925).
 The Siwa–Matruh hollow-capsule route is tested across every internal crossing:
-C0127 through C0426 to C1833, then D1800 to D3612. No C1833/D1800 seam link or
+C0127 through C0426 to C1833, then D1901 to D3612. D1800 is excluded with row zero;
+no replacement C1833/D1901 seam link or
 scenario completion is inferred. C0436 is outside the calibrated inventory;
 the source route reaches D3612, not D0612.
 
@@ -229,8 +233,8 @@ from B1606 and its east crossing into B1508. Tests cover B1706–B1606–B1507�
 and reject a detour through B1607. Raw detector findings and its conservative
 endpoint exclusion remain unchanged.
 
-No ground assignments changed. Of 2,528 cells without typed ground, source-surface
-measurements report 2,087 land, 233 water, 184 mixed and 24 unresolved. A land
+No retained ground assignments changed. Of 2,462 cells without typed ground, source-surface
+measurements report 2,030 land, 228 water, 180 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
 

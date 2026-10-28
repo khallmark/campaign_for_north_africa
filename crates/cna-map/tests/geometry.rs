@@ -1,7 +1,8 @@
 use cna_map::geometry::{
-    center, corners, edge, edge_normal_bearing, hex_at, BoardPoint, TRAVEL_BEARINGS,
+    center, contains_hex, corners, edge, edge_normal_bearing, hex_at, hexes, BoardPoint,
+    TRAVEL_BEARINGS,
 };
-use cna_map::hex::{Direction, HexId, HexsideId};
+use cna_map::hex::{Direction, HexId, HexsideId, MapSection};
 
 fn close(actual: f64, expected: f64) {
     assert!((actual - expected).abs() < 1e-9, "{actual} != {expected}");
@@ -133,4 +134,28 @@ fn geometry_rejects_non_hex_regions_and_nonfinite_points() {
         };
         assert_eq!(hex_at(p), None, "{}", zone["name"]);
     }
+}
+
+#[test]
+fn geometry_excludes_row_zero_without_renumbering_or_hiding_adjacent_cells() {
+    assert!(hexes().iter().all(|hex| hex.row() > 0));
+    for section in MapSection::ALL {
+        for col in 0..100 {
+            let zero = HexId::new(section, col, 0).unwrap();
+            assert!(!contains_hex(zero), "{zero}");
+            assert_ne!(hex_at(center(zero)), Some(zero), "{zero}");
+        }
+    }
+    for id in ["Malta 0801", "A0201", "B3001", "C0201", "D1801", "E3001"] {
+        let hex: HexId = id.parse().unwrap();
+        assert!(contains_hex(hex), "{id}");
+        assert_eq!(hex_at(center(hex)), Some(hex), "{id}");
+    }
+    // Removing the duplicate zero-row identity must not remove its valid
+    // neighbor-section location or silently create a cross-section edge.
+    let a: HexId = "A3033".parse().unwrap();
+    let b: HexId = "B3000".parse().unwrap();
+    assert_eq!(hex_at(center(a)), Some(a));
+    assert_eq!(hex_at(center(b)), None);
+    assert!(Direction::ALL.into_iter().all(|d| a.neighbor(d) != Some(b)));
 }

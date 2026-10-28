@@ -64,7 +64,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     serde_json::to_writer(
         io::stdout().lock(),
         &json!({
-            "version":1,"membership":"calibrated_center_in_source_section_polygon",
+            "version":1,"membership":"calibrated_center_in_source_section_polygon_positive_row",
             "hexes":cells,"hexsides":sides,"sources":model.sources,"surveys":surveys,
             "examinations":model.examinations
         }),

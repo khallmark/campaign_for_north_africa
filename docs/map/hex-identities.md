@@ -8,6 +8,10 @@ The parser accepts exactly `A`–`E` plus four ASCII digits, or `Malta NNNN`.
 prefix, OCR correction, whitespace trimming, lowercase alias, or `Map C` alias.
 Coordinates 00–99 are syntactically representable; successful parsing does not
 prove a cell exists inside a section polygon, is land, or permits movement.
+The map inventory excludes row 00 (the second digit pair), which the module
+numbering introduces but the original map does not label. Remaining IDs and
+calibrated positions are unchanged. Lattice neighbors are still mathematical
+neighbors; map consumers must also check inventory membership.
 
 No reviewed mapping establishes equivalence to the original rulebook's printed
 hex numbers. Image calibration establishes grid alignment, not that identity

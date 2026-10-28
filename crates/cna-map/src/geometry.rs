@@ -148,12 +148,13 @@ pub fn center(hex: HexId) -> BoardPoint {
     grids()[hex.section() as usize].center(hex)
 }
 
-/// Calibrated center membership in the source section polygon, not playable land.
+/// Calibrated center membership, excluding the module's extra row zero.
+/// This does not establish playable land or cross-section connections.
 pub fn contains_hex(hex: HexId) -> bool {
-    grids()[hex.section() as usize].contains(center(hex))
+    hex.row() > 0 && grids()[hex.section() as usize].contains(center(hex))
 }
 
-/// Complete center-in-polygon inventory. Overlapping sections retain distinct IDs.
+/// Center-in-polygon inventory with row zero excluded, without renumbering cells.
 pub fn hexes() -> &'static [HexId] {
     static HEXES: OnceLock<Vec<HexId>> = OnceLock::new();
     HEXES.get_or_init(|| {
@@ -230,7 +231,7 @@ pub fn hex_at(point: BoardPoint) -> Option<HexId> {
                 }
                 let hex = HexId::new(section, col as u8, row as u8).unwrap();
                 let c = grid.center(hex);
-                if !grid.contains(c) {
+                if !contains_hex(hex) {
                     continue;
                 }
                 let delta = BoardPoint {

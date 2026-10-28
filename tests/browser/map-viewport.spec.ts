@@ -206,8 +206,8 @@ test('failed tiles retain placeholders and touch pinch preserves its midpoint', 
 test('source geometry and evidence remain inspectable without artwork or movement authority', async ({ page }) => {
   await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'Unavailable' }));
   await open(page);
-  await expect(page.locator('.geography-coverage')).toContainText('7180 source-grid hexes');
-  await expect(page.locator('.geography-coverage')).toContainText('7180 raster examinations');
+  await expect(page.locator('.geography-coverage')).toContainText('7076 source-grid hexes');
+  await expect(page.locator('.geography-coverage')).toContainText('7076 raster examinations');
   const input = page.getByRole('textbox', { name: 'Hex identity', exact: true });
   const inspect = async (id: string) => {
     await input.fill(id);
@@ -236,17 +236,18 @@ test('source geometry and evidence remain inspectable without artwork or movemen
   await expect(page.locator('.geography-inspector')).toContainText('operational hex association unresolved');
   await inspect('A3033');
   await expect(page.locator('.geography-hex[data-hex=A3033]')).toHaveCount(1);
-  await expect(page.locator('.geography-hex[data-hex=B3000]')).toHaveCount(1);
+  await expect(page.locator('.geography-hex[data-hex=B3000]')).toHaveCount(0);
   await expect(page.locator('.geography-inspector')).toContainText('A3033 · section-local identity');
-  const aLabel = (await page.locator('.geography-id').filter({ hasText: /^A3033$/ }).boundingBox())!;
-  const bLabel = (await page.locator('.geography-id').filter({ hasText: /^B3000$/ }).boundingBox())!;
-  expect(bLabel.y).toBeGreaterThanOrEqual(aLabel.y + aLabel.height);
+  await expect(page.locator('.geography-id').filter({ hasText: /^A3033$/ })).toBeVisible();
+  await expect(page.locator('.geography-id').filter({ hasText: /^B3000$/ })).toHaveCount(0);
   await inspect('B3000');
-  await expect(page.locator('.geography-inspector')).toContainText('B3000 · section-local identity');
+  await expect(page.locator('.geography-inspector')).toContainText('No source-grid hex here');
+  await expect(page.locator('.geography-selected')).toHaveCount(0);
+  await inspect('B3001');
+  await expect(page.locator('.geography-inspector')).toContainText('B3001 · section-local identity');
   await inspect('D3033');
-  const dLabel = (await page.locator('.geography-id').filter({ hasText: /^D3033$/ }).boundingBox())!;
-  const eLabel = (await page.locator('.geography-id').filter({ hasText: /^E3000$/ }).boundingBox())!;
-  expect(eLabel.y).toBeGreaterThanOrEqual(dLabel.y + dLabel.height);
+  await expect(page.locator('.geography-id').filter({ hasText: /^D3033$/ })).toBeVisible();
+  await expect(page.locator('.geography-id').filter({ hasText: /^E3000$/ })).toHaveCount(0);
   await inspect('E3525');
   await page.locator('.geography-examination > summary').click();
   await expect(page.locator('.geography-examination')).toContainText('mixed_water_land');

@@ -2,7 +2,7 @@
   "version": 1,
   "reviewer": "Amp visual transcription; human review pending",
   "date": "2026-10-25",
-  "notes": "All 117 detected blue-dot candidates inspected in source crops. Labels are associations with a symbol, not a settlement classification: TEC uses a combined Village/Bir glyph. No water yield, port capacity, fortification or playability is inferred from names. The nearby RIFI area label is not assigned to A2005. A1520 spelling remains uncertain. Co-located A3233 and B3200 retain separate identities. Missing detector candidates are not absent locations.",
+  "notes": "All 116 retained blue-dot candidates inspected in source crops. Labels are associations with a symbol, not a settlement classification: TEC uses a combined Village/Bir glyph. No water yield, port capacity, fortification or playability is inferred from names. The nearby RIFI area label is not assigned to A2005. A1520 spelling remains uncertain. Antelat remains at A3233; its duplicate B3200 is excluded with row zero. Missing detector candidates are not absent locations.",
   "labels": {
     "A0817": "Maradah",
     "A1318": "Maaten Groter",
@@ -35,7 +35,6 @@
     "B0712": "El Ergh",
     "B2602": "Giuf el Mater",
     "B3002": "Sauhu",
-    "B3200": "Antelat",
     "B3208": "Maaten el-Grara",
     "B3406": "Bir",
     "B3715": "Ben Gania",

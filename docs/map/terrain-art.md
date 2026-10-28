@@ -82,7 +82,8 @@ with a textual friendly/enemy label; circle/diamond shapes distinguish the color
 
 ## Coordinates and placement contract
 
-- The board is **14,310 × 4,632 board pixels**, with **7,180 section-local IDs**.
+- The board is **14,310 × 4,632 board pixels**, with **7,076 section-local IDs**
+  after excluding row zero without renumbering the remaining cells.
   `geometry::center`, `corners`, `edge` and `calibration.rs` remain authoritative.
   Never infer seam merges or replace these cells with a regular ideal hex grid.
 - Delivery raster tiles being 512px does **not** establish per-hex art dimensions.

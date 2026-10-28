@@ -25,8 +25,10 @@ class MapDatabaseTests(unittest.TestCase):
         module.populate(self.db, self.model)
 
     def test_geometry_unknowns_provenance_and_connected_networks(self):
-        self.assertEqual(self.db.execute("SELECT count(*) FROM hexes").fetchone()[0], 7180)
-        self.assertEqual(self.db.execute("SELECT count(*) FROM hexsides").fetchone()[0], 20684)
+        self.assertEqual(self.db.execute("SELECT count(*) FROM hexes").fetchone()[0], 7076)
+        self.assertEqual(self.db.execute("SELECT count(*) FROM hexsides").fetchone()[0], 20375)
+        self.assertEqual(self.db.execute("SELECT id FROM hexes WHERE row=0").fetchall(), [])
+        self.assertEqual(self.db.execute("SELECT from_hex,to_hex FROM network_links WHERE from_hex LIKE '%00' OR to_hex LIKE '%00'").fetchall(), [])
         self.assertEqual(self.db.execute("PRAGMA integrity_check").fetchone()[0], "ok")
         self.assertEqual(self.db.execute("PRAGMA foreign_key_check").fetchall(), [])
         self.assertEqual(self.db.execute("SELECT terrain_status FROM hexes WHERE id='A4829'").fetchone()[0], "unmapped")
@@ -94,11 +96,11 @@ class MapDatabaseTests(unittest.TestCase):
 
     def test_siwa_matruh_unfinished_road_is_depicted_but_not_an_operational_road(self):
         # Read from source (7800,3200,1150,1380) and (8550,1800,1200,1500).
-        # C1833 and D1800 overlap on paper; do not invent a section-seam link.
+        # Row zero is excluded; do not replace D1800 with an invented seam link.
         for route in (
             'C0127 C0227 C0327 C0426 C0527 C0627 C0728 C0828 C0929 C1029 '
             'C1130 C1230 C1331 C1332 C1432 C1533 C1633 C1733 C1833',
-            'D1800 D1901 D2001 D2002 D2103 D2203 D2204 D2305 D2405 D2406 '
+            'D1901 D2001 D2002 D2103 D2203 D2204 D2305 D2405 D2406 '
             'D2507 D2607 D2708 D2808 D2909 D3009 D3110 D3210 D3311 D3411 D3512 D3612',
         ):
             cells = route.split()
@@ -114,9 +116,9 @@ class MapDatabaseTests(unittest.TestCase):
                     ''', (start, end)).fetchone())
 
     def test_whole_map_evidence_preserves_uncertainty_and_source_controls(self):
-        self.assertEqual(self.db.execute("SELECT count(*) FROM cell_measurements").fetchone()[0], 7180)
-        self.assertEqual(self.db.execute("SELECT count(*) FROM side_examinations").fetchone()[0], 20684)
-        self.assertEqual(self.db.execute("SELECT count(*) FROM examinations").fetchone()[0], 35900)
+        self.assertEqual(self.db.execute("SELECT count(*) FROM cell_measurements").fetchone()[0], 7076)
+        self.assertEqual(self.db.execute("SELECT count(*) FROM side_examinations").fetchone()[0], 20375)
+        self.assertEqual(self.db.execute("SELECT count(*) FROM examinations").fetchone()[0], 35380)
         self.assertEqual(self.db.execute("""
             SELECT section,family FROM examination_coverage GROUP BY section,family
             HAVING sum(hexes)<>(SELECT count(*) FROM hexes h WHERE h.section=examination_coverage.section)
@@ -233,7 +235,9 @@ class MapDatabaseTests(unittest.TestCase):
             SELECT symbol,center_x,center_y,label,status FROM source_points WHERE hex='C3111'
         ''').fetchall(), [('village_bir_dot', 6567.0, 2324.1, 'El Cuasc', 'unresolved')])
         self.assertEqual(dict(self.db.execute('SELECT symbol,count(*) FROM source_points GROUP BY symbol')),
-                         {'village_bir_dot': 117, 'oasis': 2, 'port_icon': 2})
+                         {'village_bir_dot': 116, 'oasis': 2, 'port_icon': 2})
+        self.assertEqual(self.db.execute("SELECT hex FROM source_points WHERE label='Antelat'").fetchall(),
+                         [('A3233',)])
         for hex_id, examination in self.model['examinations'].items():
             for point in examination['points']:
                 self.assertIsNotNone(self.db.execute('''

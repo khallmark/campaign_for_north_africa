@@ -7,13 +7,13 @@ use cna_map::{
 use std::collections::BTreeSet;
 
 #[test]
-fn complete_section_inventory_preserves_overlapping_identities_and_excludes_offboard_ids() {
+fn complete_section_inventory_excludes_row_zero_and_offboard_ids() {
     let members: BTreeSet<_> = hexes().iter().copied().collect();
     assert_eq!(members.len(), hexes().len());
-    // Pinned calibrated polygon census, including Malta and raster edge cells.
+    // Calibrated polygon census minus each section's extra row-zero cells.
     for (section, count) in MapSection::ALL
         .into_iter()
-        .zip([67, 1013, 1989, 1545, 1253, 1313])
+        .zip([58, 1000, 1961, 1520, 1240, 1297])
     {
         assert_eq!(
             members.iter().filter(|h| h.section() == section).count(),
@@ -28,7 +28,7 @@ fn complete_section_inventory_preserves_overlapping_identities_and_excludes_offb
     }
     let a: HexId = "A3033".parse().unwrap();
     let b: HexId = "B3000".parse().unwrap();
-    assert!(members.contains(&a) && members.contains(&b));
+    assert!(members.contains(&a) && !members.contains(&b));
     assert!((center(a).x - center(b).x).abs() < 3.0);
     assert!(Direction::ALL.into_iter().all(|d| a.neighbor(d) != Some(b)));
     for id in ["A0000", "C9999", "D3000"] {

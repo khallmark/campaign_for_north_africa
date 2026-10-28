@@ -419,6 +419,10 @@ def generate():
             "coverage": {"kind": "point", "hexes": [hex_id], "observation": {
                 "status": "unresolved", "source_label": label+"; Village/Bir glyph, operational category unresolved"}}})
     for cell in cells:
+        for point in cell["points"]:
+            bounds = point.get("label_crop", cell["crop"])
+            point["source_refs"] = [rules["source"]+"#xywh="+",".join(map(str, bounds)),
+                                    rules["legend"]+"#legend/"+point["symbol"]]
         for terrain in cell["terrain"]:
             groups[(cell["section"], "terrain", terrain)].append(cell["hex"])
         for symbol in sorted({point["symbol"] for point in cell["points"]}):
@@ -465,7 +469,10 @@ def generate():
                   "unresolved": "Raster examined; no supported interpretation, never default Clear"},
               "limitations": rules["notes"], "coverage": coverage, "cells": cells, "sides": sides}
     extracted = {"version": 1, "sources": sources, "surveys": surveys,
-                 "examinations": {c["hex"]: {k: c[k] for k in ("crop", "surface", "families")} for c in cells}}
+                 "examinations": {c["hex"]: {
+                     **{k: c[k] for k in ("crop", "surface", "families")},
+                     "points": [{k: p[k] for k in ("symbol", "center", "label", "status", "source_refs") if k in p}
+                                for p in c["points"]]} for c in cells}}
     ledger["extracted_sha256"] = hashlib.sha256((encode(extracted)+"\n").encode()).hexdigest()
     return ledger, extracted
 

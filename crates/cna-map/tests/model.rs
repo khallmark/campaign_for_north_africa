@@ -1,7 +1,7 @@
 use cna_map::{
     geometry::{center, contains_hex, hexes},
     hex::{Direction, HexId, MapSection},
-    model::{model, Model},
+    model::{model, Model, SourcePointStatus, SourceSymbol},
     terrain::{MapRecord, Observation, TransportDepiction},
 };
 use std::collections::BTreeSet;
@@ -95,4 +95,48 @@ fn source_surveys_expand_into_map_v1_without_promoting_uncertainty() {
         .unwrap()
         .validate()
         .is_err());
+}
+
+#[test]
+fn source_locations_keep_measured_symbols_labels_and_uncertainty() {
+    let hex: HexId = "C3111".parse().unwrap();
+    let points = &model().examinations[&hex].points;
+    assert_eq!(points.len(), 1);
+    assert_eq!(points[0].symbol, SourceSymbol::VillageBirDot);
+    assert_eq!(points[0].center, [6567.0, 2324.1]);
+    assert_eq!(points[0].label.as_deref(), Some("El Cuasc"));
+    assert_eq!(points[0].status, SourcePointStatus::Unresolved);
+    assert_eq!(points[0].source_refs.len(), 2);
+    assert!(matches!(
+        &model()
+            .surveys
+            .iter()
+            .find(|s| s.id == "label-C3111")
+            .unwrap()
+            .coverage,
+        cna_map::model::Coverage::Point {
+            observation: Observation::Unresolved { .. },
+            ..
+        }
+    ));
+    let original = serde_json::to_value(model()).unwrap();
+    for (field, invalid) in [
+        ("center", serde_json::json!([6600.0, 2400.0])),
+        ("label", serde_json::json!(" ")),
+        ("source_refs", serde_json::json!([])),
+        (
+            "source_refs",
+            serde_json::json!(["untracked.png#xywh=1,2,3,4"]),
+        ),
+    ] {
+        let mut changed = original.clone();
+        changed["examinations"]["C3111"]["points"][0][field] = invalid;
+        assert!(
+            serde_json::from_value::<Model>(changed)
+                .unwrap()
+                .validate()
+                .is_err(),
+            "{field}"
+        );
+    }
 }

@@ -342,7 +342,7 @@ impl Research {
                 node.append_child(&image).unwrap();
                 self.board.append_child(&node).unwrap();
                 image
-                    .set_attribute("src", &format!("/tiles/map/{}/{x}_{y}.png", level.z))
+                    .set_attribute("src", &format!("tiles/map/{}/{x}_{y}.png", level.z))
                     .unwrap();
                 self.tiles.insert(key, node);
             }
@@ -367,7 +367,7 @@ fn pointer_geometry(points: &BTreeMap<i32, ScreenPoint>) -> (ScreenPoint, f64) {
 
 fn request_manifest(state: Rc<RefCell<Research>>) -> Result<(), JsValue> {
     let xhr = XmlHttpRequest::new()?;
-    xhr.open("GET", "/tiles/map/manifest.json")?;
+    xhr.open("GET", "tiles/map/manifest.json")?;
     xhr.set_timeout(10_000);
     let request = xhr.clone();
     let loaded = Closure::<dyn FnMut(Event)>::new(move |_| {
@@ -404,7 +404,7 @@ fn request_manifest(state: Rc<RefCell<Research>>) -> Result<(), JsValue> {
                 overview.set_attribute("fetchpriority", "high").unwrap();
                 state.board.prepend_with_node_1(&overview).unwrap();
                 overview
-                    .set_attribute("src", "/tiles/map/0/0_0.png")
+                    .set_attribute("src", "tiles/map/0/0_0.png")
                     .unwrap();
             }
             state.manifest = Some(manifest);

@@ -47,7 +47,7 @@ impl Inventory {
     pub fn panel(&self) -> String {
         let ready = self.entries.iter().filter(|e| e.sprite.ready()).count();
         let roles: String = ROLES.iter().map(|role| format!(
-            r#"<article class="deployment-card"><img src="/sprites/{}.png" alt="" loading="lazy"/><h3>{}</h3><p>{}</p><small>{} · {} CP · range {}</small><button data-action="deploy-role" data-role="{}">Place role unit</button></article>"#,
+            r#"<article class="deployment-card"><img src="sprites/{}.png" alt="" loading="lazy"/><h3>{}</h3><p>{}</p><small>{} · {} CP · range {}</small><button data-action="deploy-role" data-role="{}">Place role unit</button></article>"#,
             role.id, role.name, role.description, role.domain_name(), role.cp, role.range, role.id
         )).collect();
         format!(
@@ -110,7 +110,7 @@ impl Inventory {
             let role = entry.role_id.as_deref().and_then(role);
             let portrait = if entry.sprite.ready() { entry.sprite.portrait_path.clone() }
                 else { role.map(|r| format!("/sprites/{}.png", r.id)) };
-            let image = portrait.as_ref().map(|p| format!("<img src=\"{}\" alt=\"\" loading=\"lazy\"/>", escape(p))).unwrap_or_default();
+            let image = portrait.as_ref().map(|p| format!("<img src=\"{}\" alt=\"\" loading=\"lazy\"/>", escape(p.trim_start_matches('/')))).unwrap_or_default();
             format!(r#"<article class="deployment-card">{image}<h3>{}</h3><small>{} · {}</small><p>{}</p><small>{} · {} source rows</small><button data-action="deploy-identity" data-identity="{}" {}>{}</button></article>"#,
                 escape(&entry.name), escape(&entry.entity_kind), escape(&entry.side),
                 if entry.sprite.ready() { "Unique identity artwork" } else if portrait.is_none() { "Artwork unavailable" } else { "Unique art missing — shared role placeholder" },

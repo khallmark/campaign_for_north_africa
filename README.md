@@ -40,6 +40,22 @@ npm run build
 
 `npm run dev` builds Rust/Wasm before starting Vite, which prints the development URL. After editing Rust, run `npm run wasm` and reload the page. `npm run preview` serves the production build. No game account, backend, or API key is needed. Fonts use Google Fonts with local system fallbacks. Rulebook games resume from browser storage; review-only counters reset on reload.
 
+### GitHub Pages
+
+The **Deploy Pages** workflow is manual: select the validated source branch and
+enter its full commit SHA as `expected_sha`. A mismatched head fails before build;
+pushes never deploy automatically. Enable **Settings → Pages → GitHub Actions**
+before the first release. The workflow must exist on the default branch to dispatch.
+
+The release builds with `CNA_PUBLIC_BASE=/campaign_for_north_africa/`, exercises
+that path in Chromium, and uploads only `dist/`. Existing source-fingerprint and
+credential guards run alongside a Pages-specific file allowlist that rejects
+private review tiles, PDFs, SQLite, hidden files, links and credential markers.
+Original artwork is not hydrated or published. Generated terrain and illustrations
+remain available; original-token references show the private-review limitation.
+`deployment.json` records the exact source SHA for post-release verification.
+To roll back, dispatch the workflow at a previously validated release ref and SHA.
+
 ## Validation
 
 Run `npm run check` for fast default checks, then `npm run test:e2e` before review.

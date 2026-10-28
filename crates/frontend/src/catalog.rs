@@ -247,7 +247,7 @@ impl Catalog {
             let image = self.entries.iter()
                 .find(|record| record.kind == "unit_type" && record.unit_type == id)
                 .and_then(|record| record.sprite.as_ref())
-                .map(|sprite| format!("<img src=\"{}\" alt=\"\" loading=\"lazy\" />", escape(&sprite.path)))
+                .map(|sprite| format!("<img src=\"{}\" alt=\"\" loading=\"lazy\" />", escape(sprite.path.trim_start_matches('/'))))
                 .unwrap_or_default();
             Some(format!(r#"<button class="catalog-type" id="catalog-type-{}" data-action="catalog-type" data-type="{}" aria-label="Explore {}">{image}<strong>{}</strong><span>Matching records: {members}</span><span aria-hidden="true">›</span></button>"#, escape(id), escape(id), escape(name), escape(name)))
         }).collect();
@@ -377,7 +377,7 @@ impl Catalog {
             .map(|sprite| {
                 format!(
                     r#"<img src="{}" alt="" loading="lazy" />"#,
-                    escape(&sprite.path)
+                    escape(sprite.path.trim_start_matches('/'))
                 )
             })
             .unwrap_or_default();

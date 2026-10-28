@@ -5,14 +5,16 @@ import { defineConfig, loadEnv } from 'vite';
 
 // Explicit local review opt-in. Never copy this source artwork into a build.
 export default defineConfig(({ command, mode }) => {
+  const base = process.env.CNA_PUBLIC_BASE || '/';
   // Vite serves workspace files outside public/ too, including /@fs and ?raw.
   // Source images must use the opted-in middleware; the DB is never served.
   const server = { fs: { deny: ['.env', '.env.*', '*.{crt,pem}', '**/.git/**', '**/*.sqlite{,-*}', '**/docs/CNAv2.1.0/images/**'] } };
   const directory = loadEnv(mode, process.cwd(), 'CNA_PRIVATE_REVIEW_').CNA_PRIVATE_REVIEW_TILES;
-  if (command !== 'serve' || !directory) return { server };
+  if (command !== 'serve' || !directory) return { base, server };
   const root = resolve(directory);
   const sourceRoot = resolve('docs/CNAv2.1.0/images');
   return {
+    base,
     server,
     plugins: [{
       name: 'cna-private-review-tiles',

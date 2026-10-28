@@ -439,7 +439,8 @@ pub fn mount() -> Result<(), JsValue> {
         <div class="geography-switches"><button data-map-control="art" aria-pressed="true">Original terrain</button><button data-map-control="grid" aria-pressed="true">Hex grid</button><button data-map-control="features" aria-pressed="true">Geography</button><button data-map-control="source" aria-pressed="false" disabled hidden>Source scan</button><button data-map-control="inspect" aria-pressed="false">Inspect mode</button></div>
         <form class="geography-search"><label for="geography-id">Hex identity</label><input id="geography-id" placeholder="D3714" maxlength="10" autocomplete="off"><button type="submit">Inspect hex</button></form>
         <p class="geography-coverage"></p>
-        <details class="geography-details"><summary>Hex evidence</summary>
+        <div class="geography-legend-slot"></div>
+        <details class="geography-details" name="map-reference"><summary>Hex evidence</summary>
           <p class="terrain-art-key">Terrain blends are illustrative, not surveyed extents. Gray = unknown. Compare Source scan at the same camera position.</p>
           <p class="geography-key">Terrain/water tint = provisional · orange road / dark railroad with ties / dotted track · violet dashed road / violet dashed railroad with ties = unfinished source depiction, unresolved and not operational links · blue hexside · magenta side/dot = unclassified · all routes schematic, not exact linework · raster examination is not complete transcription</p>
           <div class="geography-inspector" aria-live="polite">Enable Inspect mode and click a hex, or enter its section-local identity. Enter inspects the viewport center. Grid labels appear at detail scale.</div>
@@ -447,6 +448,9 @@ pub fn mount() -> Result<(), JsValue> {
       </div>
       <div class="research-viewport" tabindex="0" role="region" aria-label="Full-board map" aria-describedby="research-help"><div class="research-board" data-source-visible="false"></div><div id="board-counters"></div></div>
       <div class="research-footer"><p id="research-help">Drag to pan · scroll to zoom · arrows / + / − / Home</p><output class="research-readout"></output></div>"#);
+    root.query_selector(".geography-legend-slot")?
+        .unwrap()
+        .set_inner_html(&super::legend::render());
     document()
         .query_selector(".board-workspace")?
         .unwrap()

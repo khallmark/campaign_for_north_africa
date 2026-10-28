@@ -1,5 +1,89 @@
 import { expect, test } from '@playwright/test';
 
+test('map legend explains active symbols and scrolls without moving the map', async ({ page }) => {
+  await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'No private scan' }));
+  await page.goto('/');
+  const summary = page.locator('.geography-legend > summary');
+  const legend = page.getByRole('region', { name: 'Map legend', exact: true });
+  const camera = () => page.locator('.research-viewport').evaluate((el: HTMLElement) =>
+    [el.dataset.centerX, el.dataset.centerY, el.dataset.zoom]);
+  await expect(summary).toBeVisible();
+  await expect(legend).toBeHidden();
+  const initialCamera = await camera();
+  await summary.focus();
+  await page.keyboard.press('Enter');
+  await expect(legend).toBeVisible();
+  await expect(legend.getByRole('heading')).toHaveText([
+    'Terrain tiles', 'Routes & construction', 'Water & hexsides', 'Places & facilities', 'Unclassified evidence', 'Hex grid',
+  ]);
+  await expect(legend).toContainText('Not Clear');
+  await expect(legend).toContainText('excluded from network links');
+  await expect(legend).toContainText('not surveyed boundaries');
+  // All samples are real bundled assets, including below-the-fold lazy images.
+  expect(await legend.locator('img').evaluateAll(async images => {
+    return Promise.all(images.map(async (node: HTMLImageElement) => {
+      node.loading = 'eager';
+      await node.decode();
+      return node.naturalWidth > 0;
+    }));
+  })).not.toContain(false);
+  await expect(legend.locator('.legend-route.railroad').first()).toHaveCSS('stroke', 'rgb(41, 61, 58)');
+  await expect(legend.locator('.legend-construction.unfinished-railroad')).toHaveCSS('stroke', 'rgb(113, 68, 160)');
+  await legend.hover();
+  await page.mouse.wheel(0, 450);
+  await expect.poll(() => legend.evaluate(el => el.scrollTop)).toBeGreaterThan(0);
+  expect(await camera()).toEqual(initialCamera);
+  await legend.focus();
+  await page.keyboard.press('End');
+  await expect(legend.getByText(/Only enabled layers/)).toBeInViewport();
+  await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  await expect(legend.getByRole('heading', { name: 'Terrain tiles', exact: true })).toBeHidden();
+  await expect(legend.getByRole('heading', { name: 'Terrain evidence tints', exact: true })).toBeVisible();
+  await expect(legend.getByRole('heading', { name: 'Locations', exact: true })).toBeVisible();
+  await expect(legend.getByRole('heading', { name: 'Places & facilities', exact: true })).toBeHidden();
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await expect(legend.getByRole('heading')).toHaveText(['Hex grid']);
+  await page.getByRole('button', { name: 'Hex grid', exact: true }).click();
+  await expect(legend.locator('.legend-empty')).toBeVisible();
+  await page.getByRole('button', { name: 'Inspect mode', exact: true }).click();
+  await expect(legend.getByRole('heading')).toHaveText(['Inspect mode', 'Inspected hex']);
+  await expect(legend.locator('.legend-empty')).toBeHidden();
+  await page.getByRole('button', { name: 'Inspect mode', exact: true }).click();
+  await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  await expect(legend.getByRole('heading')).toHaveText(['Terrain tiles']);
+  expect(await camera()).toEqual(initialCamera);
+  await summary.focus();
+  await page.keyboard.press('Space');
+  await expect(legend).toBeHidden();
+  await summary.click();
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('C4217');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  await expect(page.locator('.geography-inspector')).toContainText('C4217');
+  await expect(legend).toBeHidden();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await summary.click();
+  await expect(legend).toBeVisible();
+  await expect(page.locator('.geography-inspector')).toBeHidden();
+  const tools = page.locator('.geography-tools');
+  const box = (await tools.boundingBox())!;
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width).toBeLessThanOrEqual(390);
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.y + box.height).toBeLessThan(844);
+  for (const panel of await page.locator('.floating-panel').all()) {
+    const panelBox = (await panel.boundingBox())!;
+    expect(box.y).toBeGreaterThan(panelBox.y + panelBox.height);
+  }
+  expect(await tools.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
+  await legend.focus();
+  await page.keyboard.press('End');
+  await expect(legend.getByText(/Only enabled layers/)).toBeInViewport();
+  await summary.focus();
+  await page.keyboard.press('Enter');
+  await expect(legend).toBeHidden();
+});
+
 test('bundled terrain works without private scans and survives map controls', async ({ page }) => {
   const failedArt: string[] = [];
   const errors: string[] = [];
@@ -103,7 +187,12 @@ test('source scan and original terrain can be compared together or independently
     [el.dataset.centerX, el.dataset.centerY, el.dataset.zoom]);
   await expect(source).toBeEnabled();
   const initialCamera = await camera();
+  await page.locator('.geography-legend > summary').click();
+  const legend = page.getByRole('region', { name: 'Map legend', exact: true });
+  await expect(legend.getByRole('heading', { name: 'Source scan', exact: true })).toBeHidden();
   await source.click();
+  await expect(legend.getByRole('heading', { name: 'Source scan', exact: true })).toBeVisible();
+  await expect(legend.getByText(/55% opacity/)).toBeVisible();
   await expect(art).toHaveAttribute('aria-pressed', 'true');
   await expect(source).toHaveAttribute('aria-pressed', 'true');
   await expect(ground).toBeVisible();
@@ -112,6 +201,8 @@ test('source scan and original terrain can be compared together or independently
   await expect(page.locator('.research-tile[data-ready=true]').first()).toBeVisible();
   await art.click();
   await expect(ground).toBeHidden();
+  await expect(legend.getByText(/55% opacity/)).toBeHidden();
+  await expect(legend.getByRole('heading', { name: 'Terrain tiles', exact: true })).toBeHidden();
   await expect(source).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('.research-overview')).toBeVisible();
   await art.click();
@@ -119,6 +210,7 @@ test('source scan and original terrain can be compared together or independently
   await expect(ground).toBeVisible();
   await source.click();
   await expect(art).toHaveAttribute('aria-pressed', 'true');
+  await expect(legend.getByRole('heading', { name: 'Source scan', exact: true })).toBeHidden();
   await expect(ground).toHaveCSS('opacity', '1');
   await expect(page.locator('.research-tile')).toHaveCount(0);
   expect(await camera()).toEqual(initialCamera);

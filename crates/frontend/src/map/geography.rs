@@ -5,11 +5,24 @@ use cna_map::{
     geometry::{center, corners, edge, hexes},
     hex::HexId,
     model::{model, Coverage},
-    terrain::{MapRecord, Observation, TransportDepiction},
+    terrain::{MapRecord, Observation, Terrain, TransportDepiction},
     viewport::Viewport,
 };
 use std::{collections::BTreeMap, fmt::Write};
 use web_sys::Element;
+
+pub(super) fn terrain_color(terrain: &Terrain) -> &'static str {
+    match terrain {
+        Terrain::Desert => "#d9a92e",
+        Terrain::Mountain => "#806044",
+        Terrain::Delta => "#3d877b",
+        Terrain::SaltMarsh => "#9b83af",
+        Terrain::Clear => "#eee9d2",
+        Terrain::Gravel => "#b7a77a",
+        Terrain::HeavyVegetation | Terrain::Swamp => "#629659",
+        _ => "#ad8c58",
+    }
+}
 
 pub(super) struct Geography {
     svg: Element,
@@ -379,17 +392,7 @@ impl Geography {
                         {
                             let color = match &record.observation {
                                 Observation::Provisional { value }
-                                | Observation::Reviewed { value } => match value {
-                                    cna_map::terrain::Terrain::Desert => "#d9a92e",
-                                    cna_map::terrain::Terrain::Mountain => "#806044",
-                                    cna_map::terrain::Terrain::Delta => "#3d877b",
-                                    cna_map::terrain::Terrain::SaltMarsh => "#9b83af",
-                                    cna_map::terrain::Terrain::Clear => "#eee9d2",
-                                    cna_map::terrain::Terrain::Gravel => "#b7a77a",
-                                    cna_map::terrain::Terrain::HeavyVegetation
-                                    | cna_map::terrain::Terrain::Swamp => "#629659",
-                                    _ => "#ad8c58",
-                                },
+                                | Observation::Reviewed { value } => terrain_color(value),
                                 _ => "#a65e72",
                             };
                             write!(html, "<polygon class=geography-terrain data-hex=\"{hex}\" points=\"{}\" fill=\"{color}\"/>", polygon(*hex)).unwrap();

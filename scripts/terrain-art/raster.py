@@ -5,7 +5,7 @@
 """Bake original materials into display tiles. Never reads private source images.
 
 The blend is illustrative, not an extraction of terrain extent. Unknown cells
-are clipped out of the material masks. Coordinates come from map-model.
+keep a neutral paper substrate, never a terrain material. Coordinates come from map-model.
 """
 import argparse
 import hashlib
@@ -96,7 +96,7 @@ def render_tile(box, cells, textures):
         weight = np.asarray(mask.filter(ImageFilter.GaussianBlur(12)), dtype=np.float32)
         colors += texture_region(textures[material], origin, size) * weight[:, :, None]
         total += weight
-    result = np.full((size[1], size[0], 3), UNKNOWN, dtype=np.uint8)
+    result = np.clip(np.rint(texture_region(textures["unmapped"], origin, size)), 0, 255).astype(np.uint8)
     supported = (np.asarray(known) > 0) & (total > 0)
     result[supported] = np.clip(np.rint(colors[supported] / total[supported, None]), 0, 255).astype(np.uint8)
     return Image.fromarray(result).crop((PAD, PAD, size[0] - PAD, size[1] - PAD))
@@ -110,7 +110,7 @@ def build(check):
     cells = cells_from_model(model, art["recipes"]["terrain"])
     inputs = {"cells": cells, "board": art["board_pixels"],
               "surfaces": {name: asset["sha256"] for name, asset in art["assets"].items()
-                           if asset["kind"] == "surface"},
+                           if asset["kind"] in ("surface", "substrate")},
               "generator": digest(Path(__file__).read_bytes())}
     fingerprint = digest(json.dumps(inputs, sort_keys=True).encode())
     if check:
@@ -122,7 +122,7 @@ def build(check):
         return
     textures = {name: np.asarray(Image.open(PACK / asset["path"]).convert("RGB").resize(
                     (320, 320), Image.Resampling.LANCZOS))
-                for name, asset in art["assets"].items() if asset["kind"] == "surface"}
+                for name, asset in art["assets"].items() if asset["kind"] in ("surface", "substrate")}
     width, height = art["board_pixels"]
     board = Image.new("RGB", (width, height), UNKNOWN)
     for y in range(0, height, TILE):

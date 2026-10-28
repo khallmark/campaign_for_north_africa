@@ -67,6 +67,9 @@ impl Artwork {
                     }
                 }
                 MapRecord::Point { hex, record } => {
+                    if super::source_points::replaces_marker(*hex, record) {
+                        continue;
+                    }
                     let Some(value) = known(&record.observation) else {
                         continue;
                     };

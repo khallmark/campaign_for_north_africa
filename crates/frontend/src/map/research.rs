@@ -231,7 +231,7 @@ impl Research {
         self.status.set_text_content(Some(if self.geography.original_art && self.source_visible {
             "Source scan + original terrain · translucent illustrative art · routes schematic"
         } else if self.geography.original_art {
-            "Original terrain art · illustrative blends, not surveyed boundaries · gray = unknown · routes schematic"
+            "Original terrain art · illustrative blends, not surveyed boundaries · neutral paper = unmapped · routes schematic"
         } else if self.source_visible {
             "Source map loaded · terrain and seams unverified"
         } else {
@@ -441,7 +441,7 @@ pub fn mount() -> Result<(), JsValue> {
         <p class="geography-coverage"></p>
         <div class="geography-legend-slot"></div>
         <details class="geography-details" name="map-reference"><summary>Hex evidence</summary>
-          <p class="terrain-art-key">Terrain blends are illustrative, not surveyed extents. Gray = unknown. Compare Source scan at the same camera position.</p>
+          <p class="terrain-art-key">Terrain blends are illustrative, not surveyed extents. Neutral paper = unmapped, not Clear. Compare Source scan at the same camera position.</p>
           <p class="geography-key">Terrain/water tint = provisional · orange road / dark railroad with ties / dotted track · violet dashed road / violet dashed railroad with ties = unfinished source depiction, unresolved and not operational links · blue hexside · magenta side/dot = unclassified · all routes schematic, not exact linework · raster examination is not complete transcription</p>
           <div class="geography-inspector" aria-live="polite">Enable Inspect mode and click a hex, or enter its section-local identity. Enter inspects the viewport center. Grid labels appear at detail scale.</div>
         </details>

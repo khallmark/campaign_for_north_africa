@@ -397,6 +397,8 @@
 .geography-terrain, .legend-terrain { opacity: 0.35; stroke: #534b35; stroke-width: 1; stroke-dasharray: 3 2; }
 .geography-water, .legend-water { fill: #488fb0; opacity: 0.35; }
 :is(.geography-water, .legend-water).mixed_water_land { fill: #86acaa; stroke: #376c86; stroke-dasharray: 4 3; }
+.source-water { fill: #6ea4c0; }
+.research-viewport[data-source-visible=true] .source-water { opacity: 0.45; }
 .geography-overlay[data-detail=false] .geography-terrain,
 .geography-overlay[data-detail=false] .geography-water { stroke: none; }
 .geography-selected, .legend-selected { fill: #fff8cf22; stroke: #ba452d; stroke-width: 3; }
@@ -411,6 +413,10 @@
 :is(.geography-construction, .legend-construction).construction-ties { stroke-width: 8; stroke-dasharray: 2 18; }
 .geography-location, .legend-location { fill: #f8e6a2; stroke: #24594f; stroke-width: 2; }
 :is(.geography-location, .legend-location).unresolved { fill: none; stroke: #ac3c65; }
+.source-point { color: #24594f; }
+.source-point.unresolved { color: #96335b; }
+.source-point-symbol { fill: #fff7df; stroke: currentColor; stroke-width: 1.8; }
+.source-point-label { fill: #382f25; stroke: #fff9e8; stroke-width: 3; paint-order: stroke; font: 600 12px "Barlow", sans-serif; }
 .terrain-art-key { color: #4b5b58; margin: 8px 0; line-height: 1.45; }
 .geography-switches button:disabled { opacity: 0.4; cursor: default; }
 .geography-switches button[hidden] { display: none; }
@@ -456,7 +462,7 @@
 .legend-samples small { display: block; color: #656853; font-size: 10px; margin-top: 3px; }
 .legend-swatch, .legend-point, .legend-samples svg { display: block; width: 54px; height: 36px; flex: 0 0 54px; }
 .legend-swatch { object-fit: cover; border: 1px solid #c5bea5; border-radius: 3px; }
-.legend-unknown { background: #d8dcdf; }
+.legend-unknown { background: #d9d7ce url('/art/terrain-v1/surfaces/unmapped.png') center / cover; }
 .legend-point { object-fit: contain; }
 .legend-layer-note { border-top: 1px solid #d7d0b9; padding-top: 10px; }
 /* Read the controls' actual state; no second legend state to drift out of sync. */

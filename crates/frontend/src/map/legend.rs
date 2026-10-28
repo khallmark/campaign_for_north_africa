@@ -13,7 +13,7 @@ pub(super) fn render() -> String {
         <section class="legend-art-only"><h3>Terrain tiles</h3><p>High-quality terrain · Original terrain enabled</p>
         <p>Original terrain textures blend where materials are observed. Blends show presence, not surveyed boundaries or full-hex coverage.</p>
         <ul class="legend-samples">
-        <li><span class="legend-swatch legend-unknown" aria-hidden="true"></span><span>Unknown / unmapped<small>Not Clear</small></span></li>"#,
+        <li><span class="legend-swatch legend-unknown" aria-hidden="true"></span><span>Unknown / unmapped<small>Neutral paper · Not Clear</small></span></li>"#,
     );
     for (asset, label) in [
         ("clear", "Clear"),
@@ -74,8 +74,9 @@ pub(super) fn render() -> String {
         <section class="legend-geography-only"><h3>Water &amp; hexsides</h3><ul class="legend-samples">
         <li><svg viewBox="0 0 60 32" aria-hidden="true"><rect class="legend-water" x="5" y="3" width="50" height="26"/></svg><span>Water evidence</span></li>
         <li><svg viewBox="0 0 60 32" aria-hidden="true"><rect class="legend-water mixed_water_land" x="5" y="3" width="50" height="26"/></svg><span>Mixed water / land</span></li>
+        <li><svg viewBox="0 0 60 32" aria-hidden="true"><path class="source-water" d="M4 3Q40 4 22 17Q9 28 56 25L56 32Q-8 34 10 15Q24 5 4 10Z"/></svg><span>Source water shape<small>Original channel width · display evidence only</small></span></li>
         <li><svg viewBox="0 0 60 32" aria-hidden="true"><path class="legend-route side" d="M3 16H57"/></svg><span>Natural hexside<small>River, wadi, ridge, slope, escarpment, coast or sea</small></span></li>
-        </ul><p>Blue water tint is automated evidence, not a sea/coast classification. Natural hexsides share one style; use Hex evidence to identify the feature.</p></section>
+        </ul><p>Blue water tint and source-ink shapes are automated evidence, not Major/Minor River or sea/coast classifications. Source overprint gaps remain; no movement or crossing rules follow from these shapes. Natural hexsides share one style; use Hex evidence to identify the feature.</p></section>
         <section class="legend-points-only"><h3>Places &amp; facilities</h3><p>Original symbols appear at detail scale with Original terrain and Geography enabled. A symbol gives no capacity or operational status.</p><ul class="legend-samples">"#,
     );
     for (asset, label) in [
@@ -100,7 +101,10 @@ pub(super) fn render() -> String {
         <section class="legend-geography-only"><h3>Unclassified evidence</h3><ul class="legend-samples">
         <li><svg viewBox="0 0 60 32" aria-hidden="true"><path class="legend-route unresolved" d="M3 16H57"/></svg><span>Unclassified hexside</span></li>
         <li><svg viewBox="0 0 60 32" aria-hidden="true"><circle class="legend-location unresolved" cx="30" cy="16" r="4"/></svg><span>Unclassified location</span></li>
-        </ul><p>Magenta marks are unresolved, not missing roads or railroads. Transcription is incomplete; no mark does not mean no feature.</p></section>
+        <li><svg class="source-point unresolved" viewBox="0 0 60 32" aria-hidden="true"><circle class="source-point-symbol" cx="30" cy="16" r="4"/></svg><span>Measured Village/Bir dot<small>Category unresolved</small></span></li>
+        <li><svg class="source-point" viewBox="0 0 60 32" aria-hidden="true"><g transform="translate(30 18)"><ellipse class="source-point-symbol" rx="7" ry="4"/><path class="source-point-symbol" d="M0 0V-10M-5-6Q0-12 5-6"/></g></svg><span>Measured oasis glyph</span></li>
+        <li><svg class="source-point" viewBox="0 0 60 32" aria-hidden="true"><g transform="translate(30 18)"><path class="source-point-symbol" d="M0-7V7M-5-3H5M-7 1Q-7 7 0 7Q7 7 7 1"/><circle class="source-point-symbol" cy="-9" r="2"/></g></svg><span>Measured port glyph</span></li>
+        </ul><p>Measured glyphs and detail-scale labels follow source positions with Geography enabled, independently of Original terrain. Labels associate names with glyphs, not operational categories or capacities.</p><p>Magenta marks are unresolved, not missing roads or railroads. Transcription is incomplete; no mark does not mean no feature.</p></section>
         <section class="legend-grid-only"><h3>Hex grid</h3><ul class="legend-samples"><li><svg viewBox="0 0 60 32" aria-hidden="true"><path class="legend-grid" d="M16 3H44L52 16L44 29H16L8 16Z"/></svg><span>Source-grid hex<small>Labels at detail scale</small></span></li></ul><p>Section seams and official playable identities remain unresolved.</p></section>
         <section class="legend-inspect-only"><h3>Inspect mode</h3><p>Click a hex or press Enter on the map to inspect the viewport center. Hex evidence opens with source citations.</p></section>
         <section class="legend-selection-only"><h3>Inspected hex</h3><ul class="legend-samples"><li><svg viewBox="0 0 60 32" aria-hidden="true"><path class="legend-selected" d="M16 3H44L52 16L44 29H16L8 16Z"/></svg><span>Selected outline</span></li></ul><p>The outline stays visible after Inspect mode is turned off. Inspect a hex for <b>reviewed</b>, <b>provisional</b> or <b>unresolved</b> records. These are evidence states, not game-rule costs.</p></section>

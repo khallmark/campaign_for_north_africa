@@ -1,8 +1,9 @@
 //! Research geometry and evidence overlay, independent of counter placement.
 use super::art::Artwork;
+use super::source_points;
 use crate::{document, view::escape};
 use cna_map::{
-    geometry::{center, corners, edge, hexes},
+    geometry::{center, corners, edge, hexes, BoardPoint},
     hex::HexId,
     model::{model, Coverage},
     terrain::{MapRecord, Observation, Terrain, TransportDepiction},
@@ -109,6 +110,14 @@ impl Geography {
                 write!(html, "<p>{}: {}</p>", escape(family), escape(status)).unwrap();
             }
             html.push_str("</details>");
+            for point in &examination.points {
+                let (symbol, status) = source_points::description(point);
+                write!(html, "<details class=source-point-evidence><summary>{} · {symbol} · {status}</summary><p>Measured source position [{}, {}]. Display evidence only; no capacity, water yield or movement authority.</p>", escape(point.label.as_deref().unwrap_or(symbol)), point.center[0], point.center[1]).unwrap();
+                for reference in &point.source_refs {
+                    write!(html, "<p class=geography-source>{}</p>", escape(reference)).unwrap();
+                }
+                html.push_str("</details>");
+            }
         }
         let mut terrain = false;
         let mut count = 0;
@@ -470,13 +479,16 @@ impl Geography {
                             write!(layer, "M{:.2},{:.2}L{:.2},{:.2}", a.x, a.y, b.x, b.y).unwrap();
                         }
                         MapRecord::Point { hex, record } if visible(*hex) => {
+                            if source_points::replaces_marker(*hex, record) {
+                                continue;
+                            }
                             let c = viewport.to_screen(center(*hex));
                             let unresolved =
                                 matches!(record.observation, Observation::Unresolved { .. });
                             if self.original_art && !unresolved {
                                 continue;
                             }
-                            write!(locations, "<circle class=\"geography-location{}\" cx=\"{:.2}\" cy=\"{:.2}\" r=\"4\"/>", if unresolved {" unresolved"} else {""}, c.x,c.y).unwrap();
+                            write!(locations, "<circle class=\"geography-location{}\" data-hex=\"{hex}\" cx=\"{:.2}\" cy=\"{:.2}\" r=\"4\"/>", if unresolved {" unresolved"} else {""}, c.x,c.y).unwrap();
                         }
                         _ => {}
                     }
@@ -484,6 +496,7 @@ impl Geography {
             }
             // Terrain must not tint routes; the wider road stroke must not hide
             // a coincident railroad. Keep both visible regardless of survey order.
+            html.push_str(&super::source_water::render(viewport));
             for (class, path) in links {
                 write!(
                     html,
@@ -521,11 +534,23 @@ impl Geography {
                         .filter(|p| (p.x - c.x).abs() < 40.0 && (p.y - c.y).abs() < 18.0)
                         .count();
                     label_centers.push(c);
+                    let mut label_y = c.y + 18.0 * viewport.zoom() + 20.0 * overlapping as f64;
+                    if self.features
+                        && model().examinations.get(&hex).is_some_and(|examination| {
+                            examination.points.iter().any(|point| {
+                                let [x, y] = point.center;
+                                let p = viewport.to_screen(BoardPoint { x, y });
+                                (p.x - c.x).abs() < 28.0 && (p.y - label_y).abs() < 20.0
+                            })
+                        })
+                    {
+                        // Keep source glyphs fixed; move only the schematic ID.
+                        label_y += 24.0;
+                    }
                     write!(
                         html,
                         "<text class=geography-id x=\"{:.2}\" y=\"{:.2}\">{hex}</text>",
-                        c.x,
-                        c.y + 18.0 * viewport.zoom() + 20.0 * overlapping as f64
+                        c.x, label_y
                     )
                     .unwrap();
                 }
@@ -541,6 +566,10 @@ impl Geography {
                 polygon(hex)
             )
             .unwrap();
+        }
+        // Source names must remain legible above grid IDs and selection outlines.
+        if self.features {
+            html.push_str(&source_points::render(viewport));
         }
         self.svg.set_inner_html(&html);
         self.last_render = Some(state);

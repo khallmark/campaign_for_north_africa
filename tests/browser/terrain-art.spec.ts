@@ -166,6 +166,105 @@ test('bundled terrain works without private scans and survives map controls', as
   expect(errors).toEqual([]);
 });
 
+test('measured source labels retain positions and uncertainty across viewer controls', async ({ page }) => {
+  await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'No private scan' }));
+  await page.goto('/');
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('C3111');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  const point = page.locator('.geography-overlay .source-point[data-hex="C3111"]');
+  await expect(point.locator('text')).toHaveText('El Cuasc');
+  await expect(point).toHaveClass('source-point unresolved');
+  await expect(point.locator('title')).toContainText('not operational authority');
+  await expect(page.locator('.source-point-evidence')).toContainText('Measured source position [6567, 2324.1]');
+  await expect(page.locator('.geography-inspector')).toContainText('Terrain unmapped — not Clear.');
+  await expect(page.locator('.terrain-art-point[data-hex="C3111"]')).toHaveCount(0);
+
+  async function checkMeasuredPosition() {
+    const error = await point.evaluate((node: SVGGElement) => {
+      const viewport = document.querySelector<HTMLElement>('.research-viewport')!;
+      const box = viewport.getBoundingClientRect();
+      const zoom = Number(viewport.dataset.zoom);
+      const matrix = node.getScreenCTM()!;
+      const expectedX = box.x + box.width / 2 + (6567 - Number(viewport.dataset.centerX)) * zoom;
+      const expectedY = box.y + box.height / 2 + (2324.1 - Number(viewport.dataset.centerY)) * zoom;
+      return Math.hypot(matrix.e - expectedX, matrix.f - expectedY);
+    });
+    // This rejects snapping to the hex center, x/y swaps and DPR scaling twice.
+    expect(error).toBeLessThan(0.2);
+  }
+  await checkMeasuredPosition();
+  await page.locator('.geography-details > summary').click();
+  await page.locator('.research-viewport').focus();
+  await page.keyboard.press('ArrowRight');
+  await checkMeasuredPosition();
+  await page.keyboard.press('+');
+  await checkMeasuredPosition();
+  await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  await expect(point.locator('text')).toHaveText('El Cuasc');
+  await checkMeasuredPosition();
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await expect(point).toHaveCount(0);
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await checkMeasuredPosition();
+
+  for (const [hex, symbol, art] of [['C0716', 'Oasis', 'oasis'], ['D3814', 'Port', 'port']]) {
+    await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill(hex);
+    await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+    await expect(page.locator(`.geography-overlay .source-point[data-hex="${hex}"] > title`)).toContainText(`${symbol} source glyph`);
+    await expect(page.locator(`.geography-location[data-hex="${hex}"]`)).toHaveCount(0);
+    await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+    await expect(page.locator(`.terrain-art-point[data-hex="${hex}"][data-feature="${art}"]`)).toHaveCount(0);
+    await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  }
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('A2010');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  const colocated = page.locator('.geography-overlay .source-point[data-hex="A2010"]');
+  await expect(colocated).toHaveCount(2);
+  await expect(colocated.locator('text')).toHaveText('Ras el Ali');
+  await expect(colocated.locator('title')).toHaveText([
+    'Village/Bir source dot · unresolved · measured source position, not operational authority',
+    'Port source glyph · unresolved · measured source position, not operational authority',
+  ]);
+  await expect(page.locator('.geography-location[data-hex="A2010"]')).toHaveCount(0);
+});
+
+test('water shapes retain source channel widths without assigning river classes', async ({ page }) => {
+  await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'No private scan' }));
+  await page.goto('/');
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('E1530');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  const shapes = page.locator('.geography-overlay .source-water');
+  await expect(shapes.first()).toBeVisible();
+  await expect(page.locator('.source-water-layer > title')).toContainText('not a river classification');
+  async function checkChannel() {
+    const wet = await shapes.evaluateAll(nodes => {
+      const viewport = document.querySelector<HTMLElement>('.research-viewport')!;
+      const box = viewport.getBoundingClientRect();
+      const zoom = Number(viewport.dataset.zoom);
+      // Independent original-pixel transect: water at x=13848..13872, y=3490.
+      return [13840, 13850, 13860, 13870, 13880].map(x => {
+        const screen = new DOMPoint(
+          box.x + box.width / 2 + (x - Number(viewport.dataset.centerX)) * zoom,
+          box.y + box.height / 2 + (3490 - Number(viewport.dataset.centerY)) * zoom,
+        );
+        return nodes.some((node: SVGPathElement) =>
+          node.isPointInFill(screen.matrixTransform(node.getScreenCTM()!.inverse())));
+      });
+    });
+    expect(wet).toEqual([false, true, true, true, false]);
+  }
+  await checkChannel();
+  await page.locator('.geography-details > summary').click();
+  await page.locator('.research-viewport').focus();
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('+');
+  await checkChannel();
+  await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  await checkChannel();
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await expect(shapes).toHaveCount(0);
+});
+
 test('source scan and original terrain can be compared together or independently', async ({ page }) => {
   const levels = Array.from({ length: 6 }, (_, z) => {
     const width = Math.ceil(14310 / 2 ** (5 - z));

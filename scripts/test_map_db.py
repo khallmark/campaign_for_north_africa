@@ -206,6 +206,7 @@ class MapDatabaseTests(unittest.TestCase):
             'C2414 C2415',
             'C1415 C1515',
             'C0925 C0825',
+            'B1706 B1606 B1507 B1508 B1509',
         ):
             cells = route.split()
             for start, end in zip(cells, cells[1:]):
@@ -217,9 +218,11 @@ class MapDatabaseTests(unittest.TestCase):
         # Enlarged source crops against calibrated edges rule out these detours:
         # El Cuasc goes straight into C3011; the northern bend uses C2318.
         # C0925 bends south into C0825, not east into C0926.
+        # B1507's corner crossings do not detour through B1607.
         for start, end in (('C3111', 'C3112'), ('C3011', 'C3112'),
                            ('C2418', 'C2319'), ('C2319', 'C2218'),
-                           ('C0925', 'C0926')):
+                           ('C0925', 'C0926'), ('B1606', 'B1607'),
+                           ('B1507', 'B1607'), ('B1607', 'B1508')):
             with self.subTest(unsupported_crossing=(start, end)):
                 self.assertIsNone(self.db.execute('''
                     SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=? AND feature='track'

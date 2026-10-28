@@ -99,8 +99,8 @@ automated or agent-visual record is human-reviewed.
 | D | 1,253 | 1,179 / 37 / 36 / 1 | 786 |
 | E | 1,313 | 994 / 273 / 41 / 5 | 956 |
 
-The current combined model has **251 surveys / 24,142 observations**: 4,792 terrain,
-19,204 hexside and 146 point observations. **7,702 are provisional, 16,440 unresolved,
+The current combined model has **252 surveys / 24,144 observations**: 4,792 terrain,
+19,206 hexside and 146 point observations. **7,704 are provisional, 16,440 unresolved,
 none human-reviewed.** Terrain observations cover 4,652 cells; 2,528 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
@@ -167,7 +167,7 @@ Combined distinct typed crossings (manual plus extracted; duplicates removed):
 | Section | Road | Railroad | Track |
 | --- | ---: | ---: | ---: |
 | A | 76 | 7 | 248 |
-| B | 57 | 5 | 463 |
+| B | 57 | 5 | 465 |
 | C | 32 | 0 | 423 |
 | D | 36 | 26 | 284 |
 | E | 171 | 167 | 159 |
@@ -223,6 +223,11 @@ The Siwa–Matruh hollow-capsule route is tested across every internal crossing:
 C0127 through C0426 to C1833, then D1800 to D3612. No C1833/D1800 seam link or
 scenario completion is inferred. C0436 is outside the calibrated inventory;
 the source route reaches D3612, not D0612.
+
+B1507 has two further source-cited corner corrections: its northwest crossing
+from B1606 and its east crossing into B1508. Tests cover B1706–B1606–B1507–B1508–B1509
+and reject a detour through B1607. Raw detector findings and its conservative
+endpoint exclusion remain unchanged.
 
 No ground assignments changed. Of 2,528 cells without typed ground, source-surface
 measurements report 2,087 land, 233 water, 184 mixed and 24 unresolved. A land

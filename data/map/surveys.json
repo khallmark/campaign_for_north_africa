@@ -209,6 +209,11 @@
       "id": "c0925-south-track-correction", "label": "C0925 southern track bend", "notes": "The single dashed track bends south from C0925 into C0825 at the shared corner region, not east into C0926. A straight chord fitted between distant dashes incorrectly cuts C0925 east; the actual central side has track ink only on its west. Keep this corner-sensitive manual interpretation provisional and the raw measurements available. No invented eastward branch, movement permission or precise centerline is implied.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=7621,3809,340,300", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
       "coverage": {"kind": "hexside", "sides": [{"hex":"C0825","direction":"north_west"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "b1507-track-corner-corrections", "label": "B1507 corner track crossings", "notes": "Enlarged source dashes cross from B1606 into B1507 near the northern endpoint of its northwest side, bend inside B1507, and leave east into B1508 near that side's northern endpoint. Calibrated edges rule out a detour through B1607. Neighboring B1706-B1606 and B1508-B1509 crossings are already present. These corner-sensitive crossings supplement the conservative detector without weakening its endpoint exclusion or changing raw findings. Provisional source interpretation only; no movement permission or within-cell junction authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=3100,3180,650,620", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"B1507","direction":"north_west"},{"hex":"B1507","direction":"east"}], "observation": {"status": "provisional", "value": "track"}}
     }
   ]
 }

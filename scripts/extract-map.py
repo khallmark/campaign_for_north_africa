@@ -227,6 +227,14 @@ def dashed_route_context(mask, bounds, a, b):
             u, v = relative @ axis, relative @ transverse
             corridor = (u >= -8) & (u <= distance+8) & (np.abs(v) < 5)
             ink = (mask > 0) & corridor
+            # A chord between dashes on a bend can cut the side even though
+            # the source route passes around its endpoint. Require source ink
+            # beyond the grid band on both sides within the finite side's span.
+            side_t = world @ along / np.linalg.norm(b-a)
+            side_ink = ink & (side_t > 0) & (side_t < 1)
+            if not (np.any(side_ink & (across < -3))
+                    and np.any(side_ink & (across > 3))):
+                continue
             bins = np.floor(u[ink]+8).astype(int)
             occupied = np.bincount(bins, minlength=int(distance)+17) > 0
             profile = "".join("1" if value else "0" for value in occupied)
@@ -241,6 +249,74 @@ def dashed_route_context(mask, bounds, a, b):
                 continue
             return [{"span": round(float(distance), 2), "t": round(float(t), 3),
                      "runs": runs, "gaps": gaps}]
+    return []
+
+
+def unfinished_road_context(mask, bounds, a, b):
+    """Recognize separated hollow road capsules, never completed-road links."""
+    contours, hierarchy = cv2.findContours(mask, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
+    if hierarchy is None:
+        return []
+    parents = {hierarchy[0][i][3] for i, c in enumerate(contours)
+               if hierarchy[0][i][3] >= 0 and cv2.contourArea(c) >= 3}
+    capsules = []
+    for parent in sorted(parents):
+        # Fit the hollow core, not grid spurs attached to its outer outline.
+        # Several holes in a single connected outline still count only once.
+        points = np.concatenate([c[:, 0, :] for i, c in enumerate(contours)
+                                 if hierarchy[0][i][3] == parent and cv2.contourArea(c) >= 3]).astype(float)
+        _, axes = np.linalg.eigh(np.cov(points.T))
+        length, width = np.ptp(points @ axes[:, -1]), np.ptp(points @ axes[:, 0])
+        if 6 <= length <= 36 and width <= 5 and length > 2 * width:
+            capsules.append((points.mean(axis=0) + bounds[:2] - a, axes[:, -1]))
+    along = (b-a) / np.linalg.norm(b-a)
+    normal = np.array([-along[1], along[0]])
+    y, x = np.indices(mask.shape)
+    world = np.stack((x+bounds[0]-a[0], y+bounds[1]-a[1]), axis=-1)
+    for i, (p, p_axis) in enumerate(capsules):
+        for q, q_axis in capsules[i+1:]:
+            distance = np.linalg.norm(q-p)
+            pn, qn = p @ normal, q @ normal
+            if pn == qn or not 12 < distance < 100:
+                continue
+            axis = (q-p) / distance
+            if min(abs(axis @ p_axis), abs(axis @ q_axis)) < .94:
+                continue
+            crossing_u = distance * (-pn/(qn-pn))
+            # The last capsule may straddle the side but lose its closed outline
+            # under a settlement glyph. Extend at most half a capsule length;
+            # actual source ink on both sides is still required below.
+            if not -18 < crossing_u < distance+18:
+                continue
+            crossing = p + axis * crossing_u
+            t = (crossing @ along) / np.linalg.norm(b-a)
+            if not 0 < t < 1:
+                continue
+            transverse = np.array([-axis[1], axis[0]])
+            # A third distinct hollow glyph establishes the repeated symbol;
+            # multiple holes inside one grid-contaminated capsule do not count.
+            aligned = sum(abs((r-crossing) @ transverse) < 4
+                          and abs((r-crossing) @ axis) < 55
+                          and abs(r_axis @ axis) > .94 for r, r_axis in capsules)
+            if aligned < 3:
+                continue
+            # Grid ink may merge or deform a capsule. A longer fit is allowed
+            # only when the actual intervening strokes retain short light gaps;
+            # three distant holes must not bridge empty paper or a solid spine.
+            relative = world-p
+            u, v = relative @ axis, relative @ transverse
+            lower, upper = min(-8, crossing_u-8), max(distance+8, crossing_u+8)
+            ink = (mask > 0) & (u >= lower) & (u <= upper) & (np.abs(v) < 5)
+            side_t, across = world @ along / np.linalg.norm(b-a), world @ normal
+            side_ink = ink & (side_t > 0) & (side_t < 1)
+            if not (np.any(side_ink & (across < -3)) and np.any(side_ink & (across > 3))):
+                continue
+            bins = np.floor(u[ink]-lower).astype(int)
+            profile = "".join("1" if n else "0" for n in np.bincount(bins, minlength=int(upper-lower)+1))
+            gaps = [len(run) for run in profile.strip("0").split("1") if run]
+            if len(gaps) < 2 or max(gaps) > 9:
+                continue
+            return [{"capsules": int(aligned), "t": round(float(t), 3), "gaps": gaps}]
     return []
 
 
@@ -280,8 +356,13 @@ def continuous_route_context(image, a, b, rules, ink):
         peaks = sum(bool(run) for run in "".join("1" if w >= 6 else "0" for w in widths).split("0"))
         if ink == "road" or peaks >= 4:
             evidence.append({"length": round(length, 2), "tie_peaks": peaks})
-    return {"crop": bounds, "strokes": evidence,
-            "dashes": dashed_route_context(mask, bounds, a, b) if ink == "rail_track" else []}
+    context = {"crop": bounds, "strokes": evidence,
+               "dashes": dashed_route_context(mask, bounds, a, b) if ink == "rail_track" else []}
+    if ink == "road":
+        capsules = unfinished_road_context(mask, bounds, a, b)
+        if capsules:
+            context["capsules"] = capsules
+    return context
 
 
 def examine_side(image, side, rules):
@@ -296,13 +377,14 @@ def examine_side(image, side, rules):
         mask = masks[ink].copy()
         mask[~polygon] = 0
         count = int(np.count_nonzero(mask))
-        if count < 8:
-            continue
         # Reconstruct antialiasing and dark grid occlusion, never light gaps
-        # between unfinished transportation strokes.
+        # between unfinished transportation strokes. Gate on the recovered
+        # mask too: a thin route may have no exact-palette interior pixels.
         if ink in ("road", "rail_track"):
             mask = route_mask(crop, rules, ink)
             mask[~polygon] = 0
+        if np.count_nonzero(mask) < 8:
+            continue
         contours, hierarchy = cv2.findContours(mask, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
         capsules = sum(1 for index, contour in enumerate(contours)
                        if hierarchy[0][index][3] >= 0 and cv2.contourArea(contour) >= 3) if hierarchy is not None else 0
@@ -380,6 +462,8 @@ def examine_side(image, side, rules):
         findings.append({"ink": ink, "pixels": count, "crossing": crossing,
                          "corner": corner, "continuous": bool(continuous), "ties": bool(tied),
                          "capsules": capsules, "side_band": bool(side_band), "context": context, "value": value})
+        if ink == "road" and not value and context.get("capsules"):
+            findings[-1]["depiction"] = "unfinished_road"
     return {"hex": side["hex"], "direction": side["direction"], "other": side["other"],
             "crop": bounds, "findings": findings}
 
@@ -432,7 +516,9 @@ def generate():
     for side in sides:
         for finding in side["findings"]:
             section = by_hex[side["hex"]]["section"]
-            if finding["value"]:
+            if finding.get("depiction"):
+                groups[(section, "hexside", finding["depiction"])].append({"hex": side["hex"], "direction": side["direction"]})
+            elif finding["value"]:
                 groups[(section, "hexside", finding["value"])].append({"hex": side["hex"], "direction": side["direction"]})
             elif finding["ink"] in ("road", "rail_track") or (finding["side_band"] and finding["ink"] in ("slope_ridge", "escarpment", "blue_barred")):
                 groups[(section, "hexside", "unresolved_"+finding["ink"])].append({"hex": side["hex"], "direction": side["direction"]})
@@ -442,6 +528,8 @@ def generate():
         if kind == "point":
             observation = ({"status": "provisional", "value": {"type": "oasis"}} if value == "oasis" else
                            {"status": "unresolved", "source_label": value+" glyph; name, category or operational association unresolved"})
+        elif value == "unfinished_road":
+            observation = {"status": "unresolved", "source_label": "Unfinished Road depicted; scenario completion and operational interpretation unresolved"}
         elif value.startswith("unresolved_"):
             observation = {"status": "unresolved", "source_label": value.removeprefix("unresolved_")+" ink; class, construction state, crossing or orientation unresolved"}
         else:
@@ -452,6 +540,8 @@ def generate():
                            "reviewer": "Amp automated ink survey; human review pending", "date": "2026-10-25"},
             "coverage": {"kind": kind, "sides" if kind == "hexside" else "hexes": locations,
                          "observation": observation}})
+        if value == "unfinished_road":
+            surveys[-1]["coverage"]["depiction"] = value
     coverage = defaultdict(Counter)
     for cell in cells:
         for family, state in cell["families"].items():

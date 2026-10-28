@@ -25,6 +25,7 @@ requires Python 3.11+ and the packages pinned in `requirements-map.txt`:
 ```sh
 python3 -m venv .venv-map
 .venv-map/bin/pip install -r requirements-map.txt
+.venv-map/bin/python -m unittest scripts.test_map_extraction -v
 .venv-map/bin/python scripts/extract-map.py --check
 # After reviewing changed rules, labels or sources:
 .venv-map/bin/python scripts/extract-map.py --write
@@ -60,6 +61,16 @@ fingerprinted together. SQLite import rejects stale generator/rule/geometry pins
 and disagreement with that compact ledger. No raster pixels are embedded in the
 database or generated JSON. Regeneration uses the private original PNG and TEC.
 
+Transport candidates are gated after antialias recovery, not solely on exact
+palette pixels: otherwise a visible thin track can disappear before classification.
+Dash fits require observed ink beyond the grid band on both sides within the
+finite hexside span, so a chord across a bend cannot invent a corner crossing.
+Repeated hollow road capsules produce `unfinished_road` depictions with unresolved
+status, never completed-road network links. Three distinct aligned capsules are
+required; multiple holes in one grid-contaminated glyph do not count as repetition.
+Synthetic controls distinguish those capsules from solid dashes, a single capsule,
+and continuous completed-road lines.
+
 The browser uses the same Rust geometry and survey inputs as SQLite; it does not
 download SQLite. Search accepts only inventory members. Inspect mode is separate
 from counter placement; click inspects the pointer cell and Enter inspects the
@@ -88,8 +99,8 @@ automated or agent-visual record is human-reviewed.
 | D | 1,253 | 1,179 / 37 / 36 / 1 | 786 |
 | E | 1,313 | 994 / 273 / 41 / 5 | 956 |
 
-The current combined model has **242 surveys / 13,737 observations**: 4,792 terrain,
-8,799 hexside and 146 point observations. **7,685 are provisional, 6,052 unresolved,
+The current combined model has **251 surveys / 24,142 observations**: 4,792 terrain,
+19,204 hexside and 146 point observations. **7,702 are provisional, 16,440 unresolved,
 none human-reviewed.** Terrain observations cover 4,652 cells; 2,528 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
@@ -105,7 +116,7 @@ Clear requires at least 99.5% matching blank background in the inset polygon and
 fewer than five terrain/water-ink pixels in the full polygon. Transport/grid
 antialiasing is excluded from that terrain test; failed matches stay unresolved.
 
-Transportation extraction currently yields 370 Road, 205 Railroad and 1,557 Track
+Transportation extraction currently yields 370 Road, 205 Railroad and 1,568 Track
 crossings; 707 Wadi side candidates are typed provisionally. Gray grid occlusion
 may be bridged, but light gaps between unfinished dashes/crosses may not. Known
 terrain swatches take precedence over interpolation that resembles road ink.
@@ -135,14 +146,18 @@ No track is invented across C3019–C3020's blue barred side. At B4902 E, nearby
 continuous rail and dashed track both trigger; the mixed detector finding now
 stays unresolved instead of selecting Railroad. Its raw measurements remain.
 Conservative detection still leaves routes fragmented and uncertain.
-**8,788 side ink findings remain untyped**, with individual crops and measurements;
-5,893 extracted unresolved side observations expose the relevant candidates.
-Separately, 38 source-cited unresolved observations carry explicit unfinished
-construction depictions: 11 road crossings from Sollum toward Sidi Barani, 23 rail
-crossings from Sidi Azeiz through Capuzzo toward Sofafi, and four existing Matruh
-sample sides. They are excluded from network links, not counted as completed
-Road/Railroad, and do not establish scenario completion. Their separate renderer
-integration is pending; this model change does not yet display construction art.
+**19,176 side ink findings remain untyped**, with individual crops and measurements;
+16,211 extracted unresolved side observations expose generic candidates. Recovering
+antialiased ink admits more candidates, including ambiguous grid/text strokes;
+these are evidence to inspect, not confirmed routes or operational links.
+Separately, 108 unresolved observations carry explicit unfinished construction
+depictions: 81 road observations (71 distinct sides) and 27 railroad observations.
+The 70 automatically recognized road sides include all 39 checked Siwa–Matruh
+crossings and source-backed stretches near Martuba, El Adem and Sollum. All 70
+were agent-inspected against enlarged source crops; ten overlap existing manual
+observations. They are excluded from network links, not counted as completed
+Road/Railroad, and do not establish scenario completion. The construction renderer
+displays these observations separately from completed transportation links.
 Slopes/escarpments still need directional interpretation; most river/coast sides
 need classification. There are no cross-section links or assumed operational
 junctions. Network endpoints are transcription limits, not real termini.
@@ -152,10 +167,10 @@ Combined distinct typed crossings (manual plus extracted; duplicates removed):
 | Section | Road | Railroad | Track |
 | --- | ---: | ---: | ---: |
 | A | 76 | 7 | 248 |
-| B | 57 | 5 | 459 |
-| C | 32 | 0 | 412 |
+| B | 57 | 5 | 463 |
+| C | 32 | 0 | 423 |
 | D | 36 | 26 | 284 |
-| E | 171 | 167 | 157 |
+| E | 171 | 167 | 159 |
 | Malta | 0 | 0 | 0 |
 
 Zero means no typed crossings, not confirmed absence. In particular, disconnected
@@ -198,6 +213,16 @@ reachability through an alternate route. Enlarged source crops against calibrate
 side endpoints also rule out four initially misread crossings: the El Cuasc route
 uses C3111 → C3011 → C3012, not C3112, and the northern bend uses C2318, not C2319.
 Tests reject those unsupported detours. Blue barred sides remain unclassified.
+
+The later C2410 east and C1415 northwest reports exposed an exact-palette gate
+that discarded visible antialiased tracks before dash classification. Moving the
+gate after recovery adds 12 source-inspected automatic crossings. Requiring actual
+ink on both sides of the finite edge removes the false C0925 east chord. Two
+source-cited corner corrections add C2414 east and C0825 northwest (to C0925).
+The Siwa–Matruh hollow-capsule route is tested across every internal crossing:
+C0127 through C0426 to C1833, then D1800 to D3612. No C1833/D1800 seam link or
+scenario completion is inferred. C0436 is outside the calibrated inventory;
+the source route reaches D3612, not D0612.
 
 No ground assignments changed. Of 2,528 cells without typed ground, source-surface
 measurements report 2,087 land, 233 water, 184 mixed and 24 unresolved. A land

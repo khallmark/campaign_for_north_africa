@@ -92,6 +92,27 @@ class MapDatabaseTests(unittest.TestCase):
             SELECT depiction FROM observations WHERE hex='C3019' AND direction='east' AND depiction IS NOT NULL
         """).fetchall(), [])
 
+    def test_siwa_matruh_unfinished_road_is_depicted_but_not_an_operational_road(self):
+        # Read from source (7800,3200,1150,1380) and (8550,1800,1200,1500).
+        # C1833 and D1800 overlap on paper; do not invent a section-seam link.
+        for route in (
+            'C0127 C0227 C0327 C0426 C0527 C0627 C0728 C0828 C0929 C1029 '
+            'C1130 C1230 C1331 C1332 C1432 C1533 C1633 C1733 C1833',
+            'D1800 D1901 D2001 D2002 D2103 D2203 D2204 D2305 D2405 D2406 '
+            'D2507 D2607 D2708 D2808 D2909 D3009 D3110 D3210 D3311 D3411 D3512 D3612',
+        ):
+            cells = route.split()
+            for start, end in zip(cells, cells[1:]):
+                with self.subTest(start=start, end=end):
+                    self.assertIsNotNone(self.db.execute('''
+                        SELECT 1 FROM observations o JOIN hexsides s USING(hex,direction)
+                        WHERE o.depiction='unfinished_road' AND o.status='unresolved' AND o.value IS NULL
+                          AND ((s.hex=? AND s.other=?) OR (s.hex=? AND s.other=?))
+                    ''', (start, end, end, start)).fetchone())
+                    self.assertIsNone(self.db.execute('''
+                        SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=? AND feature='road'
+                    ''', (start, end)).fetchone())
+
     def test_whole_map_evidence_preserves_uncertainty_and_source_controls(self):
         self.assertEqual(self.db.execute("SELECT count(*) FROM cell_measurements").fetchone()[0], 7180)
         self.assertEqual(self.db.execute("SELECT count(*) FROM side_examinations").fetchone()[0], 20684)
@@ -172,7 +193,7 @@ class MapDatabaseTests(unittest.TestCase):
         """).fetchall(), [])
 
     def test_reported_source_gaps_and_neighboring_track_crossings(self):
-        # Independently read from the three source crops, not computed from
+        # Independently read from the cited source crops, not computed from
         # existing links. Include each side so an alternate path cannot hide gaps.
         for route in (
             'C3111 C3011 C3012 C3013 C3014 C3015 C3016',
@@ -181,6 +202,10 @@ class MapDatabaseTests(unittest.TestCase):
             'C2619 C2519 C2418 C2318 C2218 C2217 C2117 C2116 C2016 C1916 C1815 C1715',
             'C1619 C1519 C1418 C1319 C1218 C1119 C1019 C0920 C0820 C0821',
             'C1119 C1118 C1117 C1116 C1115',
+            'C2410 C2411',
+            'C2414 C2415',
+            'C1415 C1515',
+            'C0925 C0825',
         ):
             cells = route.split()
             for start, end in zip(cells, cells[1:]):
@@ -191,8 +216,10 @@ class MapDatabaseTests(unittest.TestCase):
                     ''', (start, end)).fetchone())
         # Enlarged source crops against calibrated edges rule out these detours:
         # El Cuasc goes straight into C3011; the northern bend uses C2318.
+        # C0925 bends south into C0825, not east into C0926.
         for start, end in (('C3111', 'C3112'), ('C3011', 'C3112'),
-                           ('C2418', 'C2319'), ('C2319', 'C2218')):
+                           ('C2418', 'C2319'), ('C2319', 'C2218'),
+                           ('C0925', 'C0926')):
             with self.subTest(unsupported_crossing=(start, end)):
                 self.assertIsNone(self.db.execute('''
                     SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=? AND feature='track'

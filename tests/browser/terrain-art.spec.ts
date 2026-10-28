@@ -321,18 +321,22 @@ test('source-backed unfinished routes are visible without becoming completed lin
   await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'No private scan' }));
   await page.goto('/');
   await page.getByRole('button', { name: 'Fit full board', exact: true }).click();
-  // Exact source-backed counts also reject classifying thousands of generic
-  // unresolved ink candidates (including blue bars) as construction routes.
+  // Railroad controls stay separate from the newly recognized hollow road
+  // capsules. Generic unresolved ink (including blue bars) is not construction.
   await expect(page.locator('.geography-construction.unfinished-railroad')).toHaveCount(27);
-  await expect(page.locator('.geography-construction.unfinished-road')).toHaveCount(11);
+  await expect(page.locator('.geography-construction[data-from="C3019"][data-to="C3020"]')).toHaveCount(0);
   await expect(page.locator('.geography-link.unfinished-railroad, .geography-link.unfinished-road')).toHaveCount(0);
-  for (const [hex, kind, label] of [
-    ['C4217', 'unfinished-railroad', 'Unfinished railroad'],
-    ['C3823', 'unfinished-road', 'Unfinished road'],
+  for (const [hex, to, kind, label] of [
+    ['C4217', 'C4218', 'unfinished-railroad', 'Unfinished railroad'],
+    ['C3823', 'C3824', 'unfinished-road', 'Unfinished road'],
+    ['C0127', 'C0227', 'unfinished-road', 'Unfinished road'],
+    ['C1331', 'C1332', 'unfinished-road', 'Unfinished road'],
+    ['D3512', 'D3612', 'unfinished-road', 'Unfinished road'],
   ]) {
     await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill(hex);
     await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
-    const path = page.locator(`.geography-construction.${kind}[data-from="${hex}"]`);
+    // Independent manual and extracted observations may describe the same side.
+    const path = page.locator(`.geography-construction.${kind}[data-from="${hex}"][data-to="${to}"]`).first();
     // Horizontal SVG strokes have zero-height geometric bounds, so Playwright's
     // visibility predicate rejects them even when the stroke is painted.
     await expect(path).toBeAttached();

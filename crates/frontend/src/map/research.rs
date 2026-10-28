@@ -231,7 +231,7 @@ impl Research {
         self.status.set_text_content(Some(if self.geography.original_art && self.source_visible {
             "Source scan + original terrain · translucent illustrative art · routes schematic"
         } else if self.geography.original_art {
-            "Original terrain art · illustrative blends, not surveyed boundaries · gray = unknown · routes schematic"
+            "Original terrain art · illustrative blends, not surveyed boundaries · neutral paper = unmapped · routes schematic"
         } else if self.source_visible {
             "Source map loaded · terrain and seams unverified"
         } else {

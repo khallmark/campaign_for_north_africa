@@ -184,6 +184,36 @@
       "id": "cairo-major-city", "label": "Cairo building clusters", "notes": "Five blue building clusters matched to TEC Major City and their actual outlines. Nearby Heliopolis and Mena dark dots are not promoted to Major City. Rivers and training figures remain distinct features; no level or capacity is inferred.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=13600,3040,410,370", "docs/CNAv2.1.0/images/TEC.png#legend/Major-City"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
       "coverage": {"kind": "point", "hexes": ["E1930","E1931","E1829","E1830","E1730"], "observation": {"status": "provisional", "value": {"type": "major_city"}}}
+    },
+    {
+      "id": "el-cuasc-track-corrections", "label": "El Cuasc track crossings", "notes": "Gray single dashes traced from the El Cuasc dot in C3111 southeast into C3011, then east into C3012. Enlarged source pixels against calibrated endpoints rule out a detour through C3112. C3011 east falls about 3.5 pixels from the calibrated side endpoint, inside the detector's excluded corner zone. Neighboring east, northeast and north/south tracks were compared across the crop; existing raw ink measurements remain unchanged. Source evidence only, no movement or within-cell junction authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=6300,2050,800,700", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C3011","direction":"east"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "el-grein-north-track-corrections", "label": "Track north of El Grein", "notes": "Gray single-dash route traced from C2619 through C2519, C2418, C2318, C2218, C2217, C2117, C2116, C2016, C1916, C1815 and C1715. Enlarged source pixels against calibrated endpoints place the northern bend in C2318, not C2319; those crossings already exist. C2116 east is the omitted crossing, followed by a sharp turn inside the cell; its dashes do not satisfy the detector's straight-corridor fit. Blue barred and wadi marks to the east are separate, not transportation connections. Crop endpoints are review limits, not source termini.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=6650,2650,800,800", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C2116","direction":"east"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "ain-melfa-east-track-corrections", "label": "Ain Melfa eastern track crossings", "notes": "Gray single dashes traced along the north/south route east of Ain Melfa and Giarabub Oasis, including the C1119 northwest crossing about 5.5 pixels from its endpoint. C0820 northwest is another omitted crossing on the same route. The westward spur is separately visible through C1118 to C1115. These track dashes are distinct from the adjacent blue barred sides and wadi. No water, passability or junction rule inferred; raw detector uncertainty is retained.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=6850,3350,800,700", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C1119","direction":"north_west"},{"hex":"C0820","direction":"north_west"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "c2414-east-track-correction", "label": "C2414 eastward track crossing", "notes": "Enlarged source pixels show single gray dashes across C2414 east, close to the northern endpoint before turning northeast inside C2415. Calibrated side endpoints distinguish this from a detour through the northern cell. Retain raw detector findings separately; this corner-sensitive source crossing does not establish movement permission or a within-cell junction.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=6747,2679,340,300", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C2414","direction":"east"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "c0925-south-track-correction", "label": "C0925 southern track bend", "notes": "The single dashed track bends south from C0925 into C0825 at the shared corner region, not east into C0926. A straight chord fitted between distant dashes incorrectly cuts C0925 east; the actual central side has track ink only on its west. Keep this corner-sensitive manual interpretation provisional and the raw measurements available. No invented eastward branch, movement permission or precise centerline is implied.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=7621,3809,340,300", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C0825","direction":"north_west"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "b1507-track-corner-corrections", "label": "B1507 corner track crossings", "notes": "Enlarged source dashes cross from B1606 into B1507 near the northern endpoint of its northwest side, bend inside B1507, and leave east into B1508 near that side's northern endpoint. Calibrated edges rule out a detour through B1607. Neighboring B1706-B1606 and B1508-B1509 crossings are already present. These corner-sensitive crossings supplement the conservative detector without weakening its endpoint exclusion or changing raw findings. Provisional source interpretation only; no movement permission or within-cell junction authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=3100,3180,650,620", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"B1507","direction":"north_west"},{"hex":"B1507","direction":"east"}], "observation": {"status": "provisional", "value": "track"}}
     }
   ]
 }

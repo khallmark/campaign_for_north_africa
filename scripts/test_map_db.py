@@ -92,6 +92,27 @@ class MapDatabaseTests(unittest.TestCase):
             SELECT depiction FROM observations WHERE hex='C3019' AND direction='east' AND depiction IS NOT NULL
         """).fetchall(), [])
 
+    def test_siwa_matruh_unfinished_road_is_depicted_but_not_an_operational_road(self):
+        # Read from source (7800,3200,1150,1380) and (8550,1800,1200,1500).
+        # C1833 and D1800 overlap on paper; do not invent a section-seam link.
+        for route in (
+            'C0127 C0227 C0327 C0426 C0527 C0627 C0728 C0828 C0929 C1029 '
+            'C1130 C1230 C1331 C1332 C1432 C1533 C1633 C1733 C1833',
+            'D1800 D1901 D2001 D2002 D2103 D2203 D2204 D2305 D2405 D2406 '
+            'D2507 D2607 D2708 D2808 D2909 D3009 D3110 D3210 D3311 D3411 D3512 D3612',
+        ):
+            cells = route.split()
+            for start, end in zip(cells, cells[1:]):
+                with self.subTest(start=start, end=end):
+                    self.assertIsNotNone(self.db.execute('''
+                        SELECT 1 FROM observations o JOIN hexsides s USING(hex,direction)
+                        WHERE o.depiction='unfinished_road' AND o.status='unresolved' AND o.value IS NULL
+                          AND ((s.hex=? AND s.other=?) OR (s.hex=? AND s.other=?))
+                    ''', (start, end, end, start)).fetchone())
+                    self.assertIsNone(self.db.execute('''
+                        SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=? AND feature='road'
+                    ''', (start, end)).fetchone())
+
     def test_whole_map_evidence_preserves_uncertainty_and_source_controls(self):
         self.assertEqual(self.db.execute("SELECT count(*) FROM cell_measurements").fetchone()[0], 7180)
         self.assertEqual(self.db.execute("SELECT count(*) FROM side_examinations").fetchone()[0], 20684)
@@ -170,6 +191,59 @@ class MapDatabaseTests(unittest.TestCase):
             SELECT n.id FROM network_links n JOIN hexes a ON a.id=n.from_hex JOIN hexes b ON b.id=n.to_hex
             WHERE a.section<>b.section
         """).fetchall(), [])
+
+    def test_reported_source_gaps_and_neighboring_track_crossings(self):
+        # Independently read from the cited source crops, not computed from
+        # existing links. Include each side so an alternate path cannot hide gaps.
+        for route in (
+            'C3111 C3011 C3012 C3013 C3014 C3015 C3016',
+            'C3008 C3009 C3010 C3111 C3211 C3312 C3412',
+            'C3409 C3310 C3210 C3111 C3010 C2911 C2811 C2712 C2612',
+            'C2619 C2519 C2418 C2318 C2218 C2217 C2117 C2116 C2016 C1916 C1815 C1715',
+            'C1619 C1519 C1418 C1319 C1218 C1119 C1019 C0920 C0820 C0821',
+            'C1119 C1118 C1117 C1116 C1115',
+            'C2410 C2411',
+            'C2414 C2415',
+            'C1415 C1515',
+            'C0925 C0825',
+            'B1706 B1606 B1507 B1508 B1509',
+        ):
+            cells = route.split()
+            for start, end in zip(cells, cells[1:]):
+                with self.subTest(start=start, end=end):
+                    self.assertIsNotNone(self.db.execute('''
+                        SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=?
+                          AND feature='track' AND status='provisional'
+                    ''', (start, end)).fetchone())
+        # Enlarged source crops against calibrated edges rule out these detours:
+        # El Cuasc goes straight into C3011; the northern bend uses C2318.
+        # C0925 bends south into C0825, not east into C0926.
+        # B1507's corner crossings do not detour through B1607.
+        for start, end in (('C3111', 'C3112'), ('C3011', 'C3112'),
+                           ('C2418', 'C2319'), ('C2319', 'C2218'),
+                           ('C0925', 'C0926'), ('B1606', 'B1607'),
+                           ('B1507', 'B1607'), ('B1607', 'B1508')):
+            with self.subTest(unsupported_crossing=(start, end)):
+                self.assertIsNone(self.db.execute('''
+                    SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=? AND feature='track'
+                ''', (start, end)).fetchone())
+
+    def test_source_points_retain_positions_and_do_not_promote_categories(self):
+        self.assertEqual(self.db.execute('''
+            SELECT symbol,center_x,center_y,label,status FROM source_points WHERE hex='C3111'
+        ''').fetchall(), [('village_bir_dot', 6567.0, 2324.1, 'El Cuasc', 'unresolved')])
+        self.assertEqual(dict(self.db.execute('SELECT symbol,count(*) FROM source_points GROUP BY symbol')),
+                         {'village_bir_dot': 117, 'oasis': 2, 'port_icon': 2})
+        for hex_id, examination in self.model['examinations'].items():
+            for point in examination['points']:
+                self.assertIsNotNone(self.db.execute('''
+                    SELECT 1 FROM source_points WHERE hex=? AND symbol=? AND center_x=? AND center_y=?
+                      AND label IS ? AND status=? AND source_refs=?
+                ''', (hex_id, point['symbol'], *point['center'], point.get('label'), point['status'],
+                      module.encode(point['source_refs']))).fetchone())
+        self.assertEqual(self.db.execute('''
+            SELECT status,value FROM observations WHERE survey='label-C3111'
+        ''').fetchone(), ('unresolved', None))
 
     def test_regeneration_is_logically_identical_and_changes_are_detectable(self):
         with sqlite3.connect(":memory:") as second:

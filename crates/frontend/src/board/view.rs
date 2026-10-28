@@ -52,8 +52,13 @@ fn portrait(b: &Board, c: &Counter) -> String {
             .and_then(cna_sim::role)
             .map(|r| format!("/sprites/{}.png", r.id))
     };
-    path.map(|path| format!(r#"<img src="{}" alt=""/>"#, escape(&path)))
-        .unwrap_or_else(|| icon("flag"))
+    path.map(|path| {
+        format!(
+            r#"<img src="{}" alt=""/>"#,
+            escape(path.trim_start_matches('/'))
+        )
+    })
+    .unwrap_or_else(|| icon("flag"))
 }
 
 pub(super) fn roster(b: &Board) -> String {

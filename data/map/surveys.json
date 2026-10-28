@@ -184,6 +184,21 @@
       "id": "cairo-major-city", "label": "Cairo building clusters", "notes": "Five blue building clusters matched to TEC Major City and their actual outlines. Nearby Heliopolis and Mena dark dots are not promoted to Major City. Rivers and training figures remain distinct features; no level or capacity is inferred.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=13600,3040,410,370", "docs/CNAv2.1.0/images/TEC.png#legend/Major-City"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
       "coverage": {"kind": "point", "hexes": ["E1930","E1931","E1829","E1830","E1730"], "observation": {"status": "provisional", "value": {"type": "major_city"}}}
+    },
+    {
+      "id": "el-cuasc-track-corrections", "label": "El Cuasc track crossings", "notes": "Gray single dashes traced from the El Cuasc dot east through C3112, briefly C3011, then C3012. These are three distinct side crossings, not a direct shortcut from C3111 to C3012. C3011 east falls about 3.5 pixels from the calibrated side endpoint, inside the detector's excluded corner zone. Neighboring east, northeast and north/south tracks were compared across the crop; existing raw ink measurements remain unchanged. Source evidence only, no movement or within-cell junction authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=6300,2050,800,700", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C3111","direction":"east"},{"hex":"C3011","direction":"north_east"},{"hex":"C3011","direction":"east"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "el-grein-north-track-corrections", "label": "Track north of El Grein", "notes": "Gray single-dash route traced from C2619 through C2519, C2418, C2319, C2218, C2217, C2117, C2116, C2016, C1916, C1815 and C1715. Three omitted crossings corrected. C2116 east is followed by a sharp turn inside the cell; its dashes do not satisfy the detector's straight-corridor fit. Blue barred and wadi marks to the east are separate, not transportation connections. Crop endpoints are review limits, not source termini.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=6650,2650,800,800", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C2319","direction":"north_west"},{"hex":"C2218","direction":"north_east"},{"hex":"C2116","direction":"east"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "ain-melfa-east-track-corrections", "label": "Ain Melfa eastern track crossings", "notes": "Gray single dashes traced along the north/south route east of Ain Melfa and Giarabub Oasis, including the C1119 northwest crossing about 5.5 pixels from its endpoint. C0820 northwest is another omitted crossing on the same route. The westward spur is separately visible through C1118 to C1115. These track dashes are distinct from the adjacent blue barred sides and wadi. No water, passability or junction rule inferred; raw detector uncertainty is retained.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=6850,3350,800,700", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C1119","direction":"north_west"},{"hex":"C0820","direction":"north_west"}], "observation": {"status": "provisional", "value": "track"}}
     }
   ]
 }

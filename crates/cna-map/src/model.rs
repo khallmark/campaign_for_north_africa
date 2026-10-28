@@ -1,7 +1,7 @@
 //! Auditable transcription batches expanded into the existing map-v1 vocabulary.
 //! Connectivity is section-local evidence, never an official movement graph.
 use crate::{
-    geometry::{contains_hex, hexes},
+    geometry::{contains_hex, corners, hexes},
     hex::{HexId, HexsideId},
     terrain::{
         HexsideFeature, MapRecord, Observation, PointFeature, Provenance, Record, Terrain,
@@ -60,6 +60,35 @@ pub struct Examination {
     pub crop: [i32; 4],
     pub surface: String,
     pub families: BTreeMap<String, String>,
+    #[serde(default)]
+    pub points: Vec<SourcePoint>,
+}
+
+/// A measured source glyph, not a settlement category or operational location.
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SourcePoint {
+    pub symbol: SourceSymbol,
+    pub center: [f64; 2],
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub label: Option<String>,
+    pub status: SourcePointStatus,
+    pub source_refs: Vec<String>,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SourceSymbol {
+    VillageBirDot,
+    Oasis,
+    PortIcon,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SourcePointStatus {
+    Provisional,
+    Unresolved,
 }
 
 impl Survey {
@@ -137,6 +166,32 @@ impl Model {
                 })
             {
                 return Err(format!("invalid automated examination for {hex}"));
+            }
+            let vertices = corners(*hex);
+            for point in &examination.points {
+                let [x, y] = point.center;
+                // Check this section's polygon directly: global picking can
+                // choose a different identity at an overlapping section seam.
+                let outside = (0..6).any(|i| {
+                    let a = vertices[i];
+                    let b = vertices[(i + 1) % 6];
+                    (b.x - a.x) * (y - a.y) - (b.y - a.y) * (x - a.x)
+                        < -0.02 * (b.x - a.x).hypot(b.y - a.y)
+                });
+                if !x.is_finite()
+                    || !y.is_finite()
+                    || outside
+                    || point.label.as_ref().is_some_and(|s| s.trim().is_empty())
+                    || point.source_refs.is_empty()
+                    || point.source_refs.iter().any(|reference| {
+                        !reference.contains('#')
+                            || !self
+                                .sources
+                                .contains_key(reference.split('#').next().unwrap())
+                    })
+                {
+                    return Err(format!("invalid source point for {hex}"));
+                }
             }
         }
         let mut ids = BTreeSet::new();

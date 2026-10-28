@@ -20,6 +20,16 @@ CREATE TABLE cell_measurements (
   surface TEXT NOT NULL CHECK(surface IN ('land','water','mixed_water_land','unresolved')),
   evidence TEXT NOT NULL CHECK(json_valid(evidence))
 ) STRICT;
+-- Source glyphs at measured positions; never settlement/water/port authority.
+CREATE VIEW source_points AS
+SELECT c.hex, p.key AS point_index,
+  json_extract(p.value,'$.symbol') AS symbol,
+  json_extract(p.value,'$.center[0]') AS center_x,
+  json_extract(p.value,'$.center[1]') AS center_y,
+  json_extract(p.value,'$.label') AS label,
+  json_extract(p.value,'$.status') AS status,
+  json_extract(p.value,'$.source_refs') AS source_refs
+FROM cell_measurements c, json_each(c.evidence,'$.points') p;
 CREATE TABLE examinations (
   hex TEXT NOT NULL REFERENCES cell_measurements(hex),
   family TEXT NOT NULL CHECK(family IN ('surface','terrain','transport','hexside','locations')),

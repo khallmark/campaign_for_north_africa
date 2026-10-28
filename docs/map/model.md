@@ -173,6 +173,34 @@ port glyphs do not establish complete recall. Other location symbols, labels,
 fortifications and operational port associations remain incomplete. No capacity,
 city level, movement cost, water amount, bridge rule or legal movement is inferred.
 
+### Source-located symbols and reported track omissions
+
+The compact model's `examinations[hex].points` now retains all 121 detected glyphs
+(117 Village/Bir dots, two oasis and two port symbols) at their measured board-pixel
+centers. `symbol` is `village_bir_dot`, `oasis` or `port_icon`; `label` is optional,
+`status` is `unresolved` or `provisional`, and `source_refs` identifies the source
+crop and legend under the model's pinned SHA256 values. For example, C3111 carries
+El Cuasc at `[6567.0, 2324.1]`, with `symbol: village_bir_dot` and
+`status: unresolved`. A renderer can show its source symbol and name without
+promoting the operational observation to a town, water supply or port. Positions
+are validated against the owning hex's polygon, not global hit-picking across
+unresolved seams. Raw template scores and label crops remain in the ledger.
+
+The October 28 comparison of El Cuasc, the track north of El Grein and Ain Melfa
+found eight omitted track crossings across six inspected route sequences. The
+three source-cited correction surveys retain provisional status and leave raw
+detector evidence unchanged. C3011 east and C1119 northwest fall in the detector's
+12% endpoint exclusion zone; C2116 east has a sharp turn that fails its straight
+dash corridor. These are conservative-detector false negatives, not missing scan
+pixels. The correction does not weaken those checks globally or assert complete
+track recall. Regression tests check each consecutive crossing rather than mere
+reachability through an alternate route. Blue barred sides remain unclassified.
+
+No ground assignments changed. Of 2,528 cells without typed ground, source-surface
+measurements report 2,087 land, 233 water, 184 mixed and 24 unresolved. A land
+measurement or a place label does not establish Clear terrain. A neutral unknown
+texture is presentation, not a terrain observation.
+
 ## SQLite contracts for later simulation research
 
 `hexes` contains section identity, center, JSON outline and terrain completeness.
@@ -183,6 +211,9 @@ Schema version 2 added `cell_measurements`, `side_examinations`, `examinations` 
 the `examination_coverage` view. These are detector coverage, not review approval.
 Schema version 3 adds nullable `observations.depiction`, restricted to unresolved
 hexside observations; see the [depiction contract](terrain-schema.md#unfinished-transportation-depiction).
+Schema version 4 adds the `source_points` view over the existing immutable cell
+evidence, exposing hex, point index, symbol, center, optional label, status and
+source references. It does not duplicate observations or feed `network_links`.
 
 `network_links` exposes both directions of each road/railroad/track/pipeline
 crossing, including its observation ID, survey and review status. It supports

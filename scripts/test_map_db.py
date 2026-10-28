@@ -171,6 +171,42 @@ class MapDatabaseTests(unittest.TestCase):
             WHERE a.section<>b.section
         """).fetchall(), [])
 
+    def test_reported_source_gaps_and_neighboring_track_crossings(self):
+        # Independently read from the three source crops, not computed from
+        # existing links. Include each side so an alternate path cannot hide gaps.
+        for route in (
+            'C3111 C3112 C3011 C3012 C3013 C3014 C3015 C3016',
+            'C3008 C3009 C3010 C3111 C3211 C3312 C3412',
+            'C3409 C3310 C3210 C3111 C3010 C2911 C2811 C2712 C2612',
+            'C2619 C2519 C2418 C2319 C2218 C2217 C2117 C2116 C2016 C1916 C1815 C1715',
+            'C1619 C1519 C1418 C1319 C1218 C1119 C1019 C0920 C0820 C0821',
+            'C1119 C1118 C1117 C1116 C1115',
+        ):
+            cells = route.split()
+            for start, end in zip(cells, cells[1:]):
+                with self.subTest(start=start, end=end):
+                    self.assertIsNotNone(self.db.execute('''
+                        SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=?
+                          AND feature='track' AND status='provisional'
+                    ''', (start, end)).fetchone())
+
+    def test_source_points_retain_positions_and_do_not_promote_categories(self):
+        self.assertEqual(self.db.execute('''
+            SELECT symbol,center_x,center_y,label,status FROM source_points WHERE hex='C3111'
+        ''').fetchall(), [('village_bir_dot', 6567.0, 2324.1, 'El Cuasc', 'unresolved')])
+        self.assertEqual(dict(self.db.execute('SELECT symbol,count(*) FROM source_points GROUP BY symbol')),
+                         {'village_bir_dot': 117, 'oasis': 2, 'port_icon': 2})
+        for hex_id, examination in self.model['examinations'].items():
+            for point in examination['points']:
+                self.assertIsNotNone(self.db.execute('''
+                    SELECT 1 FROM source_points WHERE hex=? AND symbol=? AND center_x=? AND center_y=?
+                      AND label IS ? AND status=? AND source_refs=?
+                ''', (hex_id, point['symbol'], *point['center'], point.get('label'), point['status'],
+                      module.encode(point['source_refs']))).fetchone())
+        self.assertEqual(self.db.execute('''
+            SELECT status,value FROM observations WHERE survey='label-C3111'
+        ''').fetchone(), ('unresolved', None))
+
     def test_regeneration_is_logically_identical_and_changes_are_detectable(self):
         with sqlite3.connect(":memory:") as second:
             module.populate(second, self.model)

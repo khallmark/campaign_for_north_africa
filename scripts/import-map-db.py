@@ -58,7 +58,10 @@ def populate(db, model):
     geometry_hash = hashlib.sha256(encode({k: model[k] for k in ("hexes", "hexsides")}).encode()).hexdigest()
     if geometry_hash != ledger["geometry_sha256"]:
         raise ValueError("examination geometry fingerprint differs from current geometry")
-    summaries = {c["hex"]: {k: c[k] for k in ("crop", "surface", "families")} for c in ledger["cells"]}
+    summaries = {c["hex"]: {
+        **{k: c[k] for k in ("crop", "surface", "families")},
+        "points": [{k: p[k] for k in ("symbol", "center", "label", "status", "source_refs") if k in p}
+                   for p in c["points"]]} for c in ledger["cells"]}
     if summaries != model["examinations"] or any(model["sources"].get(p) != h for p, h in ledger["sources"].items()):
         raise ValueError("examination evidence differs from exported model/source pins")
     if len(ledger["cells"]) != len(model["hexes"]) or len(ledger["sides"]) != len(model["hexsides"]):
@@ -67,7 +70,7 @@ def populate(db, model):
     fingerprints = {path: digest(ROOT / path) for path in INPUTS}
     db.executemany("INSERT INTO metadata VALUES (?,?)", [
         ("generator", "cna-map-model"),
-        ("schema_version", "3"), ("membership", model["membership"]),
+        ("schema_version", "4"), ("membership", model["membership"]),
         ("input_fingerprints", encode(fingerprints)),
         ("model_sha256", hashlib.sha256(encode(model).encode()).hexdigest()),
         ("seams", "unresolved; no cross-section movement or identity equivalence"),

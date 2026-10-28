@@ -199,6 +199,16 @@
       "id": "ain-melfa-east-track-corrections", "label": "Ain Melfa eastern track crossings", "notes": "Gray single dashes traced along the north/south route east of Ain Melfa and Giarabub Oasis, including the C1119 northwest crossing about 5.5 pixels from its endpoint. C0820 northwest is another omitted crossing on the same route. The westward spur is separately visible through C1118 to C1115. These track dashes are distinct from the adjacent blue barred sides and wadi. No water, passability or junction rule inferred; raw detector uncertainty is retained.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=6850,3350,800,700", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
       "coverage": {"kind": "hexside", "sides": [{"hex":"C1119","direction":"north_west"},{"hex":"C0820","direction":"north_west"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "c2414-east-track-correction", "label": "C2414 eastward track crossing", "notes": "Enlarged source pixels show single gray dashes across C2414 east, close to the northern endpoint before turning northeast inside C2415. Calibrated side endpoints distinguish this from a detour through the northern cell. Retain raw detector findings separately; this corner-sensitive source crossing does not establish movement permission or a within-cell junction.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=6747,2679,340,300", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C2414","direction":"east"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "c0925-south-track-correction", "label": "C0925 southern track bend", "notes": "The single dashed track bends south from C0925 into C0825 at the shared corner region, not east into C0926. A straight chord fitted between distant dashes incorrectly cuts C0925 east; the actual central side has track ink only on its west. Keep this corner-sensitive manual interpretation provisional and the raw measurements available. No invented eastward branch, movement permission or precise centerline is implied.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=7621,3809,340,300", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-28"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C0825","direction":"north_west"}], "observation": {"status": "provisional", "value": "track"}}
     }
   ]
 }

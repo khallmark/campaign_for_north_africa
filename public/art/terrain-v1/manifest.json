@@ -11,6 +11,7 @@
   "unknown": {
     "fill": "#d8dcdf",
     "asset": "unknown",
+    "substrate": "unmapped",
     "label": "Unknown"
   },
   "construction_variants": {
@@ -1211,6 +1212,28 @@
       ],
       "padding": 8,
       "sha256": "cef8060a9c8a56aa16226122f5791e6fda1b974b05085da0e28f1428e4f0f4d8"
+    },
+    "unmapped": {
+      "path": "surfaces/unmapped.png",
+      "size": [
+        1238,
+        1238
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "kind": "substrate",
+      "alpha": false,
+      "master": "unmapped",
+      "source_box": [
+        8,
+        8,
+        1246,
+        1246
+      ],
+      "padding": 0,
+      "sha256": "0fcd9510307f36eeb5de5cbec23add16375bf7ac836c9a3c9171d0531315eae3"
     }
   },
   "masters": {
@@ -1241,6 +1264,14 @@
     "points": {
       "path": "masters/points.png",
       "sha256": "fbe12a43a77ba4a8ea498b4983b4d4337fd22be65f9c7b6e72c30cfd05c8cea5",
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "unmapped": {
+      "path": "masters/unmapped.png",
+      "sha256": "fb1762e688e2025e4c88cdbd3bcc0de9836184a3266d1783b0371e73ee7682fb",
       "size": [
         1254,
         1254

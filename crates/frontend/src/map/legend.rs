@@ -13,7 +13,7 @@ pub(super) fn render() -> String {
         <section class="legend-art-only"><h3>Terrain tiles</h3><p>High-quality terrain · Original terrain enabled</p>
         <p>Original terrain textures blend where materials are observed. Blends show presence, not surveyed boundaries or full-hex coverage.</p>
         <ul class="legend-samples">
-        <li><span class="legend-swatch legend-unknown" aria-hidden="true"></span><span>Unknown / unmapped<small>Not Clear</small></span></li>"#,
+        <li><span class="legend-swatch legend-unknown" aria-hidden="true"></span><span>Unknown / unmapped<small>Neutral paper · Not Clear</small></span></li>"#,
     );
     for (asset, label) in [
         ("clear", "Clear"),

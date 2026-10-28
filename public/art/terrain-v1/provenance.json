@@ -10,6 +10,15 @@
   "prompt_record": "Summaries below; exact generation prompts and tool outputs are retained in authoring_thread. All four requests asked for original fictional North African strategy-map gouache artwork, no labels or game-map references. Generation is nondeterministic; the checked-in masters are the reproducible extraction input.",
   "postprocessing": "Pillow 12.0.0: equal-grid crops; 8px inset for opaque swatches; remove near-invisible alpha dust (alpha <= 8 becomes 0), alpha-bounds trim plus 8px transparent padding for overlays; PNG encoding. No external background removal, scan sampling, recoloring, generated geometry or painted paths. Manifest records exact crop boxes and output hashes.",
   "masters": {
+    "unmapped": {
+      "attachment": "https://ampcode.com/user-content/attachments/b4ddb9f6803c6e61f9048f6955a67b2db9497d2e0999a292c699257b93642103-file.png",
+      "sha256": "fb1762e688e2025e4c88cdbd3bcc0de9836184a3266d1783b0371e73ee7682fb",
+      "created": "2026-10-28",
+      "background": "opaque",
+      "requested_size": [1024, 1024],
+      "actual_size": [1254, 1254],
+      "prompt_summary": "Original neutral uncharted cartographic paper substrate, warm ivory fine fibers and faint graphite stippling. Explicitly not asserted geography: no terrain, water, roads, railways, settlements, symbols, labels, grids or directional shading. No reference images. This texture does not classify unknown cells."
+    },
     "surfaces": {
       "attachment": "https://ampcode.com/user-content/attachments/468a035018c60eb522b22c66d831d0ffce20291023eebc529e79ceac09b4568d-file.png",
       "sha256": "197219c8b518bed37e0de3906586b801c49615d623211fe5f344ae6d3485b57a",

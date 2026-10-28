@@ -23,7 +23,7 @@ POINTS = (
     "minefield friendly_badge enemy_badge village_bir_oasis"
 ).split()
 SHEETS = {"surfaces": (3, SURFACES), "transport": (2, TRANSPORT),
-          "features": (3, FEATURES), "points": (4, POINTS)}
+          "features": (3, FEATURES), "points": (4, POINTS), "unmapped": (1, ["unmapped"])}
 
 
 def png_bytes(image):
@@ -112,9 +112,10 @@ def validate(manifest, images):
     for name, image in images.items():
         alpha = image.getchannel("A")
         low, high = alpha.getextrema()
-        if high < 128 or (name in SURFACES and low != 255):
+        opaque = name in SURFACES or name == "unmapped"
+        if high < 128 or (opaque and low != 255):
             raise ValueError(f"{name}: invalid surface/foreground alpha")
-        if name not in SURFACES:
+        if not opaque:
             if low != 0:
                 raise ValueError(f"{name}: missing transparency")
             for edge in [(0, 0, image.width, 1), (0, image.height - 1, image.width, image.height),
@@ -137,7 +138,7 @@ def build(check):
         "geometry_authority": "crates/cna-map/src/geometry.rs and calibration.rs",
         "board_pixels": [14310, 4632], "per_hex_art_contract": False,
         "rendering": "illustrative decals; not seamless textures or geographic centerlines",
-        "unknown": {"fill": "#d8dcdf", "asset": "unknown", "label": "Unknown"},
+        "unknown": {"fill": "#d8dcdf", "asset": "unknown", "substrate": "unmapped", "label": "Unknown"},
         "construction_variants": {"road": "road_unfinished", "railroad": "railroad_unfinished"},
         "construction_policy": "explicit construction evidence only; provisional does not mean unfinished",
         "recipes": recipes(), "assets": {}, "masters": {},
@@ -152,7 +153,7 @@ def build(check):
         manifest["masters"][sheet] = {"path": f"masters/{sheet}.png", "sha256": digest,
                                        "size": list(master.size)}
         for index, name in enumerate(names):
-            surface = sheet == "surfaces"
+            surface = sheet in ("surfaces", "unmapped")
             strip = sheet == "transport" or (sheet == "features" and name not in ("sea", "unknown"))
             image, source_box = extract(master, columns, len(names), index, surface)
             relative = f"{'surfaces' if surface else 'overlays'}/{name}.png"
@@ -160,7 +161,7 @@ def build(check):
             outputs[relative] = encoded
             images[name] = image
             entry = {"path": relative, "size": list(image.size), "pivot": [0.5, 0.5],
-                     "kind": "surface" if surface else "strip" if strip else "stamp",
+                     "kind": "substrate" if name == "unmapped" else "surface" if surface else "strip" if strip else "stamp",
                      "alpha": not surface, "master": sheet, "source_box": source_box,
                      "padding": 0 if surface else 8, "sha256": hashlib.sha256(encoded).hexdigest()}
             if strip:

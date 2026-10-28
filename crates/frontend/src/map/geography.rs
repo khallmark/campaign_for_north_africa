@@ -496,6 +496,7 @@ impl Geography {
             }
             // Terrain must not tint routes; the wider road stroke must not hide
             // a coincident railroad. Keep both visible regardless of survey order.
+            html.push_str(&super::source_water::render(viewport));
             for (class, path) in links {
                 write!(
                     html,

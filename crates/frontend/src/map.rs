@@ -14,6 +14,7 @@ mod geography;
 mod legend;
 mod research;
 mod source_points;
+mod source_water;
 pub use research::mount as mount_research;
 pub(crate) use research::{focus as focus_board, refresh as refresh_board};
 

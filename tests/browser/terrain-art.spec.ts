@@ -228,6 +228,43 @@ test('measured source labels retain positions and uncertainty across viewer cont
   await expect(page.locator('.geography-location[data-hex="A2010"]')).toHaveCount(0);
 });
 
+test('water shapes retain source channel widths without assigning river classes', async ({ page }) => {
+  await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'No private scan' }));
+  await page.goto('/');
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('E1530');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  const shapes = page.locator('.geography-overlay .source-water');
+  await expect(shapes.first()).toBeVisible();
+  await expect(page.locator('.source-water-layer > title')).toContainText('not a river classification');
+  async function checkChannel() {
+    const wet = await shapes.evaluateAll(nodes => {
+      const viewport = document.querySelector<HTMLElement>('.research-viewport')!;
+      const box = viewport.getBoundingClientRect();
+      const zoom = Number(viewport.dataset.zoom);
+      // Independent original-pixel transect: water at x=13848..13872, y=3490.
+      return [13840, 13850, 13860, 13870, 13880].map(x => {
+        const screen = new DOMPoint(
+          box.x + box.width / 2 + (x - Number(viewport.dataset.centerX)) * zoom,
+          box.y + box.height / 2 + (3490 - Number(viewport.dataset.centerY)) * zoom,
+        );
+        return nodes.some((node: SVGPathElement) =>
+          node.isPointInFill(screen.matrixTransform(node.getScreenCTM()!.inverse())));
+      });
+    });
+    expect(wet).toEqual([false, true, true, true, false]);
+  }
+  await checkChannel();
+  await page.locator('.geography-details > summary').click();
+  await page.locator('.research-viewport').focus();
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('+');
+  await checkChannel();
+  await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  await checkChannel();
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await expect(shapes).toHaveCount(0);
+});
+
 test('source scan and original terrain can be compared together or independently', async ({ page }) => {
   const levels = Array.from({ length: 6 }, (_, z) => {
     const width = Math.ceil(14310 / 2 ** (5 - z));

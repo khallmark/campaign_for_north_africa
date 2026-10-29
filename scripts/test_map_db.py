@@ -207,6 +207,13 @@ class MapDatabaseTests(unittest.TestCase):
             'C1415 C1515',
             'C0925 C0825',
             'B1706 B1606 B1507 B1508 B1509',
+            # Complete regional source sequences, not just reported endpoints.
+            'C1828 C1829 C1830 C1831 C1832 C1933 C2033',
+            'D0708 D0808 D0908 D1008 D1109 D1208 D1308 D1407 D1508 D1608 '
+            'D1709 D1809 D1910 D1911 D2011',
+            'D1308 D1408 D1409 D1510 D1610 D1611 D1712 D1812 D1813 D1914 D1915 D2015',
+            'D1109 D1110 D1111 D1112 D1113 D1114 D1014 D1115',
+            'D1110 D1210 D1211 D1312 D1412 D1513 D1613 D1614 D1615',
         ):
             cells = route.split()
             for start, end in zip(cells, cells[1:]):
@@ -219,10 +226,13 @@ class MapDatabaseTests(unittest.TestCase):
         # El Cuasc goes straight into C3011; the northern bend uses C2318.
         # C0925 bends south into C0825, not east into C0926.
         # B1507's corner crossings do not detour through B1607.
+        # C1832 bends directly into C1933; D1114 dips through D1014.
         for start, end in (('C3111', 'C3112'), ('C3011', 'C3112'),
                            ('C2418', 'C2319'), ('C2319', 'C2218'),
                            ('C0925', 'C0926'), ('B1606', 'B1607'),
-                           ('B1507', 'B1607'), ('B1607', 'B1508')):
+                           ('B1507', 'B1607'), ('B1607', 'B1508'),
+                           ('C1832', 'C1932'), ('C1932', 'C1933'),
+                           ('D1114', 'D1115')):
             with self.subTest(unsupported_crossing=(start, end)):
                 self.assertIsNone(self.db.execute('''
                     SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=? AND feature='track'

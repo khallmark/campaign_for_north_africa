@@ -99,8 +99,8 @@ automated or agent-visual record is human-reviewed.
 | D | 1,253 | 1,179 / 37 / 36 / 1 | 786 |
 | E | 1,313 | 994 / 273 / 41 / 5 | 956 |
 
-The current combined model has **252 surveys / 24,144 observations**: 4,792 terrain,
-19,206 hexside and 146 point observations. **7,704 are provisional, 16,440 unresolved,
+The current combined model has **255 surveys / 24,150 observations**: 4,792 terrain,
+19,212 hexside and 146 point observations. **7,710 are provisional, 16,440 unresolved,
 none human-reviewed.** Terrain observations cover 4,652 cells; 2,528 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
@@ -168,8 +168,8 @@ Combined distinct typed crossings (manual plus extracted; duplicates removed):
 | --- | ---: | ---: | ---: |
 | A | 76 | 7 | 248 |
 | B | 57 | 5 | 465 |
-| C | 32 | 0 | 423 |
-| D | 36 | 26 | 284 |
+| C | 32 | 0 | 425 |
+| D | 36 | 26 | 288 |
 | E | 171 | 167 | 159 |
 | Malta | 0 | 0 | 0 |
 
@@ -228,6 +228,17 @@ B1507 has two further source-cited corner corrections: its northwest crossing
 from B1606 and its east crossing into B1508. Tests cover B1706–B1606–B1507–B1508–B1509
 and reject a detour through B1607. Raw detector findings and its conservative
 endpoint exclusion remain unchanged.
+
+The screenshot-led C1832/Qara audit checks 46 consecutive crossings across five
+regional routes, including the adjoining eastern and northeastern branches. Six
+omissions have source-cited corrections: C1831 east, C1832 northeast, D1008
+northeast, D1208 northwest, D1809 northeast and D1915 northeast. The C crossings
+are corner-sensitive; Qara's dot/wadi, the escarpment fringe, curved dashes and
+converging branches interrupt the detector's narrow straight-stroke evidence.
+These corrections preserve its raw uncertainty rather than relaxing safeguards
+globally. Tests also reject a false detour through C1932 and the nonexistent
+D1114 east shortcut: that route passes through D1014. This regional audit does
+not establish complete map-wide recall or exact centerline geometry.
 
 No ground assignments changed. Of 2,528 cells without typed ground, source-surface
 measurements report 2,087 land, 233 water, 184 mixed and 24 unresolved. A land

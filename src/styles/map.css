@@ -398,7 +398,8 @@
 .geography-water, .legend-water { fill: #488fb0; opacity: 0.35; }
 :is(.geography-water, .legend-water).mixed_water_land { fill: #86acaa; stroke: #376c86; stroke-dasharray: 4 3; }
 .source-water { fill: #6ea4c0; }
-.research-viewport[data-source-visible=true] .source-water { opacity: 0.45; }
+.source-wadi { fill: #7f948e; }
+.research-viewport[data-source-visible=true] :is(.source-water, .source-wadi) { opacity: 0.45; }
 .geography-overlay[data-detail=false] .geography-terrain,
 .geography-overlay[data-detail=false] .geography-water { stroke: none; }
 .geography-selected, .legend-selected { fill: #fff8cf22; stroke: #ba452d; stroke-width: 3; }

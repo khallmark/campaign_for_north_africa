@@ -365,7 +365,8 @@ impl Geography {
             let mut locations = String::new();
             let mut water: BTreeMap<&str, String> = BTreeMap::new();
             for (&hex, examination) in &model().examinations {
-                if visible(hex)
+                if !self.original_art
+                    && visible(hex)
                     && matches!(examination.surface.as_str(), "water" | "mixed_water_land")
                 {
                     if viewport.zoom() < 0.65 {
@@ -453,6 +454,11 @@ impl Geography {
                                 _ => continue,
                             };
                             use cna_map::terrain::HexsideFeature::*;
+                            // Actual water/wadi ink is drawn below. A straight
+                            // hex edge would duplicate it and misstate its course.
+                            if matches!(value, Wadi | MajorRiver | MinorRiver) {
+                                continue;
+                            }
                             let (a, b, class) =
                                 if matches!(value, Road | Railroad | Track | Pipeline) {
                                     (

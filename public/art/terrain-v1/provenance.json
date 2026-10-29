@@ -8,7 +8,7 @@
   "reference_images": [],
   "source_policy": "Original text-to-image artwork. No scanned board, source tile, rulebook image, published game art or private image was supplied to Painter. Terrain vocabulary came from code and schema text only. This is provenance, not a legal warranty or a new license grant.",
   "prompt_record": "Summaries below; exact generation prompts and tool outputs are retained in authoring_thread. All four requests asked for original fictional North African strategy-map gouache artwork, no labels or game-map references. Generation is nondeterministic; the checked-in masters are the reproducible extraction input.",
-  "postprocessing": "Pillow 12.0.0: equal-grid crops; 8px inset for opaque swatches; remove near-invisible alpha dust (alpha <= 8 becomes 0), alpha-bounds trim plus 8px transparent padding for overlays; PNG encoding. No external background removal, scan sampling, recoloring, generated geometry or painted paths. Manifest records exact crop boxes and output hashes.",
+  "postprocessing": "Pillow 12.0.0: equal-grid crops; 8px inset for opaque swatches; remove near-invisible alpha dust (alpha <= 8 becomes 0), alpha-bounds trim plus 8px transparent padding for overlays; PNG encoding. Unmapped paper receives a constant per-channel offset to match the original Clear artwork's mean palette while retaining its own paper texture; this is not a terrain assignment. No external background removal, scan sampling, generated geometry or painted paths. Manifest records exact crop boxes and output hashes.",
   "masters": {
     "unmapped": {
       "attachment": "https://ampcode.com/user-content/attachments/b4ddb9f6803c6e61f9048f6955a67b2db9497d2e0999a292c699257b93642103-file.png",

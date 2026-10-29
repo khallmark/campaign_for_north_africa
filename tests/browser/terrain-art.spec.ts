@@ -162,6 +162,14 @@ test('bundled terrain works without private scans and survives map controls', as
   await expect(page.locator('.geography-inspector')).toContainText('mountain');
   expect(await groundPixel()).not.toEqual(desertPixel);
   expect(await groundPixel()).not.toEqual([216, 220, 223, 255]);
+  // A road/name can interrupt classification without changing its paper palette.
+  // Unknown must stay unclassified, but must not become a cold white corridor.
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('C3111');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  await expect(page.locator('.geography-inspector')).toContainText('Terrain unmapped — not Clear');
+  const paper = await groundPixel();
+  expect(paper[0] - paper[2]).toBeGreaterThan(50);
+  expect(paper[1] - paper[2]).toBeGreaterThan(25);
   expect(failedArt).toEqual([]);
   expect(errors).toEqual([]);
 });
@@ -235,6 +243,7 @@ test('water shapes retain source channel widths without assigning river classes'
   await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
   const shapes = page.locator('.geography-overlay .source-water');
   await expect(shapes.first()).toBeVisible();
+  await expect(page.locator('.geography-water')).toHaveCount(0);
   await expect(page.locator('.source-water-layer > title')).toContainText('not a river classification');
   async function checkChannel() {
     const wet = await shapes.evaluateAll(nodes => {
@@ -260,9 +269,31 @@ test('water shapes retain source channel widths without assigning river classes'
   await page.keyboard.press('+');
   await checkChannel();
   await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  expect(await page.locator('.geography-water').count()).toBeGreaterThan(0);
   await checkChannel();
   await page.getByRole('button', { name: 'Geography', exact: true }).click();
   await expect(shapes).toHaveCount(0);
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  // Independent source-pixel transects in three sections, including grid
+  // interruptions. These are dry channels, never blue flowing-water shapes.
+  for (const [hex, y, xs] of [
+    ['A0807', 3990, [485, 496, 502, 515]],
+    ['B1515', 3500, [3785, 3798, 3808, 3825]],
+    ['C2016', 3200, [7025, 7040, 7050, 7065]],
+  ] as const) {
+    await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill(hex);
+    await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+    const channels = page.locator('.geography-overlay .source-wadi');
+    await expect(channels.first()).toBeVisible();
+    expect(await channels.evaluateAll((nodes, { y, xs }) => xs.map(x =>
+      nodes.some((node: SVGPathElement) => node.isPointInFill(new DOMPoint(x, y))),
+    ), { y, xs })).toEqual([false, true, true, false]);
+    await expect(channels.first()).toHaveCSS('fill', 'rgb(127, 148, 142)');
+    await page.getByRole('button', { name: 'Geography', exact: true }).click();
+    await expect(channels).toHaveCount(0);
+    await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  }
 });
 
 test('source scan and original terrain can be compared together or independently', async ({ page }) => {

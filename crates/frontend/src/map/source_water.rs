@@ -1,4 +1,4 @@
-//! Source water-ink shapes retain channel width without assigning river rules.
+//! Source water and dry-wadi shapes retain widths without assigning river rules.
 use crate::view::escape;
 use cna_map::{
     geometry::BoardPoint,
@@ -10,6 +10,7 @@ use std::{fmt::Write, sync::OnceLock};
 #[derive(Deserialize)]
 struct Outline {
     id: String,
+    kind: String,
     rings: Vec<Vec<[f64; 2]>>,
     bounds: [f64; 4],
 }
@@ -37,7 +38,7 @@ pub(super) fn render(viewport: Viewport) -> String {
     });
     let origin = viewport.to_screen(BoardPoint { x: 0.0, y: 0.0 });
     let mut html = format!(
-        r#"<g class="source-water-layer" data-source-ref="{}" transform="translate({:.2} {:.2}) scale({})"><title>Source water ink · provisional display evidence, not a river classification or movement rule. Source overprint gaps retained.</title>"#,
+        r#"<g class="source-water-layer" data-source-ref="{}" transform="translate({:.2} {:.2}) scale({})"><title>Source water and dry-wadi ink · provisional display evidence, not a river classification or movement rule. Source overprint gaps retained.</title>"#,
         escape(&water.source_ref),
         origin.x,
         origin.y,
@@ -49,7 +50,8 @@ pub(super) fn render(viewport: Viewport) -> String {
     }) {
         write!(
             html,
-            r#"<path class="source-water" data-source-id="{}" fill-rule="evenodd" d=""#,
+            r#"<path class="source-{}" data-source-id="{}" fill-rule="evenodd" d=""#,
+            escape(&outline.kind),
             escape(&outline.id)
         )
         .unwrap();

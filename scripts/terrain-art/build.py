@@ -10,7 +10,7 @@ import io
 import json
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageStat
 
 ROOT = Path(__file__).resolve().parents[2]
 PACK = ROOT / "public/art/terrain-v1"
@@ -156,6 +156,16 @@ def build(check):
             surface = sheet in ("surfaces", "unmapped")
             strip = sheet == "transport" or (sheet == "features" and name not in ("sea", "unknown"))
             image, source_box = extract(master, columns, len(names), index, surface)
+            if name == "unmapped":
+                # Match the authored ground palette, not its terrain texture.
+                # Roads interrupt classification; their unknown cells must not
+                # become white corridors or acquire invented Clear terrain.
+                reference = ImageStat.Stat(images["clear"]).mean
+                mean = ImageStat.Stat(image).mean
+                image = Image.merge("RGBA", [
+                    channel.point(lambda value, offset=round(target-current): value + offset)
+                    for channel, target, current in zip(image.split(), reference, mean)
+                ])
             relative = f"{'surfaces' if surface else 'overlays'}/{name}.png"
             encoded = png_bytes(image)
             outputs[relative] = encoded

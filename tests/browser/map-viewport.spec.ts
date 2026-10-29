@@ -252,7 +252,10 @@ test('source geometry and evidence remain inspectable without artwork or movemen
   await expect(page.locator('.geography-examination')).toContainText('mixed_water_land');
   await expect(page.locator('.geography-examination')).toContainText('Automated evidence, not human-reviewed');
   await expect(page.locator('.geography-examination')).toContainText('Not detected does not mean absent');
+  await expect(page.locator('.geography-water.mixed_water_land[data-hex=E3525]')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
   await expect(page.locator('.geography-water.mixed_water_land[data-hex=E3525]')).toHaveCount(1);
+  await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
   await inspect('Malta 0805');
   await expect(page.locator('.geography-examination')).toContainText('Raster examination');
   await inspect('C9999');

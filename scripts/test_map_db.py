@@ -238,6 +238,65 @@ class MapDatabaseTests(unittest.TestCase):
                     SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=? AND feature='track'
                 ''', (start, end)).fetchone())
 
+    def test_barrani_matruh_coastal_routes_preserve_crossings_and_construction_state(self):
+        # Read crossing by crossing from source crops (8100,1500,900,1000)
+        # and (9000,1750,1000,750). Split at section boundaries, not inferred seams.
+        for feature, routes in (
+            ('track', (
+                'C4131 C4031 C3931 C3831 C3731 C3630 C3530 C3430 C3330 C3229 C3130 C3029 C2929',
+                'D3901 D3801 D3702 D3602 D3502 D3402 D3303 D3203 D3103 D3003 D2903',
+                'C3630 C3631 C3632 C3633',
+                'D3601 D3602 D3603 D3504 D3505 D3506 D3507 D3407 D3408 D3409 '
+                'D3410 D3411 D3412 D3313 D3314 D3315 D3316 D3317 D3318',
+                'C3529 C3530 C3531 C3532 C3533',
+                'D3501 D3502 D3503 D3403 D3404 D3405 D3306 D3307 D3308 D3309 D3310 D3210',
+                'C3029 C3030 C3031 C3032 C3033',
+                'D2901 D2902 D2903 D2904 D2905 D2906 D2907 D2908 D2909',
+                'D3516 D3415 D3315 D3215 D3115 D3015 D2915',
+                'D3218 D3118 D3117 D3016 D3015',
+            )),
+            ('road', (
+                'C4130 C4131 C4132 C4032 C4033',
+                'D4001 D4002 D3903 D3904 D3804 D3805 D3806 D3707 D3708 D3709 '
+                'D3710 D3711 D3611 D3612 D3613 D3714',
+            )),
+            ('unfinished_railroad', (
+                'C3631 C3632 C3633',
+                'D3601 D3602 D3603 D3604 D3605 D3606 D3607 D3608 D3609 D3710 '
+                'D3711 D3611 D3612 D3613 D3514 D3515 D3615',
+            )),
+        ):
+            for route in routes:
+                cells = route.split()
+                for start, end in zip(cells, cells[1:]):
+                    with self.subTest(feature=feature, start=start, end=end):
+                        if feature == 'unfinished_railroad':
+                            self.assertIsNotNone(self.db.execute('''
+                                SELECT 1 FROM observations o JOIN hexsides s USING(hex,direction)
+                                WHERE o.depiction='unfinished_railroad' AND o.status='unresolved'
+                                  AND o.value IS NULL
+                                  AND ((s.hex=? AND s.other=?) OR (s.hex=? AND s.other=?))
+                            ''', (start, end, end, start)).fetchone())
+                            self.assertIsNone(self.db.execute('''
+                                SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=?
+                                  AND feature='railroad'
+                            ''', (start, end)).fetchone())
+                        else:
+                            self.assertIsNotNone(self.db.execute('''
+                                SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=?
+                                  AND feature=? AND status='provisional'
+                            ''', (start, end, feature)).fetchone())
+        # The road stays north of D3610; Bir Talab's eastern track does not
+        # continue south across D2916 NE. Do not extend strokes through corners.
+        for start, end, feature in (
+            ('D3610', 'D3710', 'road'), ('D3610', 'D3711', 'road'),
+            ('D2916', 'D3016', 'track'),
+        ):
+            with self.subTest(unsupported_crossing=(start, end, feature)):
+                self.assertIsNone(self.db.execute('''
+                    SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=? AND feature=?
+                ''', (start, end, feature)).fetchone())
+
     def test_source_points_retain_positions_and_do_not_promote_categories(self):
         self.assertEqual(self.db.execute('''
             SELECT symbol,center_x,center_y,label,status FROM source_points WHERE hex='C3111'

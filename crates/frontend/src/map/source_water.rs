@@ -1,4 +1,4 @@
-//! Source water and dry-wadi shapes retain widths without assigning river rules.
+//! Source water, dry-wadi and scarp shapes retain widths without movement rules.
 use crate::view::escape;
 use cna_map::{
     geometry::BoardPoint,
@@ -38,7 +38,7 @@ pub(super) fn render(viewport: Viewport) -> String {
     });
     let origin = viewport.to_screen(BoardPoint { x: 0.0, y: 0.0 });
     let mut html = format!(
-        r#"<g class="source-water-layer" data-source-ref="{}" transform="translate({:.2} {:.2}) scale({})"><title>Source water and dry-wadi ink · provisional display evidence, not a river classification or movement rule. Source overprint gaps retained.</title>"#,
+        r#"<g class="source-water-layer" data-source-ref="{}" transform="translate({:.2} {:.2}) scale({})"><title>Source water, dry-wadi and escarpment ink · provisional display evidence, not a river classification or movement rule. Printed scarp faces retained; Up/Down unresolved. Source overprint gaps retained.</title>"#,
         escape(&water.source_ref),
         origin.x,
         origin.y,

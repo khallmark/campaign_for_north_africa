@@ -296,6 +296,40 @@ test('water shapes retain source channel widths without assigning river classes'
   }
 });
 
+test('escarpments retain printed faces without turning lettering into terrain', async ({ page }) => {
+  await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'No private scan' }));
+  await page.goto('/');
+  const scarps = page.locator('.geography-overlay .source-escarpment');
+  // Independently sampled original-pixel transects in three sections. The
+  // broad face must stay at its source position, not become a hex-center line.
+  for (const [hex, y, xs] of [
+    ['A4331', 1450, [2665, 2680, 2686, 2700]],
+    ['C3624', 1950, [7677, 7691, 7696, 7710]],
+    ['D1814', 3250, [9640, 9655, 9662, 9678]],
+  ] as const) {
+    await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill(hex);
+    await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+    await expect(scarps.first()).toBeVisible();
+    expect(await scarps.evaluateAll((nodes, { y, xs }) => xs.map(x =>
+      nodes.some((node: SVGPathElement) => node.isPointInFill(new DOMPoint(x, y))),
+    ), { y, xs })).toEqual([false, true, true, false]);
+    await expect(scarps.first()).toHaveCSS('fill', 'rgb(94, 97, 98)');
+  }
+  await expect(page.locator('.source-water-layer > title')).toContainText('Up/Down unresolved');
+  await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  await expect(scarps.first()).toBeVisible();
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await expect(scarps).toHaveCount(0);
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await expect(scarps.first()).toBeVisible();
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('D1720');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  // Qattara Depression lettering uses exactly the same gray as the scarps.
+  expect(await scarps.evaluateAll(nodes => nodes.some((node: SVGPathElement) =>
+    node.isPointInFill(new DOMPoint(10200, 3330)),
+  ))).toBe(false);
+});
+
 test('source scan and original terrain can be compared together or independently', async ({ page }) => {
   const levels = Array.from({ length: 6 }, (_, z) => {
     const width = Math.ceil(14310 / 2 ** (5 - z));

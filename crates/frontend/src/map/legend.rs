@@ -45,7 +45,7 @@ pub(super) fn render() -> String {
     }
     html.push_str(
         r#"</ul></section><section class="legend-geography-only"><h3>Routes &amp; construction</h3>
-        <p>Geography shows schematic crossings, not exact paths or movement permission.</p><ul class="legend-samples">"#,
+        <p>Geography shows schematic crossings, not exact paths or movement permission. Parallel display lanes separate a track and construction sharing a crossing; their spacing is not surveyed.</p><ul class="legend-samples">"#,
     );
     for (class, label, ties) in [
         ("legend-route road", "Road", ""),
@@ -63,7 +63,11 @@ pub(super) fn render() -> String {
             "legend-construction construction-ties",
         ),
     ] {
-        write!(html, r#"<li><svg viewBox="0 0 60 32" aria-hidden="true"><path class="{class}" d="M3 16H57"/>"#).unwrap();
+        html.push_str(r#"<li><svg viewBox="0 0 60 32" aria-hidden="true">"#);
+        if class == "legend-route track" {
+            html.push_str(r#"<path class="geography-track-casing" d="M3 16H57"/>"#);
+        }
+        write!(html, r#"<path class="{class}" d="M3 16H57"/>"#).unwrap();
         if !ties.is_empty() {
             write!(html, r#"<path class="{ties}" d="M3 16H57"/>"#).unwrap();
         }

@@ -6,10 +6,13 @@ use cna_map::{
     geometry::{center, corners, edge, hexes, BoardPoint},
     hex::HexId,
     model::{model, Coverage},
-    terrain::{MapRecord, Observation, Terrain, TransportDepiction},
+    terrain::{HexsideFeature, MapRecord, Observation, Terrain, TransportDepiction},
     viewport::Viewport,
 };
-use std::{collections::BTreeMap, fmt::Write};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    fmt::Write,
+};
 use web_sys::Element;
 
 pub(super) fn terrain_color(terrain: &Terrain) -> &'static str {
@@ -359,6 +362,26 @@ impl Geography {
             String::new()
         };
         if self.features {
+            let track_sides: BTreeSet<_> = self
+                .records
+                .iter()
+                .flatten()
+                .filter_map(|assignment| match assignment {
+                    MapRecord::Hexside { side, record, .. }
+                        if matches!(
+                            record.observation,
+                            Observation::Provisional {
+                                value: HexsideFeature::Track
+                            } | Observation::Reviewed {
+                                value: HexsideFeature::Track
+                            }
+                        ) =>
+                    {
+                        Some(*side)
+                    }
+                    _ => None,
+                })
+                .collect();
             let mut links: BTreeMap<&str, String> = BTreeMap::new();
             let mut railroads = String::new();
             let mut construction = String::new();
@@ -424,8 +447,19 @@ impl Geography {
                                     }
                                 };
                                 let other = side.hex().neighbor(side.direction()).unwrap();
-                                let a = viewport.to_screen(center(side.hex()));
-                                let b = viewport.to_screen(center(other));
+                                let mut a = viewport.to_screen(center(side.hex()));
+                                let mut b = viewport.to_screen(center(other));
+                                if track_sides.contains(side) {
+                                    // Parallel display lanes distinguish coincident evidence;
+                                    // this is not a surveyed displacement or a new crossing.
+                                    let dx = b.x - a.x;
+                                    let dy = b.y - a.y;
+                                    let offset = 8.0 * viewport.zoom().min(1.0) / dx.hypot(dy);
+                                    a.x -= dy * offset;
+                                    b.x -= dy * offset;
+                                    a.y += dx * offset;
+                                    b.y += dx * offset;
+                                }
                                 let path = format!("M{:.2},{:.2}L{:.2},{:.2}", a.x, a.y, b.x, b.y);
                                 write!(construction, "<path class=\"geography-construction {class}\" data-from=\"{}\" data-to=\"{other}\" d=\"{path}\"><title>{label} depiction · unresolved · schematic, not an operational link</title></path>", side.hex()).unwrap();
                                 if matches!(depiction, TransportDepiction::UnfinishedRailroad) {
@@ -504,6 +538,13 @@ impl Geography {
             // a coincident railroad. Keep both visible regardless of survey order.
             html.push_str(&super::source_water::render(viewport));
             for (class, path) in links {
+                if class == "track" {
+                    write!(
+                        html,
+                        "<path class=\"geography-track-casing\" d=\"{path}\"/>"
+                    )
+                    .unwrap();
+                }
                 write!(
                     html,
                     "<path class=\"geography-link {class}\" d=\"{path}\"/>"

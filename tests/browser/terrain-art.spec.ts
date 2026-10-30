@@ -380,6 +380,47 @@ test('source scan and original terrain can be compared together or independently
   expect(await camera()).toEqual(initialCamera);
 });
 
+test('tracks stay legible over artwork and beside coincident construction', async ({ page }) => {
+  await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'No private scan' }));
+  await page.goto('/');
+  for (const [from, to] of [['C3632', 'C3633'], ['D3602', 'D3603'], ['C3722', 'C3821']]) {
+    await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill(from);
+    await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+    const separation = await page.evaluate(({ from, to }) => {
+      const center = (hex: string) => {
+        const polygon = document.querySelector<SVGPolygonElement>(`.geography-hex[data-hex="${hex}"]`)!;
+        const points = Array.from(polygon.points);
+        return new DOMPoint(points.reduce((sum, p) => sum + p.x, 0) / points.length,
+          points.reduce((sum, p) => sum + p.y, 0) / points.length);
+      };
+      const a = center(from), b = center(to);
+      const track = document.querySelector<SVGPathElement>('.geography-link.track')!;
+      const construction = document.querySelector<SVGPathElement>(
+        `.geography-construction.unfinished-railroad[data-from="${from}"][data-to="${to}"]`,
+      )!;
+      const midpoint = new DOMPoint((a.x + b.x) / 2, (a.y + b.y) / 2);
+      const railMidpoint = construction.getPointAtLength(construction.getTotalLength() / 2);
+      return { trackAtCrossing: track.isPointInStroke(midpoint),
+        distance: Math.hypot(railMidpoint.x - midpoint.x, railMidpoint.y - midpoint.y) };
+    }, { from, to });
+    expect(separation.trackAtCrossing).toBe(true);
+    expect(separation.distance).toBeGreaterThan(6);
+    expect(separation.distance).toBeLessThan(10);
+  }
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('D3115');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  const track = page.locator('.geography-link.track');
+  const casing = page.locator('.geography-overlay .geography-track-casing');
+  await expect(track).toHaveCSS('stroke', 'rgb(76, 47, 24)');
+  await expect(casing).toHaveCSS('stroke', 'rgb(255, 248, 229)');
+  expect(await casing.getAttribute('d')).toBe(await track.getAttribute('d'));
+  await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  await expect(casing).toBeAttached();
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await expect(track).toHaveCount(0);
+  await expect(casing).toHaveCount(0);
+});
+
 test('source-backed unfinished routes are visible without becoming completed links', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));

@@ -388,11 +388,13 @@ test('source-backed unfinished routes are visible without becoming completed lin
   await page.getByRole('button', { name: 'Fit full board', exact: true }).click();
   // Railroad controls stay separate from the newly recognized hollow road
   // capsules. Generic unresolved ink (including blue bars) is not construction.
-  await expect(page.locator('.geography-construction.unfinished-railroad')).toHaveCount(27);
+  await expect(page.locator('.geography-construction.unfinished-railroad')).toHaveCount(39);
   await expect(page.locator('.geography-construction[data-from="C3019"][data-to="C3020"]')).toHaveCount(0);
   await expect(page.locator('.geography-link.unfinished-railroad, .geography-link.unfinished-road')).toHaveCount(0);
   for (const [hex, to, kind, label] of [
     ['C4217', 'C4218', 'unfinished-railroad', 'Unfinished railroad'],
+    ['D3602', 'D3603', 'unfinished-railroad', 'Unfinished railroad'],
+    ['D3611', 'D3711', 'unfinished-railroad', 'Unfinished railroad'],
     ['C3823', 'C3824', 'unfinished-road', 'Unfinished road'],
     ['C0127', 'C0227', 'unfinished-road', 'Unfinished road'],
     ['C1331', 'C1332', 'unfinished-road', 'Unfinished road'],

@@ -280,8 +280,9 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,809/1,961 B cells; 4,209 cells
-remain not_reviewed**, including B5601 onward and all of C–E. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,961/1,961 B cells; 4,057 cells
+remain not_reviewed**, covering all of C–E. Rosetta's anchor is a point-only spot
+check and does not count as whole-cell review. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -534,6 +535,26 @@ stippled-band interiors and mixed coastal cells retain unresolved ground/footpri
 findings. Tocra B5501's western Road exits retained inventory and remains a
 boundary finding for the seam owner. No precise centerline, operational junction,
 port, Up/Down effect or section adjacency is inferred.
+
+The final northern B batch reviews **152 retained B5601–B6123 cells**, completing
+the section's 1,961 whole-cell source inspections, not its interpretation.
+Six Track crossings restore the Tocra–Tolmeta coast and El Gubba's southbound
+near-edge bend through **B5819 → B5719 → B5720**, not a direct shortcut.
+Two continuous Road crossings restore **B5717 east and B5919 east** independently
+of nearby Track and unfinished-Road capsules. Clear occurrences at B5627/B5629,
+partial Rough at B5720/B5728 and a Mountain core at B5915 supplement existing
+classes without replacing them. No Railroad is observed in this batch.
+
+The omitted **Derna anchor at (4962.5, 253.5)** is separate from its existing
+Village/Bir dot. A new source template at the unchanged 0.88 threshold also
+recovers **Rosetta's anchor at (12978.5, 1565.5)**, independently spot-inspected in
+E4120. Both retain unresolved operational port association; E4120 remains
+`not_reviewed` for whole-cell coverage. Prior measured symbols are unchanged.
+Coast slivers in B5923/B6020/B6021 visibly disagree with the raw detector's `land`
+label; this is recorded without rewriting measurements or geometry. B5906/B6121
+retain unresolved raw surface and explicit mixed-shore findings. The B5508/B5608
+vertex, band polarity, coast ownership, construction completion and operational
+effects remain unresolved. No seam adjacency or exact source path is inferred.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

@@ -300,10 +300,11 @@ test('escarpments retain printed faces without turning lettering into terrain', 
   await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'No private scan' }));
   await page.goto('/');
   const scarps = page.locator('.geography-overlay .source-escarpment');
-  // Independently sampled original-pixel transects in three sections. The
+  // Independently sampled original-pixel transects across the board. The
   // broad face must stay at its source position, not become a hex-center line.
   for (const [hex, y, xs] of [
     ['A4331', 1450, [2665, 2680, 2686, 2700]],
+    ['B5502', 595, [2947, 2958, 2963, 2982]],
     ['C3624', 1950, [7677, 7691, 7696, 7710]],
     ['D1814', 3250, [9640, 9655, 9662, 9678]],
   ] as const) {
@@ -314,6 +315,21 @@ test('escarpments retain printed faces without turning lettering into terrain', 
       nodes.some((node: SVGPathElement) => node.isPointInFill(new DOMPoint(x, y))),
     ), { y, xs })).toEqual([false, true, true, false]);
     await expect(scarps.first()).toHaveCSS('fill', 'rgb(94, 97, 98)');
+  }
+  // Detached source stipple and the small coastal cap were formerly omitted.
+  // Positions come from original RGB pixels, not from generated SVG rings.
+  for (const [hex, x, y] of [
+    ['A4231', 2714, 1519],
+    ['C5004', 6016, 974],
+    ['C3625', 7813, 1983],
+    ['D2329', 10906, 2903],
+    ['E1023', 13294, 3857],
+  ] as const) {
+    await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill(hex);
+    await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+    expect(await scarps.evaluateAll((nodes, { x, y }) => nodes.some((node: SVGPathElement) =>
+      node.isPointInFill(new DOMPoint(x, y)),
+    ), { x, y })).toBe(true);
   }
   await expect(page.locator('.source-water-layer > title')).toContainText('Up/Down unresolved');
   await page.getByRole('button', { name: 'Original terrain', exact: true }).click();

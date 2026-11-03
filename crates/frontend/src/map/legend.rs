@@ -45,14 +45,23 @@ pub(super) fn render() -> String {
     }
     html.push_str(
         r#"</ul></section><section class="legend-geography-only"><h3>Routes &amp; construction</h3>
-        <p>Geography shows schematic crossings, not exact paths or movement permission. Parallel display lanes separate a track and construction sharing a crossing; their spacing is not surveyed.</p><ul class="legend-samples">"#,
+        <p>Road and railroad curves follow measured source ink, not hex centers. Traces are provisional and incomplete: gaps stay open, and visual continuity does not establish movement permission or section-seam adjacency. Track, pipeline and construction crossings remain schematic. Parallel display lanes separate a track and construction sharing a crossing; their spacing is not surveyed.</p><ul class="legend-samples">"#,
     );
     for (class, label, ties) in [
-        ("legend-route road", "Road", ""),
+        (
+            "legend-route road",
+            "Road · source curve",
+            "legend-route road-fill",
+        ),
         (
             "legend-route railroad",
-            "Railroad",
+            "Railroad · source curve",
             "legend-route railroad railroad-ties",
+        ),
+        (
+            "geography-route-untraced",
+            "Observed crossing · curve incomplete",
+            "",
         ),
         ("legend-route track", "Track", ""),
         ("legend-route pipeline", "Pipeline", ""),
@@ -67,14 +76,19 @@ pub(super) fn render() -> String {
         if class == "legend-route track" {
             html.push_str(r#"<path class="geography-track-casing" d="M3 16H57"/>"#);
         }
-        write!(html, r#"<path class="{class}" d="M3 16H57"/>"#).unwrap();
+        let path = if matches!(class, "legend-route road" | "legend-route railroad") {
+            "M3 24Q20 4 30 16T57 8"
+        } else {
+            "M3 16H57"
+        };
+        write!(html, r#"<path class="{class}" d="{path}"/>"#).unwrap();
         if !ties.is_empty() {
-            write!(html, r#"<path class="{ties}" d="M3 16H57"/>"#).unwrap();
+            write!(html, r#"<path class="{ties}" d="{path}"/>"#).unwrap();
         }
         write!(html, "</svg><span>{label}</span></li>").unwrap();
     }
     html.push_str(
-        r#"</ul><p>Violet construction marks remain unresolved and are excluded from network links. Other routes may also be provisional; inspect their evidence.</p></section>
+        r#"</ul><p>Amber dotted sides retain observed road/rail crossings where curve tracing is incomplete; they do not locate the route within the side. Inspect a hex for its trace status. Violet construction marks remain unresolved and are excluded from network links. Other routes may also be provisional; inspect their evidence.</p></section>
         <section class="legend-geography-only"><h3>Water &amp; hexsides</h3><ul class="legend-samples">
         <li><svg viewBox="0 0 60 32" aria-hidden="true"><rect class="legend-water" x="5" y="3" width="50" height="26"/></svg><span>Water evidence</span></li>
         <li><svg viewBox="0 0 60 32" aria-hidden="true"><rect class="legend-water mixed_water_land" x="5" y="3" width="50" height="26"/></svg><span>Mixed water / land</span></li>

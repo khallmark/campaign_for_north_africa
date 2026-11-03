@@ -405,9 +405,14 @@
 .geography-overlay[data-detail=false] .geography-water { stroke: none; }
 .geography-selected, .legend-selected { fill: #fff8cf22; stroke: #ba452d; stroke-width: 3; }
 .geography-link, .legend-route { fill: none; stroke-width: 3; stroke: #34839a; }
-:is(.geography-link, .legend-route).road { stroke: #bf741d; stroke-width: 5; }
+:is(.geography-link, .legend-route).road { stroke: #73552d; stroke-width: 5; }
+:is(.geography-link, .legend-route).road-fill { stroke: #f7e8bb; stroke-width: 2.5; }
 :is(.geography-link, .legend-route).railroad { stroke: #293d3a; stroke-width: 1.5; }
 :is(.geography-link, .legend-route).railroad-ties { stroke-width: 8; stroke-dasharray: 2 9; }
+.source-route { vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.source-route.road, .source-route.road-fill { stroke-linecap: round; }
+.source-route.railroad-ties { stroke: #293d3a; }
+.geography-route-untraced { fill: none; stroke: #a65c16; stroke-width: 2; stroke-dasharray: 2 4; }
 :is(.geography-link, .legend-route).track { stroke: #4c2f18; stroke-dasharray: 3 5; }
 .geography-track-casing { fill: none; stroke: #fff8e5; stroke-width: 6; stroke-dasharray: 3 5; }
 :is(.geography-link, .legend-route).unresolved { stroke: #ac3c65; stroke-width: 2; stroke-dasharray: 2 5; opacity: 0.8; }

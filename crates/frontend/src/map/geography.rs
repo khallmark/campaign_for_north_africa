@@ -41,6 +41,7 @@ pub(super) struct Geography {
     pub features: bool,
     pub inspecting: bool,
     pub selected: Option<HexId>,
+    pub untraced_routes: usize,
 }
 
 impl Geography {
@@ -71,6 +72,23 @@ impl Geography {
             .iter()
             .map(|survey| survey.records())
             .collect();
+        let untraced_routes = records
+            .iter()
+            .flatten()
+            .filter_map(|assignment| match assignment {
+                MapRecord::Hexside { side, record, .. } => match &record.observation {
+                    Observation::Reviewed { value } | Observation::Provisional { value }
+                        if matches!(value, HexsideFeature::Road | HexsideFeature::Railroad)
+                            && !super::source_routes::has_trace(*side, value) =>
+                    {
+                        Some((*side, matches!(value, HexsideFeature::Road)))
+                    }
+                    _ => None,
+                },
+                _ => None,
+            })
+            .collect::<BTreeSet<_>>()
+            .len();
         let artwork = Artwork::new(&records);
         let ground = document()
             .create_element_ns(Some("http://www.w3.org/2000/svg"), "svg")
@@ -97,6 +115,7 @@ impl Geography {
             features: true,
             inspecting: false,
             selected: None,
+            untraced_routes,
         }
     }
 
@@ -153,10 +172,29 @@ impl Geography {
                             Some(TransportDepiction::UnfinishedRailroad) => " · Unfinished railroad depiction — schematic, not an operational link",
                             None => "",
                         };
+                        let trace_label = match &record.observation {
+                            Observation::Reviewed { value }
+                            | Observation::Provisional { value }
+                                if matches!(
+                                    value,
+                                    HexsideFeature::Road | HexsideFeature::Railroad
+                                ) =>
+                            {
+                                if super::source_routes::has_trace(*side, value) {
+                                    " · Source curve traced near this crossing; display evidence only"
+                                } else {
+                                    " · Source curve incomplete here; amber side marker retains the observed crossing without inventing a route"
+                                }
+                            }
+                            _ => "",
+                        };
                         (
                             hex == side.hex() || hex == other,
                             serde_json::to_value(&record.observation).unwrap(),
-                            format!("Side {} ↔ {other}{depiction_label}", side.hex()),
+                            format!(
+                                "Side {} ↔ {other}{depiction_label}{trace_label}",
+                                side.hex()
+                            ),
                         )
                     }
                 };
@@ -383,7 +421,6 @@ impl Geography {
                 })
                 .collect();
             let mut links: BTreeMap<&str, String> = BTreeMap::new();
-            let mut railroads = String::new();
             let mut construction = String::new();
             let mut locations = String::new();
             let mut water: BTreeMap<&str, String> = BTreeMap::new();
@@ -488,34 +525,45 @@ impl Geography {
                                 _ => continue,
                             };
                             use cna_map::terrain::HexsideFeature::*;
+                            // Source curves replace schematic road/rail chords.
+                            // Never bridge untraced ink with hex-center guesses.
+                            // Mark the observed side instead, so incomplete curve
+                            // coverage does not silently erase known crossings.
+                            if matches!(value, Road | Railroad) {
+                                if !super::source_routes::has_trace(*side, value) {
+                                    let (a, b) = edge(*side);
+                                    let a = viewport.to_screen(a);
+                                    let b = viewport.to_screen(b);
+                                    let kind = if matches!(value, Road) {
+                                        "road"
+                                    } else {
+                                        "railroad"
+                                    };
+                                    write!(locations, "<path class=\"geography-route-untraced\" data-kind=\"{kind}\" data-hex=\"{}\" d=\"M{:.2},{:.2}L{:.2},{:.2}\"><title>Observed {kind} crossing · source curve incomplete here; side marker is not the route's position or a movement link</title></path>", side.hex(), a.x, a.y, b.x, b.y).unwrap();
+                                }
+                                continue;
+                            }
                             // Actual water/wadi ink is drawn below. A straight
                             // hex edge would duplicate it and misstate its course.
                             if matches!(value, Wadi | MajorRiver | MinorRiver) {
                                 continue;
                             }
-                            let (a, b, class) =
-                                if matches!(value, Road | Railroad | Track | Pipeline) {
-                                    (
-                                        center(side.hex()),
-                                        center(side.hex().neighbor(side.direction()).unwrap()),
-                                        match value {
-                                            Road => "road",
-                                            Railroad => "railroad",
-                                            Track => "track",
-                                            _ => "pipeline",
-                                        },
-                                    )
-                                } else {
-                                    let (a, b) = edge(*side);
-                                    (a, b, "side")
-                                };
+                            let (a, b, class) = if matches!(value, Track | Pipeline) {
+                                (
+                                    center(side.hex()),
+                                    center(side.hex().neighbor(side.direction()).unwrap()),
+                                    match value {
+                                        Track => "track",
+                                        _ => "pipeline",
+                                    },
+                                )
+                            } else {
+                                let (a, b) = edge(*side);
+                                (a, b, "side")
+                            };
                             let a = viewport.to_screen(a);
                             let b = viewport.to_screen(b);
-                            let layer = if matches!(value, Railroad) {
-                                &mut railroads
-                            } else {
-                                links.entry(class).or_default()
-                            };
+                            let layer = links.entry(class).or_default();
                             write!(layer, "M{:.2},{:.2}L{:.2},{:.2}", a.x, a.y, b.x, b.y).unwrap();
                         }
                         MapRecord::Point { hex, record } if visible(*hex) => {
@@ -551,9 +599,7 @@ impl Geography {
                 )
                 .unwrap();
             }
-            if !railroads.is_empty() {
-                write!(html, "<path class=\"geography-link railroad\" d=\"{railroads}\"/><path class=\"geography-link railroad railroad-ties\" d=\"{railroads}\"/>").unwrap();
-            }
+            html.push_str(&super::source_routes::render(viewport));
             html.push_str(&construction);
             html.push_str(&locations);
             html.push_str(&art_locations);

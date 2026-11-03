@@ -228,15 +228,21 @@ impl Research {
                 if self.source_visible { "true" } else { "false" },
             )
             .unwrap();
-        self.status.set_text_content(Some(if self.geography.original_art && self.source_visible {
-            "Source scan + original terrain · translucent illustrative art · routes schematic"
+        let terrain_status = if self.geography.original_art && self.source_visible {
+            "Source scan + original terrain · translucent illustrative art"
         } else if self.geography.original_art {
-            "Original terrain art · illustrative blends, not surveyed boundaries · neutral paper = unmapped · routes schematic"
+            "Original terrain art · illustrative blends · neutral paper = unmapped"
         } else if self.source_visible {
             "Source map loaded · terrain and seams unverified"
         } else {
-            "Geography evidence · provisional observations · routes schematic"
-        }));
+            "Geography evidence · provisional observations"
+        };
+        let status = if self.geography.features {
+            format!("{terrain_status} · measured road/rail curves (partial) · tracks/construction schematic · {} unmatched sides (amber; trace coverage unresolved)", self.geography.untraced_routes)
+        } else {
+            terrain_status.to_owned()
+        };
+        self.status.set_text_content(Some(&status));
         let center = v.center();
         let origin = v.to_screen(BoardPoint { x: 0.0, y: 0.0 });
         self.board
@@ -442,7 +448,7 @@ pub fn mount() -> Result<(), JsValue> {
         <div class="geography-legend-slot"></div>
         <details class="geography-details" name="map-reference"><summary>Hex evidence</summary>
           <p class="terrain-art-key">Terrain blends are illustrative, not surveyed extents. Neutral paper = unmapped, not Clear. Compare Source scan at the same camera position.</p>
-          <p class="geography-key">Terrain/water tint = provisional · orange road / dark railroad with ties / dotted track · violet dashed road / violet dashed railroad with ties = unfinished source depiction, unresolved and not operational links · blue hexside · magenta side/dot = unclassified · all routes schematic, not exact linework · raster examination is not complete transcription</p>
+          <p class="geography-key">Terrain/water tint = provisional · pale cased road / dark railroad with ties = measured source curves, partial coverage · amber dotted side = observed crossing, curve coverage unresolved (not a route reclassification) · dotted track and violet construction = schematic crossings · construction stays unresolved and non-operational · blue hexside · magenta side/dot = unclassified · raster examination is not complete transcription</p>
           <div class="geography-inspector" aria-live="polite">Enable Inspect mode and click a hex, or enter its section-local identity. Enter inspects the viewport center. Grid labels appear at detail scale.</div>
         </details>
       </div>

@@ -256,6 +256,8 @@ class MapDatabaseTests(unittest.TestCase):
             'C2414 C2415',
             'C1415 C1515',
             'C0925 C0825',
+            'C0522 C0422 C0323 C0324 C0224',
+            'C0622 C0523 C0524 C0424 C0325 C0225',
             'B1706 B1606 B1507 B1508 B1509',
             'B2118 B2217 B2318 B2418 B2518',
             'B2130 B2229 B2330 B2430 B2531',
@@ -325,6 +327,8 @@ class MapDatabaseTests(unittest.TestCase):
                            ('B5514', 'B5515'), ('B5501', 'B5502'),
                            ('B5602', 'B5603'), ('B5703', 'B5702'),
                            ('B5704', 'B5705'), ('B5819', 'B5720'),
+                           ('C0323', 'C0423'), ('C0422', 'C0423'),
+                           ('C0523', 'C0623'), ('C0622', 'C0623'),
                            ('D1114', 'D1115')):
             with self.subTest(unsupported_crossing=(start, end)):
                 self.assertIsNone(self.db.execute('''
@@ -417,10 +421,28 @@ class MapDatabaseTests(unittest.TestCase):
             SELECT symbol,center_x,center_y,label,status FROM source_points WHERE hex='C3111'
         ''').fetchall(), [('village_bir_dot', 6567.0, 2324.1, 'El Cuasc', 'unresolved')])
         self.assertEqual(dict(self.db.execute('SELECT symbol,count(*) FROM source_points GROUP BY symbol')),
-                         {'village_bir_dot': 119, 'oasis': 3, 'port_icon': 7})
+                         {'village_bir_dot': 119, 'oasis': 8, 'port_icon': 7})
         self.assertEqual(self.db.execute('''
             SELECT symbol,center_x,center_y,status FROM source_points WHERE hex='B0513'
         ''').fetchall(), [('oasis', 3931.5, 4211.5, 'provisional')])
+        self.assertEqual(self.db.execute('''
+            SELECT hex,center_x,center_y,label,status FROM source_points
+            WHERE symbol='oasis' AND hex IN ('C0127','C0130','C0224','C0233','C0718')
+            ORDER BY hex
+        ''').fetchall(), [
+            ('C0127', 7945.0, 4507.5, None, 'provisional'),
+            ('C0130', 8202.5, 4505.5, None, 'provisional'),
+            ('C0224', 7731.0, 4434.5, None, 'provisional'),
+            ('C0233', 8503.0, 4429.5, None, 'provisional'),
+            ('C0718', 7174.0, 4071.5, None, 'provisional'),
+        ])
+        self.assertEqual(self.db.execute('''
+            SELECT hex FROM source_points WHERE hex IN ('C0124','C0333')
+        ''').fetchall(), [])
+        for hex_id, terrain in (('C0127', 'clear'), ('C0130', 'salt_marsh'), ('C0333', 'salt_marsh')):
+            self.assertEqual(self.db.execute('''
+                SELECT value FROM observations WHERE hex=? AND kind='terrain'
+            ''', (hex_id,)).fetchall(), [(terrain,)])
         # Independently inspected anchors, not operational ports. Nofilia's
         # footprint straddles A2803, but its measured center remains in A2703.
         self.assertEqual(self.db.execute('''

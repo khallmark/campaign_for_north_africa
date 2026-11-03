@@ -97,13 +97,13 @@ automated or agent-visual record is human-reviewed.
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
 | A | 1,000 | 866 / 62 / 64 / 8 | 828 |
 | B | 1,961 | 1,885 / 40 / 34 / 2 | 1,832 |
-| C | 1,520 | 1,438 / 41 / 36 / 5 | 859 |
+| C | 1,520 | 1,438 / 41 / 36 / 5 | 875 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **325 surveys / 24,660 observations**: 5,423 terrain,
-19,076 hexside and 161 point observations. **8,416 are provisional, 16,244 unresolved,
-none human-reviewed.** Terrain observations cover 5,269 cells; 1,807 have none.
+The current combined model has **328 surveys / 24,687 observations**: 5,439 terrain,
+19,078 hexside and 170 point observations. **8,443 are provisional, 16,244 unresolved,
+none human-reviewed.** Terrain observations cover 5,285 cells; 1,791 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -262,7 +262,8 @@ adds 199 Clear occurrences, nine partial Mountain cores retaining existing Rough
 fringes, five partial Gravel occurrences and one partial Rough occurrence.
 The twelve B batches add 443 Clear occurrences, three partial Rough
 occurrences and six partial Mountain cores, retaining existing Rough where present.
-Of 1,807 cells without typed ground, source-surface measurements report 1,376 land, 228
+The first C batch adds 16 Clear occurrences.
+Of 1,791 cells without typed ground, source-surface measurements report 1,360 land, 228
 water, 179 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -280,9 +281,10 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,961/1,961 B cells; 4,057 cells
-remain not_reviewed**, covering all of C–E. Rosetta's anchor is a point-only spot
-check and does not count as whole-cell review. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 165/1,520 C cells;
+3,892 cells remain not_reviewed**, covering C0601 onward and all of D–E. Rosetta's
+anchor and C0718's Oasis are point-only spot checks, not whole-cell coverage.
+This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -576,6 +578,25 @@ The display now has 159 measured curves and 38,113 raw samples, matching 557/592
 completed crossings (366/377 Road and 191/215 Railroad). B5717 east remains among
 the 35 unmatched crossings, with an incomplete-curve marker rather than a chord.
 Track routes remain schematic and independent of construction.
+
+The first C batch reviews **165 retained C0101–C0533 cells**. Sixteen outlined
+plain interiors receive provisional Clear independently of route, Oasis and
+section-line overprints. Other band-filled cells remain untyped; existing Desert,
+Rough and Salt Marsh occurrences are preserved. Two near-vertex Track crossings,
+**C0323 northwest and C0523 northwest**, restore paths through C0422 and C0622
+without detours through C0423/C0623. The latter has a narrow raster margin and
+remains provisional. C0622 context does not receive whole-cell review credit.
+
+Three source templates at unchanged 0.88 threshold recover five measured Oasis
+centers: C0127 **(7945,4507.5)**, C0130 **(8202.5,4505.5)**, C0224 **(7731,4434.5)**,
+C0233 **(8503,4429.5)** and the already classified C0718 **(7174,4071.5)**. The last
+is independently spot-inspected but stays `not_reviewed` in the whole-cell ledger.
+Neighboring C0124/C0333 do not gain glyphs from crop padding. Source names do not
+become additional Village/Bir dots, towns, water yields or operational junctions.
+Disconnected unfinished-Road capsules remain excluded from usable Road links;
+blue barred symbols and olive band polarity remain unresolved. Tracks leaving
+the southern inventory and C0133/C0533 eastern section edges are boundary findings,
+not row-zero or seam links. No continuous Road or Railroad is observed in this batch.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

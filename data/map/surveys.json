@@ -6,6 +6,21 @@
   },
   "surveys": [
     {
+      "id": "c-01-05-plain-ground", "label": "Southern C plain interiors", "notes": "Sixteen individually outlined four-times controls establish plain ground beneath Track, Oasis, unfinished-Road and gray section-line overprints. Neighboring Salt Marsh, Desert, Rough and olive stippled bands stay outside these interiors; their marginal side footprint remains uncertain. Band-filled cells are not defaulted to Clear. These are provisional terrain occurrences, not homogeneous movement costs or operational oasis water supply.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=7380,4100,1210,490", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["C0127","C0131","C0132","C0133","C0224","C0433","C0521","C0523","C0524","C0526","C0527","C0528","C0529","C0530","C0531","C0533"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "siwa-western-track-corners", "label": "Siwa western near-vertex Track crossings", "notes": "Paired four-times outlines and eight-times source pixels show single dashed Track crossing C0323 northwest from C0422 and C0523 northwest from C0622 just before their northern vertices. The center strokes lie on the northwest side of each vertex, not a detour through C0423 or C0623; the latter crossing has only a narrow raster margin and remains provisional. Preserve raw candidate measurements and all geometry. These observations are neither precise centerlines nor movement, junction or section-seam authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=7520,4100,180,330", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C0323","direction":"north_west"},{"hex":"C0523","direction":"north_west"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "siwa-oasis-symbols", "label": "Siwa-area Oasis glyphs", "notes": "Four palm-and-pool glyphs match TEC Oasis at measured template centers C0127 (7945,4507.5), C0130 (8202.5,4505.5), C0224 (7731,4434.5) and C0233 (8503,4429.5). Three sampled/overprinted source templates retain the 0.88 threshold; their only additional full-source match restores the already classified C0718 Oasis at (7174,4071.5), independently spot-inspected without whole-cell credit. C0124 and C0333 show neighboring glyphs only outside their outlines. No Village/Bir dot, new town, label-area ownership, operational water yield or route junction is inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=7660,4370,900,200", "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=7120,4020,110,110", "docs/CNAv2.1.0/images/TEC.png#legend/Oasis"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "point", "hexes": ["C0127","C0130","C0224","C0233"], "observation": {"status": "provisional", "value": {"type": "oasis"}}}
+    },
+    {
       "id": "b-56-61-plain-ground", "label": "Northern B plain interiors", "notes": "Whole outlined cells and four-times controls establish plain interiors at B5627 beneath unfinished-Road capsules and B5629 beneath Track/Wadi overprints. Adjacent stippled bands remain independent and their marginal footprint unresolved. Other coastal and band-filled cells are excluded; no homogeneous movement cost inferred.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=5100,430,310,150", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
       "coverage": {"kind": "terrain", "hexes": ["B5627","B5629"], "observation": {"status": "provisional", "value": "clear"}}

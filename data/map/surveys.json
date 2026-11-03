@@ -236,6 +236,16 @@
       "coverage": {"kind": "point", "hexes": ["A2703","A2928","A4827"], "observation": {"status": "unresolved", "source_label": "Anchor glyph measured; footprint membership, operational port association, capacity and efficiency unresolved"}}
     },
     {
+      "id": "a-34-40-plain-ground", "label": "Carcura to Soluch plain interiors", "notes": "Individual outlined crops and paired controls confirm affirmative plain ground in 24 previously untyped cells. Route strokes and El Magrun/Sceleidima lettering are overprints, not patterned ground or additional location glyphs. Exclude coastal cells, Salt Marsh and broad stippled/black bands. A3828 contains Road but not Carcura's Track, which bypasses it through A3827 and A3928. Clear is a provisional ground occurrence, not movement authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2137,1613,769,536", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["A3429","A3430","A3432","A3529","A3531","A3532","A3629","A3630","A3631","A3729","A3730","A3731","A3732","A3828","A3831","A3928","A3929","A3931","A3932","A4027","A4028","A4029","A4030","A4031"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "carcura-soluch-track-crossings", "label": "Carcura and Soluch obscured Track crossings", "notes": "Four-times paired source controls show five missing single-dashed Track crossings: Carcura's northeast exit across the dot; the short northwest fork from A3929 to A4028; the diagonal south from Soluch into A4030; the short branch from A4131 into A4031; and the Sceleidima dot/scarp overlap into A4032. These are not Railroad ties, unfinished transport, or inferred operational junctions. Preserve existing neighboring Tracks and Road. No Track is added through A3828, which Carcura's stroke bypasses.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2250,1598,286,346", "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2421,1525,499,274", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"A3727","direction":"north_east"},{"hex":"A3929","direction":"north_west"},{"hex":"A4030","direction":"north_west"},{"hex":"A4031","direction":"north_west"},{"hex":"A3933","direction":"north_west"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
       "id": "benghazi-major-city", "label": "Benghazi building cluster", "notes": "Blue building cluster matches TEC Major City, distinct from black training-area figures. Its glyph lies in A4827; adjacent El Berca and Benina dots are separate locations. No automatic port or fortification level assignment.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2270,1000,170,150", "docs/CNAv2.1.0/images/TEC.png#legend/Major-City"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
       "coverage": {"kind": "point", "hexes": ["A4827"], "observation": {"status": "provisional", "value": {"type": "major_city"}}}

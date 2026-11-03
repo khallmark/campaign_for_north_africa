@@ -95,15 +95,15 @@ automated or agent-visual record is human-reviewed.
 | Section | Examined cells | Land / mixed / water / unresolved | Cells with terrain observations |
 | --- | ---: | --- | ---: |
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
-| A | 1,000 | 866 / 62 / 64 / 8 | 777 |
+| A | 1,000 | 866 / 62 / 64 / 8 | 801 |
 | B | 1,961 | 1,885 / 40 / 34 / 2 | 1,386 |
 | C | 1,520 | 1,438 / 41 / 36 / 5 | 859 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **278 surveys / 24,061 observations**: 4,920 terrain,
-18,987 hexside and 154 point observations. **7,824 are provisional, 16,237 unresolved,
-none human-reviewed.** Terrain observations cover 4,772 cells; 2,304 have none.
+The current combined model has **280 surveys / 24,090 observations**: 4,944 terrain,
+18,992 hexside and 154 point observations. **7,853 are provisional, 16,237 unresolved,
+none human-reviewed.** Terrain observations cover 4,796 cells; 2,280 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -258,9 +258,9 @@ visible section-boundary breaks. Escarpment rendering and exact source-shaped
 route geometry are separate work; the detector's raw findings remain unchanged.
 
 The Malta whole-cell audit adds four provisional ground observations. The A audit
-adds 149 Clear occurrences, nine partial Mountain cores retaining existing Rough
-fringes, and five partial Gravel occurrences. Of 2,304 cells without typed ground,
-source-surface measurements report 1,872 land, 228
+adds 173 Clear occurrences, nine partial Mountain cores retaining existing Rough
+fringes, and five partial Gravel occurrences. Of 2,280 cells without typed ground,
+source-surface measurements report 1,848 land, 228
 water, 180 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -278,8 +278,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta and 836/1,000 A cells; 6,182 cells remain
-not_reviewed**, including all of B–E and A3427 onward. Malta source crops and corners match that pin exactly. Full-inset
+Recorded coverage is **58/58 Malta and 892/1,000 A cells; 6,126 cells remain
+not_reviewed**, including all of B–E and A4125 onward. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
 unfinished transportation, Village/Bir dot or Major City cluster was observed.
@@ -354,6 +354,15 @@ two pixels inside A2703. Footprint membership, settlement association, port
 capacity and efficiency remain unresolved. Benghazi's point-only check earns
 no whole-cell review credit. Templates preserve distinct raster/grid-overlap
 variants rather than relaxing the match threshold for all white patterns.
+
+The A3427–A4033 batch reconciles 56 more cells, with 24 affirmative Clear
+occurrences and five restored Tracks: **A3727 NE → A3827, A3929 NW → A4028,
+A4030 NW → A4130, A4031 NW → A4131, A3933 NW → A4032**. Paired source controls
+distinguish the short branches and dot/scarp overlaps from Railroad ties.
+Carcura's Track bypasses A3828 through A3827 → A3928; no extra crossing is added
+there. The eastern Tracks at A3433/A3633/A3833/A3933 remain unresolved section
+continuations. Broad bands stay untyped, Wadi/scarp-tip membership at A3833
+remains uncertain, and no Up/Down, passability or operational junction is inferred.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

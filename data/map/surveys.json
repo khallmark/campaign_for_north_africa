@@ -6,6 +6,21 @@
   },
   "surveys": [
     {
+      "id": "b-01-05-plain-ground", "label": "Southern B plain ground beneath Track", "notes": "Individual outlined cells and wider desert-boundary control confirm plain ground throughout B0405 and B0506. Neighboring yellow Desert stays outside; single-dashed Track does not replace the ground. Add affirmative provisional Clear, not a default from detector failure or movement authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=3170,4130,660,490", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["B0405","B0506"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "jalo-southern-track-crossings", "label": "Jalo southern missing Track crossings", "notes": "Paired whole-cell and regional controls show single gray dashes crossing B0315 east into B0316 and B0413 northwest into Jalo B0513. Grid and blue Oasis overprint interrupt short portions without creating railroad ties or unfinished double strokes. Preserve raw unresolved measurements independently; no exact curves, legal movement or within-cell junction authority inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=3700,4110,620,470", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"B0315","direction":"east"},{"hex":"B0413","direction":"north_west"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "jalo-oasis", "label": "Jalo oasis", "notes": "Blue palm-and-pool glyph in B0513 matches TEC Oasis; Jalo lettering in B0514 names that glyph rather than another settlement. An independently inspected source template at unchanged 0.88 threshold recovers center (3931.5,4211.5); full-source search finds only this additional match. Center is the template footprint center, not surveyed historical coordinates. No Village/Bir, water yield, operational capacity or route junction inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=3880,4165,190,105", "docs/CNAv2.1.0/images/TEC.png#legend/Oasis"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "point", "hexes": ["B0513"], "observation": {"status": "provisional", "value": {"type": "oasis"}}}
+    },
+    {
       "id": "matruh-village", "label": "Mersa Matruh", "notes": "Blue settlement dot at board (9665,1868), inside D3714. Village/Bir dot in TEC; no city or fortification inferred. Port icon lies in adjacent D3814 and is not silently relocated here.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=9400,1750,800,450", "docs/CNAv2.1.0/images/TEC.png#legend/Village-Bir"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
       "coverage": {"kind": "point", "hexes": ["D3714"], "observation": {"status": "provisional", "value": {"type": "village"}}}

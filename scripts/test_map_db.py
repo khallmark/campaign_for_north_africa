@@ -352,7 +352,10 @@ class MapDatabaseTests(unittest.TestCase):
             SELECT symbol,center_x,center_y,label,status FROM source_points WHERE hex='C3111'
         ''').fetchall(), [('village_bir_dot', 6567.0, 2324.1, 'El Cuasc', 'unresolved')])
         self.assertEqual(dict(self.db.execute('SELECT symbol,count(*) FROM source_points GROUP BY symbol')),
-                         {'village_bir_dot': 119, 'oasis': 2, 'port_icon': 5})
+                         {'village_bir_dot': 119, 'oasis': 3, 'port_icon': 5})
+        self.assertEqual(self.db.execute('''
+            SELECT symbol,center_x,center_y,status FROM source_points WHERE hex='B0513'
+        ''').fetchall(), [('oasis', 3931.5, 4211.5, 'provisional')])
         # Independently inspected anchors, not operational ports. Nofilia's
         # footprint straddles A2803, but its measured center remains in A2703.
         self.assertEqual(self.db.execute('''

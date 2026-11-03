@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 660/1,520 C cells;
-3,397 cells remain not_reviewed**, covering C2101 onward and all of D–E. Rosetta's
+Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 825/1,520 C cells;
+3,232 cells remain not_reviewed**, covering C2601 onward and all of D–E. Rosetta's
 anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
@@ -625,6 +625,19 @@ Road and C2033 Track continue northeast beyond retained inventory, so those
 boundary findings do not create adjacency or northwest detours. Construction,
 Wadi footprints, blue barred meanings and operational effects remain unresolved;
 no geometry, source hashes, measured points or raw examinations change.
+
+The fifth C batch reviews **165 retained C2101–C2533 cells**. It adds 45
+affirmative Clear occurrences beneath Track, Wadi and gray section lines, and
+restores **C2322 northeast → C2422 southwest Track**. Paired outlines exclude
+C2323 from that bend. The requested C2116 east → C2117 west crossing and prior
+C2414 east correction already match the source and remain unchanged.
+
+C2313 remains untyped: even native-pixel enlargement leaves the small southeast
+Salt Marsh/grid overlap uncertain. Existing Salt Marsh patches and C2506 Rough
+remain distinct from plain margins. Blue barred glyphs continue beyond Wadi
+ribbons around C2419/C2420 and C2520/C2521; their meaning is not promoted to
+Railroad, river or operational effect. No new location or boundary connection
+is inferred. Review coverage does not mean those interpretations are resolved.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

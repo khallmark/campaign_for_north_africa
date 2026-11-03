@@ -1789,6 +1789,121 @@
           "uncertainty": ["Name extent is not a second settlement or operational ownership boundary. Human review pending."]
         }
       ]
+    },
+    {
+      "id": "b-06-10-whole-cell-2026-11-03",
+      "date": "2026-11-03", "method": "agent_visual",
+      "notes": "Reconciled all 165 B0601–B1033 cells after individual 2x outlined crops, fifteen enlarged plain/band boundary controls and 3x Augila route context against TEC. Source and geometry remain pinned to add8fb4. Broad olive stippled bands retain class/direction uncertainty; no default terrain, cross-section adjacency or operational junction inferred. Previously inspected crops now have explicit family findings; cells farther north are not credited.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Land within the canonical outline; plain and yellow patches are not water."},
+        "terrain": {"status": "observed", "notes": "Existing yellow Desert occurrence matches source and TEC; nearby plain gaps and lettering do not erase the occurrence or establish homogeneous movement costs."},
+        "transport": {"status": "not_observed", "notes": "No Road, Railroad, Track or unfinished-transport glyph inside the outline. Dashes in neighboring cells are not additional crossings."},
+        "hexside": {"status": "not_observed", "notes": "No separate directional terrain glyph observed inside the outline. Ordinary grid and gray section boundary are not routes or ridge/slope rules."},
+        "locations": {"status": "not_observed", "notes": "No Village/Bir dot, Oasis, Major City or facility glyph inside the outline; neighboring names and palm fragments do not create duplicate locations."}
+      },
+      "groups": [
+        {
+          "hexes": ["B0601","B0602","B0610","B0611","B0613","B0614","B0615","B0616","B0617","B0618","B0619","B0620","B0621","B0622","B0623","B0624","B0625","B0626","B0627","B0628","B0629","B0630","B0631","B0632","B0633","B0701","B0702","B0713","B0714","B0715","B0716","B0717","B0718","B0719","B0720","B0721","B0722","B0723","B0724","B0725","B0726","B0727","B0728","B0729","B0730","B0731","B0732","B0801","B0817","B0818","B0819","B0820","B0821","B0822","B0823","B0824","B0825","B0826","B0827","B0901"],
+          "findings": {}, "survey_refs": ["ink-B-terrain-desert"],
+          "uncertainty": ["Tiny pale speck at B0822 does not replace Desert. Jalo/El Ergh lettering and Libyan Sand Desert letter tips are text, not locations or slopes. Nearby Tracks remain outside these outlines; no historical absence or movement authority inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B0603","B0607","B0608","B0609","B0703","B0733","B0802","B0809","B0810","B0812","B0813","B0814","B0815","B0816","B0828","B0829","B0830","B0831","B0832","B0902","B0917","B0918","B0919","B0920","B0921","B0922","B0923","B0924","B0925","B0926","B0927","B0928","B1001"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing partial Desert with visible plain gaps matches source. No homogeneous Desert fill or additional Clear inferred just from the gap."}},
+          "survey_refs": ["ink-B-terrain-desert"],
+          "uncertainty": ["Neighboring tracks, Augila/El Ergh dots and labels stay outside these interiors. Gray section line at B0733 is not a route. Human review pending."]
+        },
+        {
+          "hexes": ["B0808","B0909"],
+          "findings": {"terrain": {"status": "observed", "notes": "Partial Desert and plain ground both enter the outline; existing Desert retained."}, "hexside": {"status": "unresolved", "notes": "Olive stippled band follows the outside of western/northwestern grid edges. Boundary footprint and directional meaning remain unresolved; do not fill the plain/Desert cell as Mountain or Rough."}},
+          "survey_refs": ["ink-B-terrain-desert"],
+          "uncertainty": ["Neighboring Track remains outside; no operational slope direction or crossing permission inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B0604","B0605","B0704","B0705","B0706","B0805","B0914","B0915","B0916","B0929","B0930","B0931","B0932","B0933","B1012","B1014","B1015","B1016","B1017","B1018","B1019","B1020","B1021","B1022","B1023","B1024","B1025","B1026","B1027","B1028","B1029","B1030","B1031","B1032"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing affirmative Clear matches plain interior; neighboring yellow Desert and gray Tracks stay outside."}},
+          "survey_refs": ["ink-B-terrain-clear"],
+          "uncertainty": ["Source-symbol absence is not historical absence. Source section lines, crop-edge dashes and nearby terrain antialiasing do not establish extra features. Human review pending."]
+        },
+        {
+          "hexes": ["B0803","B0804","B0905","B0910","B1011"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing affirmative Clear matches plain interior despite olive bands in neighboring cells."}, "hexside": {"status": "unresolved", "notes": "Olive stippled bands approach or follow the outside of grid edges; retain side-footprint and direction uncertainty separately from the plain interior."}},
+          "survey_refs": ["ink-B-terrain-clear"],
+          "uncertainty": ["Nearby Track is outside the outline, including southwest/south at B1011. No operational slope/ridge or crossing rule inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B0606","B0912","B0913","B1013"],
+          "findings": {"terrain": {"status": "observed", "notes": "Affirmative plain ground beneath Track, confirmed in individual and enlarged controls; add provisional Clear."}, "transport": {"status": "observed", "notes": "Existing single-dashed Track retained: southwest/northeast at B0606/B1013, west/east at B0912 and west/northeast at B0913. Nearby dashes outside the outline are not branches."}},
+          "survey_refs": ["b-06-10-plain-ground","ink-B-hexside-track"],
+          "uncertainty": ["Track overprint is not ground; no exact centerline, junction or movement authority inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B0833"],
+          "findings": {"terrain": {"status": "observed", "notes": "Affirmative plain interior, with yellow Desert outside. Add provisional Clear; gray vertical section boundary is an overprint, not a road or feature."}},
+          "survey_refs": ["b-06-10-plain-ground"],
+          "uncertainty": ["Section line does not establish cross-section adjacency or movement authority. Human review pending."]
+        },
+        {
+          "hexes": ["B0903","B0907","B1002","B1004","B1009"],
+          "findings": {"terrain": {"status": "observed", "notes": "Enlarged controls show affirmative plain interior while olive bands lie on the other side of grid edges. Add provisional Clear, not Mountain or Rough from neighboring ink."}, "hexside": {"status": "unresolved", "notes": "Olive stippled bands follow several exterior edges; exact boundary footprint and directional slope/ridge semantics remain unresolved."}},
+          "survey_refs": ["b-06-10-plain-ground"],
+          "uncertainty": ["Clear does not claim homogeneous side pixels or absence of a boundary effect. Nearby Tracks stay outside. Human review pending."]
+        },
+        {
+          "hexes": ["B0806","B0906","B0911","B1005"],
+          "findings": {"terrain": {"status": "observed", "notes": "Enlarged controls confirm plain interior beneath Track, with olive band beyond the grid. Add provisional Clear."}, "transport": {"status": "observed", "notes": "Existing single-dashed northwest/southeast Track retained. B0911 also has an eastern branch; source fork is not operational junction authority."}, "hexside": {"status": "unresolved", "notes": "Olive stipple follows nearby exterior grid edges; boundary footprint and direction remain unresolved, independently of Track."}},
+          "survey_refs": ["b-06-10-plain-ground","ink-B-hexside-track"],
+          "uncertainty": ["No Up/Down, ridge type, passage permission or full-hex band terrain inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B1033"],
+          "findings": {"terrain": {"status": "observed", "notes": "Affirmative plain ground under gray section line and dashed Track. Add provisional Clear."}, "transport": {"status": "unresolved", "notes": "Single-dashed Track enters northwest and exits southeast beyond retained section inventory. Retain existing northwest crossing; do not fabricate a southeastern neighbor or confuse gray section line with another route."}},
+          "survey_refs": ["b-06-10-plain-ground","ink-B-hexside-track"],
+          "uncertainty": ["Southeastern Track continuation is a seam-owner finding, not a known terminus or operational off-map link. Human review pending."]
+        },
+        {
+          "hexes": ["B0807","B0904","B0908","B1003","B1006","B1007","B1008"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Broad olive stippled band/ring with plain core or gaps. Retain untyped ground; its shared color is not enough to assign Mountain, Rough or homogeneous Clear."}, "hexside": {"status": "unresolved", "notes": "Olive band runs along multiple inside edges with stippled fringe. Exact ridge/slope classification and direction need adjudication; no Up/Down assigned."}},
+          "survey_refs": [],
+          "uncertainty": ["Nearby Tracks remain outside. Broad source footprint is not an operational terrain/side rule or evidence for passability. Human review pending."]
+        },
+        {
+          "hexes": ["B1010"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Olive stippled band crosses a plain core; retain untyped rather than Mountain/Rough or homogeneous Clear."}, "transport": {"status": "observed", "notes": "Existing northwest/southeast single-dashed Track passes through band/plain footprint; no additional branch inside this outline."}, "hexside": {"status": "unresolved", "notes": "Broad olive band follows inside edges and meets Track; directional classification and legal crossing remain unresolved."}},
+          "survey_refs": ["ink-B-hexside-track"],
+          "uncertainty": ["Track/side-band overlap does not establish a pass, Up/Down or operational route permission. Human review pending."]
+        },
+        {
+          "hexes": ["B0612","B0709","B0710","B0711"],
+          "findings": {"transport": {"status": "observed", "notes": "Existing single-dashed Tracks retained: northwest/southeast and southwest fork at B0612; west/east through B0709/B0710/B0711. Nearby plain fringe at B0709 does not erase Desert."}},
+          "survey_refs": ["ink-B-terrain-desert","ink-B-hexside-track"],
+          "uncertainty": ["Jalo glyph outside B0612 and El Ergh dot outside B0711 do not create additional locations. Forks are source evidence, not operational junction authority. Human review pending."]
+        },
+        {
+          "hexes": ["B0811"],
+          "findings": {"terrain": {"status": "observed", "notes": "Partial Desert and plain gaps match source; retain existing occurrence."}, "transport": {"status": "observed", "notes": "Single-dashed Track crosses northwest/southeast; El Ergh dot and western branch remain in B0712 outside this outline."}},
+          "survey_refs": ["ink-B-terrain-desert","ink-B-hexside-track"],
+          "uncertainty": ["Partial terrain and Track do not establish operational costs or junctions. Human review pending."]
+        },
+        {
+          "hexes": ["B0707"],
+          "findings": {"terrain": {"status": "observed", "notes": "Yellow Desert patch and plain gaps beneath Augila dot; existing partial Desert retained."}, "transport": {"status": "observed", "notes": "Single-dashed northwest/southwest Track has east branch just northwest of the dot. Restore B0707 east into B0708; preserve existing northwestern/southwestern sides."}, "hexside": {"status": "unresolved", "notes": "Olive stippled band lies beyond the northeastern grid boundary; footprint/direction remains separate from partial ground."}, "locations": {"status": "unresolved", "notes": "Measured Augila Village/Bir dot retained, distinct from neighboring lettering and source Track junction. No Oasis or Major City inferred."}},
+          "survey_refs": ["ink-B-terrain-desert","ink-B-hexside-track","augila-east-track","label-B0707"],
+          "uncertainty": ["Village versus Bir, water yield, side direction and operational junction authority remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["B0708"],
+          "findings": {"terrain": {"status": "observed", "notes": "Partial yellow Desert with plain northern gap retained."}, "transport": {"status": "observed", "notes": "Single-dashed west/east Track; restore western entry across B0707 east, retaining existing eastern crossing."}, "hexside": {"status": "unresolved", "notes": "Olive stippled band is beyond northwest grid edge; no directional class assigned."}, "locations": {"status": "not_observed", "notes": "Augila lettering names the B0707 dot, not another settlement in this cell."}},
+          "survey_refs": ["ink-B-terrain-desert","ink-B-hexside-track","augila-east-track"],
+          "uncertainty": ["Text extent is not point ownership; partial terrain and nearby band do not assign movement permission. Human review pending."]
+        },
+        {
+          "hexes": ["B0712"],
+          "findings": {"transport": {"status": "observed", "notes": "Single-dashed northwest/southeast Track with western branch; junction is west of El Ergh dot, not snapped to its center."}, "locations": {"status": "unresolved", "notes": "Measured El Ergh Village/Bir dot retained independently of label extent into B0713. No duplicate point, Oasis or capacity assigned."}},
+          "survey_refs": ["ink-B-terrain-desert","ink-B-hexside-track","label-B0712"],
+          "uncertainty": ["Village versus Bir, water yield and operational junction permission remain unresolved. Human review pending."]
+        }
+      ]
     }
   ]
 }

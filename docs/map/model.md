@@ -96,14 +96,14 @@ automated or agent-visual record is human-reviewed.
 | --- | ---: | --- | ---: |
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
 | A | 1,000 | 866 / 62 / 64 / 8 | 828 |
-| B | 1,961 | 1,885 / 40 / 34 / 2 | 1,603 |
+| B | 1,961 | 1,885 / 40 / 34 / 2 | 1,663 |
 | C | 1,520 | 1,438 / 41 / 36 / 5 | 859 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **300 surveys / 24,369 observations**: 5,188 terrain,
-19,024 hexside and 157 point observations. **8,130 are provisional, 16,239 unresolved,
-none human-reviewed.** Terrain observations cover 5,040 cells; 2,036 have none.
+The current combined model has **302 surveys / 24,433 observations**: 5,248 terrain,
+19,028 hexside and 157 point observations. **8,194 are provisional, 16,239 unresolved,
+none human-reviewed.** Terrain observations cover 5,100 cells; 1,976 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -260,9 +260,9 @@ route geometry are separate work; the detector's raw findings remain unchanged.
 The Malta whole-cell audit adds four provisional ground observations. The A audit
 adds 199 Clear occurrences, nine partial Mountain cores retaining existing Rough
 fringes, five partial Gravel occurrences and one partial Rough occurrence.
-The first five B batches add 216 Clear occurrences and one partial Rough
-occurrence. Of 2,036 cells without typed ground,
-source-surface measurements report 1,604 land, 228
+The first six B batches add 276 Clear occurrences and one partial Rough
+occurrence. Of 1,976 cells without typed ground,
+source-surface measurements report 1,544 land, 228
 water, 180 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 825/1,961 B cells; 5,193 cells
-remain not_reviewed**, including B2601 onward and all of C–E. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 990/1,961 B cells; 5,028 cells
+remain not_reviewed**, including B3101 onward and all of C–E. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -438,6 +438,19 @@ interpretation rather than blanket Clear or Gravel. B2101's western Track
 continuation remains a seam-owner finding. Existing Wadi side observations are
 preserved with explicit association uncertainty, including outside/near-edge
 ink at B2406 and B2511. No new settlement or facility glyph was observed.
+
+The B2601–B3033 batch adds sixty affirmative Clear occurrences and four Tracks:
+**B2604 northeast → B2705**, **B2718 northeast → B2818**, **B2806 east → B2807**
+and **B2807 northwest → B2907**. Twelve-times nearest-neighbor controls distinguish
+the B2718 direct crossing from the resolution-sensitive short B2807 wedge;
+the latter rejects direct B2806 northeast → B2907. Original geometry is unchanged.
+B2602/B2701 remain untyped where Gravel circles straddle boundaries. Existing
+Giuf el Mater and Sauhu measured dots match source; Village/Bir category and
+Sauhu label transcription remain uncertain. Three Rough, one Gravel and two
+Salt Marsh occurrences stay unchanged. Wadi ribbons retain provisional side
+associations, not exact boundary geometry. B2601/B3001 west and B3033 northeast
+continuations are seam-owner findings, not fabricated cross-section links.
+No new settlement or facility glyph was observed in these 165 cells.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

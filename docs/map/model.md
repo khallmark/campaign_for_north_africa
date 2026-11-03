@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 495/1,961 B cells; 5,523 cells
-remain not_reviewed**, including B1601 onward and all of C–E. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 660/1,961 B cells; 5,358 cells
+remain not_reviewed**, including B2101 onward and all of C–E. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -417,6 +417,16 @@ Track/Wadi overlap does not imply a bridge or passage permission. Eastern Track
 continuations from B1133/B1233 remain seam-owner findings. The prior B06–10
 plain-ground source reference was widened to cover full edge-cell outlines;
 its fifteen observations and per-cell source pins are unchanged.
+
+The B1601–B2033 batch adds 93 affirmative Clear occurrences beneath Tracks,
+area lettering and Wadi overprint. All 165 outlines were inspected individually,
+with nineteen enlarged controls; no new settlement glyph or missing retained
+Track crossing was found. Four existing Rough and 23 Salt Marsh occurrences
+remain unchanged. HAMMIM AL WADI lettering is not a settlement. Wide Wadi
+ribbons and olive bands retain unresolved edge associations and directional
+interpretations; the isolated yellow slash at B1620 remains unidentified.
+The northwest Track continuation from B1901 exits the retained B inventory
+and is reported to the seam owner without inventing a zero-row neighbor.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

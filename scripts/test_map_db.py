@@ -146,6 +146,7 @@ class MapDatabaseTests(unittest.TestCase):
                               ("C0801", "desert"), ("C0802", "clear"),
                               ("C0716", "clear"), ("C0717", "salt_marsh"), ("C0718", "clear"),
                               ("C1119", "clear"), ("C1306", "clear"),
+                              ("C1715", "clear"), ("C2008", "clear"),
                               ("A0217", "salt_marsh"), ("A0426", "desert")):
             self.assertEqual(self.db.execute(
                 "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain'",
@@ -262,6 +263,9 @@ class MapDatabaseTests(unittest.TestCase):
             'C0522 C0422 C0323 C0324 C0224',
             'C0622 C0523 C0524 C0424 C0325 C0225',
             'C0815 C0716 C0717 C0718 C0719',
+            'C1708 C1608 C1609 C1610',
+            'C1824 C1825 C1826',
+            'C2013 C1914 C1814',
             'B1706 B1606 B1507 B1508 B1509',
             'B2118 B2217 B2318 B2418 B2518',
             'B2130 B2229 B2330 B2430 B2531',

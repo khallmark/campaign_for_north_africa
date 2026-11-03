@@ -95,15 +95,15 @@ automated or agent-visual record is human-reviewed.
 | Section | Examined cells | Land / mixed / water / unresolved | Cells with terrain observations |
 | --- | ---: | --- | ---: |
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
-| A | 1,000 | 866 / 62 / 64 / 8 | 623 |
+| A | 1,000 | 866 / 62 / 64 / 8 | 648 |
 | B | 1,961 | 1,885 / 40 / 34 / 2 | 1,386 |
 | C | 1,520 | 1,438 / 41 / 36 / 5 | 859 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **258 surveys / 23,880 observations**: 4,757 terrain,
-18,978 hexside and 145 point observations. **7,652 are provisional, 16,228 unresolved,
-none human-reviewed.** Terrain observations cover 4,618 cells; 2,458 have none.
+The current combined model has **262 surveys / 23,912 observations**: 4,787 terrain,
+18,980 hexside and 145 point observations. **7,684 are provisional, 16,228 unresolved,
+none human-reviewed.** Terrain observations cover 4,643 cells; 2,433 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -257,8 +257,9 @@ The C/D seam still has no cross-section links, so this does not resolve the
 visible section-boundary breaks. Escarpment rendering and exact source-shaped
 route geometry are separate work; the detector's raw findings remain unchanged.
 
-The Malta whole-cell audit adds four provisional ground observations. Of 2,458
-cells without typed ground, source-surface measurements report 2,026 land, 228
+The Malta whole-cell audit adds four provisional ground observations. The southern
+A audit adds 25 Clear occurrences and five partial Mountain cores while retaining
+existing Rough fringes. Of 2,433 cells without typed ground, source-surface measurements report 2,001 land, 228
 water, 180 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -276,8 +277,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-The first batch covers **58/58 Malta cells; all 7,018 mainland cells remain
-not_reviewed**. Malta source crops and corners match that pin exactly. Full-inset
+Recorded coverage is **58/58 Malta and 330/1,000 A cells; 6,688 cells remain
+not_reviewed**, including all of B–E and A1101 onward. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
 unfinished transportation, Village/Bir dot or Major City cluster was observed.
@@ -287,6 +288,17 @@ Both findings have separate provisional correction surveys. Coastal 0505, 0804,
 1301 and other mixed cells remain untyped; Rough patches do not imply homogeneous
 terrain. Water, coast sides, capacities and operational interpretations remain
 explicitly unresolved rather than inferred from the inset's labels or numerals.
+
+The two southern A batches cover every cell A0101–A1033. Individual outlined
+crops were inspected at 2×, with enlarged edge/crossing controls. They add 25
+affirmative Clear occurrences beneath tracks/labels or beside nearby patterns,
+five dark Mountain cores without erasing existing Rough, and two missing Track
+crossings: **A0430 E → A0431** and **A0703 NW → A0802**. Maradah's point remains
+operationally unresolved; neighboring lettering is not another settlement.
+Wadi meanders and stippled slope/ridge-like side bands retain directional
+uncertainty, and A0925 remains untyped rather than treating its narrow side band
+as a Mountain core. A0433's source Track continues toward B0401, but the audit
+does not invent cross-section adjacency: geometry/seam adjudication is separate.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

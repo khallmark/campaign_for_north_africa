@@ -352,7 +352,23 @@ class MapDatabaseTests(unittest.TestCase):
             SELECT symbol,center_x,center_y,label,status FROM source_points WHERE hex='C3111'
         ''').fetchall(), [('village_bir_dot', 6567.0, 2324.1, 'El Cuasc', 'unresolved')])
         self.assertEqual(dict(self.db.execute('SELECT symbol,count(*) FROM source_points GROUP BY symbol')),
-                         {'village_bir_dot': 119, 'oasis': 2, 'port_icon': 2})
+                         {'village_bir_dot': 119, 'oasis': 2, 'port_icon': 5})
+        # Independently inspected anchors, not operational ports. Nofilia's
+        # footprint straddles A2803, but its measured center remains in A2703.
+        self.assertEqual(self.db.execute('''
+            SELECT hex,center_x,center_y,status FROM source_points
+            WHERE symbol='port_icon' ORDER BY hex
+        ''').fetchall(), [
+            ('A2010', 919.5, 3105.5, 'unresolved'),
+            ('A2703', 283.5, 2576.5, 'unresolved'),
+            ('A2928', 2390.5, 2450.5, 'unresolved'),
+            ('A4827', 2348.5, 1054.5, 'unresolved'),
+            ('D3814', 9676.5, 1825.5, 'unresolved'),
+        ])
+        self.assertEqual(self.db.execute('''
+            SELECT hex,status,value FROM observations
+            WHERE survey='coastal-anchor-symbols' ORDER BY hex
+        ''').fetchall(), [(hex_id, 'unresolved', None) for hex_id in ('A2703', 'A2928', 'A4827')])
         for hex_id, x, y, label in (
             ('A1622', 1917.95, 3410.89, 'Bir es Suera'),
             ('D3227', 10796.1, 2254.1, 'Qotifya'),

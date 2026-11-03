@@ -278,8 +278,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta and 776/1,000 A cells; 6,242 cells remain
-not_reviewed**, including all of B–E and A2701 onward. Malta source crops and corners match that pin exactly. Full-inset
+Recorded coverage is **58/58 Malta and 836/1,000 A cells; 6,182 cells remain
+not_reviewed**, including all of B–E and A3427 onward. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
 unfinished transportation, Village/Bir dot or Major City cluster was observed.
@@ -337,6 +337,23 @@ the A2208/A2209/A2109 vertex: retain the existing footprint observation but keep
 centerline/branch interpretation unresolved. A2133/A2633 eastern continuations
 are seam-owner findings, not new adjacency. Belindah's near-grid Gravel remains
 untyped, and existing Clear at A2531 retains marginal-Gravel uncertainty.
+
+The A2701–A3333 batch reconciles 60 more retained cells, adding 23 Clear
+occurrences, partial Gravel at A2732/A2733 and **A2703 NW → A2802 Road**. The
+short closed Road tip is visible beyond the shared side; no farther continuation
+is inferred. At the coastal A2929/A3028/A3029 vertex the Road center stays east
+of A3028, so no extra crossing is added. Antelat's A3033/A3233 eastern continuations
+are seam-owner findings, not detours through A3133.
+
+Three additional source-anchor templates recover **Nofilia (A2703), Zuetina
+(A2928) and Benghazi (A4827)** at measured centers without lowering the 0.88
+match threshold. The full-source candidate search found five anchors, including
+the unchanged Matruh and Ras el Ali symbols; this does not certify complete
+port recall. Nofilia's glyph straddles A2803 but its measured center lies about
+two pixels inside A2703. Footprint membership, settlement association, port
+capacity and efficiency remain unresolved. Benghazi's point-only check earns
+no whole-cell review credit. Templates preserve distinct raster/grid-overlap
+variants rather than relaxing the match threshold for all white patterns.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

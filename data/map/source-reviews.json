@@ -155,6 +155,268 @@
           "survey_refs": ["malta-flying-boats"], "uncertainty": ["Numerals are not capacities; basin/port operational rules and human review remain pending."]
         }
       ]
+    },
+    {
+      "id": "a-01-03-whole-cell-2026-11-03",
+      "date": "2026-11-03",
+      "method": "agent_visual",
+      "notes": "Individually inspected all 99 outlined cells A0101 through A0333 in enlarged source contact sheets, with 6x edge checks for A0114/A0213/A0215/A0127 and A0316/A0317/A0326/A0327. Reconciled typed terrain and incident crossings against the pinned model, not just each side's canonical owner. Source symbols outside the outlined cell do not transfer membership. Ten affirmative plain-ground occurrences added; existing typed tracks retained. Raw unresolved detector candidates remain evidence, not accepted routes. No row-zero restoration, seam change, directional rule or human review inferred. Other A cells are not credited by this batch.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Land inside the outlined source cell; no blue water field observed. Wadi marks, where present, are not inferred to be a river or Sea surface."},
+        "transport": {"status": "not_observed", "notes": "No Road, Railroad, Track or unfinished transport glyph observed inside the outline. Adjacent dashed strokes and raw detector candidates do not establish a crossing here."},
+        "hexside": {"status": "not_observed", "notes": "No separate ridge, slope, escarpment, wadi, river or barred-side symbol observed at this cell. Ordinary grid edges are not feature lines; transport is recorded separately."},
+        "locations": {"status": "not_observed", "notes": "No settlement/Village-Bir dot, Major City cluster, oasis, airfield, flying-boat or training glyph observed within this cell. This is source-symbol absence, not historical absence."}
+      },
+      "groups": [
+        {
+          "hexes": ["A0101", "A0102", "A0103", "A0104", "A0105", "A0108", "A0109", "A0110", "A0111", "A0113", "A0114", "A0201", "A0202", "A0203", "A0204", "A0207", "A0208", "A0209", "A0210", "A0212", "A0213", "A0301", "A0302", "A0303", "A0304", "A0307", "A0308", "A0309", "A0310", "A0311"],
+          "findings": {"terrain": {"status": "observed", "notes": "Repeated ring pattern matches TEC Gravel and existing provisional Gravel. Nearby Salt Marsh at A0114/A0213 remains outside the outline; track beside A0212 also stays outside."}},
+          "survey_refs": ["ink-A-terrain-gravel"],
+          "uncertainty": ["Provisional source interpretation, not homogeneous terrain or operational movement adjudication. Human review pending."]
+        },
+        {
+          "hexes": ["A0106", "A0107", "A0205", "A0206", "A0305", "A0306"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel ring pattern surrounds the gray-green Wadi strokes; existing provisional Gravel retained."},
+            "hexside": {"status": "observed", "notes": "Meandering gray-green Wadi matches existing A0106 E/NE, A0205 E/NE and A0305 E observations incident to these cells. Curves leave grid edges; no additional side is inferred from a nearby bend."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel", "ink-A-hexside-wadi"],
+          "uncertainty": ["Wadi occurrence is source-backed; exact interior centerline, whole-side extent and operational crossing interpretation remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A0112", "A0211"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings beneath a single dashed Track; existing Gravel retained."},
+            "transport": {"status": "observed", "notes": "Single dashed stroke matches TEC Track. Existing A0112 NW to A0211 and A0211 NE to A0312 are supported. No separate road, railroad or construction glyph observed."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel", "ink-A-hexside-track"],
+          "uncertainty": ["Southern source-edge continuation is not an invented off-map connection. Crossing classifications remain provisional; exact path and operational permission unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A0115", "A0116", "A0118", "A0214", "A0217"],
+          "findings": {"terrain": {"status": "observed", "notes": "Yellow cracked Salt Marsh pattern on tan substrate matches TEC and existing provisional Salt Marsh. Plain gaps do not erase the patch; tan substrate alone does not establish additional Rough."}},
+          "survey_refs": ["ink-A-terrain-salt_marsh"],
+          "uncertainty": ["Partial pattern extent and operational treatment remain unresolved; no additional Rough or whole-cell homogeneity inferred. Human review pending."]
+        },
+        {
+          "hexes": ["A0117", "A0216"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Yellow cracked Salt Marsh patch surrounds the single dashed Track; existing Salt Marsh retained without extra Rough from tan substrate."},
+            "transport": {"status": "observed", "notes": "Single dashed Track supports A0117 NW to A0216 and A0216 NW to A0316. No separate road, railroad or construction symbol observed."}
+          },
+          "survey_refs": ["ink-A-terrain-salt_marsh", "ink-A-hexside-track"],
+          "uncertainty": ["Southern continuation/terminus is not certified as an off-map connection. Exact path, terrain extent and operational permission remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A0313"],
+          "findings": {"terrain": {"status": "observed", "notes": "Irregular tan Rough fill matches TEC and existing provisional Rough; nearby track remains outside the outline."}},
+          "survey_refs": ["ink-A-terrain-rough"],
+          "uncertainty": ["Patch occurrence does not establish homogeneous Rough or directional slope rules. Human review pending."]
+        },
+        {
+          "hexes": ["A0312"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Irregular tan Rough fill beneath the Track matches TEC and existing provisional Rough."},
+            "transport": {"status": "observed", "notes": "Single dashed Track supports A0211 NE to A0312 and A0312 NW to A0411. No road, railroad or construction glyph observed."}
+          },
+          "survey_refs": ["ink-A-terrain-rough", "ink-A-hexside-track"],
+          "uncertainty": ["Exact route geometry, patch extent and operational movement remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A0119", "A0120", "A0121", "A0122", "A0123", "A0124", "A0125", "A0126", "A0215", "A0218", "A0219", "A0220", "A0221", "A0222", "A0223", "A0226", "A0228", "A0314", "A0315", "A0318", "A0319", "A0320", "A0321", "A0322", "A0325"],
+          "findings": {"terrain": {"status": "observed", "notes": "Affirmative plain land matches TEC Clear and existing provisional Clear. Nearby Salt Marsh at A0215, Desert at A0228 and curved Track beside A0325 are outside the cell rather than additional cell features."}},
+          "survey_refs": ["ink-A-terrain-clear"],
+          "uncertainty": ["Source-ground interpretation remains provisional. Grid antialiasing and tiny edge contacts do not establish additional operational terrain. Human review pending."]
+        },
+        {
+          "hexes": ["A0317"],
+          "findings": {"terrain": {"status": "observed", "notes": "Affirmative plain interior matches TEC Clear; added a-south-plain-ground. At 6x the dashed Track stays outside the western edge and Salt Marsh approaches the southern tip from outside. Neither justifies moving the Track or replacing the plain-ground occurrence."}},
+          "survey_refs": ["a-south-plain-ground"],
+          "uncertainty": ["Near-tip pattern/grid contact is not adjudicated pixel by pixel; Clear occurrence is not a uniform whole-cell or movement-rule claim. Human review pending."]
+        },
+        {
+          "hexes": ["A0127", "A0224", "A0225", "A0227", "A0316", "A0323", "A0324", "A0326", "A0327"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Affirmative plain land beneath single dashed Track matches TEC Clear; added a-south-plain-ground for these detector omissions. Neighboring Salt Marsh and Desert are not relocated across cell outlines."},
+            "transport": {"status": "observed", "notes": "Single dashed Track supports existing chains A0127-A0227-A0327-A0427, A0324-A0224-A0225-A0326-A0426, A0216-A0316-A0416 and A0422-A0323-A0324. No additional Road, Railroad or construction glyph observed in these cells."}
+          },
+          "survey_refs": ["a-south-plain-ground", "ink-A-hexside-track"],
+          "uncertainty": ["Track crossings remain provisional and center-joined depiction is schematic. Source boundary continuation, exact path and operational permission are not inferred. Human review pending."]
+        },
+        {
+          "hexes": ["A0128", "A0129", "A0130", "A0132", "A0133", "A0229", "A0230", "A0232", "A0233", "A0328", "A0329", "A0330", "A0332", "A0333"],
+          "findings": {"terrain": {"status": "observed", "notes": "Yellow Desert fill matches TEC and existing provisional Desert. Substantial plain gaps, especially A0128/A0328/A0329, are not a reason to erase Desert or claim uniform ground."}},
+          "survey_refs": ["ink-A-terrain-desert"],
+          "uncertainty": ["Partial patch extent and operational terrain treatment remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A0131", "A0231", "A0331"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Yellow Desert fill around the Track matches TEC and existing provisional Desert."},
+            "transport": {"status": "observed", "notes": "Single dashed Track supports A0131 NE to A0231, A0231 NW to A0331 and A0331 NW to A0430. Visible stroke stops inside A0131; do not invent a southern crossing. No road, railroad or construction glyph observed."}
+          },
+          "survey_refs": ["ink-A-terrain-desert", "ink-A-hexside-track"],
+          "uncertainty": ["Source stroke endpoint is not a certified operational terminus. Exact route geometry, movement and desert patch extent remain unresolved. Human review pending."]
+        }
+      ]
+    },
+    {
+      "id": "a-04-10-whole-cell-2026-11-03",
+      "date": "2026-11-03",
+      "method": "agent_visual",
+      "notes": "Individually inspected all 231 outlined source cells A0401 through A1033 at 2x. Enlarged paired-cell controls checked A0430/A0431, A0703/A0802, A0807/A0808 and nested Mountain cores A0623/A0721. Compared TEC and existing typed terrain, incident crossings and point records. Added fifteen Clear occurrences, five partial Mountain cores and two missing Track crossings. Wadi meanders and stippled terrain-side bands remain explicitly unresolved where direction/whole-side identity is unclear. This batch excludes every uninspected cell north of A1033; detector completion never grants review coverage.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Land inside the outlined source cell; no blue water field. Gray-green Wadi strokes do not establish Sea or a major/minor river."},
+        "transport": {"status": "not_observed", "notes": "No depicted Road, Railroad, Track or unfinished route inside this outline. Nearby strokes outside the cell and generic detector rail_track candidates do not establish crossings."},
+        "hexside": {"status": "not_observed", "notes": "No separate ridge, slope, escarpment, wadi, river or barred-side symbol observed at this cell. Ordinary grid and faint section lines are not route or terrain-side glyphs."},
+        "locations": {"status": "not_observed", "notes": "No settlement/Village-Bir dot, Major City cluster, oasis, airfield, flying-boat or training glyph observed inside this cell. Nearby lettering is not a second location."}
+      },
+      "groups": [
+        {
+          "hexes": ["A0401", "A0402", "A0403", "A0404", "A0407", "A0408", "A0409", "A0410", "A0501", "A0502", "A0503", "A0504", "A0507", "A0508", "A0509", "A0510", "A0601", "A0602", "A0603", "A0604", "A0607", "A0608", "A0609", "A0701", "A0702", "A0711", "A0801", "A0803", "A0804", "A0809", "A0810", "A0811", "A0812", "A0813", "A0814", "A0901", "A0902", "A0904", "A0907", "A0909", "A0910", "A0912", "A0913", "A0914", "A1001", "A1003", "A1006", "A1007", "A1009"],
+          "findings": {"terrain": {"status": "observed", "notes": "Repeated rings match TEC Gravel and the existing provisional observation. Neighboring Rough/Track marks are outside these outlines, not transferred across the grid."}},
+          "survey_refs": ["ink-A-terrain-gravel"], "uncertainty": ["Provisional pattern occurrence, not homogeneous terrain or operational rule. Human review pending."]
+        },
+        {
+          "hexes": ["A0405", "A0406", "A0505", "A0506", "A0605", "A0606", "A0805", "A0806", "A0905", "A0906", "A1004", "A1005"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings remain visible around the gray-green Wadi band; existing Gravel retained."},
+            "hexside": {"status": "unresolved", "notes": "Gray-green Wadi meanders through or alongside the outline. Some bands run in the interior or mostly outside the neighbor's west edge. Preserve existing provisional Wadi evidence without snapping every nearby bend to a full side or inventing new directional assignments."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel"], "uncertainty": ["Exact Wadi-to-side membership and whole-side extent need adjudication; nearby ink is not proof of a new side. Human review pending."]
+        },
+        {
+          "hexes": ["A0610", "A0704", "A0707", "A0708", "A0709", "A0710", "A0807", "A0808", "A0903", "A0908", "A1002", "A1008"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings under single dashed Track match existing Gravel."},
+            "transport": {"status": "observed", "notes": "Single dashed Track supports the existing incident crossings: eastward chain A0703 through A0710 then A0610, branch A0707-A0807-A0808-A0908-A1008-A1108, and A0802-A0903-A1002-A1103. A0610 also connects east to A0611. No road, railroad or construction glyph observed."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel", "ink-A-hexside-track"], "uncertainty": ["Crossings are provisional, not surveyed centerlines or within-hex junction authority. Human review pending."]
+        },
+        {
+          "hexes": ["A0703", "A0802"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings beneath the bending single dashed Track."},
+            "transport": {"status": "observed", "notes": "Added missing A0703 NW to A0802 after enlarged paired-cell inspection. Existing A0703 E to A0704 and A0802 NE to A0903 are supported. Adjacent A0803 does not inherit this Track."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel", "ink-A-hexside-track", "a-south-missing-tracks"], "uncertainty": ["Crossing observation does not establish an exact curve or operational permission. Human review pending."]
+        },
+        {
+          "hexes": ["A0705", "A0706"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings beneath both Track and Wadi strokes."},
+            "transport": {"status": "observed", "notes": "The eastward dashed Track crosses the gray-green Wadi; existing A0704-A0705-A0706-A0707 chain is present despite overprint. No additional route class inferred."},
+            "hexside": {"status": "observed", "notes": "Gray-green Wadi supports existing provisional Wadi occurrence at the shared A0705 east side. Its bends are not a surveyed centerline or proof of a bridge."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel", "ink-A-hexside-track", "ink-A-hexside-wadi"], "uncertainty": ["Wadi extent, bridge status and operational crossing rules remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A0412", "A0413", "A0511", "A0513", "A0612", "A0613", "A0619", "A0620", "A0712", "A0713", "A0714", "A0911", "A1010", "A1011", "A1012", "A1013"],
+          "findings": {"terrain": {"status": "observed", "notes": "Irregular pale tan Rough patches match TEC and existing Rough; plain gaps remain. Nearby tracks stay outside these cells."}},
+          "survey_refs": ["ink-A-terrain-rough"], "uncertainty": ["Patch extent is not homogeneous Rough or directional slope authority. Human review pending."]
+        },
+        {
+          "hexes": ["A0411", "A0512", "A0611", "A1014"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Tan Rough fill beneath dashed Track matches TEC and existing Rough."},
+            "transport": {"status": "observed", "notes": "Existing single Track crossings are supported: A0312-A0411-A0512-A0611-A0610 and A1115-A1014-A1015. No separate Road, Railroad or construction glyph observed."}
+          },
+          "survey_refs": ["ink-A-terrain-rough", "ink-A-hexside-track"], "uncertainty": ["Exact curve, partial ground extent and operational route permission remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A0624", "A0722", "A0723", "A0724", "A0725", "A0820", "A0821", "A0822", "A0823", "A0824", "A0921", "A0922"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Dark olive Mountain cores match TEC and existing Mountain. Pale fringes and plain gaps coexist; existing Rough observations are retained rather than converting every cell to homogeneous Mountain."},
+            "hexside": {"status": "unresolved", "notes": "Terrain margins are visible, with stippled slope/ridge-like bands near A0822/A0823. No Up/Down direction or new Ridge/Slope side is assigned from a fill boundary; smooth pale fringe alone is not sufficient."}
+          },
+          "survey_refs": ["ink-A-terrain-mountain"], "uncertainty": ["Secondary fringe classification, directional terrain-side interpretation and whole-cell homogeneity remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A0623", "A0721", "A0819", "A0919", "A1023"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added dark olive Mountain core occurrences previously missing beneath the existing Rough fringe classification. Nested core/fringe pattern matches TEC Mountain; both observations remain provisional."},
+            "hexside": {"status": "unresolved", "notes": "Smooth pale fringe around the Mountain core does not determine an Up/Down slope or certify an entire hexside. No new directional side assignment made."}
+          },
+          "survey_refs": ["a-south-mountain-cores", "ink-A-terrain-rough"], "uncertainty": ["Core and fringe are partial terrain occurrences, not a homogeneous-cell replacement or directional rule. Human review pending."]
+        },
+        {
+          "hexes": ["A0414", "A0415", "A0423", "A0424", "A0425", "A0514", "A0515", "A0516", "A0518", "A0519", "A0520", "A0521", "A0522", "A0523", "A0524", "A0525", "A0614", "A0615", "A0617", "A0618", "A0621", "A0622", "A0715", "A0716", "A0718", "A0825", "A0920", "A0924", "A0926", "A1018", "A1019"],
+          "findings": {"terrain": {"status": "observed", "notes": "Affirmative plain land matches TEC Clear and existing Clear. Nearby tracks and surrounding Rough, Mountain, Salt Marsh or Desert remain outside the outline; Maradah lettering at A0718 is not a second point."}},
+          "survey_refs": ["ink-A-terrain-clear"], "uncertainty": ["Near-corner antialiasing and neighboring terrain do not justify new operational categories. Human review pending."]
+        },
+        {
+          "hexes": ["A0416", "A0417", "A0418", "A0419", "A0420", "A0421", "A0422", "A0517", "A0616", "A0717", "A0917", "A1015", "A1017"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added affirmative plain Clear ground beneath the dashed Track, not inferred from detector silence."},
+            "transport": {"status": "observed", "notes": "Existing Track crossings match source: A0316-A0416-A0517-A0616-A0717-A0817-A0917-A1017-A1118; eastward A0416 through A0422 then A0323; A1014-A1015-A0916. No additional Road, Railroad or construction glyph observed."}
+          },
+          "survey_refs": ["a-04-10-plain-ground", "ink-A-hexside-track"], "uncertainty": ["Crossing chains are source observations, not within-hex junction rules, exact curves or movement permission. Human review pending."]
+        },
+        {
+          "hexes": ["A0817"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added Clear from affirmative plain ground beneath the Maradah dot/name and tracks; neighboring Salt Marsh stays outside."},
+            "transport": {"status": "observed", "notes": "Single dashed Tracks enter from A0816 west, A0717 southwest and A0917 northwest, matching existing crossings. No operational junction inferred from convergence at the dot."},
+            "locations": {"status": "unresolved", "notes": "Blue dot and Maradah label agree with existing label-A0817. Retain Village/Bir glyph with operational category unresolved, rather than promoting it to a town or water source."}
+          },
+          "survey_refs": ["a-04-10-plain-ground", "ink-A-hexside-track", "label-A0817"], "uncertainty": ["Point category, water availability, capacity, route junction and operational status remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1020"],
+          "findings": {"terrain": {"status": "observed", "notes": "Added Clear from affirmative plain land. The neighboring dark stippled band approaches but stays outside the eastern outline; it is not a new Mountain patch or route here."}},
+          "survey_refs": ["a-04-10-plain-ground"], "uncertainty": ["Near-edge band does not establish directional slope rules; exact edge pixels are not an operational adjudication. Human review pending."]
+        },
+        {
+          "hexes": ["A0428", "A0429", "A0528", "A0529", "A0530", "A0532", "A0533", "A0625", "A0628", "A0629", "A0631", "A0632", "A0633", "A0726", "A0730", "A0732", "A0733", "A0826", "A0828", "A0831", "A0832", "A0833", "A0927", "A0929", "A0930", "A0932", "A0933", "A1026", "A1028", "A1029", "A1031", "A1032", "A1033"],
+          "findings": {"terrain": {"status": "observed", "notes": "Yellow Desert fill matches TEC and existing Desert, with substantial plain gaps in several cells. Faint vertical section lines in A0833/A0933/A1033 are overprint, not Railroad; neighboring Tracks remain outside these outlines."}},
+          "survey_refs": ["ink-A-terrain-desert"], "uncertainty": ["Partial terrain extent and section-boundary interpretation remain unresolved; no new seam adjacency or homogeneous-cell claim. Human review pending."]
+        },
+        {
+          "hexes": ["A0426", "A0427", "A0432", "A0433", "A0526", "A0527", "A0531", "A0626", "A0627", "A0630", "A0727", "A0728", "A0729", "A0731", "A0827", "A0829", "A0830", "A0928", "A0931", "A1027", "A1030"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Yellow Desert beneath dashed Tracks matches TEC and existing Desert."},
+            "transport": {"status": "observed", "notes": "Existing single dashed Track crossings match source. Includes branches through A0627/A0727 and A0830, and A0431-A0432-A0433. No completed Road, Railroad or construction pattern observed. Source continues from A0433 toward B0401; reported separately, not converted into new adjacency."}
+          },
+          "survey_refs": ["ink-A-terrain-desert", "ink-A-hexside-track"], "uncertainty": ["Exact curves and operational junctions remain unresolved. A0433/B0401 is a geometry-owner boundary finding, not an inferred connection. Human review pending."]
+        },
+        {
+          "hexes": ["A0430", "A0431"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Yellow Desert beneath dashed Track matches TEC and existing Desert."},
+            "transport": {"status": "observed", "notes": "Added missing horizontal Track A0430 E to A0431, confirmed in enlarged paired crops. Existing A0331-A0430-A0531 and A0431-A0432 crossings remain. The nearby vertical stroke stays outside A0431's west edge."}
+          },
+          "survey_refs": ["ink-A-terrain-desert", "ink-A-hexside-track", "a-south-missing-tracks"], "uncertainty": ["Source crossing does not certify an operational junction or exact drawn curve. Human review pending."]
+        },
+        {
+          "hexes": ["A0719", "A0720", "A0815", "A0818", "A0915", "A0918", "A1016", "A1024"],
+          "findings": {"terrain": {"status": "observed", "notes": "Yellow cracked Salt Marsh pattern matches TEC and existing Salt Marsh. Tan substrate is not a separate Rough assignment; Maradah lettering in A0818 is not a second location."}},
+          "survey_refs": ["ink-A-terrain-salt_marsh"], "uncertainty": ["Partial pattern extent is not homogeneous ground or operational permission. Human review pending."]
+        },
+        {
+          "hexes": ["A0816", "A0916"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Salt Marsh pattern beneath single dashed Track matches TEC and existing Salt Marsh."},
+            "transport": {"status": "observed", "notes": "Track follows A1015-A0916-A0816-A0817, matching existing crossings. No double Road or Railroad ties observed."}
+          },
+          "survey_refs": ["ink-A-terrain-salt_marsh", "ink-A-hexside-track"], "uncertainty": ["Salt Marsh patch extent and legal passage remain unresolved; source Track is not movement authority. Human review pending."]
+        },
+        {
+          "hexes": ["A0923", "A1021", "A1022", "A1025"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Yellow cracked Salt Marsh pattern matches TEC and existing Salt Marsh; neighboring dark narrow stippled bands are not automatically Mountain ground."},
+            "hexside": {"status": "unresolved", "notes": "Dark olive band with stippled fringe follows part of the outline/interior, resembling slope/ridge ink. Exact type, direction and membership on each side remain unresolved; no Up/Down assignment added."}
+          },
+          "survey_refs": ["ink-A-terrain-salt_marsh"], "uncertainty": ["Side-band classification and operational direction need separate adjudication; Salt Marsh occurrence alone does not settle them. Human review pending."]
+        },
+        {
+          "hexes": ["A0925"],
+          "findings": {
+            "terrain": {"status": "unresolved", "notes": "Plain interior with a dark narrow stippled band intruding along the east/southeast side. Retain untyped ground rather than call the band a Mountain core or the whole cell uniformly Clear."},
+            "hexside": {"status": "unresolved", "notes": "Stippled slope/ridge-like band requires type, direction and side-membership adjudication. No Up/Down rule inferred."}
+          },
+          "survey_refs": [], "uncertainty": ["Dark pigment is shared by terrain and side symbols; this is not the nested Mountain core pattern. Ground/side classification remains unresolved. Human review pending."]
+        }
+      ]
     }
   ]
 }

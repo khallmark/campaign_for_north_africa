@@ -131,11 +131,26 @@ class MapDatabaseTests(unittest.TestCase):
         # Whole-cell visual review separates plain airfield ground from coastal
         # airfields and the small western Rough intrusion into Malta 1002.
         for hex_id, value in (("Malta 0604", "clear"), ("Malta 0704", "clear"),
-                              ("Malta 0802", "clear"), ("Malta 1002", "rough")):
+                              ("Malta 0802", "clear"), ("Malta 1002", "rough"),
+                              ("A0127", "clear"), ("A0224", "clear"), ("A0225", "clear"),
+                              ("A0227", "clear"), ("A0316", "clear"), ("A0317", "clear"),
+                              ("A0323", "clear"), ("A0324", "clear"), ("A0326", "clear"),
+                              ("A0327", "clear"), ("A0416", "clear"), ("A0422", "clear"),
+                              ("A0817", "clear"), ("A1020", "clear"),
+                              ("A0217", "salt_marsh"), ("A0426", "desert")):
             self.assertEqual(self.db.execute(
                 "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain'",
                 (hex_id,)).fetchall(), [('provisional', value)])
-        for hex_id in ("Malta 0505", "Malta 0804", "Malta 1301"):
+        # Partial Mountain cores add evidence without erasing their Rough fringes.
+        for hex_id in ("A0623", "A0721", "A0819", "A0919", "A1023"):
+            self.assertEqual(self.db.execute(
+                "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain' ORDER BY value",
+                (hex_id,)).fetchall(), [('provisional', 'mountain'), ('provisional', 'rough')])
+        # Plain-ground correction must not import the neighboring Track into A0317.
+        self.assertEqual(self.db.execute(
+            "SELECT 1 FROM network_links WHERE from_hex='A0317' OR to_hex='A0317'"
+        ).fetchall(), [])
+        for hex_id in ("Malta 0505", "Malta 0804", "Malta 1301", "A0925"):
             self.assertEqual(self.db.execute(
                 "SELECT value FROM observations WHERE hex=? AND kind='terrain'", (hex_id,)).fetchall(), [])
         # Independently inspected TEC controls: pale gaps are unfinished, dark
@@ -147,6 +162,7 @@ class MapDatabaseTests(unittest.TestCase):
             ('C3226', 'north_west', 'track', False),  # Disconnected cross-ties, not dashes.
             ('D2224', 'north_east', 'track', False),
             ('C3922', 'north_west', 'track', False),  # Unfinished double road capsules.
+            ('A0703', 'north_east', 'track', False),  # Track crosses NW, not toward A0803.
             ('E2520', 'east', 'railroad', True),
             ('B5409', 'east', 'road', True),
             ('B5405', 'east', 'road', True),
@@ -188,6 +204,8 @@ class MapDatabaseTests(unittest.TestCase):
             'C2908 C3008 C3009',
             'C4216 C4217 C4218 C4219 C4220',
             'C4017 C4118 C4218 C4319',
+            'A0430 A0431 A0432 A0433',
+            'A0903 A0802 A0703 A0704 A0705 A0706 A0707',
         ):
             cells = route.split()
             for start, destination in zip(cells, cells[1:]):

@@ -278,8 +278,9 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta and 892/1,000 A cells; 6,126 cells remain
-not_reviewed**, including all of B–E and A4125 onward. Malta source crops and corners match that pin exactly. Full-inset
+Recorded coverage is **58/58 Malta and 1,000/1,000 A cells; all 6,018 B–E cells
+remain not_reviewed**. This is agent source review, not complete interpretation
+or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
 unfinished transportation, Village/Bir dot or Major City cluster was observed.
@@ -363,6 +364,23 @@ Carcura's Track bypasses A3828 through A3827 → A3928; no extra crossing is add
 there. The eastern Tracks at A3433/A3633/A3833/A3933 remain unresolved section
 continuations. Broad bands stay untyped, Wadi/scarp-tip membership at A3833
 remains uncertain, and no Up/Down, passability or operational junction is inferred.
+
+The remaining 108 northern A cells add 26 Clear occurrences, partial Rough at
+A4933, seven Railroad crossings, two Road crossings and ten rail-parallel Tracks
+around Giardina, Benghazi and Er Regima. Four more Tracks restore the eastward
+Ghemines, Soluch, A4132 and A4431 dot/scarp-obscured crossings.
+Benghazi's three Training Area figures
+are recorded as unresolved point evidence; they are not another city, port or
+capacity assignment. Benina's olive stipple stays an unresolved side band, not
+Rough or Salt Marsh. A4832 stays untyped at its uncertain northwestern fringe.
+
+**A4832 northwest Railroad remains disputed.** Its transverse tie approaches
+A4932's bottom vertex while the visible centerline runs from A4831 east through
+A4832 northeast to A4933. The prior provisional observation is preserved with
+an explicit unresolved review, not silently removed or treated as another branch.
+Eastern Track/Railroad continuations at A4933, the hooked Track at A5033 and
+Road at A5533 remain seam-owner findings. Source review does not authorize
+changes to canonical geometry or operational routes.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

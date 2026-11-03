@@ -95,15 +95,15 @@ automated or agent-visual record is human-reviewed.
 | Section | Examined cells | Land / mixed / water / unresolved | Cells with terrain observations |
 | --- | ---: | --- | ---: |
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
-| A | 1,000 | 866 / 62 / 64 / 8 | 708 |
+| A | 1,000 | 866 / 62 / 64 / 8 | 752 |
 | B | 1,961 | 1,885 / 40 / 34 / 2 | 1,386 |
 | C | 1,520 | 1,438 / 41 / 36 / 5 | 859 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **271 surveys / 23,983 observations**: 4,851 terrain,
-18,984 hexside and 148 point observations. **7,752 are provisional, 16,231 unresolved,
-none human-reviewed.** Terrain observations cover 4,703 cells; 2,373 have none.
+The current combined model has **274 surveys / 24,029 observations**: 4,895 terrain,
+18,986 hexside and 148 point observations. **7,798 are provisional, 16,231 unresolved,
+none human-reviewed.** Terrain observations cover 4,747 cells; 2,329 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -258,9 +258,9 @@ visible section-boundary breaks. Escarpment rendering and exact source-shaped
 route geometry are separate work; the detector's raw findings remain unchanged.
 
 The Malta whole-cell audit adds four provisional ground observations. The A audit
-adds 84 Clear occurrences, nine partial Mountain cores retaining existing Rough
-fringes, and one partial Gravel occurrence. Of 2,373 cells without typed ground,
-source-surface measurements report 1,941 land, 228
+adds 126 Clear occurrences, nine partial Mountain cores retaining existing Rough
+fringes, and three partial Gravel occurrences. Of 2,329 cells without typed ground,
+source-surface measurements report 1,897 land, 228
 water, 180 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -278,8 +278,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta and 656/1,000 A cells; 6,362 cells remain
-not_reviewed**, including all of B–E and A2101 onward. Malta source crops and corners match that pin exactly. Full-inset
+Recorded coverage is **58/58 Malta and 776/1,000 A cells; 6,242 cells remain
+not_reviewed**, including all of B–E and A2701 onward. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
 unfinished transportation, Village/Bir dot or Major City cluster was observed.
@@ -327,6 +327,16 @@ hollow letters and neighboring-cell dots excluded. Measured centers and labels
 retain unresolved Village/Bir categories. Individual `review_dates` preserve the
 original 116 label-review dates. The D-cell spot checks and paired A2104/A2133
 crossing checks do **not** count as whole-cell visual coverage.
+
+The A2101–A2633 batch reconciles another 120 retained cells. It adds 42 Clear
+occurrences, partial Gravel at A2431/A2631, and two missing Tracks beneath blue
+dots: **A2331 E → Belindah A2332** and **A2530 NW → Agadabia A2629**. The separate
+Agadabia eastern branch remains. A2429's northern dashed stub ends beneath side-band
+ink; no connection to Agadabia is inferred. Marble Arch's road outer stroke clips
+the A2208/A2209/A2109 vertex: retain the existing footprint observation but keep
+centerline/branch interpretation unresolved. A2133/A2633 eastern continuations
+are seam-owner findings, not new adjacency. Belindah's near-grid Gravel remains
+untyped, and existing Clear at A2531 retains marginal-Gravel uncertainty.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,155/1,961 B cells; 4,863 cells
-remain not_reviewed**, including B3601 onward and all of C–E. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,320/1,961 B cells; 4,698 cells
+remain not_reviewed**, including B4101 onward and all of C–E. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -463,6 +463,23 @@ Northwest/southwest Tracks in B3101/B3301/B3501, B3201 west and B3233 southeast
 exit retained inventory and require seam-owner reconciliation. No zero-column
 cells, B3134, cross-section links or operational permissions were invented.
 No new settlement or facility glyph was observed in these 165 cells.
+
+The B3601–B4033 batch adds forty-seven affirmative Clear occurrences and restores
+**B3903 east → B3904** and **B4004 east → B4005** Tracks. Enlarged context rejects
+a detour through B4003 and preserves the separate Msus southeast spur to B3905.
+The Msus dot overlaps the horizontal route's start; the crossing remains
+provisional, not an exact path or operational junction. Existing Msus and Ben
+Gania measured dots and labels remain unchanged, with Village/Bir category
+uncertainty. The diagonal branch northwest from Ben Gania through B3814, B3914
+and B4013 repeatedly approaches printed vertices: 12× controls cannot consistently
+resolve direct sides versus small neighboring wedges. Its presence is recorded,
+but no new sides are forced. B4113 is context-only, not reviewed coverage.
+B3701 olive interior and six Gravel-boundary cells remain untyped; seven existing
+Clear cells retain explicit Gravel-footprint uncertainty. Seventeen Rough, eight
+Salt Marsh and three Gravel occurrences stay unchanged. Wadi and olive bands
+retain unresolved exact footprints and direction; no bridge or Up/Down inferred.
+B3701/B3901 western Tracks and B3833 northeast leave the inventory and need seam
+reconciliation. No new settlement or facility glyph was observed in these 165 cells.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

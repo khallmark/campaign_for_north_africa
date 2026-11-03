@@ -9,6 +9,143 @@
   "map_source": "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
   "batches": [
     {
+      "id": "b-36-40-whole-cell-2026-11-03", "date": "2026-11-03", "method": "agent_visual",
+      "notes": "Individually inspected 165 outlined B3601–B4033 source crops at 2x, twenty-four controls and three route contexts at 4x, and seven near-vertex controls at 12x nearest-neighbor. Reconciled against ad50945 model with unchanged add8fb4 source/geometry pins. Forty-seven Clear and two horizontal Track occurrences added. Seven untyped cells remain unresolved; repeated near-vertex diagonal route associations are not forced into new sides. No prior class, point, watercourse or adjacency changed. Neighbor B4113 inspected for route context only, without whole-cell review credit. Detector status is not visual review; human adjudication pending.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Full outlined source cell inspected; grid, IDs, lettering and gray section lines separated from feature ink. Crop padding is not part of the cell."},
+        "terrain": {"status": "observed", "notes": "Plain ground inside outline matches provisional Clear independently of overprinted ink; nearby colored patches outside the outline are not imported. Not uniform source pixels or movement authority."},
+        "transport": {"status": "not_observed", "notes": "No Road, Railroad, Track or unfinished transportation glyph observed inside outline. Exterior paths are not interior routes; source-symbol absence is not historical absence."},
+        "hexside": {"status": "not_observed", "notes": "No independent Wadi, river, ridge, slope, escarpment or barred-side glyph observed within outline. Grid and section lines do not establish effects."},
+        "locations": {"status": "not_observed", "notes": "No Village/Bir dot, Major City cluster, oasis, airfield, flying-boat or training glyph observed inside outline. Exterior dots and lettering do not establish another location."}
+      },
+      "groups": [
+        {
+          "hexes": ["B3606","B3607","B3608","B3609","B3610","B3611","B3612","B3615","B3616","B3617","B3620","B3621","B3622","B3623","B3626","B3627","B3703","B3707","B3708","B3709","B3710","B3711","B3712","B3713","B3714","B3717","B3718","B3719","B3720","B3722","B3723","B3724","B3728","B3729","B3730","B3807","B3808","B3809","B3810","B3811","B3812","B3813","B3818","B3822","B3823","B3824","B3828","B3829","B3830","B3831","B3832","B3908","B3909","B3910","B3911","B3912","B3913","B3916","B3929","B3930","B3931","B3932","B3933","B4011","B4012","B4014","B4015","B4026","B4027","B4028","B4029","B4030","B4031","B4032"],
+          "findings": {}, "survey_refs": ["ink-B-terrain-clear"], "uncertainty": ["Existing Clear retained after individual inspection. Nearby Rough, Gravel, Salt Marsh, routes and labels outside the outline are not additional interior features. In particular the diagonal route touches B4014 exterior southwest corner without a resolved interior crossing. No exact boundary, homogeneous fill or operational absence certified. Human review pending."]
+        },
+        {
+          "hexes": ["B3628","B3928"],
+          "findings": {"hexside": {"status": "unresolved", "notes": "Wadi approaches B3628 outside southeast tip and B3928 southwest tip. Retain provisional evidence without claiming exact side ownership or full-cell water."}},
+          "survey_refs": ["ink-B-terrain-clear"], "uncertainty": ["Existing Clear retained; near-edge Wadi is not permanent water, a bridge or passage authority. Human review pending."]
+        },
+        {
+          "hexes": ["B3721","B3817","B3819","B3821","B3919","B4016","B4017"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Existing Clear retained, with Gravel fringe near northwest B3721/B3817, northeast/east B3819, west B3821, east B3919, southeast B4016 and northeast/southwest B4017. Pattern crosses or approaches outline; no homogeneous terrain claim or silent reclassification."}},
+          "survey_refs": ["ink-B-terrain-clear"], "uncertainty": ["Gravel circle footprint near printed lines needs adjudication; exterior neighboring Tracks are not new interior routes. Human review pending."]
+        },
+        {
+          "hexes": ["B3633","B3716","B4033"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath section lines or Ben Gania lettering. B3716 dot remains outside west; nearby Track remains outside northwest."}},
+          "survey_refs": ["b-36-40-plain-ground"], "uncertainty": ["Lettering and section lines do not create settlements, routes or canonical neighbors. Human review pending."]
+        },
+        {
+          "hexes": ["B3602","B3625","B3629","B3630","B3631","B3725","B3727","B3731","B3732","B3803","B3806","B3825","B3826","B3827","B3906","B3907","B3925","B3926","B3927","B4003"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear independently of Wadi ribbons, labels and nearby colored patches outside outline."}, "hexside": {"status": "unresolved", "notes": "Wadi near northwest/southwest B3602; northwest/west B3625/B3907; lower B3629; southwest/southeast B3630/B3927; northwest/west/southwest/southeast B3631/B3926/B4003; east/southeast B3725; northwest B3727; southeast B3731; southwest tip B3732; northern tip B3803; northwest/northern B3806; northeast/east/southeast B3825/B3925; surrounding B3826; northwest/southwest B3827; and northeast/east/southeast/southwest B3906. B3925 ribbon largely outside outline. Preserve existing provisional side evidence without exact footprint claims."}},
+          "survey_refs": ["b-36-40-plain-ground"], "uncertainty": ["B4003 context keeps horizontal Track below bottom vertex and vertical Track outside west: no route detour through that cell. Wadi does not establish permanent water, Major/Minor River, bridge, Up/Down or legal passage. Human review pending."]
+        },
+        {
+          "hexes": ["B3603","B3613","B3614","B3632","B3704","B3733","B3815","B4008","B4009","B4010","B4021"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath single-dashed Tracks independently of neighboring colored patches."}, "transport": {"status": "observed", "notes": "Existing southwest/northeast B3603/B3704/B3733; southwest/east B3613/B3815; west/northeast/southeast B3614; northeast/southeast B3632; west/east B4008/B4009; west/northeast B4010/B4021 match source. B3613 enlargement confirms southwest crossing close to bottom vertex; diagonal northwest route outside B3815 touches southwest corner without a resolved additional crossing."}},
+          "survey_refs": ["b-36-40-plain-ground","ink-B-hexside-track"], "uncertainty": ["No surveyed centerline, operational junction, movement capacity or connection to touching exterior paths inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B3902","B3905","B4002","B4006","B4007"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath Tracks and Wadi, independently of adjacent Rough or olive bands."}, "transport": {"status": "observed", "notes": "Retain west/east B3902/B4006; northwest/southwest B3905; northeast/southeast B4002 near east edge; west/east/northeast B4007. No bridge glyph established at Wadi intersection."}, "hexside": {"status": "unresolved", "notes": "Wadi near northwest/southwest B3902; northwest/west/southwest and southeast tip B3905; northwest/west/southwest B4002/B4007; northeast/east/southeast B4006. Provisional side associations retained, not exact ribbon geometry."}},
+          "survey_refs": ["b-36-40-plain-ground","ink-B-hexside-track"], "uncertainty": ["Source crossing is not bridge evidence, permanent water or operational passage authority. Human review pending."]
+        },
+        {
+          "hexes": ["B3903","B3904"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath Track and Wadi."}, "transport": {"status": "observed", "notes": "Restore B3903 east to B3904 west, shown in enlarged context below B4003 bottom vertex. Retain B3903 west/northwest fork and B3904 northeast route, not a detour through B4003."}, "hexside": {"status": "unresolved", "notes": "Wadi follows northeast/east/southeast B3903 and much of B3904 outline. Existing side evidence retained independently of Track; no bridge glyph established."}},
+          "survey_refs": ["b-36-40-plain-ground","ink-B-hexside-track","b-39-40-horizontal-track-crossings"], "uncertainty": ["Overlap with broad Wadi leaves exact geometry and crossing rules unresolved; new side is a provisional Track occurrence only. Human review pending."]
+        },
+        {
+          "hexes": ["B4004"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath Msus dot, routes and Wadi."}, "transport": {"status": "observed", "notes": "Restore eastern Track into B4005 beside the dot. Retain southwest/northeast and separate southeast spur into B3905. Four-times context supports horizontal continuation across dash gap and dot overlap, not removal of the southern spur."}, "hexside": {"status": "unresolved", "notes": "Wadi near northwest/west/southwest/southeast retained as provisional side evidence; no bridge or permanent water inferred."}, "locations": {"status": "unresolved", "notes": "Existing measured Msus Village/Bir dot matches source. Preserve label and point uncertainty; category, water supply and capacity remain unadjudicated."}},
+          "survey_refs": ["b-36-40-plain-ground","ink-B-hexside-track","b-39-40-horizontal-track-crossings","label-B4004"], "uncertainty": ["Dot obscures route start; continuation is provisional, not exact path, operational junction or water-source interpretation. Human review pending."]
+        },
+        {
+          "hexes": ["B4005"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath Msus lettering and Track; measured dot is outside west."}, "transport": {"status": "observed", "notes": "Retain eastern Track and restore western connection across B4004 east. Label does not create another settlement."}},
+          "survey_refs": ["b-36-40-plain-ground","ink-B-hexside-track","b-39-40-horizontal-track-crossings"], "uncertainty": ["Dash gap and neighboring dot overlap preserve provisional interpretation, not a surveyed centerline or operational junction. Human review pending."]
+        },
+        {
+          "hexes": ["B3715"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath Ben Gania dot and route."}, "transport": {"status": "unresolved", "notes": "Existing southwest/northeast Track retained. Additional northwest branch continues toward B3814/B3914/B4013 but repeatedly touches printed vertices. Twelve-times controls cannot resolve direct diagonal versus tiny neighboring wedges consistently; no new canonical sides assigned."}, "locations": {"status": "unresolved", "notes": "Existing measured Ben Gania Village/Bir dot matches source; preserve label, point uncertainty and unresolved category."}},
+          "survey_refs": ["b-36-40-plain-ground","ink-B-hexside-track","label-B3715"], "uncertainty": ["Continuous source route presence does not determine every side, operational junction or settlement/water capacity. Human review pending."]
+        },
+        {
+          "hexes": ["B3914","B4013"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath diagonal single-dashed route."}, "transport": {"status": "unresolved", "notes": "Track runs between northern and lower-eastern vertex vicinities in both cells. Twelve-times controls show source line width and repeated printed corners impede consistent canonical ownership; no new side assigned. B4113 context confirms continuation but receives no full-cell review credit."}},
+          "survey_refs": ["b-36-40-plain-ground"], "uncertainty": ["Do not equate missing model crossings with source route absence, or force diagonal versus small-wedge choice without adjudication. Human review pending."]
+        },
+        {
+          "hexes": ["B3833"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath Track and section line."}, "transport": {"status": "unresolved", "notes": "Southwest/northeast Track visible; existing southwest crossing retained. Northeast leaves retained inventory, so no zero-column, B3934 or cross-section endpoint invented."}},
+          "survey_refs": ["b-36-40-plain-ground","ink-B-hexside-track"], "uncertainty": ["Boundary continuation requires seam-owner reconciliation; no geometry or movement authority changed. Human review pending."]
+        },
+        {
+          "hexes": ["B3701"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Olive band occupies northeast/east/southeast interior; no Clear default or new Mountain/Rough class from shared ink."}, "transport": {"status": "unresolved", "notes": "Northwest/southwest Track leaves retained inventory. Record boundary continuation without fabricated external neighbors."}, "hexside": {"status": "unresolved", "notes": "Olive band and exterior northeastern/southeastern Wadi leave class, footprint and direction unresolved."}},
+          "survey_refs": [], "uncertainty": ["Untyped ground retained. No Up/Down, permanent water, bridge or route connectivity inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B3816","B3918","B4018","B4019","B4020"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Gravel circles straddle northeast B3816, west B3918, northwest B4018, southeast B4019 and southwest B4020. Leave ground untyped rather than treat plain center as uniform Clear or automatically add Gravel."}, "transport": {"status": "observed", "notes": "Existing west/northeast B3816/B3918, southwest/east B4018 and west/east B4019/B4020 single-dashed Tracks retained independently of Gravel footprint."}},
+          "survey_refs": ["ink-B-hexside-track"], "uncertainty": ["Near-boundary circle ownership needs adjudication; Track does not establish movement authority. Human review pending."]
+        },
+        {
+          "hexes": ["B3921"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Gravel pattern crosses or approaches west/southwest outline. Retain untyped ground pending footprint interpretation, not automatic Clear."}},
+          "survey_refs": [], "uncertainty": ["Mixed source footprint is not homogeneous movement terrain. Human review pending."]
+        },
+        {
+          "hexes": ["B3618","B3619","B3922","B3923","B3924","B4022","B4023"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing smooth beige Rough patches match source and TEC, with plain borders; not Gravel from color alone. Track outside B4022 northwest stays exterior."}},
+          "survey_refs": ["ink-B-terrain-rough"], "uncertainty": ["Partial occurrence does not imply homogeneous fill or movement cost. Human review pending."]
+        },
+        {
+          "hexes": ["B3601","B3702","B3801","B3802","B4001","B4024","B4025"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing beige Rough patches retained independently of Wadi and nearby olive bands."}, "hexside": {"status": "unresolved", "notes": "Wadi near northeast/southeast B3601, northwest/southwest B3702, northwest/southeast B3801, southwest B3802, northeast/east/southeast/southwest tip B4001, northeast/east/southeast B4024 and northwest/west/southwest/southeast B4025. Olive bands lie outside western B3601/B3801 and south B4001; side footprint/direction unresolved."}},
+          "survey_refs": ["ink-B-terrain-rough"], "uncertainty": ["Exterior western Tracks do not establish internal crossings. No permanent water, Up/Down or operational passage inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B3814","B3915"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing partial Rough retained; source route and neighboring plain ground do not replace it."}, "transport": {"status": "unresolved", "notes": "Diagonal Ben Gania branch runs through B3814 between vertex vicinities and touches B3915 exterior southwest corner. Twelve-times controls leave side ownership indeterminate between direct and short-wedge paths. No forced new sides or negative route assertion."}},
+          "survey_refs": ["ink-B-terrain-rough"], "uncertainty": ["Continuous Track ink does not establish canonical crossing ownership or exact centerline. Human review pending."]
+        },
+        {
+          "hexes": ["B3901"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing Rough retained, independently of olive band on east/southeast."}, "transport": {"status": "unresolved", "notes": "Existing eastern Track retained. West and northwest/southwest route ink leaves retained inventory or approaches printed vertices; no external endpoint invented."}, "hexside": {"status": "unresolved", "notes": "Wadi northwest/southeast and olive eastern/southeastern band retain provisional footprint/class/direction uncertainty."}, "locations": {"status": "not_observed", "notes": "Blue dot lies outside west of retained cell; do not assign it to B3901 or invent a boundary settlement identity."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track"], "uncertainty": ["Boundary route and exterior dot need separate seam-owner reconciliation. No geometry, Up/Down or operational permission inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B3604","B3605","B3705","B3706"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing yellow-network Salt Marsh matches TEC, distinct from beige Rough and Gravel circle patterns."}},
+          "survey_refs": ["ink-B-terrain-salt_marsh"], "uncertainty": ["Pattern occurrence does not certify homogeneous terrain or permanent water. Human review pending."]
+        },
+        {
+          "hexes": ["B3624","B3726","B3805"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing yellow-network Salt Marsh retained independently of Wadi."}, "hexside": {"status": "unresolved", "notes": "Wadi east/southeast B3624, northwest/west/northeast B3726 and northeast B3805 retained as provisional side evidence, not exact watercourse geometry."}},
+          "survey_refs": ["ink-B-terrain-salt_marsh"], "uncertainty": ["No permanent water, Major/Minor River or bridge inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B3804"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing yellow-network Salt Marsh retained beneath Track."}, "transport": {"status": "observed", "notes": "Existing southwest/northeast single-dashed Track matches source."}, "hexside": {"status": "unresolved", "notes": "Wadi endpoint near northern vertex leaves precise side ownership unresolved; no new side assigned."}},
+          "survey_refs": ["ink-B-terrain-salt_marsh","ink-B-hexside-track"], "uncertainty": ["No bridge or movement permission inferred from route/watercourse proximity. Human review pending."]
+        },
+        {
+          "hexes": ["B3820","B3920"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing Gravel circle pattern matches TEC, independently of plain borders."}},
+          "survey_refs": ["ink-B-terrain-gravel"], "uncertainty": ["Occurrence does not establish Rock, homogeneous fill or movement authority. Human review pending."]
+        },
+        {
+          "hexes": ["B3917"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing Gravel circle pattern retained."}, "transport": {"status": "observed", "notes": "Existing southwest/east single-dashed Track retained independently of terrain footprint."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track"], "uncertainty": ["Source pattern is not adjudicated movement cost or legal passage. Human review pending."]
+        }
+      ]
+    },
+    {
       "id": "b-31-35-whole-cell-2026-11-03", "date": "2026-11-03", "method": "agent_visual",
       "notes": "Individually inspected all 165 outlined B3101–B3533 source crops at 2x, twelve ground/route controls and one fork context at 4x, plus the shared B3208/B3309 corner from both outlines at 12x nearest-neighbor. Reconciled against 9ea2509 model with unchanged add8fb4 source/geometry pins. Fifty-eight Clear and two Track occurrences added. Three olive-band interiors stay untyped. No prior classification, point, watercourse association or adjacency changed. Detector status is not visual review; human adjudication pending.",
       "common_findings": {

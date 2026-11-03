@@ -128,6 +128,16 @@ class MapDatabaseTests(unittest.TestCase):
         self.assertEqual(self.db.execute("SELECT status,value FROM observations WHERE survey='label-B3406'").fetchone(), ('unresolved', None))
         self.assertIn('Benina', self.db.execute("SELECT source_label FROM observations WHERE survey='label-A4829'").fetchone()[0])
         self.assertEqual(self.db.execute("SELECT value FROM observations WHERE survey='malta-luqa'").fetchone()[0], '{"type":"airfield"}')
+        # Whole-cell visual review separates plain airfield ground from coastal
+        # airfields and the small western Rough intrusion into Malta 1002.
+        for hex_id, value in (("Malta 0604", "clear"), ("Malta 0704", "clear"),
+                              ("Malta 0802", "clear"), ("Malta 1002", "rough")):
+            self.assertEqual(self.db.execute(
+                "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain'",
+                (hex_id,)).fetchall(), [('provisional', value)])
+        for hex_id in ("Malta 0505", "Malta 0804", "Malta 1301"):
+            self.assertEqual(self.db.execute(
+                "SELECT value FROM observations WHERE hex=? AND kind='terrain'", (hex_id,)).fetchall(), [])
         # Independently inspected TEC controls: pale gaps are unfinished, dark
         # grid interruptions are not. Check all surveys, not only the manual one.
         for hex_id, direction, feature, present in (

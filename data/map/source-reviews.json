@@ -1,0 +1,160 @@
+{
+  "version": 1,
+  "baseline_commit": "add8fb4a8f4aec0079f1eb5b916a6d58f35a852c",
+  "geometry_sha256": "177f4d59aef386883aa4837f2274aa15535d81ad65ae17292eb153492d23a27b",
+  "sources": {
+    "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png": "e82f995e213da486004d006e5b7fd1f6e49e7464fb7fd2db23f36bbbc57b14b4",
+    "docs/CNAv2.1.0/images/TEC.png": "e0ab25e590efae1e564df71a6a229dcdf4e3f0c18bfd82ea2a656ef34baa39c7"
+  },
+  "map_source": "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
+  "batches": [
+    {
+      "id": "malta-whole-cell-2026-11-03",
+      "date": "2026-11-03",
+      "method": "agent_visual",
+      "notes": "Inspected full inset, labelled overview and all 58 individual 130x120 source crops enlarged 2x with canonical outlines. IDs and corners reconciled exactly against add8fb4. Findings concern the full outlined cell, not everything in its rectangular crop. Compared TEC symbols and existing model surveys after visual inspection. No detector status promoted to review. Agent review only; no historical absence, operational permission, capacity, seam identity or human adjudication inferred.",
+      "common_findings": {
+        "transport": {"status": "not_observed", "notes": "No depicted Road, Railroad, Track, Unfinished Road or Unfinished Railroad observed within this outlined cell. This is source-symbol absence, not historical or operational absence."},
+        "hexside": {"status": "not_observed", "notes": "No separate ridge, slope, escarpment, wadi, river or barred-side symbol observed. Coastline and ordinary black grid are not assigned directional hexside rules."},
+        "locations": {"status": "not_observed", "notes": "No Village/Bir dot, Major City cluster, oasis, airfield, flying-boat or training glyph observed within this outlined cell. Nearby labels and large Malta lettering do not establish a settlement category."}
+      },
+      "groups": [
+        {
+          "hexes": ["Malta 0501", "Malta 0502", "Malta 0906", "Malta 0907", "Malta 1005", "Malta 1006", "Malta 1104", "Malta 1105", "Malta 1106", "Malta 1107", "Malta 1202", "Malta 1203", "Malta 1204", "Malta 1205", "Malta 1206", "Malta 1302", "Malta 1303", "Malta 1304", "Malta 1305", "Malta 1306", "Malta 1307"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Blue water field inside the outlined cell; large inset lettering where present is overprint, not terrain or a location glyph."},
+            "terrain": {"status": "unresolved", "notes": "Water is visibly depicted; retain untyped ground rather than assign an operational Sea or Coast category from color alone."}
+          },
+          "survey_refs": [],
+          "uncertainty": ["Water/coast operational interpretation and playability remain unresolved. Nearby coastline approaches several corners; no side rule is inferred. Human review pending."]
+        },
+        {
+          "hexes": ["Malta 0504", "Malta 0605", "Malta 0606", "Malta 0707", "Malta 0806", "Malta 0905", "Malta 1003", "Malta 1004", "Malta 1101", "Malta 1102", "Malta 1103", "Malta 1201"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Both blue water and plain land visibly enter the outlined cell; coastline is not snapped to the black hex grid."},
+            "terrain": {"status": "unresolved", "notes": "Mixed coastal cell retained without a homogeneous Clear or Sea assignment."},
+            "hexside": {"status": "unresolved", "notes": "Coastline crosses or approaches the outline. No operational Coast side or directional feature is assigned; no separate ridge, slope, escarpment, river or wadi symbol observed."}
+          },
+          "survey_refs": [],
+          "uncertainty": ["Source coastline and retained full-cell outline do not establish playable land fraction or Coast rules. Human review pending."]
+        },
+        {
+          "hexes": ["Malta 0503"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Mostly blue water with a narrow plain-land strip at the northeastern edge."},
+            "terrain": {"status": "unresolved", "notes": "Small coastal strip is not a homogeneous Clear cell or evidence for Sea over the whole cell."},
+            "hexside": {"status": "unresolved", "notes": "Near-edge coastline needs adjudication before a Coast-side assignment; no other side glyph observed."}
+          },
+          "survey_refs": [], "uncertainty": ["Coast/grid proximity makes sub-edge membership uncertain. Human review pending."]
+        },
+        {
+          "hexes": ["Malta 0601"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Mostly water; narrow tan land enters along the northeastern edge."},
+            "terrain": {"status": "unresolved", "notes": "Rough-colored coastal sliver follows the grid closely; retain the boundary ambiguity rather than promote a whole-cell terrain assignment."},
+            "hexside": {"status": "unresolved", "notes": "Coastline nearly follows the northeastern outline; no separate directional side symbol observed."}
+          },
+          "survey_refs": [], "uncertainty": ["Tan land/water/grid overlap needs closer boundary adjudication. Human review pending."]
+        },
+        {
+          "hexes": ["Malta 0804"],
+          "findings": {
+            "surface": {"status": "unresolved", "notes": "Plain land dominates, but a tiny blue intrusion touches the northeastern corner/edge."},
+            "terrain": {"status": "unresolved", "notes": "Do not promote the cell to Clear merely because the coastal intrusion is small."},
+            "hexside": {"status": "unresolved", "notes": "Tiny coast/grid intersection remains uncertain; no separate directional side glyph observed."}
+          },
+          "survey_refs": [], "uncertainty": ["Coastal membership at the northeastern corner remains unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["Malta 1301"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Blue water with a tiny plain-land projection entering near the southeastern edge."},
+            "terrain": {"status": "unresolved", "notes": "Keep the small coastal projection explicit; no homogeneous Sea or Clear assignment."},
+            "hexside": {"status": "unresolved", "notes": "Coast crosses near the lower edge; no operational Coast side or separate directional glyph assigned."}
+          },
+          "survey_refs": [], "uncertainty": ["Tiny coastal land fraction is not a playability decision. Human review pending."]
+        },
+        {
+          "hexes": ["Malta 0602", "Malta 0701", "Malta 0702"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Tan/plain land and blue coastal water meet within or along the outlined cell."},
+            "terrain": {"status": "observed", "notes": "Irregular tan Rough fill matches TEC and the existing provisional Rough observation; this is a partial patch, not uniform ground."},
+            "hexside": {"status": "unresolved", "notes": "Coastline meets the outline; no operational Coast or directional slope assignment. No separate side glyph observed."}
+          },
+          "survey_refs": ["ink-Malta-terrain-rough"], "uncertainty": ["Rough occurrence remains provisional; coastal edge interpretation and human review remain pending."]
+        },
+        {
+          "hexes": ["Malta 0801", "Malta 0901", "Malta 1001"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Land with irregular tan patches; nearby coastal water does not justify replacing the land finding."},
+            "terrain": {"status": "observed", "notes": "Tan patch matches TEC Rough and the existing provisional observation; plain gaps remain within the cell."}
+          },
+          "survey_refs": ["ink-Malta-terrain-rough"], "uncertainty": ["Patch extent does not make the cell homogeneous Rough; near-corner coastal membership is not adjudicated. Human review pending."]
+        },
+        {
+          "hexes": ["Malta 1002"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Plain land with a small tan intrusion across the western edge."},
+            "terrain": {"status": "observed", "notes": "Small irregular tan patch matches TEC Rough. Added malta-1002-rough-intrusion because the detector left this occurrence untyped."}
+          },
+          "survey_refs": ["malta-1002-rough-intrusion"], "uncertainty": ["Only a partial Rough patch is supported, not homogeneous Rough or a slope rule. Human review pending."]
+        },
+        {
+          "hexes": ["Malta 0603", "Malta 0703", "Malta 0705", "Malta 0706", "Malta 0803", "Malta 0902", "Malta 0903", "Malta 0904"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Affirmative plain land within the outline; neighboring rough/coastal marks and labels are not relocated into this cell."},
+            "terrain": {"status": "observed", "notes": "Plain source swatch matches TEC Clear and existing provisional Clear observation."}
+          },
+          "survey_refs": ["ink-Malta-terrain-clear"], "uncertainty": ["Clear remains provisional source interpretation, not movement-cost adjudication. Human review pending."]
+        },
+        {
+          "hexes": ["Malta 0604"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Plain land surrounds the Safi label, blue airfield glyph and numeral."},
+            "terrain": {"status": "observed", "notes": "Added provisional Clear from affirmative plain ground, not from detector non-detection."},
+            "locations": {"status": "observed", "notes": "Safi blue airfield glyph agrees with malta-safi; no additional settlement dot or Major City cluster observed."}
+          },
+          "survey_refs": ["malta-safi", "malta-airfield-clear-ground"], "uncertainty": ["Printed numeral does not establish capacity; no operational status or human adjudication inferred."]
+        },
+        {
+          "hexes": ["Malta 0704"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Plain land surrounds the Luqa label, blue airfield glyph and numeral."},
+            "terrain": {"status": "observed", "notes": "Added provisional Clear from affirmative plain ground, not from detector non-detection."},
+            "locations": {"status": "observed", "notes": "Luqa blue airfield glyph agrees with malta-luqa; no additional settlement dot or Major City cluster observed."}
+          },
+          "survey_refs": ["malta-luqa", "malta-airfield-clear-ground"], "uncertainty": ["Printed numeral does not establish capacity; no operational status or human adjudication inferred."]
+        },
+        {
+          "hexes": ["Malta 0802"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Plain land surrounds the Takali label, blue airfield glyph and numeral; neighboring Rough patch lies outside the western outline."},
+            "terrain": {"status": "observed", "notes": "Added provisional Clear from affirmative plain ground, not from detector non-detection."},
+            "locations": {"status": "observed", "notes": "Takali blue airfield glyph agrees with malta-takali; no additional settlement dot or Major City cluster observed."}
+          },
+          "survey_refs": ["malta-takali", "malta-airfield-clear-ground"], "uncertainty": ["Printed numeral does not establish capacity; no operational status or human adjudication inferred."]
+        },
+        {
+          "hexes": ["Malta 0505"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Hal Far airfield is on land, with blue coastal water occupying the southern part of the cell."},
+            "terrain": {"status": "unresolved", "notes": "Unlike the inland airfield cells this mixed coastal cell is not assigned homogeneous Clear."},
+            "locations": {"status": "observed", "notes": "Hal Far blue airfield glyph agrees with malta-hal-far; no separate settlement dot or city cluster observed."},
+            "hexside": {"status": "unresolved", "notes": "Coastline traverses the cell rather than defining a validated Coast side; no other side glyph observed."}
+          },
+          "survey_refs": ["malta-hal-far"], "uncertainty": ["Numeral is not capacity; coastal and operational interpretation remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["Malta 0506", "Malta 0805"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Mixed land/water beneath a black flying-boat basin glyph and anchor."},
+            "terrain": {"status": "unresolved", "notes": "Retain mixed coastal ground without homogeneous Clear/Sea classification."},
+            "locations": {"status": "observed", "notes": "Kalafrana (0506) or Valetta (0805) black triangular glyph and anchor match TEC Flying Boat Basin and malta-flying-boats. Neither anchor nor text alone establishes an operational port or city."},
+            "hexside": {"status": "unresolved", "notes": "Complex coastline remains unsnapped; no directional side glyph or operational coast connection assigned."}
+          },
+          "survey_refs": ["malta-flying-boats"], "uncertainty": ["Numerals are not capacities; basin/port operational rules and human review remain pending."]
+        }
+      ]
+    }
+  ]
+}

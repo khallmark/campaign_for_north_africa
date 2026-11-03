@@ -141,6 +141,16 @@
       "coverage": {"kind": "point", "hexes": ["Malta 0805","Malta 0506"], "observation": {"status": "provisional", "value": {"type": "flying_boat_basin"}}}
     },
     {
+      "id": "malta-airfield-clear-ground", "label": "Safi, Luqa and Takali plain ground", "notes": "Whole-cell agent visual review against TEC Clear: affirmative plain land surrounds the airfield glyphs, names and numerals in these three cells. Printed symbols defeat the blank-pixel detector, but are not terrain fill. Coastal Hal Far is deliberately excluded, as are the small coastal intrusions in Malta 0804 and other mixed cells. No capacity, movement cost or human adjudication is inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=429,591,89,102", "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=386,518,90,102", "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=259,445,89,102", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["Malta 0604","Malta 0704","Malta 0802"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "malta-1002-rough-intrusion", "label": "Malta 1002 western Rough intrusion", "notes": "Whole-cell agent visual review finds a small irregular tan patch extending across the western edge into otherwise plain land, matching TEC Rough. This records the presence of a partial Rough patch, not a homogeneous Rough cell. The retained detector count corroborates but does not constitute this visual review. Do not infer a directional slope, route, movement rule or human adjudication.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=259,299,89,102", "docs/CNAv2.1.0/images/TEC.png#legend/Rough"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["Malta 1002"], "observation": {"status": "provisional", "value": "rough"}}
+    },
+    {
       "id": "benghazi-major-city", "label": "Benghazi building cluster", "notes": "Blue building cluster matches TEC Major City, distinct from black training-area figures. Its glyph lies in A4827; adjacent El Berca and Benina dots are separate locations. No automatic port or fortification level assignment.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2270,1000,170,150", "docs/CNAv2.1.0/images/TEC.png#legend/Major-City"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
       "coverage": {"kind": "point", "hexes": ["A4827"], "observation": {"status": "provisional", "value": {"type": "major_city"}}}

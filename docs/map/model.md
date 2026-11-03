@@ -95,15 +95,15 @@ automated or agent-visual record is human-reviewed.
 | Section | Examined cells | Land / mixed / water / unresolved | Cells with terrain observations |
 | --- | ---: | --- | ---: |
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
-| A | 1,000 | 866 / 62 / 64 / 8 | 752 |
+| A | 1,000 | 866 / 62 / 64 / 8 | 777 |
 | B | 1,961 | 1,885 / 40 / 34 / 2 | 1,386 |
 | C | 1,520 | 1,438 / 41 / 36 / 5 | 859 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **274 surveys / 24,029 observations**: 4,895 terrain,
-18,986 hexside and 148 point observations. **7,798 are provisional, 16,231 unresolved,
-none human-reviewed.** Terrain observations cover 4,747 cells; 2,329 have none.
+The current combined model has **278 surveys / 24,061 observations**: 4,920 terrain,
+18,987 hexside and 154 point observations. **7,824 are provisional, 16,237 unresolved,
+none human-reviewed.** Terrain observations cover 4,772 cells; 2,304 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -258,9 +258,9 @@ visible section-boundary breaks. Escarpment rendering and exact source-shaped
 route geometry are separate work; the detector's raw findings remain unchanged.
 
 The Malta whole-cell audit adds four provisional ground observations. The A audit
-adds 126 Clear occurrences, nine partial Mountain cores retaining existing Rough
-fringes, and three partial Gravel occurrences. Of 2,329 cells without typed ground,
-source-surface measurements report 1,897 land, 228
+adds 149 Clear occurrences, nine partial Mountain cores retaining existing Rough
+fringes, and five partial Gravel occurrences. Of 2,304 cells without typed ground,
+source-surface measurements report 1,872 land, 228
 water, 180 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.

@@ -86,5 +86,27 @@ class SourceRouteTests(unittest.TestCase):
                     self.assertTrue(any(f["value"] == "road" for f in findings))
 
 
+class SourcePointTests(unittest.TestCase):
+    def test_antialiased_dot_keeps_position_without_accepting_hollow_or_neighbor_symbols(self):
+        rules = json.loads((ROOT / "data/map/extraction-rules.json").read_text())
+        image = Image.new("RGB", (1200, 1200), tuple(rules["inks"]["background"]))
+        draw = ImageDraw.Draw(image)
+        blue = tuple(rules["inks"]["blue_symbols_text"])
+        # Subpixel placement loses a few exact-blue edge pixels; the solid dot
+        # remains distinct from a hollow letter and a dot outside the polygon.
+        draw.ellipse((401, 401, 453, 453), fill=blue)
+        draw.ellipse((521, 401, 573, 453), outline=blue, width=8)
+        draw.ellipse((681, 401, 733, 453), fill=blue)
+        image = image.resize((300, 300), Image.Resampling.LANCZOS)
+        cell = {"id": "A0101", "section": "A",
+                "corners": [[90, 90], [150, 90], [150, 130], [90, 130]]}
+        points = extract_map.examine_cell(image, cell, rules)["points"]
+        self.assertEqual(len(points), 1)
+        self.assertEqual(points[0]["symbol"], "village_bir_dot")
+        self.assertEqual(points[0]["status"], "unresolved")
+        for coordinate in points[0]["center"]:
+            self.assertAlmostEqual(coordinate, 106.75, delta=.5)
+
+
 if __name__ == "__main__":
     unittest.main()

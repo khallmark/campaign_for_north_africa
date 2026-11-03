@@ -116,8 +116,10 @@ def point_candidates(image, cell, rules, templates):
     for index in range(1, n):
         _, _, width, height, area = stats[index]
         x, y = centers[index] + bounds[:2]
+        # Exact-blue area loses antialiased edge pixels at subpixel positions.
+        # Keep a small fill margin; size/aspect/area still reject hollow letters.
         if (8 <= width <= 18 and 8 <= height <= 18 and .75 <= width/height <= 1.33
-                and area / (width*height) >= .70 and area >= 60
+                and area / (width*height) >= .68 and area >= 60
                 and cv2.pointPolygonTest(polygon, (float(x), float(y)), False) >= 0):
             points.append({"symbol": "village_bir_dot", "center": [round(float(x), 2), round(float(y), 2)],
                            "status": "unresolved", "reason": "Village/Bir glyph detected; label association and category need review"})
@@ -499,7 +501,7 @@ def generate():
         surveys.append({"id": f"label-{hex_id}", "label": label, "notes": labels["notes"],
             "provenance": {"source_refs": [rules["source"]+"#xywh="+",".join(map(str, point["label_crop"])),
                                              rules["legend"]+"#legend/Village-Bir"],
-                           "reviewer": labels["reviewer"], "date": labels["date"]},
+                           "reviewer": labels["reviewer"], "date": labels.get("review_dates", {}).get(hex_id, labels["date"])},
             "coverage": {"kind": "point", "hexes": [hex_id], "observation": {
                 "status": "unresolved", "source_label": label+"; Village/Bir glyph, operational category unresolved"}}})
     for cell in cells:

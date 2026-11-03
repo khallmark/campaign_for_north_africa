@@ -9,6 +9,214 @@
   "map_source": "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
   "batches": [
     {
+      "id": "b-46-50-whole-cell-2026-11-03", "date": "2026-11-03", "method": "agent_visual",
+      "notes": "Individually inspected all 165 outlined B4601–B5033 cells at 2x, with thirty-eight distinct controls at 4x and TEC comparison. Reconciled against 24000f8 with unchanged source/geometry pins. Add six Clear, two partial Mountain, eight Track and one Railroad occurrences. Nine Gravel-edge cells, one scarp-band cell and two coastal cells remain untyped. Existing B4903 northwest Railroad retained with explicit tie-footprint dispute. Four measured location points, prior classifications and adjacency unchanged. Human adjudication pending; detector completion is not review.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Whole outlined cell visually inspected; grid, labels and gray section lines distinguished from feature ink. Padding is not interior coverage."},
+        "terrain": {"status": "observed", "notes": "Plain interior is independent of overprinted glyphs and exterior terrain; occurrence is not homogeneous pixels or movement authority."},
+        "transport": {"status": "not_observed", "notes": "No Road, Railroad, Track or unfinished transportation glyph observed inside outline. Exterior paths and lettering are not interior routes; absence is not historical absence."},
+        "hexside": {"status": "not_observed", "notes": "No independent Wadi, river, ridge, slope, escarpment or barred-side glyph observed inside outline. Grid and section lines do not establish effects."},
+        "locations": {"status": "not_observed", "notes": "No additional Village/Bir dot, Major City cluster, oasis, airfield, flying-boat, port or training glyph observed inside outline. Nearby names do not establish additional locations."}
+      },
+      "groups": [
+        {
+          "hexes": ["B4613","B4623","B4624","B4723","B4724","B4823"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Retain existing Clear with marginal Gravel touching or approaching north B4613; west/southwest B4623; northeast B4624; northwest/west/southwest B4723; northeast/east B4724; northwest/northeast/east B4823. Most interior is plain; no silent reclassification from edge pixels."}},
+          "survey_refs": ["ink-B-terrain-clear"], "uncertainty": ["Near-grid pattern footprint needs adjudication. Exterior Track does not enter B4623/B4723; human review pending."]
+        },
+        {
+          "hexes": ["B4604","B4615","B4616","B4617","B4717"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear after enlarged outline comparison, independently of broad Wadi and exterior Gravel/Rough/Salt Marsh."}, "hexside": {"status": "unresolved", "notes": "Wadi southwest tip B4604; northeast/east B4615; northwest/west/southwest/southeast/northeast/east B4616; northwest/west/southwest B4617; northwest/west/southwest/southeast/east B4717. Broad ribbons need footprint adjudication, not new full-cell water."}},
+          "survey_refs": ["b-46-50-plain-ground"], "uncertainty": ["No permanent water, Major/Minor River, bridge, Up/Down or movement authority inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B4907"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear; enlarged control keeps northern Rough and eastern Gravel outside the outline."}, "transport": {"status": "observed", "notes": "Existing west/east single-dashed Track retained."}, "hexside": {"status": "unresolved", "notes": "Wadi curves through northwest/west/southwest vicinity; preserve provisional side association without exact path or crossing effects."}},
+          "survey_refs": ["b-46-50-plain-ground","ink-B-hexside-track"], "uncertainty": ["Plain occurrence does not make every edge pixel plain or authorize water crossing. Human review pending."]
+        },
+        {
+          "hexes": ["B4612","B4718"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Keep untyped: Gravel touches northern vertex/edge B4612 and straddles southeast B4718 despite largely plain interiors."}, "hexside": {"status": "unresolved", "notes": "Wadi northwest/west/southwest, with separate northeast tip B4718. Preserve broad-ribbon and endpoint uncertainty."}},
+          "survey_refs": [], "uncertainty": ["Do not force Clear or Gravel from near-grid fragments; no operational water interpretation. Human review pending."]
+        },
+        {
+          "hexes": ["B4625"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Gravel circles straddle northern/eastern edges in enlarged control; retain untyped ground."}, "transport": {"status": "observed", "notes": "Retain existing northwest/southeast single-dashed Track independently of ground boundary."}},
+          "survey_refs": ["ink-B-hexside-track"], "uncertainty": ["No exact boundary, homogeneous fill or movement effect inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B4807","B4816","B4818"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Keep untyped: enlarged controls show marginal Gravel fragments at west/east B4807, northeast B4816 and northern edges B4818."}, "transport": {"status": "observed", "notes": "Retain existing west/east single-dashed Tracks through plain interiors."}, "hexside": {"status": "unresolved", "notes": "Wadi northwest/west B4807; northwest/west/southwest B4816; northwest/west/southwest/southeast/east B4818. Broad footprint is not exactly a hexside."}},
+          "survey_refs": ["ink-B-hexside-track"], "uncertainty": ["Pattern edges remain unresolved; no bridge, permanent water or precise path inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B4817"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Northern Gravel fringe approaches/straddles outline; retain untyped ground."}, "transport": {"status": "observed", "notes": "Restore northwest Track directly to B4917 southeast. Paired controls put vertical branch left of northern vertex, not via B4918. Retain west/east trunk."}, "hexside": {"status": "unresolved", "notes": "Wadi follows northeast/east/southeast vicinity independently of Track fork; no bridge glyph established."}},
+          "survey_refs": ["ink-B-hexside-track","charuba-mechili-track-crossings"], "uncertainty": ["Near-vertex source line width and fork shape remain provisional, not an operational junction. Human review pending."]
+        },
+        {
+          "hexes": ["B4925","B4927"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Mostly plain interiors with Gravel touching/straddling northern/eastern B4925 and southeastern B4927 outlines. Retain untyped ground pending footprint adjudication."}},
+          "survey_refs": [], "uncertainty": ["Nearby Track remains exterior; no feature absence or uniform ground rule certified. Human review pending."]
+        },
+        {
+          "hexes": ["B4833"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Retain untyped interior with broad olive southwest and black east/southeast stippled bands, not a smooth Mountain core or homogeneous Clear."}, "hexside": {"status": "unresolved", "notes": "Olive/black side bands and connected fringe are visible independently of gray section line. Exact class ownership and Up/Down remain unadjudicated."}},
+          "survey_refs": [], "uncertainty": ["Road stays outside northwest. Section line is not an additional route or canonical seam connection. Human review pending."]
+        },
+        {
+          "hexes": ["B4933"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Gazala contains mixed Sea and plain land; retain untyped ground rather than full-cell Sea/Clear. Salt Marsh lies outside northeast."}, "transport": {"status": "observed", "notes": "Retain southwest continuous double Road. Eastern Road exits retained section; report boundary continuation without inventing adjacency."}, "hexside": {"status": "unresolved", "notes": "Irregular coastline is not permanent hexside water or an operational crossing. Gray section line is unrelated."}, "locations": {"status": "unresolved", "notes": "Existing measured Gazala Village/Bir dot and label retained; Road meets dot, but operational category/junction remains unresolved."}},
+          "survey_refs": ["label-B4933","ink-B-hexside-road"], "uncertainty": ["Coast footprint, point class, port association and seam connectivity are not inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5032"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Sea dominates but plain land enters southwest and southeast; retain mixed-coast cell untyped."}, "hexside": {"status": "unresolved", "notes": "Coastline crosses interior, not exact canonical sides; no permanent water or passage ruling."}},
+          "survey_refs": [], "uncertainty": ["Road remains outside southwest and Gazala dot outside southeast. No port or settlement inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5033"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial Salt Marsh yellow network in southwest land fringe; most cell is Sea. Not a whole-cell Salt Marsh or Mountain assignment."}, "hexside": {"status": "unresolved", "notes": "Irregular coast and gray section line do not establish canonical water sides or seam connectivity."}},
+          "survey_refs": ["ink-B-terrain-salt_marsh"], "uncertainty": ["Mixed coast remains explicit; Gazala lettering is not another dot and no water-crossing permission is inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B4614","B4630","B4631","B4632","B4703","B4704","B4705","B4802","B4803","B4804"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain smooth beige Rough patches, including partial interiors. Gravel approaches or straddles west B4630 and southeast B4632; other neighboring circles remain outside. Exterior Tracks do not enter these outlines."}},
+          "survey_refs": ["ink-B-terrain-rough"], "uncertainty": ["Rough occurrence does not resolve marginal Gravel footprint or imply homogeneous terrain. Human review pending."]
+        },
+        {
+          "hexes": ["B4601","B4603","B4611","B4701","B5006","B5007","B5008"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain existing partial/full Rough independently of Wadi ribbons and exterior Gravel/Track."}, "hexside": {"status": "unresolved", "notes": "Wadi northeast/east/southeast B4601/B4611; southeast B4603/B4701; east/southeast B5006; west/east/southeast B5007; west/southwest B5008. Preserve side-footprint uncertainty."}},
+          "survey_refs": ["ink-B-terrain-rough"], "uncertainty": ["No permanent water, bridge, new route or operational crossing rule inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B4602","B4702"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Rough beneath Track and Wadi."}, "transport": {"status": "observed", "notes": "Existing northwest/southeast single-dashed Track matches source."}, "hexside": {"status": "unresolved", "notes": "Wadi northwest/west/southwest B4602 and southwest B4702; broad footprint and crossing effects unresolved."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track"], "uncertainty": ["No precise centerline, bridge or passage inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B4801"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial eastern Rough; western interior is plain."}, "transport": {"status": "observed", "notes": "Existing northwest/southeast Track matches the El Abiar southeast branch. Separate El Abiar southwest branch stays outside northwest of this cell."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track"], "uncertainty": ["Exterior branch does not justify extra connectivity or location ownership. Human review pending."]
+        },
+        {
+          "hexes": ["B4805"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial Rough, with plain eastern border."}, "transport": {"status": "observed", "notes": "Restore east Track into B4806; retain northwest. Enlarged dashes bend across the side away from either vertex."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track","charuba-mechili-track-crossings"], "uncertainty": ["Single-dash crossing is not Railroad or an operational junction. Human review pending."]
+        },
+        {
+          "hexes": ["B4901"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add dark smooth Mountain core under route/dot overprints while retaining surrounding Rough. Distinct from stippled side bands."}, "transport": {"status": "observed", "notes": "Restore independent eastern Track and Railroad into B4902; retain southeast Track into B4801. West Track/Railroad and northwest/southwest Track branches exit retained inventory; no B5001 northeast detour inferred."}, "locations": {"status": "unresolved", "notes": "Existing measured El Abiar dot and label retained, with unresolved Village/Bir category and route overlap. Text extent adds no neighboring points."}},
+          "survey_refs": ["ink-B-terrain-rough","el-abiar-mountain-cores","charuba-mechili-track-crossings","el-abiar-rail-crossing","label-B4901"], "uncertainty": ["Partial terrain, dot overlap and boundary continuations do not establish rail availability, transfer junction or seam adjacency. Human review pending."]
+        },
+        {
+          "hexes": ["B4902"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing Rough retained."}, "transport": {"status": "observed", "notes": "Restore west and east Track, and west Railroad from El Abiar; retain northeast Railroad toward B5002. Continuous rail with ties is separate from horizontal dashes below it."}},
+          "survey_refs": ["ink-B-terrain-rough","charuba-mechili-track-crossings","el-abiar-rail-crossing","ink-B-hexside-railroad"], "uncertainty": ["El Abiar lettering is not another settlement; no operational route use or junction inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B4903"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing Rough retained beneath Track."}, "transport": {"status": "unresolved", "notes": "Restore western Track from B4902, retain eastern Track. Paired controls place Railroad centerline outside northwest while a transverse tie reaches the upper-west vertex. Preserve existing northwest Railroad with explicit footprint dispute, not a new branch or silent removal."}},
+          "survey_refs": ["ink-B-terrain-rough","charuba-mechili-track-crossings","el-abiar-rail-footprint-review"], "uncertainty": ["Source line width and tie-versus-centerline interpretation require adjudication; geometry unchanged. Human review pending."]
+        },
+        {
+          "hexes": ["B4904","B4905"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing Rough retained."}, "transport": {"status": "observed", "notes": "Retain west/east Track trunk and additional southeast fork B4905; neither dashed branch is rail."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track"], "uncertainty": ["No exact junction, capacity or movement rule inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B4906"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial Rough with plain eastern border."}, "transport": {"status": "observed", "notes": "Retain west/east Track; diagonal fork remains outside southwest."}, "hexside": {"status": "unresolved", "notes": "Wadi near east outline retains provisional footprint and crossing uncertainty."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track"], "uncertainty": ["No bridge, full-cell water or extra diagonal route inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5001"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Rough; dark Mountain patch remains outside west."}, "transport": {"status": "observed", "notes": "Existing northeast Track bends to western boundary, not directly southeast into El Abiar. Railroad stays outside south. Report western continuation without adding a canonical seam link."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track"], "uncertainty": ["Boundary path remains source evidence only; no inferred adjacency. Human review pending."]
+        },
+        {
+          "hexes": ["B5002"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Rough."}, "transport": {"status": "unresolved", "notes": "Continuous Railroad curves southwest/northeast. Existing southeast observation across B4903 northwest may reflect transverse tie footprint at the bottom vertex; preserve with dispute instead of deleting."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-railroad","el-abiar-rail-footprint-review"], "uncertainty": ["Centerline association and operational rail connectivity remain unadjudicated. Human review pending."]
+        },
+        {
+          "hexes": ["B5003","B5004"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain both smooth dark Mountain cores and surrounding pale Rough; these are partial co-occurrences, not homogeneous terrain. Railroad west of B5003 remains exterior."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-terrain-mountain"], "uncertainty": ["No movement-cost precedence, slope direction or additional interior rail inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5005"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add broad northern smooth Mountain lobe reaching interior, matching adjacent B5003/B5004 and TEC. Retain surrounding Rough rather than replacing it."}},
+          "survey_refs": ["ink-B-terrain-rough","el-abiar-mountain-cores"], "uncertainty": ["Partial occurrence is not full-cell Mountain, directional side terrain or operational cost. Human review pending."]
+        },
+        {
+          "hexes": ["B4618","B4621","B4626","B4627","B4628","B4629","B4633","B4713","B4714","B4721","B4726","B4727","B4728","B4729","B4730","B4731","B4822","B4825","B4826","B4827","B4828","B4829","B4830","B4913","B4926","B4928","B4929","B4930","B4931","B5029","B5030"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel circle pattern matching TEC. Exterior Tracks near B4626/B4721/B4726/B5029, Road near B5030, olive band east of B4931 and Mechili lettering north of B4822 do not create interior routes/points. Gray B4633 section line is not a feature."}},
+          "survey_refs": ["ink-B-terrain-gravel"], "uncertainty": ["Pattern occurrence is not exact terrain extent, Rock reclassification or movement authority. Human review pending."]
+        },
+        {
+          "hexes": ["B4605","B4606","B4609","B4610","B4620","B4706","B4707","B4708","B4710","B4711","B4712","B4715","B4716","B4719","B4914","B4915","B4916","B4919","B5009","B5012","B5013","B5014","B5015","B5016"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel beneath Wadi, independently of neighboring Rough and exterior Tracks."}, "hexside": {"status": "unresolved", "notes": "Wadi east/southeast B4605/B4609/B4706/B4708; northwest/west/southwest B4606/B4610/B4707/B4712/B4915/B5014; northwest tip B4620; northeast/east/southeast B4710/B4715/B4916/B4919/B5009; northwest/west/southwest plus east B4711; northwest/west/southwest plus northeast/east B4716; northwest/northeast/east B4719; northeast/east B4914/B5013/B5015; west/southwest B5012; northwest/west/southwest/southeast B5016. Preserve broad-ribbon/side uncertainty."}},
+          "survey_refs": ["ink-B-terrain-gravel"], "uncertainty": ["No exact watercourse centerline, permanent water, bridge, Up/Down or operational passage inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B4622","B4722","B4725","B4813","B4820","B4821","B4824","B4923","B4924","B5022","B5023","B5024","B5025","B5027","B5028"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel circle pattern beneath single-dashed Tracks."}, "transport": {"status": "observed", "notes": "Existing northwest/southeast B4622/B4722/B4725/B4821/B4824/B4924; west/east B4813/B5027; southwest/northeast B4820; west/northeast B4923/B5022/B5024/B5028; southwest/southeast/east B5023; northwest/east B5025 match source. Mechili lettering outside B4821 is not an interior dot."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track"], "uncertainty": ["Forks, label extent and dashed strokes are not operational junctions, new settlements or exact centerlines. Human review pending."]
+        },
+        {
+          "hexes": ["B4607","B4608","B4619","B4709","B4720","B4808","B4811","B4812","B4814","B4815","B4819","B4908","B4909","B4910","B4911","B4912","B4920","B5010","B5011","B5017","B5018","B5019","B5020","B5026"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel beneath independent Track and Wadi overprints."}, "transport": {"status": "observed", "notes": "Existing southwest/east B4607/B4920; west/northeast B4608/B4819; southwest/northeast B4619/B4709/B4720; west/east B4808/B4811/B4814/B4815/B4908/B4909/B4910/B5026; west/east/northwest B4812/B4911; west/northwest/southeast B4912; northwest/southeast B5010; northwest/northeast/southeast B5011; northwest/southwest B5017/B5018; northwest/east B5019; northwest/west/east/southeast B5020 match source. B4607 enlargement places Track left of lower vertex, preserving southwest rather than southeast."}, "hexside": {"status": "unresolved", "notes": "Wadi east/southeast B4607/B5011; northwest/west/southwest B4608/B4709/B4720/B4811/B4815/B4819/B4909/B4912/B5010, with extra southeast B4811 and east B4815; northeast B4619; northeast/east/southeast B4808/B4908/B4910; southwest tip B4812/B5017; northeast/east B4814/B5018/B5020; northwest/west/southwest plus east/southeast B4911; northwest/west B4920; northwest/west/southwest/southeast B5019; northwest tip B5026. Side ownership and effects stay provisional."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track"], "uncertainty": ["Track over Wadi does not imply bridge, permanent water, safe crossing or exact within-cell junction. Human review pending."]
+        },
+        {
+          "hexes": ["B4806","B4809"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel beneath Track/Wadi and Charuba lettering."}, "transport": {"status": "observed", "notes": "Restore B4806 west from B4805 and B4809 east into Charuba B4810. Retain eastern B4806 and western/southwestern B4809 Tracks; label is not another dot."}, "hexside": {"status": "unresolved", "notes": "Wadi northeast/east/southeast B4806; northwest/west plus northeast/east/southeast B4809. Preserve broad-footprint uncertainty."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track","charuba-mechili-track-crossings"], "uncertainty": ["No bridge, exact path or operational junction inferred from label-obscured dashes. Human review pending."]
+        },
+        {
+          "hexes": ["B4810"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel independently of dot, lettering and Wadi."}, "transport": {"status": "observed", "notes": "Restore western Track from B4809 beneath Charuba lettering; retain eastern Track. Dot lies above dashed trunk, not proof of exact junction placement."}, "hexside": {"status": "unresolved", "notes": "Wadi follows northwest/west/southwest/southeast/east vicinity; no independent bridge glyph established."}, "locations": {"status": "unresolved", "notes": "Existing measured Charuba Village/Bir dot and label retained with category/point uncertainty; neighboring text adds no locations."}},
+          "survey_refs": ["ink-B-terrain-gravel","charuba-mechili-track-crossings","label-B4810"], "uncertainty": ["No operational water source, settlement capacity, route junction or bridge inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B4917","B4918"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel independently of marginal Wadi."}, "transport": {"status": "observed", "notes": "Restore B4917 southeast from B4817 northwest and B4917 east into B4918 west. Retain both northeast branches. Enlarged controls show the fork near B4917 east edge, not B4918 southwest or B4917 west."}, "hexside": {"status": "unresolved", "notes": "Wadi northwest/west plus northeast/east B4917, and northwest/west/southwest B4918. Fork overlaps ribbon without establishing a bridge."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track","charuba-mechili-track-crossings"], "uncertainty": ["B4817 branch is left of its northern vertex; source-width and operational junction uncertainty remain. Human review pending."]
+        },
+        {
+          "hexes": ["B4921"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel beneath Mechili dot and route fork."}, "transport": {"status": "observed", "notes": "Restore east Track into B4922 and northeast into B5021 southwest. Retain west/northwest/southwest/southeast branches. The northeast path is distinct from northern northwest route and label-obscured eastern trunk."}, "hexside": {"status": "unresolved", "notes": "Wadi tip enters near northwest/top vertex, not a permanent water or crossing rule."}, "locations": {"status": "unresolved", "notes": "Existing measured Mechili Village/Bir dot and label retained. Multiple converging dashes do not establish operational transfer permission."}},
+          "survey_refs": ["ink-B-terrain-gravel","charuba-mechili-track-crossings","label-B4921"], "uncertainty": ["Dot/Track overlap, exact junction and settlement capacity remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["B4922"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel beneath Mechili lettering; no additional settlement dot."}, "transport": {"status": "observed", "notes": "Restore western Track from B4921 and retain east into B4923. Diagonal branch stays outside northwest."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track","charuba-mechili-track-crossings"], "uncertainty": ["Label extent is not a settlement boundary or operational route junction. Human review pending."]
+        },
+        {
+          "hexes": ["B5021"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel."}, "transport": {"status": "observed", "notes": "Restore southwest Track across B4921 northeast, retaining west/east fork. Paired controls put Mechili branch left of lower vertex, not via B4922."}, "hexside": {"status": "unresolved", "notes": "Wadi follows northwest/west/southwest; preserve provisional footprint/crossing uncertainty."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track","charuba-mechili-track-crossings"], "uncertainty": ["Single-dashed fork is not a bridge or operational junction. Human review pending."]
+        },
+        {
+          "hexes": ["B4732","B4733","B4831"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel circles independently of broad side bands; not dark Mountain cores."}, "hexside": {"status": "unresolved", "notes": "Olive stippled band northeast B4732, olive northwest and black northeast B4733, olive northeast/east B4831. Connected fringe/footprint, classification and Up/Down remain unadjudicated."}},
+          "survey_refs": ["ink-B-terrain-gravel"], "uncertainty": ["Do not infer slope/scarp traversal or operational effects from band color alone. Human review pending."]
+        },
+        {
+          "hexes": ["B4832","B4932"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial Gravel, independently of Road and olive side bands. Sea remains outside northeast B4932."}, "transport": {"status": "observed", "notes": "Retain continuous double Road northwest/northeast B4832 and northwest/southeast B4932; not unfinished capsules."}, "hexside": {"status": "unresolved", "notes": "Olive band west/southwest/southeast B4832 and southwest B4932; precise ownership, side class and direction unresolved."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-road"], "uncertainty": ["Road crossing band does not establish legal passage or homogeneous terrain; no Up/Down inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5031"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial Gravel with plain northeastern land border; Sea lies outside northeast outline."}, "transport": {"status": "observed", "notes": "Retain northwest/southeast continuous double Road. Do not move it into neighboring B5032."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-road"], "uncertainty": ["Coastal proximity does not imply interior Sea, port or movement authority. Human review pending."]
+        }
+      ]
+    },
+    {
       "id": "b-41-45-whole-cell-2026-11-03", "date": "2026-11-03", "method": "agent_visual",
       "notes": "Individually inspected all 165 outlined B4101–B4533 crops at 2x and twenty-four controls at 4x. Revisited the B4013 northern 12x control against B4113 southeast, resolving one endpoint but not the remaining Ben Gania chain. Reconciled against 75cdaff with unchanged source/geometry pins. Fifty Clear and eight Track occurrences added; six Gravel-boundary cells stay untyped. Existing points/classes and adjacency unchanged. Earlier B4013 finding updated without extra coverage; B3914 wording clarifies remaining uncertainty. Human adjudication pending; detector completion is not visual review.",
       "common_findings": {

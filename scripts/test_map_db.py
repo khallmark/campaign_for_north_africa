@@ -270,6 +270,11 @@ class MapDatabaseTests(unittest.TestCase):
             'B4123 B4223 B4323 B4423 B4523',
             'B4223 B4224 B4225 B4226',
             'B4526 B4426 B4427 B4428 B4429 B4430 B4431 B4432',
+            'B4805 B4806 B4807 B4808 B4809 B4810 B4811 B4812',
+            'B4817 B4917 B4918 B5018',
+            'B4901 B4902 B4903 B4904 B4905 B4906 B4907',
+            'B4920 B4921 B4922 B4923',
+            'B4921 B5021 B5022',
             # Complete regional source sequences, not just reported endpoints.
             'C1828 C1829 C1830 C1831 C1832 C1933 C2033',
             'D0708 D0808 D0908 D1008 D1109 D1208 D1308 D1407 D1508 D1608 '
@@ -302,11 +307,18 @@ class MapDatabaseTests(unittest.TestCase):
                            ('B3208', 'B3209'), ('B3333', 'B3433'),
                            ('B3903', 'B4003'),
                            ('B4013', 'B4114'), ('B4223', 'B4324'),
+                           ('B4817', 'B4918'), ('B4917', 'B4916'),
+                           ('B4901', 'B5001'),
                            ('D1114', 'D1115')):
             with self.subTest(unsupported_crossing=(start, end)):
                 self.assertIsNone(self.db.execute('''
                     SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=? AND feature='track'
                 ''', (start, end)).fetchone())
+        # El Abiar has a continuous tied railroad separate from its dashed Track.
+        self.assertIsNotNone(self.db.execute('''
+            SELECT 1 FROM network_links WHERE from_hex='B4901' AND to_hex='B4902'
+              AND feature='railroad' AND status='provisional'
+        ''').fetchone())
 
     def test_barrani_matruh_coastal_routes_preserve_crossings_and_construction_state(self):
         # Read crossing by crossing from source crops (8100,1500,900,1000)

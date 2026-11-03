@@ -6,6 +6,31 @@
   },
   "surveys": [
     {
+      "id": "b-46-50-plain-ground", "label": "B46–50 affirmative plain ground", "notes": "Individual outlined crops and four-times controls confirm six plain interiors beneath Wadi and Track overprints. Nine untyped near-grid Gravel cases, a broad scarp-band cell and two mixed-coast cells remain excluded. Existing ground classes and measured points are unchanged. Clear is a provisional occurrence, not uniform edge pixels or movement authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2850,860,2900,430", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["B4604","B4615","B4616","B4617","B4717","B4907"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "el-abiar-mountain-cores", "label": "El Abiar and B5005 partial Mountain cores", "notes": "Four-times outlined controls separate smooth dark olive Mountain cores from surrounding pale Rough and from stippled side bands. The El Abiar core is crossed by Track, Railroad and its existing Village/Bir dot; B5005 has a broad northern lobe extending toward the center. Add partial Mountain occurrence while retaining Rough, not whole-cell substitution or a movement ruling.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2840,860,530,220", "docs/CNAv2.1.0/images/TEC.png#legend/Mountain"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["B4901","B5005"], "observation": {"status": "provisional", "value": "mountain"}}
+    },
+    {
+      "id": "charuba-mechili-track-crossings", "label": "Charuba, El Abiar and Mechili missing Track crossings", "notes": "Four-times paired outlines restore eight single-dashed crossings. The B4817 northern branch crosses northwest into B4917 southeast, then forks east into B4918; no direct B4817 northeast detour is added. Mechili's northern branch crosses northeast into B5021 southwest separately from its east branch through B4922. Horizontal strokes under Charuba/El Abiar labels remain Tracks, not Railroad ties. Boundary continuations are excluded; no precise centerline, bridge, operational junction or geometry change inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2850,860,2900,430", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"B4805","direction":"east"},{"hex":"B4809","direction":"east"},{"hex":"B4817","direction":"north_west"},{"hex":"B4901","direction":"east"},{"hex":"B4902","direction":"east"},{"hex":"B4917","direction":"east"},{"hex":"B4921","direction":"east"},{"hex":"B4921","direction":"north_east"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "el-abiar-rail-crossing", "label": "El Abiar east Railroad crossing", "notes": "Continuous gray centerline with transverse ties crosses B4901 east into B4902 above the separate dashed Track. Existing B4902 northeast continues toward B5002. Do not confuse this clear crossing with the disputed B4903 northwest tie footprint. No operational availability, transfer junction or western section seam is inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2840,930,290,160", "docs/CNAv2.1.0/images/TEC.png#legend/Railroad"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"B4901","direction":"east"}], "observation": {"status": "provisional", "value": "railroad"}}
+    },
+    {
+      "id": "el-abiar-rail-footprint-review", "label": "B4903 northwest Railroad footprint ambiguity", "notes": "Paired enlarged outlines show the rail centerline curving from B4902 northeast through B5002 southwest, with a tie reaching across the B4903 upper-west vertex. Existing provisional B4903 northwest Railroad may reflect tie footprint rather than centerline crossing. Retain it unchanged pending adjudication; this unresolved record is not a second route, removal or altered adjacency.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2940,860,260,220", "docs/CNAv2.1.0/images/TEC.png#legend/Railroad"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"B4903","direction":"north_west"}], "observation": {"status": "unresolved", "source_label": "Existing Railroad observation may be transverse tie footprint, not centerline crossing; adjudication pending"}}
+    },
+    {
       "id": "b-41-45-plain-ground", "label": "B41–45 affirmative plain ground", "notes": "Individual outlined cells and enlarged controls confirm plain ground in fifty previously untyped cells beneath Tracks, Wadi, labels and section lines. Six near-boundary Gravel cases remain untyped; existing classified terrain and measured dots stay unchanged. Clear is provisional occurrence, not uniform pixels, historical absence or movement authority.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2850,1230,2900,420", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
       "coverage": {"kind": "terrain", "hexes": ["B4103","B4104","B4105","B4107","B4108","B4109","B4110","B4111","B4112","B4113","B4203","B4204","B4205","B4207","B4208","B4209","B4210","B4211","B4212","B4213","B4224","B4226","B4227","B4228","B4229","B4230","B4233","B4308","B4309","B4310","B4314","B4315","B4316","B4317","B4318","B4331","B4332","B4403","B4408","B4409","B4413","B4414","B4426","B4427","B4431","B4504","B4510","B4513","B4514","B4526"], "observation": {"status": "provisional", "value": "clear"}}

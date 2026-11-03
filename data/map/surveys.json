@@ -6,8 +6,23 @@
   },
   "surveys": [
     {
+      "id": "b-11-15-plain-ground", "label": "B11–15 affirmative plain ground", "notes": "Individual outlined cells and enlarged controls confirm plain ground around Tracks and gray-green Wadi strokes in 46 previously untyped cells. Nearby olive stippled side bands remain outside these interiors; their footprint/direction stays unresolved. B1333 is excluded because a small Rough lobe crosses its southwest boundary. Clear is a provisional occurrence, not uniform side pixels, absence of watercourse effects or movement authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2850,3420,2900,430", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["B1102","B1111","B1114","B1133","B1204","B1207","B1208","B1209","B1210","B1211","B1212","B1213","B1214","B1233","B1304","B1307","B1309","B1311","B1312","B1313","B1314","B1315","B1408","B1411","B1412","B1413","B1415","B1429","B1430","B1431","B1432","B1433","B1507","B1508","B1509","B1510","B1511","B1512","B1513","B1516","B1528","B1529","B1530","B1531","B1532","B1533"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "b1333-partial-rough", "label": "B1333 southwest Rough lobe", "notes": "An 8x source control shows a small beige Rough lobe crossing above both the printed southwest grid line and canonical boundary from B1232 into B1333. Record the partial occurrence, not blanket Clear or homogeneous Rough. The nearby Track and gray section line are separate; no movement rule follows from this sliver.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=5570,3570,150,170", "docs/CNAv2.1.0/images/TEC.png#legend/Rough"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["B1333"], "observation": {"status": "provisional", "value": "rough"}}
+    },
+    {
+      "id": "b-12-14-track-crossings", "label": "Eastern B12–14 missing Track crossings", "notes": "Paired enlarged controls show single gray dashes crossing B1233 northwest into B1333 and B1429 northeast into B1530. The latter crosses Wadi farther inside B1530, without an independent bridge or operational passage symbol. Section-edge continuations from B1133 and B1233 remain unresolved; no off-map adjacency or source centerline is inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=5250,3410,600,470", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"B1233","direction":"north_west"},{"hex":"B1429","direction":"north_east"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
       "id": "b-06-10-plain-ground", "label": "Augila corridor affirmative plain interiors", "notes": "Individual outlined crops and enlarged boundary controls confirm plain interiors in fifteen previously untyped cells. Gray Tracks/section lines and adjacent olive stippled bands are independent. Where a band follows the outside of the grid, record that boundary uncertainty without painting the plain cell as Mountain or Rough. Broad bands inside B0807/B0904/B0908/B1003/B1006/B1007/B1008/B1010 remain untyped. Clear is a provisional ground occurrence, not homogeneous side pixels or movement authority.",
-      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=3030,3785,2650,440", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2980,3785,2760,440", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
       "coverage": {"kind": "terrain", "hexes": ["B0606","B0806","B0833","B0903","B0906","B0907","B0911","B0912","B0913","B1002","B1004","B1005","B1009","B1013","B1033"], "observation": {"status": "provisional", "value": "clear"}}
     },
     {

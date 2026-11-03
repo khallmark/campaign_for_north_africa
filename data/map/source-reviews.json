@@ -1904,6 +1904,135 @@
           "uncertainty": ["Village versus Bir, water yield and operational junction permission remain unresolved. Human review pending."]
         }
       ]
+    },
+    {
+      "id": "b-11-15-whole-cell-2026-11-03",
+      "date": "2026-11-03", "method": "agent_visual",
+      "notes": "Individually inspected all 165 outlined B1101–B1533 cells at 2x, 47 plain-candidate controls at 3x, two paired Track controls and B1333 southwest Rough at 8x against TEC. Forty-six plain candidates become Clear; B1333 instead receives a partial Rough occurrence. Restore two Track crossings without changing existing geometry, sides or classification. No uninspected northern cells credited. Expanded prior B06–10 ground provenance crop to include full western/eastern outlined extents; observations unchanged.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Land interior; gray-green Wadi overprint, where recorded separately, does not establish Sea or full-cell water."},
+        "terrain": {"status": "observed", "notes": "Affirmative plain interior matches existing Clear. Neighboring terrain fragments and route strokes outside the outline do not create a ground occurrence."},
+        "transport": {"status": "not_observed", "notes": "No Road, Railroad, Track or unfinished-transport stroke inside the outline. Nearby dashes are not additional crossings."},
+        "hexside": {"status": "not_observed", "notes": "No independent terrain-side glyph inside the outline; black grid and gray section boundary are not routes or directional terrain."},
+        "locations": {"status": "not_observed", "notes": "No Village/Bir dot, Oasis, Major City cluster, airfield, port or other facility glyph inside this outline. Source-symbol absence is not historical absence."}
+      },
+      "groups": [
+        {
+          "hexes": ["B1112","B1113","B1115","B1116","B1117","B1118","B1119","B1120","B1121","B1122","B1123","B1124","B1125","B1126","B1127","B1128","B1129","B1130","B1131","B1132","B1203","B1205","B1215","B1216","B1217","B1218","B1219","B1220","B1221","B1222","B1223","B1224","B1225","B1226","B1227","B1228","B1229","B1230","B1231","B1303","B1305","B1308","B1310","B1316","B1317","B1318","B1319","B1320","B1321","B1322","B1323","B1324","B1325","B1326","B1327","B1328","B1329","B1330","B1331","B1332","B1402","B1409","B1410","B1414","B1416","B1417","B1418","B1419","B1420","B1421","B1422","B1423","B1424","B1425","B1426","B1427","B1428","B1517","B1518","B1519","B1520","B1521","B1522","B1523","B1524","B1525","B1526","B1527"],
+          "findings": {}, "survey_refs": ["ink-B-terrain-clear"],
+          "uncertainty": ["No extra feature inferred from empty detector output: each outlined cell was visually inspected. Nearby tracks, Rough patches and Wadi fragments outside these outlines remain separate. Human review pending."]
+        },
+        {
+          "hexes": ["B1407"],
+          "findings": {"hexside": {"status": "unresolved", "notes": "Olive stippled band follows the outside of the western edge; plain interior agrees with existing Clear, while side footprint and direction remain unresolved."}},
+          "survey_refs": ["ink-B-terrain-clear"], "uncertainty": ["Clear does not assign a legal crossing or remove boundary effects. Human review pending."]
+        },
+        {
+          "hexes": ["B1101","B1301"],
+          "findings": {"terrain": {"status": "observed", "notes": "Partial yellow Desert and plain gap match existing Desert occurrence; not homogeneous terrain."}, "hexside": {"status": "unresolved", "notes": "Olive stippled bands beyond neighboring grid edges retain side-footprint/direction uncertainty rather than new full-cell Mountain or Rough."}},
+          "survey_refs": ["ink-B-terrain-desert"], "uncertainty": ["No Up/Down, slope/ridge class or operational movement authority inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B1103","B1104","B1106","B1107","B1108","B1109","B1201","B1202","B1206","B1302","B1306","B1401","B1406","B1501"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Broad olive stippled side-band footprint enters the plain core. Retain untyped ground rather than assigning homogeneous Clear, Mountain or Rough."}, "hexside": {"status": "unresolved", "notes": "Broad band follows one or several inside edges; slope/ridge class, direction and exact boundary effects remain unresolved."}},
+          "survey_refs": [], "uncertainty": ["Shared ink color alone does not establish terrain type. Gray section line in B1501 is separate. Human review pending."]
+        },
+        {
+          "hexes": ["B1105","B1110"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Olive stippled band and plain core crossed by Track; retain untyped ground rather than full-cell Mountain, Rough or Clear."}, "transport": {"status": "observed", "notes": "Existing northwest/southeast single-dashed Track matches source and TEC, independently of band overprint."}, "hexside": {"status": "unresolved", "notes": "Broad olive band meets Track; directional terrain and legal passage remain unresolved."}},
+          "survey_refs": ["ink-B-hexside-track"], "uncertainty": ["No pass, Up/Down, bridge or operational crossing permission inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B1232","B1515"],
+          "findings": {"terrain": {"status": "observed", "notes": "Beige smooth Rough patch matches source and TEC, with visible plain gaps; retain existing partial Rough, not Rock/Gravel or full-cell fill."}},
+          "survey_refs": ["ink-B-terrain-rough"], "uncertainty": ["Nearby Track outside the outline does not establish a crossing. Human review pending."]
+        },
+        {
+          "hexes": ["B1514"],
+          "findings": {"terrain": {"status": "observed", "notes": "Partial beige Rough patch retained, independently of plain gap and small Wadi endpoint near northwest vertex."}, "hexside": {"status": "unresolved", "notes": "Gray-green Wadi tip approaches the northwest corner. Exact side ownership and passage effects remain unresolved; no new full-side Wadi inferred from the broad endpoint."}},
+          "survey_refs": ["ink-B-terrain-rough"], "uncertainty": ["No Major/Minor River or operational crossing classification assigned. Human review pending."]
+        },
+        {
+          "hexes": ["B1404","B1405","B1502","B1504","B1505"],
+          "findings": {"terrain": {"status": "observed", "notes": "Yellow fissure/network pattern matches TEC Salt Marsh and existing classification, not Rough merely from its base color. Plain gaps at patch edges do not erase the occurrence; B1505 is filled by the pattern."}},
+          "survey_refs": ["ink-B-terrain-salt_marsh"], "uncertainty": ["Track outside B1504 southwest does not enter its outline; terrain occurrence does not assign operational movement permission. Human review pending."]
+        },
+        {
+          "hexes": ["B1403","B1503"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing partial Salt Marsh with yellow fissure pattern and plain gaps matches TEC."}, "transport": {"status": "observed", "notes": "Existing single-dashed northwest/southeast Track crosses Salt Marsh/plain footprint; no rail ties or unfinished double stroke."}},
+          "survey_refs": ["ink-B-terrain-salt_marsh","ink-B-hexside-track"], "uncertainty": ["Track does not establish legal motorized passage through Salt Marsh. Human review pending."]
+        },
+        {
+          "hexes": ["B1506"],
+          "findings": {"terrain": {"status": "observed", "notes": "Partial Salt Marsh retained separately from plain gap and olive band on northeast/east edges."}, "hexside": {"status": "unresolved", "notes": "Olive stippled band enters northeast/east interior beside Salt Marsh; no direction or slope/ridge rule assigned."}},
+          "survey_refs": ["ink-B-terrain-salt_marsh"], "uncertainty": ["Band is not an extra Mountain core based on shared ink. Human review pending."]
+        },
+        {
+          "hexes": ["B1102","B1111","B1207","B1208","B1210","B1307"],
+          "findings": {"terrain": {"status": "observed", "notes": "Enlarged controls confirm plain interiors; add provisional Clear while olive bands remain outside the grid."}, "hexside": {"status": "unresolved", "notes": "Neighboring stippled bands follow exterior edges; side footprint and direction remain unresolved despite affirmative plain ground."}},
+          "survey_refs": ["b-11-15-plain-ground"], "uncertainty": ["Nearby Track strokes remain outside. Clear ground is not absence of boundary effects or movement authority. Human review pending."]
+        },
+        {
+          "hexes": ["B1114","B1204","B1304","B1309","B1315","B1408","B1415","B1430","B1431","B1432","B1508","B1509","B1510","B1516"],
+          "findings": {"terrain": {"status": "observed", "notes": "Enlarged controls confirm plain ground beneath single-dashed Tracks. Add provisional Clear; neighboring Rough and other patterns stay outside."}, "transport": {"status": "observed", "notes": "Existing Track sides match source. B1408 bends northeast/southeast, B1432 west/southeast, and B1509 has west/east/northwest/southwest branches. Other paths run northwest/southeast, southwest/northeast or west/east as recorded; do not treat every route as the same diagonal."}},
+          "survey_refs": ["b-11-15-plain-ground","ink-B-hexside-track"], "uncertainty": ["Source forks and curves are not operational junctions or exact center-to-center paths. Human review pending."]
+        },
+        {
+          "hexes": ["B1209"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add Clear beneath Track; enlarged control keeps southern olive band outside the outline."}, "transport": {"status": "observed", "notes": "Existing northwest/southeast single-dashed Track retained."}, "hexside": {"status": "unresolved", "notes": "Band beyond southwestern/southeastern grid edges remains a side-footprint/direction question."}},
+          "survey_refs": ["b-11-15-plain-ground","ink-B-hexside-track"], "uncertainty": ["No operational crossing rule inferred from Track/band intersection. Human review pending."]
+        },
+        {
+          "hexes": ["B1507"],
+          "findings": {"terrain": {"status": "observed", "notes": "Plain interior around the previously corrected Track; add Clear. Olive band lies outside west/southwest edges."}, "transport": {"status": "observed", "notes": "Retain existing manual northwest/east corner-sensitive Track crossings. No detour through B1607 or additional point inferred."}, "hexside": {"status": "unresolved", "notes": "Olive band follows exterior west/southwest edges; boundary footprint and direction remain unresolved."}},
+          "survey_refs": ["b-11-15-plain-ground","b1507-track-corner-corrections"], "uncertainty": ["No source settlement glyph in this cell; route corner is not a location or operational junction. Human review pending."]
+        },
+        {
+          "hexes": ["B1133"],
+          "findings": {"terrain": {"status": "observed", "notes": "Plain ground under gray section line and curved Track; add Clear."}, "transport": {"status": "unresolved", "notes": "Existing southeastern Track into B1033 retained; eastern entry comes from outside retained inventory. No off-map link or terminus inferred."}},
+          "survey_refs": ["b-11-15-plain-ground","ink-B-hexside-track"], "uncertainty": ["Eastern continuation is a seam-owner finding, not canonical adjacency. Human review pending."]
+        },
+        {
+          "hexes": ["B1233"],
+          "findings": {"terrain": {"status": "observed", "notes": "Plain ground under Track and section line; neighboring Rough stays outside the western edge. Add Clear."}, "transport": {"status": "unresolved", "notes": "Restore missing northwest single-dashed Track into B1333. Its eastern continuation leaves retained inventory; do not add a fabricated neighbor."}},
+          "survey_refs": ["b-11-15-plain-ground","b-12-14-track-crossings"], "uncertainty": ["Eastern section-boundary continuation remains unresolved despite supported northwest crossing. Human review pending."]
+        },
+        {
+          "hexes": ["B1333"],
+          "findings": {"terrain": {"status": "observed", "notes": "8x control shows a small Rough lobe entering above printed and calibrated southwest boundary from B1232. Add partial Rough rather than blanket Clear; most interior remains plain."}, "transport": {"status": "observed", "notes": "Single-dashed northwest/southeast Track: existing northwest retained, restore southeastern exit across B1233 northwest. Gray section line is not another road."}},
+          "survey_refs": ["b1333-partial-rough","ink-B-hexside-track","b-12-14-track-crossings"], "uncertainty": ["Tiny ground occurrence does not establish full-hex uniformity, source fill extent or movement costs. Human review pending."]
+        },
+        {
+          "hexes": ["B1433"],
+          "findings": {"terrain": {"status": "observed", "notes": "Plain ground under gray section line; add Clear. Track to southwest stays outside, so no route invented here."}},
+          "survey_refs": ["b-11-15-plain-ground"], "uncertainty": ["Section line is not a terrain feature or adjacency permission. Human review pending."]
+        },
+        {
+          "hexes": ["B1211","B1212","B1213","B1311","B1312","B1313","B1314","B1411","B1412","B1413","B1512","B1513","B1528","B1529","B1531","B1532","B1533"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear around gray-green Wadi strokes after enlarged controls. Wadi is an independent overprint, not full-cell Sea or absent ground."}, "hexside": {"status": "unresolved", "notes": "Gray-green meanders agree with existing provisional Wadi interpretation, but wide strokes and endpoints depart from exact grid edges. Preserve current side observations; exact crossed edges and operational effects require separate adjudication, particularly the ribbon across B1529–B1533 upper interiors."}},
+          "survey_refs": ["b-11-15-plain-ground","ink-B-hexside-wadi"], "uncertainty": ["No Major/Minor River, bridge, permanent water or passage permission inferred. B1533's section line and eastward Wadi continuation do not create adjacency. Human review pending."]
+        },
+        {
+          "hexes": ["B1214"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add Clear beneath Track and small Wadi tip near northwest vertex."}, "transport": {"status": "observed", "notes": "Existing southwest/northeast single-dashed Track matches source, separate from corner watercourse tip."}, "hexside": {"status": "unresolved", "notes": "Wadi endpoint reaches northwest corner; no additional full-side ownership inferred from its width."}},
+          "survey_refs": ["b-11-15-plain-ground","ink-B-hexside-track"], "uncertainty": ["No bridge, Major/Minor River or operational crossing effect assigned. Human review pending."]
+        },
+        {
+          "hexes": ["B1511"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear around Wadi and Track, not homogeneous water or terrain."}, "transport": {"status": "observed", "notes": "Existing west/northwest single-dashed Track bends inside the plain interior; no location symbol at the bend."}, "hexside": {"status": "unresolved", "notes": "Broad Wadi on northeast/east edges retained independently; exact edge association and passage effect remain unresolved."}},
+          "survey_refs": ["b-11-15-plain-ground","ink-B-hexside-track","ink-B-hexside-wadi"], "uncertainty": ["No bridge, junction, Major/Minor River or permanent water inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B1429"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add Clear around single-dashed Track corner."}, "transport": {"status": "observed", "notes": "Restore northeast Track into B1530, retaining existing east into B1430. Bend inside this cell is not another settlement or source junction."}},
+          "survey_refs": ["b-11-15-plain-ground","ink-B-hexside-track","b-12-14-track-crossings"], "uncertainty": ["No operational connection rule or exact source curve inferred from the two side observations. Human review pending."]
+        },
+        {
+          "hexes": ["B1530"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add Clear around Wadi ribbon and Track."}, "transport": {"status": "observed", "notes": "Restore southwest Track across B1429 northeast, retaining existing northwest Track. Single dashes cross broad Wadi inside the cell; no independent bridge glyph observed."}, "hexside": {"status": "unresolved", "notes": "Wide gray-green Wadi crosses upper interior, below the northern vertex rather than tracing both northern grid edges. Preserve existing provisional side record; exact side association remains unresolved."}},
+          "survey_refs": ["b-11-15-plain-ground","ink-B-hexside-track","ink-B-hexside-wadi","b-12-14-track-crossings"], "uncertainty": ["Track/Wadi overlap does not establish bridge, legal passage, permanent water or Major/Minor River class. Human review pending."]
+        }
+      ]
     }
   ]
 }

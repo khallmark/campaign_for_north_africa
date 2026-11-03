@@ -417,6 +417,209 @@
           "survey_refs": [], "uncertainty": ["Dark pigment is shared by terrain and side symbols; this is not the nested Mountain core pattern. Ground/side classification remains unresolved. Human review pending."]
         }
       ]
+    },
+    {
+      "id": "a-11-15-whole-cell-2026-11-03",
+      "date": "2026-11-03",
+      "method": "agent_visual",
+      "notes": "Individually inspected all 165 outlined cells A1101 through A1533 at 2x, then reconciled ground, incident route crossings and points. Enlarged 4x paired-cell controls confirm A1503's Wadi-overprinted Track, A1128/A1213/A1532 directions and the missing A1523 east branch. 3x/6x controls separate Mountain cores, plain Wadi interiors and near-edge Gravel fragments. Added thirteen Clear occurrences, four partial Mountain cores retaining Rough, one partial Gravel occurrence and one Track crossing. Raw detector candidates are not accepted routes, and no cells north of A1533 receive review credit from this batch.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Land within the outlined cell. Gray-green Wadi strokes do not establish a Sea surface or a major/minor river."},
+        "transport": {"status": "not_observed", "notes": "No Road, Railroad, Track or unfinished transport glyph observed inside this outline. Adjacent strokes and unresolved detector candidates do not establish crossings."},
+        "hexside": {"status": "not_observed", "notes": "No separate ridge, slope, escarpment, wadi, river or barred-side symbol observed at this cell. Ordinary grid and faint section lines are not feature lines."},
+        "locations": {"status": "not_observed", "notes": "No settlement/Village-Bir dot, Major City, oasis, airfield, flying-boat or training glyph observed within this outline. Neighboring lettering does not create another point."}
+      },
+      "groups": [
+        {
+          "hexes": ["A1101","A1102","A1106","A1107","A1109","A1202","A1206","A1207","A1209","A1306","A1307","A1309","A1310","A1326","A1405","A1406","A1407","A1409","A1410","A1426","A1501","A1502","A1505","A1506","A1507","A1519"],
+          "findings": {"terrain": {"status": "observed", "notes": "Repeated rings match TEC Gravel and existing provisional Gravel. Adjacent route strokes and lettering stay outside the outline; A1519 lettering is not another point."}},
+          "survey_refs": ["ink-A-terrain-gravel"], "uncertainty": ["Partial pattern extent and operational terrain treatment remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1103","A1108","A1203","A1208","A1308","A1408","A1419","A1508","A1521"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings remain visible around single dashed Track strokes."},
+            "transport": {"status": "observed", "notes": "TEC Track supports existing incident crossings: A1002-A1103-A1203-A1303, A1008-A1108-A1208-A1308-A1408-A1508-A1607, A1508 east to A1509, A1418-A1419-A1520 and A1520-A1521-A1522. No Road, Railroad or construction glyph observed."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel","ink-A-hexside-track"], "uncertainty": ["Crossings remain provisional, not exact curves, legal movement or within-cell junction authority. Human review pending."]
+        },
+        {
+          "hexes": ["A1104","A1105","A1201","A1204","A1205","A1301","A1302","A1304","A1305","A1401","A1402","A1404","A1423","A1424","A1425","A1504","A1525","A1526"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings around meandering gray-green Wadi match existing provisional Gravel."},
+            "hexside": {"status": "unresolved", "notes": "Wadi runs through, beside or along the cell, sometimes mostly outside a western edge (A1104/A1205/A1305/A1404/A1504) or northwest edge (A1425). A1423/A1424 also approach stippled side bands. Preserve existing evidence; do not snap every nearby bend to a whole side or infer a directional rule."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel"], "uncertainty": ["Wadi extent and exact side membership remain unresolved. Side-band type and direction are not inferred from dark pigment. Human review pending."]
+        },
+        {
+          "hexes": ["A1110","A1111","A1112","A1113","A1210","A1211","A1212","A1311","A1312"],
+          "findings": {"terrain": {"status": "observed", "notes": "Tan Rough patches match TEC and existing Rough. Tracks beside A1212/A1312 remain outside the outline; no Mountain core observed."}},
+          "survey_refs": ["ink-A-terrain-rough"], "uncertainty": ["Patch occurrence does not establish homogeneous terrain or movement rules. Human review pending."]
+        },
+        {
+          "hexes": ["A1114","A1115","A1213","A1313"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Pale Rough patches beneath the dashed Track match existing Rough; plain gaps retained."},
+            "transport": {"status": "observed", "notes": "Existing Track chain A1014-A1115-A1114-A1213-A1313-A1412 is supported. Enlarged paired source confirms A1213 northwest into A1313, not a route through A1312. No Road, Railroad or construction glyph observed."}
+          },
+          "survey_refs": ["ink-A-terrain-rough","ink-A-hexside-track"], "uncertainty": ["Exact centerlines and legal movement remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1116","A1117","A1214","A1215","A1216","A1218","A1219","A1226","A1314","A1315","A1319","A1327","A1413","A1414","A1416","A1430","A1514","A1516","A1528","A1530","A1531","A1533"],
+          "findings": {"terrain": {"status": "observed", "notes": "Affirmative plain land matches TEC Clear and existing Clear. Neighboring tracks, Gravel, Desert and stippled bands remain outside; lettering near A1216/A1218 is not another Maaten Groter point."}},
+          "survey_refs": ["ink-A-terrain-clear"], "uncertainty": ["Near-edge contacts and partial source patterns are not homogeneous terrain or operational adjudication. Human review pending."]
+        },
+        {
+          "hexes": ["A1118","A1217","A1431","A1529","A1532"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added affirmative Clear ground beneath the Track, not inferred from detector silence."},
+            "transport": {"status": "observed", "notes": "Existing Track crossings match A1017-A1118-A1217-A1318, A1332-A1431-A1532-A1632 and A1428-A1529-A1629. Four-times control confirms A1532 northeast into A1632, not A1631. No other route class observed."}
+          },
+          "survey_refs": ["a-11-15-plain-ground","ink-A-hexside-track"], "uncertainty": ["Exact path, legal passage and source route junctions remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1417","A1517"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added affirmative Clear beneath continuous double Road strokes."},
+            "transport": {"status": "observed", "notes": "Continuous double strokes match TEC Road and existing A1318-A1417-A1517-A1616 crossings. No dashed construction capsule or Railroad tie pattern observed."}
+          },
+          "survey_refs": ["a-11-15-plain-ground","ink-A-hexside-road"], "uncertainty": ["Source Road is provisional, not operational permission or a surveyed centerline. Human review pending."]
+        },
+        {
+          "hexes": ["A1318"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added Clear ground under the blue Maaten Groter dot/name; nearby Salt Marsh does not replace it."},
+            "transport": {"status": "observed", "notes": "Existing double Road heads northwest to A1417; dashed Track connects southwest to A1217 and northeast to A1418. Visible convergence at the dot does not authorize junction movement."},
+            "locations": {"status": "unresolved", "notes": "Blue dot and Maaten Groter label match label-A1318. Retain Village/Bir glyph with unresolved operational category; lettering in neighboring cells is not additional settlements."}
+          },
+          "survey_refs": ["a-11-15-plain-ground","ink-A-hexside-road","ink-A-hexside-track","label-A1318"], "uncertainty": ["Location type, capacity, water availability and route junction rules remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1321","A1322","A1422","A1512","A1513"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added affirmative plain Clear ground around Wadi strokes. Enlarged controls show adjacent Mountain/stippled bands outside the outlined interior, not new cores."},
+            "hexside": {"status": "unresolved", "notes": "Wadi meanders along or inside the outline; A1512's broad curve crosses the interior rather than representing an entire grid side. Preserve current Wadi observations without adding arbitrary side assignments or operational bridges."}
+          },
+          "survey_refs": ["a-11-15-plain-ground"], "uncertainty": ["Wadi extent, exact side membership and adjacent band direction remain unresolved. Clear occurrence does not mean feature-free ground. Human review pending."]
+        },
+        {
+          "hexes": ["A1119"],
+          "findings": {"terrain": {"status": "observed", "notes": "Added distinct dark olive Mountain core within the existing pale Rough fringe, confirmed at 3x. Both observations remain; this is not homogeneous Mountain."}},
+          "survey_refs": ["a-11-15-mountain-cores","ink-A-terrain-rough"], "uncertainty": ["Partial core/fringe extent and operational terrain treatment remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1220","A1320","A1421"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added dark Mountain cores within existing Rough fringes. Gray-green Wadi overprint is separate; it does not erase the core."},
+            "hexside": {"status": "unresolved", "notes": "Wadi touches or enters the outline, with curved interior portions. Smooth terrain fringes do not establish Up/Down sides. Preserve existing Wadi occurrence without inventing additional full-side assignments."}
+          },
+          "survey_refs": ["a-11-15-mountain-cores","ink-A-terrain-rough"], "uncertainty": ["Ground extent, Wadi membership and directional side rules remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1120","A1122","A1123"],
+          "findings": {"terrain": {"status": "observed", "notes": "Dark Mountain core and pale Rough fringe match existing observations. Neither is erased or extended across the entire cell."}},
+          "survey_refs": ["ink-A-terrain-mountain","ink-A-terrain-rough"], "uncertainty": ["Partial patch extent does not establish homogeneous Mountain or directional terrain rules. Human review pending."]
+        },
+        {
+          "hexes": ["A1420"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Mountain core and Rough fringe match both existing observations."},
+            "hexside": {"status": "unresolved", "notes": "Wadi follows the southern margin and neighboring cells; exact whole-side membership is unresolved. No Up/Down assignment from the ground fringe."}
+          },
+          "survey_refs": ["ink-A-terrain-mountain","ink-A-terrain-rough"], "uncertainty": ["Wadi-to-side assignment and operational ground/side rules need adjudication. Human review pending."]
+        },
+        {
+          "hexes": ["A1124","A1223","A1316","A1317","A1415","A1515"],
+          "findings": {"terrain": {"status": "observed", "notes": "Yellow cracked Salt Marsh pattern matches existing Salt Marsh. Maaten Groter lettering in A1316/A1317 is not a second point, and tan substrate is not an automatic Rough assignment."}},
+          "survey_refs": ["ink-A-terrain-salt_marsh"], "uncertainty": ["Partial patch extent and operational movement remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1121","A1221","A1222"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Salt Marsh pattern matches existing Salt Marsh; narrow dark bands are not automatically Mountain ground."},
+            "hexside": {"status": "unresolved", "notes": "Dark stippled slope/ridge-like bands approach or enter the outline. Type, exact side membership and Up/Down direction are unresolved rather than inferred from pigment alone."}
+          },
+          "survey_refs": ["ink-A-terrain-salt_marsh"], "uncertainty": ["Terrain-side interpretation and direction remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1125","A1224","A1323","A1324","A1527"],
+          "findings": {
+            "terrain": {"status": "unresolved", "notes": "Plain interior with dark stippled side band intruding; retain untyped ground rather than classify it as a Mountain core. A1527 also has near-edge Gravel fragments, insufficient to claim homogeneous ground."},
+            "hexside": {"status": "unresolved", "notes": "Stippled band follows parts of the outline/interior; A1527 also has Wadi at its northern tip. Exact side type, membership, extent and direction remain unresolved."}
+          },
+          "survey_refs": [], "uncertainty": ["Shared dark pigment does not settle ground versus side-symbol interpretation. Human review pending."]
+        },
+        {
+          "hexes": ["A1325"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Mostly plain interior with Gravel ring fragments straddling the northern outline. Stippled bands stay outside west/southwest. Six-times edge inspection retains untyped ground pending partial-pattern membership adjudication, not a Mountain assignment."}},
+          "survey_refs": [], "uncertainty": ["Near-grid fragments do not establish homogeneous Clear or Gravel; partial-pattern classification remains unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1418"],
+          "findings": {
+            "terrain": {"status": "unresolved", "notes": "Plain interior with near-grid Gravel fragments at the northeast edge; retained untyped after 6x inspection instead of a blanket Clear assignment."},
+            "transport": {"status": "observed", "notes": "Existing single Track branches southwest to A1318, northwest to A1518 and east to A1419 are supported; no Road/Railroad/construction glyph observed."}
+          },
+          "survey_refs": ["ink-A-hexside-track"], "uncertainty": ["Partial ground membership, exact curves and within-cell junction authority remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1518"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added partial Gravel: several rings lie distinctly inside the northeast/east outline at 6x, while most of the interior is plain. Do not generalize to adjacent A1418."},
+            "transport": {"status": "observed", "notes": "Existing dashed Track northwest to A1617 and southeast to A1418 is supported. Nearby double Road lies outside this cell."}
+          },
+          "survey_refs": ["a1518-partial-gravel","ink-A-hexside-track"], "uncertainty": ["Gravel occurrence is partial, not homogeneous ground or operational movement authority. Human review pending."]
+        },
+        {
+          "hexes": ["A1126","A1127","A1129","A1130","A1132","A1133","A1225","A1227","A1229","A1230","A1232","A1233","A1329","A1330","A1331","A1333","A1427","A1429","A1432","A1433"],
+          "findings": {"terrain": {"status": "observed", "notes": "Yellow Desert patches match existing Desert, including large plain gaps. Neighboring tracks and dark edge bands stay outside; faint section lines are not Railroad."}},
+          "survey_refs": ["ink-A-terrain-desert"], "uncertainty": ["Partial patch extent and seam interpretation remain unresolved. No cross-section adjacency inferred. Human review pending."]
+        },
+        {
+          "hexes": ["A1128","A1131","A1228","A1231","A1328","A1332","A1428"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Yellow Desert around dashed Tracks matches existing Desert, with plain gaps retained."},
+            "transport": {"status": "observed", "notes": "Existing chains A1027-A1128-A1228-A1328-A1428-A1529 and A1030-A1131-A1231-A1332-A1431 match the source. Enlarged control confirms A1128 northeast into A1228, not A1227. No other route class observed."}
+          },
+          "survey_refs": ["ink-A-terrain-desert","ink-A-hexside-track"], "uncertainty": ["Exact curves and operational movement remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1303","A1403","A1503","A1509","A1510","A1511","A1522"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings beneath Wadi/Track strokes match existing Gravel."},
+            "transport": {"status": "observed", "notes": "Existing dashed Track chains A1203-A1303-A1403-A1503-A1603, A1508-A1509-A1510-A1511-A1411 and A1521-A1522-A1523 are supported. Four-times control resolves A1503's dash overprint across Wadi; retain northeast crossing into A1603."},
+            "hexside": {"status": "unresolved", "notes": "Gray-green Wadi crosses or approaches the outlined cell. Preserve its existing occurrence without treating every bend as a whole side, a bridge or a different route class."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel","ink-A-hexside-track"], "uncertainty": ["Wadi extent, exact crossing geometry and operational bridge/junction status remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1523","A1524"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel beneath Track and Wadi matches existing Gravel."},
+            "transport": {"status": "observed", "notes": "Added A1523 east to A1524: the shallow dashed branch crosses below the upper shared vertex at 4x. Existing separate A1523 northeast to A1623 and A1524 northeast to A1624 remain. This does not claim an operational junction."},
+            "hexside": {"status": "unresolved", "notes": "Wadi follows curved southern margins; exact whole-side extent and membership are unresolved."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel","ink-A-hexside-track","a1523-east-track"], "uncertainty": ["Source crossing is provisional, not an exact curve or movement rule. Wadi side interpretation remains unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1411","A1412"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Tan Rough patches match existing Rough, including plain gaps."},
+            "transport": {"status": "observed", "notes": "Dashed Track supports existing A1511-A1411-A1412-A1313 crossings. No Road, Railroad or construction glyph observed."},
+            "hexside": {"status": "unresolved", "notes": "Wadi approaches northern edges from neighboring cells. Preserve existing provisional evidence; proximity is not a new whole-side assignment."}
+          },
+          "survey_refs": ["ink-A-terrain-rough","ink-A-hexside-track"], "uncertainty": ["Wadi membership, partial Rough extent and operational route status remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1520"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings beneath dot and label match existing Gravel."},
+            "transport": {"status": "observed", "notes": "Dashed Track from A1419 southwest continues east to A1521, matching current crossings. No operational junction inferred."},
+            "locations": {"status": "unresolved", "notes": "Blue dot and Maatan Belcleibat lettering agree with label-A1520; preserve spelling uncertainty and unresolved Village/Bir operational category. Nearby name fragments are not extra points."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel","ink-A-hexside-track","label-A1520"], "uncertainty": ["Spelling, category, water availability, capacity and operational role remain unresolved. Human review pending."]
+        }
+      ]
     }
   ]
 }

@@ -137,12 +137,15 @@ class MapDatabaseTests(unittest.TestCase):
                               ("A0323", "clear"), ("A0324", "clear"), ("A0326", "clear"),
                               ("A0327", "clear"), ("A0416", "clear"), ("A0422", "clear"),
                               ("A0817", "clear"), ("A1020", "clear"),
+                              ("A1118", "clear"), ("A1318", "clear"), ("A1512", "clear"),
+                              ("A1517", "clear"), ("A1518", "gravel"), ("A1532", "clear"),
                               ("A0217", "salt_marsh"), ("A0426", "desert")):
             self.assertEqual(self.db.execute(
                 "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain'",
                 (hex_id,)).fetchall(), [('provisional', value)])
         # Partial Mountain cores add evidence without erasing their Rough fringes.
-        for hex_id in ("A0623", "A0721", "A0819", "A0919", "A1023"):
+        for hex_id in ("A0623", "A0721", "A0819", "A0919", "A1023",
+                       "A1119", "A1220", "A1320", "A1421"):
             self.assertEqual(self.db.execute(
                 "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain' ORDER BY value",
                 (hex_id,)).fetchall(), [('provisional', 'mountain'), ('provisional', 'rough')])
@@ -150,7 +153,8 @@ class MapDatabaseTests(unittest.TestCase):
         self.assertEqual(self.db.execute(
             "SELECT 1 FROM network_links WHERE from_hex='A0317' OR to_hex='A0317'"
         ).fetchall(), [])
-        for hex_id in ("Malta 0505", "Malta 0804", "Malta 1301", "A0925"):
+        for hex_id in ("Malta 0505", "Malta 0804", "Malta 1301", "A0925",
+                       "A1125", "A1325", "A1418", "A1527"):
             self.assertEqual(self.db.execute(
                 "SELECT value FROM observations WHERE hex=? AND kind='terrain'", (hex_id,)).fetchall(), [])
         # Independently inspected TEC controls: pale gaps are unfinished, dark
@@ -206,6 +210,8 @@ class MapDatabaseTests(unittest.TestCase):
             'C4017 C4118 C4218 C4319',
             'A0430 A0431 A0432 A0433',
             'A0903 A0802 A0703 A0704 A0705 A0706 A0707',
+            'A1522 A1523 A1524 A1624',
+            'A1522 A1523 A1623',
         ):
             cells = route.split()
             for start, destination in zip(cells, cells[1:]):

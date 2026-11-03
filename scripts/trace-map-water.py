@@ -74,6 +74,10 @@ def build():
     with source.open("rb") as stream:
         assert hashlib.file_digest(stream, "sha256").hexdigest() == rules["sha256"], "Source fingerprint mismatch"
     image = Image.open(source).convert("RGB")
+    scope_path = ROOT / "public/data/map/sources.json"
+    zones = [np.asarray(zone["polygon"], np.int32)
+             for zone in json.loads(scope_path.read_text())["zones"]
+             if zone["name"] in ("Malta", "Map A", "Map B", "Map C", "Map D", "Map E")]
     outlines = []
     for kind in ("water", "wadi", "escarpment"):
         mask = np.zeros((image.height, image.width), dtype=np.uint8)
@@ -85,9 +89,22 @@ def build():
         if kind == "escarpment":
             mask = escarpment_mask(mask, image)
         contours, hierarchy = cv2.findContours(mask, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+        # Keep source-ink fragments between lettering/road overprints without
+        # filling the overprints themselves. This is not channel gap joining.
+        minimum_area = 1 if kind == "escarpment" else 20
         for index, contour in enumerate(contours):
             area = cv2.contourArea(contour)
-            if hierarchy[0, index, 3] != -1 or area < (1 if kind == "escarpment" else 150):
+            if hierarchy[0, index, 3] != -1 or area < minimum_area:
+                continue
+            bounds = cv2.boundingRect(contour)
+            x, y, width, height = bounds
+            # A shared blue palette also occurs in the calendar/holding boxes.
+            # Admit newly recovered fragments only within source map zones;
+            # leave existing broad outlines and scarp extraction unchanged.
+            if kind in ("water", "wadi") and area < 150 and not any(
+                cv2.pointPolygonTest(zone, (x + width/2, y + height/2), False) >= 0
+                for zone in zones
+            ):
                 continue
             raw = [contour[:, 0, :].tolist()]
             hole = hierarchy[0, index, 2]
@@ -97,12 +114,15 @@ def build():
                 hole = hierarchy[0, hole, 0]
             tolerance = .25 if kind == "escarpment" and area < 150 else .75
             rings = [cv2.approxPolyDP(np.asarray(ring, np.int32), tolerance, True)[:, 0, :].tolist() for ring in raw]
-            bounds = cv2.boundingRect(contour)
             identity = hashlib.sha256(json.dumps(raw).encode()).hexdigest()[:16]
             outlines.append({"id": f"{kind}-{identity}", "kind": kind, "raw_rings": raw, "rings": rings,
                              "bounds": [bounds[0], bounds[1], bounds[0]+bounds[2], bounds[1]+bounds[3]]})
     return {"version": 1, "source_ref": rules["source"], "source_sha256": rules["sha256"],
             "review_status": "provisional", "units": "board pixels", "simplification_tolerance_px": .75,
+            "minimum_channel_area_px2": 20,
+            "small_fragment_scope": "bounding-box midpoint within source Malta or Map A-E zone; not a playability classification",
+            "fragment_scope_ref": "public/data/map/sources.json",
+            "fragment_scope_sha256": hashlib.sha256(scope_path.read_bytes()).hexdigest(),
             "method": "separate water, dry-wadi and broad-core escarpment ink contours; nearby compact scarp fragments retained at .25px tolerance; tiny fragments beside dark route/grid ink excluded; narrow dark/grid-blend interruptions repaired; pale gaps and larger overprints retained",
             "interpretation": "Source ink outlines, not Major/Minor River, sea, coast, Up/Down Escarpment or movement classifications. Wadi ink stays separate from water. Printed widths and ragged scarp faces retained; holes preserved; no gap joining across pale ground.",
             "outlines": outlines}

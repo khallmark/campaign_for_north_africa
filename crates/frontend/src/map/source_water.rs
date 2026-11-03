@@ -21,6 +21,32 @@ struct Water {
     outlines: Vec<Outline>,
 }
 
+fn write_channel_ring(html: &mut String, ring: &[[f64; 2]]) {
+    // Round raster-scale corners, not entire bends. Each tangent endpoint is
+    // at most one source pixel from the vertex and halfway along its edge:
+    // the quadratic stays within 0.5px of the original pair of segments.
+    // No spline overshoot, joining of components, or removal of hole rings.
+    for (i, &[x, y]) in ring.iter().enumerate() {
+        let previous = ring[(i + ring.len() - 1) % ring.len()];
+        let next = ring[(i + 1) % ring.len()];
+        let tangent = |[px, py]: [f64; 2]| {
+            let dx = px - x;
+            let dy = py - y;
+            let fraction = (1.0 / dx.hypot(dy)).min(0.5);
+            [x + dx * fraction, y + dy * fraction]
+        };
+        let [ax, ay] = tangent(previous);
+        let [bx, by] = tangent(next);
+        write!(
+            html,
+            "{}{ax:.2},{ay:.2}Q{x},{y} {bx:.2},{by:.2}",
+            if i == 0 { "M" } else { "L" }
+        )
+        .unwrap();
+    }
+    html.push('Z');
+}
+
 pub(super) fn render(viewport: Viewport) -> String {
     static WATER: OnceLock<Water> = OnceLock::new();
     let water = WATER.get_or_init(|| {
@@ -55,11 +81,17 @@ pub(super) fn render(viewport: Viewport) -> String {
             escape(&outline.id)
         )
         .unwrap();
-        for ring in &outline.rings {
-            for (i, [x, y]) in ring.iter().enumerate() {
-                write!(html, "{}{x},{y}", if i == 0 { "M" } else { "L" }).unwrap();
+        for (index, ring) in outline.rings.iter().enumerate() {
+            // Hole rings include thousands of tiny source-print interruptions.
+            // Keep those voids exact instead of rounding/expanding their banks.
+            if index == 0 && matches!(outline.kind.as_str(), "water" | "wadi") {
+                write_channel_ring(&mut html, ring);
+            } else {
+                for (i, [x, y]) in ring.iter().enumerate() {
+                    write!(html, "{}{x},{y}", if i == 0 { "M" } else { "L" }).unwrap();
+                }
+                html.push('Z');
             }
-            html.push('Z');
         }
         html.push_str("\"/>");
     }

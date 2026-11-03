@@ -278,8 +278,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta and 836/1,000 A cells; 6,182 cells remain
-not_reviewed**, including all of B–E and A3427 onward. Malta source crops and corners match that pin exactly. Full-inset
+Recorded coverage is **58/58 Malta and 892/1,000 A cells; 6,126 cells remain
+not_reviewed**, including all of B–E and A4125 onward. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
 unfinished transportation, Village/Bir dot or Major City cluster was observed.
@@ -354,6 +354,15 @@ two pixels inside A2703. Footprint membership, settlement association, port
 capacity and efficiency remain unresolved. Benghazi's point-only check earns
 no whole-cell review credit. Templates preserve distinct raster/grid-overlap
 variants rather than relaxing the match threshold for all white patterns.
+
+The A3427–A4033 batch reconciles 56 more cells, with 24 affirmative Clear
+occurrences and five restored Tracks: **A3727 NE → A3827, A3929 NW → A4028,
+A4030 NW → A4130, A4031 NW → A4131, A3933 NW → A4032**. Paired source controls
+distinguish the short branches and dot/scarp overlaps from Railroad ties.
+Carcura's Track bypasses A3828 through A3827 → A3928; no extra crossing is added
+there. The eastern Tracks at A3433/A3633/A3833/A3933 remain unresolved section
+continuations. Broad bands stay untyped, Wadi/scarp-tip membership at A3833
+remains uncertain, and no Up/Down, passability or operational junction is inferred.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

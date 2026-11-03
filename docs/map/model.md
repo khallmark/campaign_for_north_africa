@@ -95,15 +95,15 @@ automated or agent-visual record is human-reviewed.
 | Section | Examined cells | Land / mixed / water / unresolved | Cells with terrain observations |
 | --- | ---: | --- | ---: |
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
-| A | 1,000 | 866 / 62 / 64 / 8 | 662 |
+| A | 1,000 | 866 / 62 / 64 / 8 | 708 |
 | B | 1,961 | 1,885 / 40 / 34 / 2 | 1,386 |
 | C | 1,520 | 1,438 / 41 / 36 / 5 | 859 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **266 surveys / 23,931 observations**: 4,805 terrain,
-18,981 hexside and 145 point observations. **7,703 are provisional, 16,228 unresolved,
-none human-reviewed.** Terrain observations cover 4,657 cells; 2,419 have none.
+The current combined model has **271 surveys / 23,983 observations**: 4,851 terrain,
+18,984 hexside and 148 point observations. **7,752 are provisional, 16,231 unresolved,
+none human-reviewed.** Terrain observations cover 4,703 cells; 2,373 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -180,7 +180,7 @@ crosses on unfinished lines in C must not become completed railroads. Blue barre
 hexside marks remain unclassified. The renderer paints railroad spines and ties
 above roads, so coincident schematic links remain visible when the scan is hidden.
 
-All 116 retained blue-dot candidates were visually inspected for labels by an
+All 119 retained blue-dot candidates were visually inspected for labels by an
 agent. The combined Village/Bir glyph does not establish a water-source category;
 labels remain unresolved observations, including uncertain spellings and an
 unlabelled dot near Rifi. Additional source inspection records Malta's four named
@@ -192,8 +192,8 @@ city level, movement cost, water amount, bridge rule or legal movement is inferr
 
 ### Source-located symbols and reported track omissions
 
-The compact model's `examinations[hex].points` retains 120 detected glyphs
-(116 Village/Bir dots, two oasis and two port symbols) at their measured board-pixel
+The compact model's `examinations[hex].points` retains 123 detected glyphs
+(119 Village/Bir dots, two oasis and two port symbols) at their measured board-pixel
 centers. `symbol` is `village_bir_dot`, `oasis` or `port_icon`; `label` is optional,
 `status` is `unresolved` or `provisional`, and `source_refs` identifies the source
 crop and legend under the model's pinned SHA256 values. For example, C3111 carries
@@ -258,9 +258,9 @@ visible section-boundary breaks. Escarpment rendering and exact source-shaped
 route geometry are separate work; the detector's raw findings remain unchanged.
 
 The Malta whole-cell audit adds four provisional ground observations. The A audit
-adds 38 Clear occurrences, nine partial Mountain cores retaining existing Rough
-fringes, and one partial Gravel occurrence. Of 2,419 cells without typed ground,
-source-surface measurements report 1,987 land, 228
+adds 84 Clear occurrences, nine partial Mountain cores retaining existing Rough
+fringes, and one partial Gravel occurrence. Of 2,373 cells without typed ground,
+source-surface measurements report 1,941 land, 228
 water, 180 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -278,8 +278,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta and 495/1,000 A cells; 6,523 cells remain
-not_reviewed**, including all of B–E and A1601 onward. Malta source crops and corners match that pin exactly. Full-inset
+Recorded coverage is **58/58 Malta and 656/1,000 A cells; 6,362 cells remain
+not_reviewed**, including all of B–E and A2101 onward. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
 unfinished transportation, Village/Bir dot or Major City cluster was observed.
@@ -309,6 +309,24 @@ from near-grid fragments in A1418/A1325, which remain untyped. Maaten Groter and
 Maatan Belcleibat retain unresolved operational categories; no new location is
 created from neighboring lettering. Stippled side bands remain distinct from
 Mountain cores, with side type/direction explicitly unresolved.
+
+The A1601–A2033 batch covers 161 retained cells, adding 46 affirmative Clear
+occurrences and three Tracks: **A2003 NE → A2104**, **A2032 NE → A2133** and
+**A2032 E → A2033**. The separate A1933–A2033 branch remains. A2033's southeastern
+continuation leaves the section-local inventory and is a geometry-owner finding,
+not a new inferred seam. Near-grid Gravel, coastal slivers and stippled side bands
+retain explicit uncertainty; existing Clear at A1924/A1928 is not a claim that
+their marginal Gravel fragments are absent.
+
+The same audit found **Bir es Suera (A1622)** missing from the point detector:
+antialiased edge loss left 118 exact-blue pixels in a 13×13 box, just below the
+70% fill gate. A two-percentage-point margin also recovers **Qotifya (D3227)** and
+**Galal (D3326)**. A whole-inventory delta check found only those three new dots;
+each dot and label was inspected at 4× before acceptance. Synthetic controls keep
+hollow letters and neighboring-cell dots excluded. Measured centers and labels
+retain unresolved Village/Bir categories. Individual `review_dates` preserve the
+original 116 label-review dates. The D-cell spot checks and paired A2104/A2133
+crossing checks do **not** count as whole-cell visual coverage.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

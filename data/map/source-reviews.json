@@ -620,6 +620,268 @@
           "survey_refs": ["ink-A-terrain-gravel","ink-A-hexside-track","label-A1520"], "uncertainty": ["Spelling, category, water availability, capacity and operational role remain unresolved. Human review pending."]
         }
       ]
+    },
+    {
+      "id": "a-16-20-whole-cell-2026-11-03",
+      "date": "2026-11-03",
+      "method": "agent_visual",
+      "notes": "Individually inspected all 161 retained cells A1601 through A2033 at 2x and reconciled ground, incident transport and point evidence. Four-times edge controls distinguish coastal slivers, near-grid Gravel and stippled side bands. Added 46 Clear occurrences and three missing Track crossings. Bir es Suera's dot exposed an antialiased fill-threshold omission: a whole-inventory threshold-delta check found only three additional dots, each visually inspected (the other two are Qotifya D3227 and Galal D3326). Those two point-only checks do not grant D-cell audit coverage. Paired-cell checks into A2104/A2133 likewise do not credit a full northern cell review. Original source and geometry pins are unchanged; no automated detector completion is promoted to visual review.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Land inside the outlined cell; gray-green Wadi is separate from blue sea water."},
+        "transport": {"status": "not_observed", "notes": "No Road, Railroad, Track or unfinished transportation glyph observed inside this outline. Adjacent strokes, plain grid and faint section lines do not establish routes."},
+        "hexside": {"status": "not_observed", "notes": "No separate ridge, slope, escarpment, wadi, river or barred-side glyph observed in this outline. No side rule inferred from ordinary grid."},
+        "locations": {"status": "not_observed", "notes": "No settlement/Village-Bir dot, Major City, oasis, airfield, flying-boat or training glyph observed inside the outline. Neighboring names are not new locations."}
+      },
+      "groups": [
+        {
+          "hexes": ["A1601","A1604","A1605","A1608","A1618","A1701","A1702","A1705","A1708","A1709","A1726","A1801","A1802","A1804","A1824","A1826","A1827","A1902","A1904","A1905"],
+          "findings": {"terrain": {"status": "observed", "notes": "Repeated rings match TEC Gravel and the existing provisional occurrence. Bir el Ginn lettering near A1826 does not create a second location; nearby strokes stay outside these cells."}},
+          "survey_refs": ["ink-A-terrain-gravel"], "uncertainty": ["Partial pattern extent and operational terrain treatment remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1602","A1609","A1710"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings remain visible around gray-green Wadi."},
+            "hexside": {"status": "unresolved", "notes": "Wadi crosses or approaches the southern/northeastern margins; preserve curved source occurrence without assigning every nearby side or a bridge rule."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel"], "uncertainty": ["Wadi extent and directional side membership remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1619","A1620","A1621"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings match existing Gravel. Narrow dark stippled bands approach the northern boundaries, not nested Mountain cores."},
+            "hexside": {"status": "unresolved", "notes": "Nearby stippled slope/ridge-like bands require edge-membership and type adjudication; no Up/Down interpretation added."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel"], "uncertainty": ["Near-grid side-band membership is unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1603","A1606","A1607","A1624","A1626","A1706","A1727","A1728"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings remain around dashed Track and gray-green Wadi overprints."},
+            "transport": {"status": "observed", "notes": "Existing incident Track crossings match source dashes. Enlarged control confirms A1805-A1706-A1606-A1607-A1508: A1607 enters from the west, not from track-free A1707. A1603 links A1503/A1703; A1624 links A1524/A1625; A1626-A1727-A1728-A1828 continues from A1625."},
+            "hexside": {"status": "unresolved", "notes": "Wadi bends through or beside these cells, sometimes overprinted by Track. Exact whole-side extent and bridge/junction implications remain unresolved."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel","ink-A-hexside-track"], "uncertainty": ["Source crossings are provisional, not exact route paths or operational permissions. Human review pending."]
+        },
+        {
+          "hexes": ["A1623","A1625","A1703","A1724","A1725","A1803","A1805","A1903","A1925","A1927"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings match existing Gravel beneath single dashed Tracks."},
+            "transport": {"status": "observed", "notes": "Existing incident crossings agree with source: A1523-A1623-A1724-A1725-A1825; A1624-A1625-A1626; A1603-A1703-A1803-A1903-A2003; A1706-A1805-A1906; A1825-A1925-A2025; A1926-A1927-A2027. No additional Road, Railroad or construction glyph observed."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel","ink-A-hexside-track"], "uncertainty": ["Exact curves, junctions and operational movement remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1622"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel beneath the blue dot and Bir es Suera lettering agrees with existing Gravel."},
+            "locations": {"status": "unresolved", "notes": "New measured Village/Bir dot at (1917.95,3410.89) is associated with Bir es Suera at 4x. Its 118 exact-blue pixels in a 13x13 bounding box fell just below the old 70% fill gate. Corrected the small antialias margin and retained unresolved category; the name is not water availability."},
+            "hexside": {"status": "unresolved", "notes": "Stippled band approaches the northern outline from neighboring cells; no directional side rule or Mountain core assigned."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel","label-A1622"], "uncertainty": ["Village versus Bir, water yield, capacity and operational role remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1612","A1614","A1712","A1713","A1812","A2023"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Yellow cracked tan Salt Marsh pattern agrees with existing Salt Marsh. Adjacent Road remains outside A1812/A2023; Wadi approaches A1712's southern tip without a certified whole-side assignment."},
+            "hexside": {"status": "unresolved", "notes": "A1712 has nearby Wadi at its southern tip; other cells in this group show no separate side glyph. Proximity does not establish a directional side."}
+          },
+          "survey_refs": ["ink-A-terrain-salt_marsh"], "uncertainty": ["Partial marsh extent and the A1712 Wadi contact remain provisional/unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1721","A1722","A1723","A1821","A1922"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Cracked Salt Marsh is distinct from surrounding dark stippled bands; existing Salt Marsh retained, not replaced with Mountain."},
+            "hexside": {"status": "unresolved", "notes": "Broad stippled slope/ridge-like fringe follows some edges and enters the interior. Exact side type, direction and membership require adjudication."}
+          },
+          "survey_refs": ["ink-A-terrain-salt_marsh"], "uncertainty": ["No Up/Down direction or operational terrain rule inferred from shared pigment. Human review pending."]
+        },
+        {
+          "hexes": ["A1814","A1818"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Blue sea water and land with Salt Marsh both enter the outline."},
+            "terrain": {"status": "observed", "notes": "Existing Salt Marsh is a partial land patch, not homogeneous ground or a Sea/Coast classification."},
+            "hexside": {"status": "unresolved", "notes": "Coastline crosses the cell away from the grid; no operational Coast side assigned."}
+          },
+          "survey_refs": ["ink-A-terrain-salt_marsh"], "uncertainty": ["Land fraction, playability and coast interpretation remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1613","A1615","A1631","A1733","A1808","A1811","A1929","A2001","A2002","A2004","A2026","A2028","A2030"],
+          "findings": {"terrain": {"status": "observed", "notes": "Affirmative plain interior matches existing Clear. Enlarged controls keep nearby Gravel/Tracks/Road outside, including the Track northeast of A1808 and faint section line in A1733. Clear is not a promise about every edge pixel."}},
+          "survey_refs": ["ink-A-terrain-clear"], "uncertainty": ["Near-grid contact and homogeneous edge treatment remain uncertain; operational costs not inferred. Human review pending."]
+        },
+        {
+          "hexes": ["A1924","A1928"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain interior agrees with existing provisional Clear, but 4x shows tiny ring fragments at the southern boundary. Preserve Clear occurrence while flagging unresolved partial Gravel membership; do not claim a homogeneous cell or silently erase prior evidence."}},
+          "survey_refs": ["ink-A-terrain-clear"], "uncertainty": ["Near-grid Gravel fragments need boundary adjudication. Human review pending."]
+        },
+        {
+          "hexes": ["A1611","A1627","A1628","A1630","A1707","A1730","A1731","A1806","A1807","A1831","A1907","A2008"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added Clear for affirmative plain ground around gray-green Wadi, rather than treating an overprinted cell as unknown. Blue WADI lettering is not another settlement."},
+            "hexside": {"status": "unresolved", "notes": "Wadi meanders across or beside the outline; its curve is not automatically snapped to a full side or interpreted as an operational river."}
+          },
+          "survey_refs": ["a-16-20-plain-ground"], "uncertainty": ["Wadi-to-side interpretation and movement effects remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1633","A1833","A2009","A2031"],
+          "findings": {"terrain": {"status": "observed", "notes": "Added Clear for affirmative plain ground beneath faint section lines (A1633/A1833) or neighboring location lettering (Ras el Ali at A2009, El Hosaiet at A2031). No extra point or route is created from those overprints; nearby bands stay outside."}},
+          "survey_refs": ["a-16-20-plain-ground"], "uncertainty": ["Clear is an observed occurrence, not an operational terrain ruling. Human review pending."]
+        },
+        {
+          "hexes": ["A1616","A1714","A1715","A1716","A1717","A1820","A1911","A2024","A2025"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added affirmative Clear under continuous double Road and occasional single Track strokes. A1820's road clips the northwest corner; nearby stippled bands remain outside its plain interior."},
+            "transport": {"status": "observed", "notes": "Existing Road crossings match source. A1716 has its separate branch toward A1616, A1717 also has Track toward A1617, A1911 has Track from A1910, and A2025 has Track from A1925. No Railroad or unfinished route observed; crossings do not certify within-cell junction permissions."}
+          },
+          "survey_refs": ["a-16-20-plain-ground","ink-A-hexside-road"], "uncertainty": ["Exact route shape and junction/operational authority remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1632","A1930","A1931","A2027","A2029"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added Clear beneath single dashed Tracks on plain ground."},
+            "transport": {"status": "observed", "notes": "Existing Tracks are supported: A1532-A1632-A1732; A1829-A1930-A2029-A2130; A1830-A1931-A1932; A1927-A2027-A2128. No alternative Road/Railroad class inferred."}
+          },
+          "survey_refs": ["a-16-20-plain-ground","ink-A-hexside-track"], "uncertainty": ["Source crossings remain provisional, not surveyed paths or movement authority. Human review pending."]
+        },
+        {
+          "hexes": ["A2003"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added Clear: plain ground beneath Track, with Gravel remaining outside the southern edges."},
+            "transport": {"status": "observed", "notes": "Paired 4x crops establish the missing northeast Track into A2104, not northwest into A2103. Existing southwest connection to A1903 remains."}
+          },
+          "survey_refs": ["a-16-20-plain-ground","ink-A-hexside-track","a-20-missing-tracks"], "uncertainty": ["Crossing observation does not certify a full-cell review of A2104 or operational movement. Human review pending."]
+        },
+        {
+          "hexes": ["A1809","A1810","A1830","A1832","A1906","A1908","A1909","A1910","A1932","A1933","A2006","A2007"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added affirmative Clear beneath dashed Tracks and Wadi overprint; nearby dark bands are not Mountain cores."},
+            "transport": {"status": "observed", "notes": "Existing incident Track chains agree with source: A1805-A1906-A2005-A2006-A2007-A1908-A1909-A1809-A1810-A1910-A1911; A1829-A1830-A1931-A1932-A2032; A1732-A1832-A1933-A2033. No extra route from neighboring lettering or section lines."},
+            "hexside": {"status": "unresolved", "notes": "Wadi curves along or through the cells, sometimes under Track. Exact edge extent and bridge/side interpretation remain unresolved."}
+          },
+          "survey_refs": ["a-16-20-plain-ground","ink-A-hexside-track"], "uncertainty": ["No bridge, within-cell junction or directional side permission inferred. Human review pending."]
+        },
+        {
+          "hexes": ["A1610","A1704","A1711","A1823","A1901"],
+          "findings": {
+            "terrain": {"status": "unresolved", "notes": "Mostly plain interior with near-grid Gravel fragments at 4x. Keep untyped rather than promote Clear or Gravel from marginal ink. A1823 also borders a stippled band outside its west/southwest edges."},
+            "hexside": {"status": "unresolved", "notes": "Wadi is visible at A1610/A1711, and a side band borders A1823; A1704/A1901 have no separate side glyph. Membership of near-edge strokes remains uncertain."}
+          },
+          "survey_refs": [], "uncertainty": ["Boundary membership and mixed-ground interpretation require adjudication. Human review pending."]
+        },
+        {
+          "hexes": ["A1617","A1718","A1719","A1828","A1926"],
+          "findings": {
+            "terrain": {"status": "unresolved", "notes": "Plain interior with near-grid Gravel fragments; enlarged controls do not justify a homogeneous Clear or newly typed Gravel cell."},
+            "transport": {"status": "observed", "notes": "Existing source crossings retained: Track A1518-A1617-A1717, Road A1717-A1718-A1719-A1819, Track A1728-A1828-A1829 and A1825-A1926-A1927. No route class changed."}
+          },
+          "survey_refs": [], "uncertainty": ["Ground-fragment membership and exact route curves remain uncertain. Human review pending."]
+        },
+        {
+          "hexes": ["A1720","A1822","A1923"],
+          "findings": {
+            "terrain": {"status": "unresolved", "notes": "Plain core bordered by dark stippled side bands, not a nested Mountain core. Keep ground untyped pending side/terrain adjudication."},
+            "hexside": {"status": "unresolved", "notes": "Slope/ridge-like band follows or intrudes from adjacent edges. No Up/Down direction or full-side assignment added."}
+          },
+          "survey_refs": [], "uncertainty": ["Shared pigment does not settle terrain versus side category. Human review pending."]
+        },
+        {
+          "hexes": ["A1629","A1729","A1732"],
+          "findings": {
+            "terrain": {"status": "unresolved", "notes": "Plain Track interiors meet stippled side bands and Wadi; A1729 also has near-western Gravel fragments. Keep untyped rather than blanket Clear or Mountain."},
+            "transport": {"status": "observed", "notes": "Existing Tracks A1529-A1629-A1729-A1829 and A1632-A1732-A1832 match dashes. The band is not a second route."},
+            "hexside": {"status": "unresolved", "notes": "Stippled band and nearby Wadi require separate type, direction and membership review; no operational interpretation inferred."}
+          },
+          "survey_refs": ["ink-A-hexside-track"], "uncertainty": ["Partial ground and side direction remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1914","A1915","A1916","A1917","A1918","A1919","A2012","A2013","A2018","A2019","A2020"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Blue water inside the outline. Offshore names and missing grid segments are overprint/calibration issues, not land or routes."},
+            "terrain": {"status": "unresolved", "notes": "Retain untyped ground; visible water does not assign operational Sea terrain or playability."}
+          },
+          "survey_refs": [], "uncertainty": ["Water/coast operational treatment remains unresolved; neighboring land can approach corners. Human review pending."]
+        },
+        {
+          "hexes": ["A1815","A1817","A2011"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Mostly blue water with a plain land strip along the southern portion; nearby Road remains outside the outlined cell."},
+            "terrain": {"status": "unresolved", "notes": "Mixed coastal cell remains untyped, not homogeneous Clear or Sea."},
+            "hexside": {"status": "unresolved", "notes": "Coastline is not aligned to canonical sides; no operational Coast rule added."}
+          },
+          "survey_refs": [], "uncertainty": ["Land fraction and coast-side playability remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1813","A1819","A1912","A1913","A1920","A1921","A2022"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Blue sea water meets plain coastal land; at A1819/A1921 it closely approaches the northwest outline and remains a membership uncertainty."},
+            "terrain": {"status": "unresolved", "notes": "Retain untyped coastal ground rather than assigning homogeneous Clear from its dominant plain portion."},
+            "transport": {"status": "observed", "notes": "Existing continuous double Road crossings agree with source, including the A1819-A1820-A1920 corner excursion rather than a direct A1819-A1920 shortcut. No rail or construction glyph observed."},
+            "hexside": {"status": "unresolved", "notes": "Coastline crosses or closely follows the outline; exact Coast-side interpretation is unresolved."}
+          },
+          "survey_refs": ["ink-A-hexside-road"], "uncertainty": ["Coastal membership, exact curves and operational use remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1816","A2021"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Blue coastal water and narrow plain land containing a blue location dot."},
+            "terrain": {"status": "unresolved", "notes": "Mixed coastal ground remains untyped; settlement lettering does not make the whole cell Clear."},
+            "transport": {"status": "observed", "notes": "Existing double Road passes El Agheila between A1716/A1717 and Mersa Brega between A1921/A2022; no new operational junction inferred."},
+            "locations": {"status": "unresolved", "notes": "Existing measured dots/labels El Agheila and Mersa Brega match the source, but Village/Bir category and operational role remain unresolved."},
+            "hexside": {"status": "unresolved", "notes": "Coastline enters the outlined cell without an assigned Coast-side rule."}
+          },
+          "survey_refs": ["ink-A-hexside-road"], "uncertainty": ["Village versus Bir, capacities, coast interpretation and playability remain unresolved. Labels are recorded in label-A1816 and label-A2021 respectively. Human review pending."]
+        },
+        {
+          "hexes": ["A2010"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Blue sea and plain land meet inside this Ras el Ali coastal cell."},
+            "terrain": {"status": "unresolved", "notes": "Mixed coast retained without homogeneous Clear or Sea assignment."},
+            "transport": {"status": "observed", "notes": "Continuous double Road crosses northwest/southeast through the dot, matching current A2110-A2010-A1911 links."},
+            "locations": {"status": "unresolved", "notes": "Existing Ras el Ali dot and separate offshore anchor glyph both visible at 4x. Preserve both measured symbols without inferring port capacity, settlement category or automatic operational association."},
+            "hexside": {"status": "unresolved", "notes": "Coastline inside the cell is not assigned a directional side rule."}
+          },
+          "survey_refs": ["ink-A-hexside-road","label-A2010","ink-A-point-port_icon"], "uncertainty": ["Port association, efficiency, location category and coast playability remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1825"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel beneath the blue dot and lettering agrees with existing Gravel."},
+            "transport": {"status": "observed", "notes": "Existing dashed Tracks to A1725, A1925 and A1926 agree with source; no operational junction assumed."},
+            "locations": {"status": "unresolved", "notes": "Bir el Ginn dot/label agrees with measured source point; name does not certify water yield or Village/Bir classification."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel","ink-A-hexside-track","label-A1825"], "uncertainty": ["Location category, water and junction authority remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A1829","A2005"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added affirmative Clear around dot/label and Track strokes. A2005 has a small gray-green Wadi intrusion at its eastern edge."},
+            "transport": {"status": "observed", "notes": "Existing dashed branches agree with source: El Gtafia to A1729/A1828/A1830/A1930, and A2005 to A1906/A2006/A2105. No route class or junction permission changed."},
+            "locations": {"status": "unresolved", "notes": "El Gtafia matches the existing A1829 label. A2005 remains an unlabelled dot near RIFI; the neighboring italic area name is not assigned as a settlement name."},
+            "hexside": {"status": "unresolved", "notes": "A2005 Wadi is separate from its Track; no separate side glyph observed at A1829. Whole-side membership is not inferred from the short intrusion."}
+          },
+          "survey_refs": ["a-16-20-plain-ground","ink-A-hexside-track"], "uncertainty": ["A2005 name, location categories, water and within-cell junctions remain unresolved. Labels are recorded in label-A1829 and label-A2005 respectively. Human review pending."]
+        },
+        {
+          "hexes": ["A2032"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added affirmative Clear beneath El Hosaiet lettering, blue dot, dashed Tracks and Wadi."},
+            "transport": {"status": "observed", "notes": "Four-times controls add Track northeast to A2133 and east to A2033 across Wadi, retaining southwest to A1932. Do not mistake the pale section line farther east for another route."},
+            "locations": {"status": "unresolved", "notes": "Existing El Hosaiet measured dot/label matches source; Village/Bir operational category remains unresolved."},
+            "hexside": {"status": "unresolved", "notes": "Wadi curves inside the east/southeast part of the cell; no bridge or exact whole-side assignment inferred from Track overlap."}
+          },
+          "survey_refs": ["a-16-20-plain-ground","ink-A-hexside-track","a-20-missing-tracks","label-A2032"], "uncertainty": ["Crossings, category and Wadi/bridge meaning remain provisional or unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2033"],
+          "findings": {
+            "terrain": {"status": "unresolved", "notes": "Plain interior with stippled band intruding northwest/west; do not assign Mountain or homogeneous Clear."},
+            "transport": {"status": "observed", "notes": "Added missing western Track from A2032, retaining the southwest branch to A1933. A separate dashed southeast continuation exits the section-local inventory; report to geometry owner, not fabricate adjacency. The faint vertical section line is not Railroad."},
+            "hexside": {"status": "unresolved", "notes": "Wadi near west and broad stippled slope/ridge-like band require type, direction and membership adjudication."}
+          },
+          "survey_refs": ["ink-A-hexside-track","a-20-missing-tracks"], "uncertainty": ["Southeastern seam identity, band direction and operational junction status remain unresolved. Human review pending."]
+        }
+      ]
     }
   ]
 }

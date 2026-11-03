@@ -139,6 +139,8 @@ class MapDatabaseTests(unittest.TestCase):
                               ("A0817", "clear"), ("A1020", "clear"),
                               ("A1118", "clear"), ("A1318", "clear"), ("A1512", "clear"),
                               ("A1517", "clear"), ("A1518", "gravel"), ("A1532", "clear"),
+                              ("A1707", "clear"), ("A1820", "clear"), ("A2003", "clear"),
+                              ("A2005", "clear"), ("A2032", "clear"),
                               ("A0217", "salt_marsh"), ("A0426", "desert")):
             self.assertEqual(self.db.execute(
                 "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain'",
@@ -154,7 +156,8 @@ class MapDatabaseTests(unittest.TestCase):
             "SELECT 1 FROM network_links WHERE from_hex='A0317' OR to_hex='A0317'"
         ).fetchall(), [])
         for hex_id in ("Malta 0505", "Malta 0804", "Malta 1301", "A0925",
-                       "A1125", "A1325", "A1418", "A1527"):
+                       "A1125", "A1325", "A1418", "A1527", "A1617", "A1704",
+                       "A1732", "A1819", "A2010", "A2033"):
             self.assertEqual(self.db.execute(
                 "SELECT value FROM observations WHERE hex=? AND kind='terrain'", (hex_id,)).fetchall(), [])
         # Independently inspected TEC controls: pale gaps are unfinished, dark
@@ -167,6 +170,8 @@ class MapDatabaseTests(unittest.TestCase):
             ('D2224', 'north_east', 'track', False),
             ('C3922', 'north_west', 'track', False),  # Unfinished double road capsules.
             ('A0703', 'north_east', 'track', False),  # Track crosses NW, not toward A0803.
+            ('A2003', 'north_west', 'track', False),  # Actual crossing is NE into A2104.
+            ('A1607', 'north_west', 'track', False),  # Track enters from A1606 to the west.
             ('E2520', 'east', 'railroad', True),
             ('B5409', 'east', 'road', True),
             ('B5405', 'east', 'road', True),
@@ -212,6 +217,9 @@ class MapDatabaseTests(unittest.TestCase):
             'A0903 A0802 A0703 A0704 A0705 A0706 A0707',
             'A1522 A1523 A1524 A1624',
             'A1522 A1523 A1623',
+            'A1903 A2003 A2104',
+            'A1932 A2032 A2133',
+            'A2032 A2033 A1933',
         ):
             cells = route.split()
             for start, destination in zip(cells, cells[1:]):
@@ -338,7 +346,18 @@ class MapDatabaseTests(unittest.TestCase):
             SELECT symbol,center_x,center_y,label,status FROM source_points WHERE hex='C3111'
         ''').fetchall(), [('village_bir_dot', 6567.0, 2324.1, 'El Cuasc', 'unresolved')])
         self.assertEqual(dict(self.db.execute('SELECT symbol,count(*) FROM source_points GROUP BY symbol')),
-                         {'village_bir_dot': 116, 'oasis': 2, 'port_icon': 2})
+                         {'village_bir_dot': 119, 'oasis': 2, 'port_icon': 2})
+        for hex_id, x, y, label in (
+            ('A1622', 1917.95, 3410.89, 'Bir es Suera'),
+            ('D3227', 10796.1, 2254.1, 'Qotifya'),
+            ('D3326', 10673.95, 2164.89, 'Galal'),
+        ):
+            self.assertEqual(self.db.execute('''
+                SELECT symbol,center_x,center_y,label,status FROM source_points WHERE hex=?
+            ''', (hex_id,)).fetchall(), [('village_bir_dot', x, y, label, 'unresolved')])
+            self.assertEqual(self.db.execute('''
+                SELECT status,value,json_extract(provenance,'$.date') FROM observations WHERE survey=?
+            ''', ('label-' + hex_id,)).fetchone(), ('unresolved', None, '2026-11-03'))
         self.assertEqual(self.db.execute("SELECT hex FROM source_points WHERE label='Antelat'").fetchall(),
                          [('A3233',)])
         for hex_id, examination in self.model['examinations'].items():

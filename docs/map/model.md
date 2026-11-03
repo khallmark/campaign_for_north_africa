@@ -97,13 +97,13 @@ automated or agent-visual record is human-reviewed.
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
 | A | 1,000 | 866 / 62 / 64 / 8 | 828 |
 | B | 1,961 | 1,885 / 40 / 34 / 2 | 1,832 |
-| C | 1,520 | 1,438 / 41 / 36 / 5 | 1,248 |
+| C | 1,520 | 1,438 / 41 / 36 / 5 | 1,316 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **340 surveys / 25,072 observations**: 5,812 terrain,
-19,090 hexside and 170 point observations. **8,828 are provisional, 16,244 unresolved,
-none human-reviewed.** Terrain observations cover 5,658 cells; 1,418 have none.
+The current combined model has **344 surveys / 25,148 observations**: 5,880 terrain,
+19,096 hexside and 172 point observations. **8,902 are provisional, 16,246 unresolved,
+none human-reviewed.** Terrain observations cover 5,726 cells; 1,350 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -262,8 +262,8 @@ adds 199 Clear occurrences, nine partial Mountain cores retaining existing Rough
 fringes, five partial Gravel occurrences and one partial Rough occurrence.
 The twelve B batches add 443 Clear occurrences, three partial Rough
 occurrences and six partial Mountain cores, retaining existing Rough where present.
-The first seven C batches add 388 Clear occurrences and one marginal Desert occurrence.
-Of 1,418 cells without typed ground, source-surface measurements report 987 land, 228
+The first eight C batches add 456 Clear occurrences and one marginal Desert occurrence.
+Of 1,350 cells without typed ground, source-surface measurements report 919 land, 228
 water, 179 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -281,8 +281,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 1,155/1,520 C cells;
-2,902 cells remain not_reviewed**, covering C3601 onward and all of D–E. Rosetta's
+Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 1,320/1,520 C cells;
+2,737 cells remain not_reviewed**, covering C4101 onward and all of D–E. Rosetta's
 anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
@@ -691,6 +691,24 @@ Wadi margins, blue bars and escarpment polarity remain distinct and uncertain.
 C3101's western and C3533's eastern continuations are boundary findings, not new
 adjacency. C3128/C3129's corner-following Track remains unresolved rather than
 inventing a detour from C3028. No operational permissions are inferred.
+
+The eighth C batch reviews **165 retained C3601–C4033 cells**, adding 68
+affirmative Clear occurrences and six Track crossings: C3821 northeast → C3922
+southwest, C3917 northeast → C4017 southwest, C3920 northeast → C4020 southwest,
+C4019 northwest → C4119 southeast, C4019 east → C4020 west and C4020 northeast →
+C4121 southwest. C4119/C4121 are crossing-only context, not whole-cell review.
+Single dashes remain distinct from unfinished Railroad cross-ties and unfinished
+Road. Capuzzo's measured Village/Bir dot and completed Road remain unchanged.
+
+Sollum's white anchor in C4022 is independently measured at **(7530.5, 1649.5)**
+source pixels, separate from its Village/Bir dot in C4021. A source-template
+variant at the unchanged threshold finds this additional anchor without moving
+the seven prior anchors. Its Port glyph remains unresolved: proximity does not
+establish operational association, capacity or efficiency. Coastal and inward
+directional-band cells remain untyped, including Buq Buq C3926 and C4022. Existing
+Rough, Salt Marsh, blue bars, Wadi and face uncertainty remain intact. C3901's
+southwest and C3633/C4033's eastern continuations are boundary-only findings;
+C4011's top-vertex/edge-following Track remains unresolved without a new detour.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

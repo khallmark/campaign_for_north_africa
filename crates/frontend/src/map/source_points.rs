@@ -103,9 +103,38 @@ pub(super) fn render(viewport: Viewport) -> String {
             }
             if viewport.zoom() >= 0.65 {
                 if let Some(label) = &point.label {
+                    // Reserve a conservative 12px-font box, including the halo.
+                    // Move the label, never the measured glyph, around nearby symbols.
+                    let label_width = label.chars().count() as f64 * 12.0;
+                    let (dx, dy, anchor) = [
+                        (9.0, -9.0, "start"),
+                        (-9.0, -9.0, "end"),
+                        (9.0, 25.0, "start"),
+                        (-9.0, 25.0, "end"),
+                    ]
+                    .into_iter()
+                    .find(|(dx, dy, anchor)| {
+                        let left = c.x + dx - if *anchor == "end" { label_width } else { 0.0 };
+                        model()
+                            .examinations
+                            .values()
+                            .flat_map(|e| &e.points)
+                            .all(|other| {
+                                if std::ptr::eq(point, other) {
+                                    return true;
+                                }
+                                let [x, y] = other.center;
+                                let other = viewport.to_screen(BoardPoint { x, y });
+                                other.x + 10.0 < left - 2.0
+                                    || other.x - 10.0 > left + label_width + 2.0
+                                    || other.y + 10.0 < c.y + dy - 15.0
+                                    || other.y - 13.0 > c.y + dy + 5.0
+                            })
+                    })
+                    .unwrap_or((9.0, -9.0, "start"));
                     write!(
                         html,
-                        r#"<text class="source-point-label" x="9" y="-9">{}</text>"#,
+                        r#"<text class="source-point-label" x="{dx}" y="{dy}" text-anchor="{anchor}">{}</text>"#,
                         escape(label)
                     )
                     .unwrap();

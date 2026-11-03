@@ -215,7 +215,7 @@ test('measured source labels retain positions and uncertainty across viewer cont
   await page.getByRole('button', { name: 'Geography', exact: true }).click();
   await checkMeasuredPosition();
 
-  for (const [hex, symbol, art] of [['C0716', 'Oasis', 'oasis'], ['D3814', 'Port', 'port']]) {
+  for (const [hex, symbol, art] of [['C0716', 'Oasis', 'oasis'], ['C4022', 'Port', 'port'], ['D3814', 'Port', 'port']]) {
     await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill(hex);
     await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
     await expect(page.locator(`.geography-overlay .source-point[data-hex="${hex}"] > title`)).toContainText(`${symbol} source glyph`);
@@ -234,6 +234,43 @@ test('measured source labels retain positions and uncertainty across viewer cont
     'Port source glyph · unresolved · measured source position, not operational authority',
   ]);
   await expect(page.locator('.geography-location[data-hex="A2010"]')).toHaveCount(0);
+});
+
+test('Sollum label clears the measured anchor across zoom and artwork states', async ({ page }) => {
+  await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'No private scan' }));
+  await page.goto('/');
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('C4022');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  await expect(page.locator('.source-point-evidence')).toContainText('Measured source position [7530.5, 1649.5]');
+  const anchor = page.locator('.source-point[data-hex="C4022"]');
+  await expect(anchor).toHaveClass('source-point unresolved');
+  await page.locator('.geography-details > summary').click();
+  for (const zoomKey of ['-', '+', '+']) {
+    await page.locator('.research-viewport').focus();
+    await page.keyboard.press(zoomKey);
+    for (let artState = 0; artState < 2; artState++) {
+      const label = page.locator('.source-point[data-hex="C4021"] text');
+      await expect(label).toHaveText('Sollum');
+      const textBox = (await label.boundingBox())!;
+      const glyphs = anchor.locator('.source-point-symbol');
+      await expect(glyphs).toHaveCount(2);
+      expect(await anchor.evaluate((node: SVGGElement) => {
+        const viewport = document.querySelector<HTMLElement>('.research-viewport')!;
+        const box = viewport.getBoundingClientRect();
+        const zoom = Number(viewport.dataset.zoom);
+        const matrix = node.getScreenCTM()!;
+        return Math.hypot(matrix.e - (box.x + box.width / 2 + (7530.5 - Number(viewport.dataset.centerX)) * zoom),
+          matrix.f - (box.y + box.height / 2 + (1649.5 - Number(viewport.dataset.centerY)) * zoom));
+      })).toBeLessThan(0.2);
+      for (const glyph of await glyphs.all()) {
+        const box = (await glyph.boundingBox())!;
+        // Include the text halo and glyph stroke, not just their fill bounds.
+        expect(textBox.x + textBox.width + 2 < box.x || box.x + box.width + 2 < textBox.x ||
+          textBox.y + textBox.height + 2 < box.y || box.y + box.height + 2 < textBox.y).toBe(true);
+      }
+      await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+    }
+  }
 });
 
 test('water shapes retain source channel widths without assigning river classes', async ({ page }) => {

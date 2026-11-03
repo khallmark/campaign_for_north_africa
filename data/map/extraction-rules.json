@@ -18,7 +18,8 @@
     {"symbol":"port_icon","ink":"background","crop":[2375,2435,31,31],"minimum_score":0.88},
     {"symbol":"port_icon","ink":"background","crop":[2333,1039,31,31],"minimum_score":0.88},
     {"symbol":"port_icon","ink":"background","crop":[268,2561,31,31],"minimum_score":0.88},
-    {"symbol":"port_icon","ink":"background","crop":[4947,238,31,31],"minimum_score":0.88}
+    {"symbol":"port_icon","ink":"background","crop":[4947,238,31,31],"minimum_score":0.88},
+    {"symbol":"port_icon","ink":"background","crop":[7515,1634,31,31],"minimum_score":0.88}
   ],
   "inks": {
     "background": [251,250,239],

@@ -215,7 +215,7 @@ test('measured source labels retain positions and uncertainty across viewer cont
   await page.getByRole('button', { name: 'Geography', exact: true }).click();
   await checkMeasuredPosition();
 
-  for (const [hex, symbol, art] of [['C0716', 'Oasis', 'oasis'], ['D3814', 'Port', 'port']]) {
+  for (const [hex, symbol, art] of [['C0716', 'Oasis', 'oasis'], ['C4022', 'Port', 'port'], ['D3814', 'Port', 'port']]) {
     await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill(hex);
     await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
     await expect(page.locator(`.geography-overlay .source-point[data-hex="${hex}"] > title`)).toContainText(`${symbol} source glyph`);

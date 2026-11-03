@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,485/1,961 B cells; 4,533 cells
-remain not_reviewed**, including B4601 onward and all of C–E. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,650/1,961 B cells; 4,368 cells
+remain not_reviewed**, including B5101 onward and all of C–E. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -496,6 +496,25 @@ Thirty Rough, twenty-eight Gravel and one Salt Marsh occurrence remain unchanged
 B4101 west, B4301 northwest, B4333 east and B4533 east are boundary findings for
 the seam owner, not invented cross-section links. No new settlement or facility
 glyph was observed in these 165 cells; watercourse effects remain unadjudicated.
+
+The B4601–B5033 batch adds six affirmative Clear occurrences, partial Mountain
+cores at **El Abiar B4901 and B5005** without replacing Rough, and eight Tracks:
+**B4805 east, B4809 east, B4817 northwest, B4901 east, B4902 east, B4917 east,
+B4921 east and B4921 northeast**. Paired 4× controls distinguish the B4817 branch
+through B4917 from a detour through B4918, and Mechili's northeast branch into
+B5021 from its east branch through B4922. One independent **B4901 east Railroad**
+crossing is restored above the dashed Track. The existing **B4903 northwest
+Railroad** may instead represent a transverse tie touching the shared vertex;
+it is retained with explicit unresolved evidence, not silently removed.
+Charuba, El Abiar, Mechili and Gazala keep their measured dots, labels and
+Village/Bir uncertainty. No new settlement/facility glyph was observed in this
+batch. Nine Gravel-boundary cells, broad-band B4833 and coastal B4933/B5032 stay
+untyped. Existing 108 Gravel, 32 Rough and partial Salt Marsh B5033 occurrences
+remain unchanged; six earlier Clear cells retain fringe uncertainty.
+El Abiar's western rail/Track and northwest/southwest Track branches, B5001 west
+Track and Gazala B4933 east Road remain boundary findings for the seam owner.
+Gray section lines, broad Wadi and stippled side bands do not establish new
+adjacency, permanent water, operational junctions or Up/Down effects.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

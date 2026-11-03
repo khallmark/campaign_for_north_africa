@@ -10,6 +10,7 @@
   "blue_barred_opacity": 0.9,
   "templates": [
     {"symbol":"oasis","ink":"blue_symbols_text","crop":[6968,4037,75,65],"minimum_score":0.88},
+    {"symbol":"oasis","ink":"blue_symbols_text","crop":[3895,4179,73,65],"minimum_score":0.88},
     {"symbol":"port_icon","ink":"background","crop":[9661,1810,31,31],"minimum_score":0.88},
     {"symbol":"port_icon","ink":"background","crop":[2375,2435,31,31],"minimum_score":0.88},
     {"symbol":"port_icon","ink":"background","crop":[2333,1039,31,31],"minimum_score":0.88},

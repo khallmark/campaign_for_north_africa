@@ -278,8 +278,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta and 1,000/1,000 A cells; all 6,018 B–E cells
-remain not_reviewed**. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 165/1,961 B cells; 5,853 cells
+remain not_reviewed**, including B0601 onward and all of C–E. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -381,6 +381,17 @@ an explicit unresolved review, not silently removed or treated as another branch
 Eastern Track/Railroad continuations at A4933, the hooked Track at A5033 and
 Road at A5533 remain seam-owner findings. Source review does not authorize
 changes to canonical geometry or operational routes.
+
+The first 165 southern B cells add affirmative Clear under Track at B0405/B0506
+and two omitted Track crossings: B0315 east and B0413 northwest into Jalo.
+Jalo's palm-and-pool glyph is in B0513; its lettering in B0514 is not a second
+location. A source-template variant at the unchanged 0.88 threshold recovers
+its measured footprint center (3931.5,4211.5), independently of operational
+water yield or capacity. The full-source candidate search finds only that one
+additional match; this is not complete Oasis recall. Desert/plain boundaries
+remain partial occurrences. Large Libyan Sand Desert letters are not ridges
+or slopes despite their shared ink. The southern edge Tracks at B0111/B0114/B0117
+and B0401's western continuation remain boundary findings, not invented links.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

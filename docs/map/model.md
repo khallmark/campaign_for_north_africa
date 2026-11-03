@@ -96,14 +96,14 @@ automated or agent-visual record is human-reviewed.
 | --- | ---: | --- | ---: |
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
 | A | 1,000 | 866 / 62 / 64 / 8 | 828 |
-| B | 1,961 | 1,885 / 40 / 34 / 2 | 1,768 |
+| B | 1,961 | 1,885 / 40 / 34 / 2 | 1,818 |
 | C | 1,520 | 1,438 / 41 / 36 / 5 | 859 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **306 surveys / 24,542 observations**: 5,353 terrain,
-19,032 hexside and 157 point observations. **8,303 are provisional, 16,239 unresolved,
-none human-reviewed.** Terrain observations cover 5,205 cells; 1,871 have none.
+The current combined model has **308 surveys / 24,600 observations**: 5,403 terrain,
+19,040 hexside and 157 point observations. **8,361 are provisional, 16,239 unresolved,
+none human-reviewed.** Terrain observations cover 5,255 cells; 1,821 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -260,9 +260,9 @@ route geometry are separate work; the detector's raw findings remain unchanged.
 The Malta whole-cell audit adds four provisional ground observations. The A audit
 adds 199 Clear occurrences, nine partial Mountain cores retaining existing Rough
 fringes, five partial Gravel occurrences and one partial Rough occurrence.
-The first eight B batches add 381 Clear occurrences and one partial Rough
-occurrence. Of 1,871 cells without typed ground,
-source-surface measurements report 1,439 land, 228
+The first nine B batches add 431 Clear occurrences and one partial Rough
+occurrence. Of 1,821 cells without typed ground,
+source-surface measurements report 1,389 land, 228
 water, 180 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,320/1,961 B cells; 4,698 cells
-remain not_reviewed**, including B4101 onward and all of C–E. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,485/1,961 B cells; 4,533 cells
+remain not_reviewed**, including B4601 onward and all of C–E. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -473,13 +473,29 @@ Gania measured dots and labels remain unchanged, with Village/Bir category
 uncertainty. The diagonal branch northwest from Ben Gania through B3814, B3914
 and B4013 repeatedly approaches printed vertices: 12× controls cannot consistently
 resolve direct sides versus small neighboring wedges. Its presence is recorded,
-but no new sides are forced. B4113 is context-only, not reviewed coverage.
+but no new sides were forced in this batch. B4113 was context-only until the next batch.
 B3701 olive interior and six Gravel-boundary cells remain untyped; seven existing
 Clear cells retain explicit Gravel-footprint uncertainty. Seventeen Rough, eight
 Salt Marsh and three Gravel occurrences stay unchanged. Wadi and olive bands
 retain unresolved exact footprints and direction; no bridge or Up/Down inferred.
 B3701/B3901 western Tracks and B3833 northeast leave the inventory and need seam
 reconciliation. No new settlement or facility glyph was observed in these 165 cells.
+
+The B4101–B4533 batch adds fifty affirmative Clear occurrences and eight Tracks:
+**B4013 northwest → B4113**, **B4113 northeast → B4213**, **B4223 northwest → B4323**,
+**B4223 east → B4224**, **B4426 northwest → B4526**, and the three eastern crossings
+**B4429 → B4430 → B4431 → B4432**. Reconciliation of B4113's full outline with
+B4013's northern 12× control resolves this endpoint left of the shared vertex,
+not through B4114. B4013's southern endpoint and the remaining Ben Gania chain
+remain unresolved. B4013's prior review is amended without extra coverage;
+B3914's note clarifies that its uncertainty persists.
+Existing Bir Tengeder and Rotunda Segnali measured points and labels stay unchanged,
+with Village/Bir category and dot/route overlap uncertainty. Six Gravel-boundary
+cells remain untyped and eight existing Clear cells retain footprint uncertainty.
+Thirty Rough, twenty-eight Gravel and one Salt Marsh occurrence remain unchanged.
+B4101 west, B4301 northwest, B4333 east and B4533 east are boundary findings for
+the seam owner, not invented cross-section links. No new settlement or facility
+glyph was observed in these 165 cells; watercourse effects remain unadjudicated.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

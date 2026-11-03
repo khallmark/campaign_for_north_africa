@@ -260,9 +260,9 @@ route geometry are separate work; the detector's raw findings remain unchanged.
 The Malta whole-cell audit adds four provisional ground observations. The A audit
 adds 199 Clear occurrences, nine partial Mountain cores retaining existing Rough
 fringes, five partial Gravel occurrences and one partial Rough occurrence.
-The first two B batches add 17 Clear
-occurrences. Of 2,236 cells without typed ground,
-source-surface measurements report 1,804 land, 228
+The first three B batches add 63 Clear occurrences and one partial Rough
+occurrence. Of 2,189 cells without typed ground,
+source-surface measurements report 1,757 land, 228
 water, 180 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 330/1,961 B cells; 5,688 cells
-remain not_reviewed**, including B1101 onward and all of C–E. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 495/1,961 B cells; 5,523 cells
+remain not_reviewed**, including B1601 onward and all of C–E. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -404,6 +404,19 @@ does not establish Mountain, Rough or homogeneous Clear. Enlarged controls
 separate plain interiors from bands beyond neighboring grid edges, while retaining
 boundary-footprint/direction uncertainty. The southeastern Track continuation
 at B1033 leaves the retained inventory and remains a seam-owner finding.
+
+The B1101–B1533 batch adds 46 Clear occurrences around Tracks/Wadi and a small
+Rough lobe entering B1333 above its southwest grid boundary, not blanket Clear.
+Two missing Tracks are restored: **B1233 northwest → B1333** and
+**B1429 northeast → B1530**. B1507's previously corrected corner crossings are
+retained, with affirmative Clear ground now recorded separately. Existing Salt
+Marsh and Rough classifications remain unchanged; sixteen olive-banded cells
+remain untyped. Wadi curves across upper B1529–B1533 do not trace exact grid edges:
+their current side records are preserved with explicit association uncertainty.
+Track/Wadi overlap does not imply a bridge or passage permission. Eastern Track
+continuations from B1133/B1233 remain seam-owner findings. The prior B06–10
+plain-ground source reference was widened to cover full edge-cell outlines;
+its fifteen observations and per-cell source pins are unchanged.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

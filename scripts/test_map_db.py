@@ -285,7 +285,8 @@ class MapDatabaseTests(unittest.TestCase):
             'B5419 B5520',
             'B5515 B5614',
             'B5523 B5524',
-            'B5501 B5601',
+            'B5501 B5601 B5602 B5703 B5704 B5804 B5805',
+            'B5919 B5819 B5719 B5720 B5619',
             # Complete regional source sequences, not just reported endpoints.
             'C1828 C1829 C1830 C1831 C1832 C1933 C2033',
             'D0708 D0808 D0908 D1008 D1109 D1208 D1308 D1407 D1508 D1608 '
@@ -322,6 +323,8 @@ class MapDatabaseTests(unittest.TestCase):
                            ('B4901', 'B5001'),
                            ('B5216', 'B5317'), ('B5217', 'B5317'),
                            ('B5514', 'B5515'), ('B5501', 'B5502'),
+                           ('B5602', 'B5603'), ('B5703', 'B5702'),
+                           ('B5704', 'B5705'), ('B5819', 'B5720'),
                            ('D1114', 'D1115')):
             with self.subTest(unsupported_crossing=(start, end)):
                 self.assertIsNone(self.db.execute('''
@@ -337,6 +340,12 @@ class MapDatabaseTests(unittest.TestCase):
                 self.assertIsNotNone(self.db.execute('''
                     SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=?
                       AND feature='railroad' AND status='provisional'
+                ''', (start, end)).fetchone())
+        for start, end in (('B5717', 'B5718'), ('B5919', 'B5920')):
+            with self.subTest(northern_road=(start, end)):
+                self.assertIsNotNone(self.db.execute('''
+                    SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=?
+                      AND feature='road' AND status='provisional'
                 ''', (start, end)).fetchone())
         # The Track under Martuba's construction depiction is not finished Road.
         self.assertIsNone(self.db.execute('''
@@ -408,7 +417,7 @@ class MapDatabaseTests(unittest.TestCase):
             SELECT symbol,center_x,center_y,label,status FROM source_points WHERE hex='C3111'
         ''').fetchall(), [('village_bir_dot', 6567.0, 2324.1, 'El Cuasc', 'unresolved')])
         self.assertEqual(dict(self.db.execute('SELECT symbol,count(*) FROM source_points GROUP BY symbol')),
-                         {'village_bir_dot': 119, 'oasis': 3, 'port_icon': 5})
+                         {'village_bir_dot': 119, 'oasis': 3, 'port_icon': 7})
         self.assertEqual(self.db.execute('''
             SELECT symbol,center_x,center_y,status FROM source_points WHERE hex='B0513'
         ''').fetchall(), [('oasis', 3931.5, 4211.5, 'provisional')])
@@ -422,7 +431,9 @@ class MapDatabaseTests(unittest.TestCase):
             ('A2703', 283.5, 2576.5, 'unresolved'),
             ('A2928', 2390.5, 2450.5, 'unresolved'),
             ('A4827', 2348.5, 1054.5, 'unresolved'),
+            ('B5925', 4962.5, 253.5, 'unresolved'),
             ('D3814', 9676.5, 1825.5, 'unresolved'),
+            ('E4120', 12978.5, 1565.5, 'unresolved'),
         ])
         self.assertEqual(self.db.execute('''
             SELECT hex,status,value FROM observations

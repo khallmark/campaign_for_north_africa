@@ -96,14 +96,14 @@ automated or agent-visual record is human-reviewed.
 | --- | ---: | --- | ---: |
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
 | A | 1,000 | 866 / 62 / 64 / 8 | 828 |
-| B | 1,961 | 1,885 / 40 / 34 / 2 | 1,829 |
+| B | 1,961 | 1,885 / 40 / 34 / 2 | 1,832 |
 | C | 1,520 | 1,438 / 41 / 36 / 5 | 859 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **317 surveys / 24,643 observations**: 5,418 terrain,
-19,068 hexside and 157 point observations. **8,403 are provisional, 16,240 unresolved,
-none human-reviewed.** Terrain observations cover 5,266 cells; 1,810 have none.
+The current combined model has **325 surveys / 24,660 observations**: 5,423 terrain,
+19,076 hexside and 161 point observations. **8,416 are provisional, 16,244 unresolved,
+none human-reviewed.** Terrain observations cover 5,269 cells; 1,807 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -260,10 +260,10 @@ route geometry are separate work; the detector's raw findings remain unchanged.
 The Malta whole-cell audit adds four provisional ground observations. The A audit
 adds 199 Clear occurrences, nine partial Mountain cores retaining existing Rough
 fringes, five partial Gravel occurrences and one partial Rough occurrence.
-The first eleven B batches add 441 Clear occurrences, one partial Rough
-occurrence and five partial Mountain cores, retaining existing Rough where present.
-Of 1,810 cells without typed ground, source-surface measurements report 1,378 land, 228
-water, 180 mixed and 24 unresolved. A land
+The twelve B batches add 443 Clear occurrences, three partial Rough
+occurrences and six partial Mountain cores, retaining existing Rough where present.
+Of 1,807 cells without typed ground, source-surface measurements report 1,376 land, 228
+water, 179 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
 
@@ -280,8 +280,9 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,809/1,961 B cells; 4,209 cells
-remain not_reviewed**, including B5601 onward and all of C–E. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,961/1,961 B cells; 4,057 cells
+remain not_reviewed**, covering all of C–E. Rosetta's anchor is a point-only spot
+check and does not count as whole-cell review. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -531,8 +532,8 @@ or turn stippled bands into ground. Sixteen missing Track crossings and two
 Railroad crossings restore the Barce approach and branches near Maraua/Martuba.
 Paired controls place the B5316 route through B5216–B5217, not B5317; the B5515
 Track joins the Road in B5614, not B5514. Tocra's Track crosses northeast into
-B5601 independently of its east Road. B5601/B5614 and other B56 crops remain
-context-only and **not_reviewed**. The exact B5508 northeast/east-vertex route
+B5601 independently of its east Road. At that checkpoint, B5601/B5614 and other
+B56 crops were context-only and **not_reviewed**. The exact B5508 northeast/east-vertex route
 toward El Garrib is still unresolved; no side is forced from endpoint connectivity.
 The Track across B5523 east remains independent of the Martuba unfinished Road,
 which is not promoted to a usable Road. Eight measured Village/Bir dots and all
@@ -542,12 +543,39 @@ findings. Tocra B5501's western Road exits retained inventory and remains a
 boundary finding for the seam owner. No precise centerline, operational junction,
 port, Up/Down effect or section adjacency is inferred.
 
-Barce source-path regeneration associates B5403 northeast with an existing rail
+At the B51–55 checkpoint, Barce regeneration associated B5403 northeast with an existing rail
 curve; B5202 northeast remains untraced and retains an amber incomplete-curve
 marker rather than an invented chord. All 158 curve geometries and 38,042 raw
-samples remain unchanged. Matched completed crossings total 556/590 (365/375
+samples were unchanged. Matched completed crossings totaled 556/590 (365/375
 Road and 191/215 Railroad), leaving 34 unmatched. Neither parallel Track overlap
 nor missing source-curve coverage is resolved by this audit.
+
+The final northern B batch reviews **152 retained B5601–B6123 cells**, completing
+the section's 1,961 whole-cell source inspections, not its interpretation.
+Six Track crossings restore the Tocra–Tolmeta coast and El Gubba's southbound
+near-edge bend through **B5819 → B5719 → B5720**, not a direct shortcut.
+Two continuous Road crossings restore **B5717 east and B5919 east** independently
+of nearby Track and unfinished-Road capsules. Clear occurrences at B5627/B5629,
+partial Rough at B5720/B5728 and a Mountain core at B5915 supplement existing
+classes without replacing them. No Railroad is observed in this batch.
+
+The omitted **Derna anchor at (4962.5, 253.5)** is separate from its existing
+Village/Bir dot. A new source template at the unchanged 0.88 threshold also
+recovers **Rosetta's anchor at (12978.5, 1565.5)**, independently spot-inspected in
+E4120. Both retain unresolved operational port association; E4120 remains
+`not_reviewed` for whole-cell coverage. Prior measured symbols are unchanged.
+Coast slivers in B5923/B6020/B6021 visibly disagree with the raw detector's `land`
+label; this is recorded without rewriting measurements or geometry. B5906/B6121
+retain unresolved raw surface and explicit mixed-shore findings. The B5508/B5608
+vertex, band polarity, coast ownership, construction completion and operational
+effects remain unresolved. No seam adjacency or exact source path is inferred.
+
+Integration regeneration adds one 71-sample Road curve east of El Gubba, matched
+to B5919 east. All 158 previous curves, their samples and references are unchanged.
+The display now has 159 measured curves and 38,113 raw samples, matching 557/592
+completed crossings (366/377 Road and 191/215 Railroad). B5717 east remains among
+the 35 unmatched crossings, with an incomplete-curve marker rather than a chord.
+Track routes remain schematic and independent of construction.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

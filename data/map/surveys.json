@@ -6,6 +6,36 @@
   },
   "surveys": [
     {
+      "id": "b-56-61-plain-ground", "label": "Northern B plain interiors", "notes": "Whole outlined cells and four-times controls establish plain interiors at B5627 beneath unfinished-Road capsules and B5629 beneath Track/Wadi overprints. Adjacent stippled bands remain independent and their marginal footprint unresolved. Other coastal and band-filled cells are excluded; no homogeneous movement cost inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=5100,430,310,150", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["B5627","B5629"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "b-57-partial-rough", "label": "Northern B partial Rough patches", "notes": "Four-times controls show a pale smooth Rough fringe inside southern B5720, separately from the Mountain core and construction route, and an isolated pale Rough patch inside eastern coastal B5728, distinct from its stippled side band. Preserve existing Mountain, coast and route evidence; these are occurrences, not whole-cell replacements.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=4470,365,100,150", "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=5150,365,110,150", "docs/CNAv2.1.0/images/TEC.png#legend/Rough"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["B5720","B5728"], "observation": {"status": "provisional", "value": "rough"}}
+    },
+    {
+      "id": "cyrene-west-mountain-core", "label": "Cyrene western Mountain core", "notes": "B5915 has a broad smooth olive core inside its southern outline beneath the Road; existing pale Rough remains distinct. Cyrene lettering does not establish another location dot. The southern Wadi is outside the outline; no directional side effect, exact partition or movement authority inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=4040,210,120,170", "docs/CNAv2.1.0/images/TEC.png#legend/Mountain"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["B5915"], "observation": {"status": "provisional", "value": "mountain"}}
+    },
+    {
+      "id": "tolmeta-el-gubba-track-crossings", "label": "Tolmeta coast and El Gubba Track crossings", "notes": "Single gray dashes restore four Tocra-Tolmeta coastal crossings through Heavy Vegetation and plain shore strips. Enlarged paired controls place B5602 northeast into B5703, B5703 east into B5704 and B5704 northeast into B5804, not B5603/B5705 or water-only B5702. El Gubba's southbound Track passes B5819 southwest into B5719 northeast, crosses B5719 east into B5720, then continues southwest to B5619; do not replace the near-edge bend with a direct B5819-to-B5720 chord. Exact centerlines, operational junctions, coastal passage and human approval remain unresolved.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2890,285,500,300", "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=4380,290,220,260", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"B5601","direction":"east"},{"hex":"B5602","direction":"north_east"},{"hex":"B5703","direction":"east"},{"hex":"B5704","direction":"north_east"},{"hex":"B5719","direction":"north_east"},{"hex":"B5719","direction":"east"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "ohegab-gubba-road-crossings", "label": "El Ohegab and El Gubba eastern Road crossings", "notes": "Four-times controls show continuous double Road east from El Ohegab B5717 into B5718 and east from El Gubba B5919 into Giovanni B5920. Nearby blue dots, labels, single-dashed Tracks and disconnected unfinished-Road capsules are independent evidence. Restore the two omitted Road sides without promoting any construction route or inferring an operational transfer junction.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=4220,350,210,160", "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=4380,210,240,170", "docs/CNAv2.1.0/images/TEC.png#legend/Road"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"B5717","direction":"east"},{"hex":"B5919","direction":"east"}], "observation": {"status": "provisional", "value": "road"}}
+    },
+    {
+      "id": "derna-rosetta-anchor-symbols", "label": "Derna and Rosetta source anchors", "notes": "Outlined Derna and separate Rosetta spot controls show white anchor-in-circle symbols matching TEC Port. The additional Derna template retains the 0.88 threshold and measures centers (4962.5,253.5) in B5925 and (12978.5,1565.5) in E4120. Existing dots and five anchors are unchanged. E4120 remains not_reviewed in the whole-cell audit: this is a point-only inspection. Source glyph membership does not establish port category, capacity, ownership, operational association or complete detector recall.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=4905,220,100,110", "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=12860,1500,210,140", "docs/CNAv2.1.0/images/TEC.png#legend/Port"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "point", "hexes": ["B5925","E4120"], "observation": {"status": "unresolved", "source_label": "Measured anchor glyph; operational port association, category, capacity and efficiency unresolved"}}
+    },
+    {
       "id": "b-51-55-plain-ground", "label": "Tmimi and northern B plain interiors", "notes": "Individual outlined crops and paired four-times controls confirm four plain interiors beneath Wadi, location or unfinished-Road overprints. Near-grid Gravel at B5129/B5130/B5228, stippled bands and mixed coastal cells remain excluded. Clear is a provisional occurrence, not uniform pixels or movement authority.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=5030,510,400,410", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
       "coverage": {"kind": "terrain", "hexes": ["B5229","B5426","B5427","B5527"], "observation": {"status": "provisional", "value": "clear"}}

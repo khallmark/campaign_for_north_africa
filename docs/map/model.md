@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 330/1,520 C cells;
-3,727 cells remain not_reviewed**, covering C1101 onward and all of D–E. Rosetta's
+Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 495/1,520 C cells;
+3,562 cells remain not_reviewed**, covering C1601 onward and all of D–E. Rosetta's
 anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
@@ -594,6 +594,22 @@ operational effects remain unresolved. **C0901 northwest exits the retained
 inventory**: this is a boundary finding for reconciliation, not a new row-zero
 neighbor, seam link or fabricated terminus. No continuous Road or Railroad is
 observed in this batch; source/geometry pins are unchanged.
+
+The third C batch reviews **165 retained C1101–C1533 cells** at 2× with enlarged
+4× controls, adding 65 affirmative Clear occurrences beneath Track, Wadi,
+unfinished-Road and gray section-line overprints. Plain cores surrounded by Wadi
+in C1306/C1405 remain ground, not full-cell water. C1116/C1117/C1118/C1217 olive
+band interiors stay untyped. Ain Melfa's existing unresolved Village/Bir point at
+**(7170.58,3781.65)** is retained without operational supply or town promotion.
+
+Existing internal route sequences—including **C1119 northwest → C1218 southeast**—
+match the enlarged source controls and require no new sides or reclassification.
+Tracks leaving C1101/C1201 west and Wadi leaving C1501's western boundary are
+reported for seam reconciliation only; no row-zero neighbor is introduced.
+Broad Wadi footprints, terminal tips, blue barred meanings, band polarity and
+construction completion remain unresolved. Existing points, raw evidence,
+geometry and source hashes are unchanged; no continuous Road or Railroad is
+observed in this batch.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

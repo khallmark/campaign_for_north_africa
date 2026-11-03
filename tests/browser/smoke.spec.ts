@@ -597,7 +597,15 @@ for (const viewportCase of ['project viewport', '390px viewport'] as const) {
       const marker = (await page.locator('.counter-marker').boundingBox())!;
       const dx = x - marker.x - marker.width / 2;
       const dy = y - marker.y - marker.height / 2;
-      const startX = width / 2 + (dx > 0 ? -90 : 90), startY = height / 2 - 120;
+      const startX = width / 2 + (dx > 0 ? -90 : 90);
+      let startY = height / 2 - 120;
+      const tools = (await page.locator('.geography-tools').boundingBox())!;
+      if (startX >= tools.x && startX <= tools.x + tools.width
+        && startY >= tools.y && startY <= tools.y + tools.height) {
+        startY = tools.y + tools.height + 20;
+      }
+      expect(await page.locator('.research-viewport').evaluate((map, [x, y]) =>
+        map.contains(document.elementFromPoint(x, y)), [startX, startY])).toBe(true);
       await page.mouse.move(startX, startY);
       await page.mouse.down();
       await page.mouse.move(startX + dx, startY + dy, { steps: 10 });
@@ -647,9 +655,12 @@ test('open floating panels do not intercept selected actions', async ({ page }) 
     if (width === 390) {
       // Put the snapped marker's center in the visible gap between the panels.
       const marker = (await page.locator('.counter-marker').boundingBox())!;
-      await page.mouse.move(100, 500);
+      const startY = (await page.locator('.geography-tools').boundingBox())!.y - 20;
+      expect(await page.locator('.research-viewport').evaluate((map, y) =>
+        map.contains(document.elementFromPoint(100, y)), startY)).toBe(true);
+      await page.mouse.move(100, startY);
       await page.mouse.down();
-      await page.mouse.move(100 + Math.round(x - marker.x - marker.width / 2), 500);
+      await page.mouse.move(100 + Math.round(x - marker.x - marker.width / 2), startY);
       await page.mouse.up();
     }
     for (const panel of ['.order-panel', '.unit-panel']) await expect(page.locator(panel)).toHaveAttribute('open');

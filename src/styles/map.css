@@ -391,26 +391,26 @@
   transform-origin: 0 0;
   z-index: 1;
 }
-.geography-hex { fill: none; stroke: #21575b; stroke-width: 0.7; opacity: 0.55; }
+.geography-hex, .legend-grid { fill: none; stroke: #21575b; stroke-width: 0.7; opacity: 0.55; }
 .geography-overlay[data-original-art=true] .geography-hex { stroke: #62553e; opacity: 0.24; }
 .geography-id { fill: #24484b; stroke: #fff9e8; stroke-width: 2.5; paint-order: stroke; text-anchor: middle; font: 10px monospace; }
-.geography-terrain { opacity: 0.35; stroke: #534b35; stroke-width: 1; stroke-dasharray: 3 2; }
-.geography-water { fill: #488fb0; opacity: 0.35; }
-.geography-water.mixed_water_land { fill: #86acaa; stroke: #376c86; stroke-dasharray: 4 3; }
+.geography-terrain, .legend-terrain { opacity: 0.35; stroke: #534b35; stroke-width: 1; stroke-dasharray: 3 2; }
+.geography-water, .legend-water { fill: #488fb0; opacity: 0.35; }
+:is(.geography-water, .legend-water).mixed_water_land { fill: #86acaa; stroke: #376c86; stroke-dasharray: 4 3; }
 .geography-overlay[data-detail=false] .geography-terrain,
 .geography-overlay[data-detail=false] .geography-water { stroke: none; }
-.geography-selected { fill: #fff8cf22; stroke: #ba452d; stroke-width: 3; }
-.geography-link { fill: none; stroke-width: 3; stroke: #34839a; }
-.geography-link.road { stroke: #bf741d; stroke-width: 5; }
-.geography-link.railroad { stroke: #293d3a; stroke-width: 1.5; }
-.geography-link.railroad-ties { stroke-width: 8; stroke-dasharray: 2 9; }
-.geography-link.track { stroke: #805a32; stroke-dasharray: 2 4; }
-.geography-link.unresolved { stroke: #ac3c65; stroke-width: 2; stroke-dasharray: 2 5; opacity: 0.8; }
-.geography-construction { fill: none; stroke: #7144a0; stroke-width: 2; stroke-dasharray: 10 10; }
-.geography-construction.unfinished-road { stroke-width: 4; stroke-dasharray: 8 8; }
-.geography-construction.construction-ties { stroke-width: 8; stroke-dasharray: 2 18; }
-.geography-location { fill: #f8e6a2; stroke: #24594f; stroke-width: 2; }
-.geography-location.unresolved { fill: none; stroke: #ac3c65; }
+.geography-selected, .legend-selected { fill: #fff8cf22; stroke: #ba452d; stroke-width: 3; }
+.geography-link, .legend-route { fill: none; stroke-width: 3; stroke: #34839a; }
+:is(.geography-link, .legend-route).road { stroke: #bf741d; stroke-width: 5; }
+:is(.geography-link, .legend-route).railroad { stroke: #293d3a; stroke-width: 1.5; }
+:is(.geography-link, .legend-route).railroad-ties { stroke-width: 8; stroke-dasharray: 2 9; }
+:is(.geography-link, .legend-route).track { stroke: #805a32; stroke-dasharray: 2 4; }
+:is(.geography-link, .legend-route).unresolved { stroke: #ac3c65; stroke-width: 2; stroke-dasharray: 2 5; opacity: 0.8; }
+.geography-construction, .legend-construction { fill: none; stroke: #7144a0; stroke-width: 2; stroke-dasharray: 10 10; }
+:is(.geography-construction, .legend-construction).unfinished-road { stroke-width: 4; stroke-dasharray: 8 8; }
+:is(.geography-construction, .legend-construction).construction-ties { stroke-width: 8; stroke-dasharray: 2 18; }
+.geography-location, .legend-location { fill: #f8e6a2; stroke: #24594f; stroke-width: 2; }
+:is(.geography-location, .legend-location).unresolved { fill: none; stroke: #ac3c65; }
 .terrain-art-key { color: #4b5b58; margin: 8px 0; line-height: 1.45; }
 .geography-switches button:disabled { opacity: 0.4; cursor: default; }
 .geography-switches button[hidden] { display: none; }
@@ -442,9 +442,46 @@
 .geography-inspector details { border-top: 1px solid #ddd7c4; padding: 6px 0; }
 .geography-inspector summary { cursor: pointer; }
 .geography-source { overflow-wrap: anywhere; font: 10px monospace; }
+#map-research .geography-tools:has(.geography-legend[open]) { background: #fcf8ec; }
+.geography-legend { border-block: 1px solid #d7d0b9; margin: 8px 0; }
+.geography-legend > summary { padding: 9px 0; cursor: pointer; font-size: 12px; font-weight: 600; }
+.geography-legend > summary span { color: #656853; font-size: 10px; font-weight: 400; margin-left: 8px; }
+.geography-legend > summary:focus-visible, .legend-content:focus-visible { outline: 2px solid var(--olive); outline-offset: 2px; }
+.legend-content { max-height: min(440px, 43dvh); overflow: auto; overscroll-behavior: contain; padding: 0 8px 8px 0; scrollbar-gutter: stable; }
+.legend-content section + section { border-top: 1px solid #d7d0b9; margin-top: 14px; padding-top: 12px; }
+.legend-content h3 { margin: 0 0 8px; font: 600 13px "Barlow", sans-serif; }
+.legend-content p { margin: 8px 0; color: #656853; line-height: 1.5; }
+.legend-samples { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 10px; }
+.legend-samples li { display: flex; align-items: center; gap: 8px; min-width: 0; line-height: 1.3; }
+.legend-samples small { display: block; color: #656853; font-size: 10px; margin-top: 3px; }
+.legend-swatch, .legend-point, .legend-samples svg { display: block; width: 54px; height: 36px; flex: 0 0 54px; }
+.legend-swatch { object-fit: cover; border: 1px solid #c5bea5; border-radius: 3px; }
+.legend-unknown { background: #d8dcdf; }
+.legend-point { object-fit: contain; }
+.legend-layer-note { border-top: 1px solid #d7d0b9; padding-top: 10px; }
+/* Read the controls' actual state; no second legend state to drift out of sync. */
+.geography-tools:has([data-map-control=art][aria-pressed=false]) :is(.legend-art-only, .legend-points-only),
+.geography-tools:has([data-map-control=art][aria-pressed=true]) .legend-tint-only,
+.geography-tools:has([data-map-control=features][aria-pressed=false]) :is(.legend-geography-only, .legend-points-only, .legend-tint-only),
+.geography-tools:has([data-map-control=source][aria-pressed=false]) .legend-source-only,
+.geography-tools:has([data-map-control=grid][aria-pressed=false]) .legend-grid-only,
+.geography-tools:has([data-map-control=inspect][aria-pressed=false]) .legend-inspect-only,
+#map-research:not(:has(.geography-selected)):has([data-map-control=inspect][aria-pressed=false]) .legend-selection-only,
+.legend-empty { display: none; }
+#map-research:not(:has(.geography-selected)) .geography-tools:not(:has(.geography-switches [aria-pressed=true])) .legend-empty { display: block; }
+.geography-tools:has([data-map-control=art][aria-pressed=true]) .legend-grid { stroke: #62553e; opacity: 0.24; }
 @media (max-width: 1000px) {
   #map-research .geography-tools { top: auto; bottom: 145px; left: 10px; transform: none; padding: 8px; width: min(420px, calc(100% - 20px)); }
   .geography-inspector { max-height: 18vh; }
+  .legend-content { max-height: min(360px, calc(100dvh - 390px)); }
   .geography-key { display: none; }
   .geography-tools button { padding: 4px 6px; font-size: 10px; }
+}
+@media (max-width: 650px) {
+  #map-research .geography-tools:has(.geography-legend[open]) {
+    max-height: max(160px, calc(72dvh - 292px));
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  .legend-content { max-height: none; overflow: visible; }
 }

@@ -11,6 +11,7 @@ use web_sys::Element;
 
 mod art;
 mod geography;
+mod legend;
 mod research;
 pub use research::mount as mount_research;
 pub(crate) use research::{focus as focus_board, refresh as refresh_board};

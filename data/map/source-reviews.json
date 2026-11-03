@@ -9,6 +9,138 @@
   "map_source": "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
   "batches": [
     {
+      "id": "b-31-35-whole-cell-2026-11-03", "date": "2026-11-03", "method": "agent_visual",
+      "notes": "Individually inspected all 165 outlined B3101–B3533 source crops at 2x, twelve ground/route controls and one fork context at 4x, plus the shared B3208/B3309 corner from both outlines at 12x nearest-neighbor. Reconciled against 9ea2509 model with unchanged add8fb4 source/geometry pins. Fifty-eight Clear and two Track occurrences added. Three olive-band interiors stay untyped. No prior classification, point, watercourse association or adjacency changed. Detector status is not visual review; human adjudication pending.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Full outlined source cell inspected; grid, IDs, lettering and gray section lines separated from feature ink. Crop padding is not part of the cell."},
+        "terrain": {"status": "observed", "notes": "Plain ground inside outline matches provisional Clear independently of overprinted ink; adjacent colored patches outside the outline are not imported. Not uniform source pixels or movement authority."},
+        "transport": {"status": "not_observed", "notes": "No Road, Railroad, Track or unfinished transportation glyph observed inside outline. Nearby exterior paths and lettering are not interior routes; source-symbol absence is not historical absence."},
+        "hexside": {"status": "not_observed", "notes": "No independent Wadi, river, ridge, slope, escarpment or barred-side glyph observed within outline. Grid and section lines do not establish side effects."},
+        "locations": {"status": "not_observed", "notes": "No Village/Bir dot, Major City cluster, oasis, airfield, flying-boat or training glyph observed inside outline. Nearby dots and text outside the cell do not establish a location."}
+      },
+      "groups": [
+        {
+          "hexes": ["B3105","B3109","B3110","B3112","B3113","B3114","B3115","B3116","B3117","B3118","B3121","B3122","B3123","B3124","B3133","B3204","B3205","B3206","B3207","B3211","B3212","B3213","B3216","B3219","B3220","B3221","B3222","B3223","B3226","B3227","B3303","B3304","B3305","B3306","B3307","B3308","B3312","B3313","B3314","B3318","B3319","B3320","B3321","B3322","B3323","B3324","B3327","B3332","B3403","B3404","B3405","B3407","B3408","B3409","B3413","B3414","B3416","B3420","B3421","B3422","B3423","B3426","B3427","B3504","B3506","B3507","B3508","B3509","B3510","B3511","B3512","B3514","B3516","B3517","B3520","B3521","B3522","B3523","B3526","B3527","B3528"],
+          "findings": {}, "survey_refs": ["ink-B-terrain-clear"], "uncertainty": ["Existing Clear retained after individual source inspection. Nearby Rough, Salt Marsh, Tracks, dots or labels outside the outline are not new occurrences. No exact boundary, homogeneous fill or operational absence certified. Human review pending."]
+        },
+        {
+          "hexes": ["B3106","B3107","B3108","B3111","B3119","B3120","B3132","B3210","B3217","B3218","B3232","B3302","B3310","B3311","B3316","B3317","B3410","B3411","B3412","B3415","B3503","B3513","B3515","B3533"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath single-dashed Tracks, independently of lettering, outside Rough patches and section line."}, "transport": {"status": "observed", "notes": "Existing single-dashed crossings/bends/forks match outlined source. B3302 enlarged control retains southwest/northeast; Trigh el Abd lettering around B3410–12 names a Track, not a town, completed Road or construction class."}},
+          "survey_refs": ["b-31-35-plain-ground","ink-B-hexside-track"], "uncertainty": ["No exact centerline, operational junction, route capacity or movement permission inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B3125","B3127","B3128","B3129","B3130","B3131","B3225","B3228","B3229","B3230","B3325","B3326","B3329","B3331","B3424","B3428","B3429","B3430","B3431","B3530","B3531","B3532"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear around Wadi ink and near-edge watercourse ribbons; nearby Salt Marsh outside B3326 north remains separate."}, "hexside": {"status": "unresolved", "notes": "Wadi lies northeast B3125; southwest B3127; east/southeast B3128/B3130; northwest/west B3129/B3131/B3229/B3532; northwest/west/southwest B3225/B3331/B3431; northeast/east/southeast B3228/B3230/B3325/B3424/B3430; outside west B3326; northwest/west/lower B3329; southeast B3428; southwest tip B3429; northwest/northeast and outside east B3530; and around both sides/lower interior B3531. Preserve provisional side evidence, not exact ribbon-to-side geometry."}},
+          "survey_refs": ["b-31-35-plain-ground"], "uncertainty": ["Broad watercourse footprints and near-edge endpoints remain unresolved; no permanent water, Major/Minor River, bridge, Up/Down or legal passage inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B3101","B3301"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear independently of western Track and gray section line."}, "transport": {"status": "unresolved", "notes": "Single-dashed Track crosses northwest and southwest of each outlined cell. Those sides exit the retained inventory; existing neighbors lie on the other sides. Record source route presence for seam owner without inventing zero-column identities or interior detours."}},
+          "survey_refs": ["b-31-35-plain-ground"], "uncertainty": ["Canonical adjacency does not yet represent this western continuation. No seamless route connectivity or operational absence claimed. Human review pending."]
+        },
+        {
+          "hexes": ["B3202"],
+          "findings": {"terrain": {"status": "observed", "notes": "Enlarged control confirms plain interior; add Clear while olive band stays outside west/southwest/southeast."}, "hexside": {"status": "unresolved", "notes": "Olive band nearly follows three exterior edges; class, direction and precise side effect remain unresolved."}},
+          "survey_refs": ["b-31-35-plain-ground"], "uncertainty": ["Exterior fringe is not a homogeneous Mountain, Rough or Salt Marsh core. Human review pending."]
+        },
+        {
+          "hexes": ["B3208"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath measured Village/Bir dot and single-dashed Track."}, "transport": {"status": "observed", "notes": "Retain southwest Track and restore northeast directly to B3309 southwest. Twelve-times shared-corner controls put dashes left of the upper east vertex, not through B3209."}, "locations": {"status": "unresolved", "notes": "Existing Maaten el-Grara measured Village/Bir dot matches source. Preserve label and unresolved operational category; lettering extends east but does not add neighboring settlements."}},
+          "survey_refs": ["b-31-35-plain-ground","ink-B-hexside-track","b-32-34-track-crossings","label-B3208"], "uncertainty": ["Source-pixel corner association is provisional, not exact surveyed centerline, village capacity, water supply or legal junction. Human review pending."]
+        },
+        {
+          "hexes": ["B3309"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath Track."}, "transport": {"status": "observed", "notes": "Retain eastern Track; restore southwest from B3208 northeast. Enlarged control places crossing left of the bottom vertex, rejecting southeast through B3209."}},
+          "survey_refs": ["b-31-35-plain-ground","ink-B-hexside-track","b-32-34-track-crossings"], "uncertainty": ["Near-corner source evidence remains provisional; no geometry or operational movement rule changed. Human review pending."]
+        },
+        {
+          "hexes": ["B3333"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath single-dashed Track fork."}, "transport": {"status": "observed", "notes": "Retain southwest/southeast Track branches; restore northwest into B3432 southeast. Enlarged fork control rejects B3433 detour."}},
+          "survey_refs": ["b-31-35-plain-ground","ink-B-hexside-track","b-32-34-track-crossings"], "uncertainty": ["Fork does not establish an operational transfer junction or surveyed centerline. Human review pending."]
+        },
+        {
+          "hexes": ["B3432"],
+          "findings": {"transport": {"status": "observed", "notes": "Existing northeast Track retained; restore southeast across B3333 northwest. Dashes remain inside eastern edge, not via B3433."}},
+          "survey_refs": ["ink-B-terrain-clear","ink-B-hexside-track","b-32-34-track-crossings"], "uncertainty": ["Existing Clear retained; source line width does not certify exact centerline or operational connectivity. Human review pending."]
+        },
+        {
+          "hexes": ["B3209","B3433"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath Maaten el-Grara lettering at B3209 and section line at B3433; these are not additional feature glyphs."}, "transport": {"status": "not_observed", "notes": "Route stays outside B3209 northwest and B3433 west. Enlarged controls reject both as detours for missing neighboring crossings."}},
+          "survey_refs": ["b-31-35-plain-ground"], "uncertainty": ["Nearby label/dot or section line does not assign another settlement, route or neighbor. Human review pending."]
+        },
+        {
+          "hexes": ["B3233"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath Track and section line."}, "transport": {"status": "unresolved", "notes": "Northwest/southeast Track visible. Northwest crossing exists; southeast continuation leaves retained inventory with no B3134 neighbor. Preserve boundary finding rather than connect through B3133."}},
+          "survey_refs": ["b-31-35-plain-ground","ink-B-hexside-track"], "uncertainty": ["Missing external endpoint requires seam-owner reconciliation; no geometry or cross-section connection inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B3401"],
+          "findings": {"terrain": {"status": "observed", "notes": "Four-times control confirms plain interior with Wadi northeast; olive band and Track remain outside west/northwest. Add Clear independently of exterior band."}, "hexside": {"status": "unresolved", "notes": "Wadi overlaps northeastern outline; olive band approaches exterior west/northwest. Exact side associations, band class/direction and effects remain unresolved."}},
+          "survey_refs": ["b-31-35-plain-ground"], "uncertainty": ["No Up/Down, bridge or permanent water inferred; exterior Track does not establish an internal route. Human review pending."]
+        },
+        {
+          "hexes": ["B3402"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear; Rough stays outside north."}, "transport": {"status": "observed", "notes": "Existing southwest/northeast Track matches source."}, "hexside": {"status": "unresolved", "notes": "Wadi touches northwest corner; preserve provisional association without interpreting ribbon tip as exact full-side watercourse."}},
+          "survey_refs": ["b-31-35-plain-ground","ink-B-hexside-track"], "uncertainty": ["Track/Wadi proximity is not a bridge, movement rule or permanent water source. Human review pending."]
+        },
+        {
+          "hexes": ["B3406"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath dot and Bir lettering."}, "locations": {"status": "unresolved", "notes": "Existing measured blue Village/Bir dot labelled Bir matches source. Preserve unresolved operational category; wording alone does not establish supply availability or a new facility class."}},
+          "survey_refs": ["b-31-35-plain-ground","label-B3406"], "uncertainty": ["Point does not establish water capacity, historical coordinates or operational ownership. Human review pending."]
+        },
+        {
+          "hexes": ["B3102"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Olive band/fringe enters northeast interior over plain core; retain untyped rather than blanket Clear or Mountain."}, "transport": {"status": "observed", "notes": "Existing northwest/southeast single-dashed Track matches source."}, "hexside": {"status": "unresolved", "notes": "Olive band's class, direction and precise side effects remain unresolved."}},
+          "survey_refs": ["ink-B-hexside-track"], "uncertainty": ["Band is not homogeneous ground or Up/Down authority; Track does not establish legal passage. Human review pending."]
+        },
+        {
+          "hexes": ["B3201"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Olive band enters eastern interior over plain core; retain untyped pending class/footprint interpretation."}, "transport": {"status": "unresolved", "notes": "West/northeast/southeast Track fork visible. Retain modeled northeast/southeast; western continuation exits retained inventory and is a seam-owner finding, not a fabricated B3200 neighbor."}, "hexside": {"status": "unresolved", "notes": "Eastern olive band remains separate from route evidence; class/direction and exact side effects unresolved."}},
+          "survey_refs": ["ink-B-hexside-track"], "uncertainty": ["No exact centerline, Up/Down, operational junction or seamless boundary connectivity inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B3501"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Olive band/fringe enters northeast/east/southeast and northwest tip; retain untyped despite plain core."}, "transport": {"status": "unresolved", "notes": "Northwest/southwest Track visible; both sides exit retained inventory. Preserve seam evidence without relocating it to existing eastern neighbors."}, "hexside": {"status": "unresolved", "notes": "Olive class/direction unresolved; Wadi stays outside northeast/southeast, with near-edge associations still provisional."}},
+          "survey_refs": [], "uncertainty": ["No fabricated zero-column neighbor, Mountain fill, Up/Down, bridge or movement rule. Human review pending."]
+        },
+        {
+          "hexes": ["B3104","B3203"],
+          "findings": {"hexside": {"status": "unresolved", "notes": "Olive band stays outside west/southwest B3104 and southwest B3203. Retain existing Clear independently of unresolved near-edge band class/direction."}},
+          "survey_refs": ["ink-B-terrain-clear"], "uncertainty": ["Exterior ink does not establish full-cell Mountain or exact side effect. Human review pending."]
+        },
+        {
+          "hexes": ["B3224","B3231","B3328","B3330","B3524","B3529"],
+          "findings": {"hexside": {"status": "unresolved", "notes": "Wadi stays outside east B3224/B3328/B3330/B3524, outside west B3231 and outside/touching northeast B3529. Salt Marsh also stays outside B3524 east. Retain Clear with provisional side-association uncertainty, not full-cell water."}},
+          "survey_refs": ["ink-B-terrain-clear"], "uncertainty": ["Near-edge ribbon width does not establish permanent water, Major/Minor River, bridge or full-side effect. Human review pending."]
+        },
+        {
+          "hexes": ["B3214","B3215","B3315","B3417","B3418","B3419","B3518","B3519"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing partial smooth beige Rough patches match source and TEC; plain margins do not erase occurrences. Not Gravel or Salt Marsh from shared ink."}},
+          "survey_refs": ["ink-B-terrain-rough"], "uncertainty": ["Occurrence is not uniform terrain fill or operational movement cost. Human review pending."]
+        },
+        {
+          "hexes": ["B3502"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain smooth Rough patch independently of Wadi and exterior olive band."}, "hexside": {"status": "unresolved", "notes": "Wadi spans northwest/southwest vicinity; olive band outside west. Exact side footprints and directional interpretation remain unresolved."}},
+          "survey_refs": ["ink-B-terrain-rough"], "uncertainty": ["No Up/Down, bridge, permanent water or homogeneous terrain authority inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B3103"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain yellow Salt Marsh network pattern independently of olive band and plain margins."}, "hexside": {"status": "unresolved", "notes": "Olive band enters northwest/northeast/east; class/direction and exact side effect remain unresolved."}},
+          "survey_refs": ["ink-B-terrain-salt_marsh"], "uncertainty": ["Shared olive ink does not establish Mountain core or Up/Down. Human review pending."]
+        },
+        {
+          "hexes": ["B3126","B3425","B3525"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain yellow fissure/network Salt Marsh pattern, separate from Wadi and plain gaps."}, "hexside": {"status": "unresolved", "notes": "Wadi remains outside northwest/southeast B3126, runs northwest/west/southwest B3425 and northwest/west/lower B3525. Broad ribbons retain provisional side associations, not exact boundary geometry."}},
+          "survey_refs": ["ink-B-terrain-salt_marsh"], "uncertainty": ["No Major/Minor River, permanent water, bridge or movement authority inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B3505"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial yellow Salt Marsh network pattern matching source and TEC; not smooth Rough or homogeneous fill."}},
+          "survey_refs": ["ink-B-terrain-salt_marsh"], "uncertainty": ["Occurrence does not assign movement cost or water availability. Human review pending."]
+        }
+      ]
+    },
+    {
       "id": "b-26-30-whole-cell-2026-11-03", "date": "2026-11-03", "method": "agent_visual",
       "notes": "Individually inspected all 165 outlined B2601–B3033 source crops at 2x, eight ground controls and three route-context controls at 4x, and B2718/B2806 corner controls at 12x nearest-neighbor. Reconciled against c602690 model with unchanged add8fb4 source/geometry pins. Sixty Clear and four Track occurrences added. All prior classes, measured points, watercourse observations and adjacency retained. Detector results are comparison evidence, never review completion. Agent source review only; human adjudication pending.",
       "common_findings": {

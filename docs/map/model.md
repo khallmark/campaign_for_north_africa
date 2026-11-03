@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 990/1,961 B cells; 5,028 cells
-remain not_reviewed**, including B3101 onward and all of C–E. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,155/1,961 B cells; 4,863 cells
+remain not_reviewed**, including B3601 onward and all of C–E. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -450,6 +450,18 @@ Sauhu label transcription remain uncertain. Three Rough, one Gravel and two
 Salt Marsh occurrences stay unchanged. Wadi ribbons retain provisional side
 associations, not exact boundary geometry. B2601/B3001 west and B3033 northeast
 continuations are seam-owner findings, not fabricated cross-section links.
+No new settlement or facility glyph was observed in these 165 cells.
+
+The B3101–B3533 batch adds fifty-eight affirmative Clear occurrences and restores
+**B3208 northeast → B3309** and **B3333 northwest → B3432** Tracks. Enlarged
+controls reject detours through B3209 and B3433. Existing Maaten el-Grara and
+Bir measured dots are retained with unresolved Village/Bir categories; Trigh el
+Abd lettering is not a settlement. Three olive-band interiors B3102/B3201/B3501
+remain untyped; nine Rough and five Salt Marsh occurrences remain unchanged.
+Wadi associations stay provisional, including outside/near-edge ribbons.
+Northwest/southwest Tracks in B3101/B3301/B3501, B3201 west and B3233 southeast
+exit retained inventory and require seam-owner reconciliation. No zero-column
+cells, B3134, cross-section links or operational permissions were invented.
 No new settlement or facility glyph was observed in these 165 cells.
 
 ```sh

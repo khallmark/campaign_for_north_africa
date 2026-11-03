@@ -280,9 +280,10 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,961/1,961 B cells; 4,057 cells
-remain not_reviewed**, covering all of C–E. Rosetta's anchor is a point-only spot
-check and does not count as whole-cell review. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 165/1,520 C cells;
+3,892 cells remain not_reviewed**, covering C0601 onward and all of D–E. Rosetta's
+anchor and C0718's Oasis are point-only spot checks, not whole-cell coverage.
+This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -555,6 +556,25 @@ label; this is recorded without rewriting measurements or geometry. B5906/B6121
 retain unresolved raw surface and explicit mixed-shore findings. The B5508/B5608
 vertex, band polarity, coast ownership, construction completion and operational
 effects remain unresolved. No seam adjacency or exact source path is inferred.
+
+The first C batch reviews **165 retained C0101–C0533 cells**. Sixteen outlined
+plain interiors receive provisional Clear independently of route, Oasis and
+section-line overprints. Other band-filled cells remain untyped; existing Desert,
+Rough and Salt Marsh occurrences are preserved. Two near-vertex Track crossings,
+**C0323 northwest and C0523 northwest**, restore paths through C0422 and C0622
+without detours through C0423/C0623. The latter has a narrow raster margin and
+remains provisional. C0622 context does not receive whole-cell review credit.
+
+Three source templates at unchanged 0.88 threshold recover five measured Oasis
+centers: C0127 **(7945,4507.5)**, C0130 **(8202.5,4505.5)**, C0224 **(7731,4434.5)**,
+C0233 **(8503,4429.5)** and the already classified C0718 **(7174,4071.5)**. The last
+is independently spot-inspected but stays `not_reviewed` in the whole-cell ledger.
+Neighboring C0124/C0333 do not gain glyphs from crop padding. Source names do not
+become additional Village/Bir dots, towns, water yields or operational junctions.
+Disconnected unfinished-Road capsules remain excluded from usable Road links;
+blue barred symbols and olive band polarity remain unresolved. Tracks leaving
+the southern inventory and C0133/C0533 eastern section edges are boundary findings,
+not row-zero or seam links. No continuous Road or Railroad is observed in this batch.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

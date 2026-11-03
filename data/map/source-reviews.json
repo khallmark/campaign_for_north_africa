@@ -9,6 +9,174 @@
   "map_source": "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
   "batches": [
     {
+      "id": "c-01-05-whole-cell-2026-11-03", "date": "2026-11-03", "method": "agent_visual",
+      "notes": "Individually inspected all 165 C0101-C0533 outlines in seven 2x sheets, with targeted 4x contrary-case controls and 8x corner pixels against TEC. Reconciled against 8b6c7f8 without changing source or geometry pins. Add sixteen affirmative Clear occurrences, two near-vertex Track sides and four Oasis glyph classifications; three unchanged-threshold templates recover these four measured centers plus the already classified C0718 Oasis. C0718 is point-only spot inspection and C0622 is route context, not whole-cell credit. No continuous Road, Railroad, Village/Bir dot or other facility glyph observed in these 165 cells. Construction, barred-side meaning, band polarity, seam crossings and operational effects remain unresolved.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Entire retained outline inspected against source at 2x and targeted enlarged controls. Source land, not an operational playability ruling; neighboring padding is not coverage. Gray section lines and black grid remain separate from geography."},
+        "terrain": {"status": "observed", "notes": "Retain affirmative yellow Desert inside outline. Neighboring plain gaps or other patches do not imply homogeneous ground or movement authority."},
+        "transport": {"status": "not_observed", "notes": "No Road, Track, Railroad or unfinished route observed inside outline. Nearby dashes and lettering do not establish an interior route or historical absence."},
+        "hexside": {"status": "not_observed", "notes": "No independent Wadi, river, barred-side or directional stippled band observed inside outline. Grid and section lines do not establish side effects or seam adjacency."},
+        "locations": {"status": "not_observed", "notes": "No independent Village/Bir dot, city, Oasis, anchor, airfield, flying-boat or training glyph observed inside outline. Neighboring names and cropped symbols are not additional locations."}
+      },
+      "groups": [
+        {
+          "hexes": ["C0101","C0102","C0103","C0104","C0105","C0106","C0108","C0109","C0110","C0111","C0112","C0113","C0114","C0115","C0116","C0117","C0118","C0119","C0122","C0123","C0201","C0202","C0203","C0204","C0205","C0206","C0208","C0209","C0210","C0211","C0212","C0213","C0214","C0215","C0216","C0217","C0218","C0219","C0301","C0302","C0303","C0304","C0305","C0306","C0308","C0309","C0310","C0311","C0312","C0313","C0314","C0315","C0316","C0317","C0318","C0319","C0401","C0402","C0403","C0404","C0405","C0406","C0408","C0409","C0410","C0411","C0412","C0413","C0414","C0415","C0416","C0417","C0418","C0501","C0502","C0503","C0504","C0505","C0506","C0512","C0513","C0514","C0515","C0516","C0517","C0518"],
+          "findings": {}, "survey_refs": ["ink-C-terrain-desert"],
+          "uncertainty": ["Inspected absence is not historical absence. Exterior Track near C0108/C0308 and frame/section lines do not establish additional features; human review pending."]
+        },
+        {
+          "hexes": ["C0107","C0207","C0307","C0407"],
+          "findings": {"transport": {"status": "observed", "notes": "Single gray dashed Track passes through Desert: northeast/southeast in C0107/C0307, northwest/southwest in C0207/C0407. Existing internal sides are retained; C0107's southern continuation leaves retained inventory and receives no row-zero link."}},
+          "survey_refs": ["ink-C-terrain-desert","ink-C-hexside-track"], "uncertainty": ["No Railroad, exact centerline, southern boundary adjacency or movement permission inferred; human review pending."]
+        },
+        {
+          "hexes": ["C0120","C0121","C0220","C0221","C0320","C0321","C0419","C0519"],
+          "findings": {"hexside": {"status": "unresolved", "notes": "Repeated blue barred boundary symbols are distinct from Railroad. They follow east C0120, northwest/west C0121, northeast/east/southeast C0220, northeast/east C0320/C0419/C0519, west C0221 and west/southwest C0321. Keep raw evidence without assigning a terrain effect, polarity or duplicate side."}},
+          "survey_refs": ["ink-C-terrain-desert"], "uncertainty": ["Blue barred classification and operational effect remain unresolved; no transport conversion or geometry change. Human review pending."]
+        },
+        {
+          "hexes": ["C0124","C0125","C0126","C0222","C0223","C0322","C0421","C0508","C0509","C0510","C0511"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial Desert with white northern/eastern gaps, not full-cell replacement or automatic Clear. C0124 enlarged control keeps the Oasis beyond the northeast outline; C0125's nearby glyph is exterior. El Al Thed and Siwa lettering across neighboring cells is not another dot."}},
+          "survey_refs": ["ink-C-terrain-desert"], "uncertainty": ["Mixed patch extents and label association are not operational authority. Track outside C0421 northeast/C0508 west stays exterior; human review pending."]
+        },
+        {
+          "hexes": ["C0420","C0520"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial yellow Desert with northern/eastern white gaps; no homogeneous Clear or Desert footprint inferred."}, "hexside": {"status": "unresolved", "notes": "Blue barred symbols follow west/southwest sides, separate from tracks and grid. Preserve provisional raw side evidence without choosing class or operational effect."}},
+          "survey_refs": ["ink-C-terrain-desert"], "uncertainty": ["Barred-side meaning and mixed-ground extents unresolved; human review pending."]
+        },
+        {
+          "hexes": ["C0507"],
+          "findings": {"terrain": {"status": "observed", "notes": "Partial Desert with a northern plain gap; existing Desert remains an occurrence, not full-cell coverage."}, "transport": {"status": "observed", "notes": "Single dashed Track crosses northeast/southeast near the east side; it does not enter neighboring C0508 west interior."}},
+          "survey_refs": ["ink-C-terrain-desert","ink-C-hexside-track"], "uncertainty": ["No exact route, movement permission or extra eastern branch inferred; human review pending."]
+        },
+        {
+          "hexes": ["C0127"],
+          "findings": {"terrain": {"status": "observed", "notes": "Four-times control establishes plain Clear beneath Oasis, Track and unfinished-Road overprints; surrounding Desert/Salt Marsh remain outside."}, "transport": {"status": "observed", "notes": "Single Track enters northwest and bends northeast beside disconnected double unfinished-Road capsules entering northeast. Preserve both depictions without converting construction to Road or asserting an operational junction."}, "locations": {"status": "observed", "notes": "Recover the palm-and-pool Oasis glyph at measured template center (7945,4507.5). Siwa lettering nearby is not a separate Village/Bir dot or a surveyed label footprint."}},
+          "survey_refs": ["c-01-05-plain-ground","siwa-oasis-symbols","ink-C-hexside-track","ink-C-hexside-unfinished_road"], "uncertainty": ["Oasis category is provisional; label association, water yield, route junction and construction completion remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["C0224"],
+          "findings": {"terrain": {"status": "observed", "notes": "Four-times control establishes plain Clear beneath the Oasis and Track; adjacent yellow Desert stays outside."}, "transport": {"status": "observed", "notes": "Single dashed Track crosses northwest/east, overprinting the upper palm without becoming Railroad or a settlement dot."}, "locations": {"status": "observed", "notes": "Recover palm-and-pool Oasis at measured template center (7731,4434.5). El Al Thed lettering nearby is not another glyph or proof of town status."}},
+          "survey_refs": ["c-01-05-plain-ground","siwa-oasis-symbols","ink-C-hexside-track"], "uncertainty": ["No label-area ownership, water supply, operational junction or exact historical coordinates inferred; human review pending."]
+        },
+        {
+          "hexes": ["C0130"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain yellow-network Salt Marsh beneath the Oasis glyph and adjacent plain gaps; no replacement by Clear or Desert."}, "transport": {"status": "observed", "notes": "Single dashed Track crosses northwest/east above the palm glyph; source line remains separate from Oasis classification."}, "locations": {"status": "observed", "notes": "Recover palm-and-pool Oasis at measured template center (8202.5,4505.5), not another settlement in the neighboring C0131 crop padding."}},
+          "survey_refs": ["ink-C-terrain-salt_marsh","siwa-oasis-symbols","ink-C-hexside-track"], "uncertainty": ["Mixed terrain, Oasis water yield and operational route effects remain unresolved; human review pending."]
+        },
+        {
+          "hexes": ["C0233"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial Salt Marsh beneath the palm-and-pool symbol and white gaps; gray section line is not terrain."}, "locations": {"status": "observed", "notes": "Recover Oasis at measured template center (8503,4429.5), inside C0233 rather than the neighboring C0333 outline. El Al Egs text is not an additional dot."}},
+          "survey_refs": ["ink-C-terrain-salt_marsh","siwa-oasis-symbols"], "uncertainty": ["Section seam, name association, Oasis water yield and operational category effects remain unresolved; human review pending."]
+        },
+        {
+          "hexes": ["C0128","C0129","C0231","C0232","C0332","C0333"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain yellow-network Salt Marsh occurrences with partial plain margins where visible; yellow strokes are not additional Desert fill."}, "locations": {"status": "not_observed", "notes": "No independent location glyph inside these outlines. El Al Egs text across C0231/C0232 is lettering; C0333's enlarged control keeps the adjacent palm outside its southeast outline in C0233."}},
+          "survey_refs": ["ink-C-terrain-salt_marsh"], "uncertainty": ["Patch extent, names and gray section lines do not establish full-cell ownership or adjacency; human review pending."]
+        },
+        {
+          "hexes": ["C0425","C0525"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Salt Marsh core beneath broad olive stippled bands; do not reclassify the band as Mountain or fill the plain gaps."}, "hexside": {"status": "unresolved", "notes": "Olive bands occupy northern/eastern C0425 and northern/western C0525 margins. Their exact side footprint and Up/Down polarity remain unresolved."}},
+          "survey_refs": ["ink-C-terrain-salt_marsh"], "uncertainty": ["Nearby Track stays outside southwest; directional band and movement effects unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["C0228"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial Salt Marsh with white margins, not homogeneous ground."}, "transport": {"status": "observed", "notes": "Single dashed Track crosses west/east through the partial Salt Marsh; no tied Railroad or completed Road observed."}},
+          "survey_refs": ["ink-C-terrain-salt_marsh","ink-C-hexside-track"], "uncertainty": ["No operational passage or exact centerline inferred; human review pending."]
+        },
+        {
+          "hexes": ["C0229"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial Salt Marsh beneath olive northeastern band and Track branches."}, "transport": {"status": "observed", "notes": "Enlarged control distinguishes west/east/southeast Track branches, not an invented northeast crossing through the band."}, "hexside": {"status": "unresolved", "notes": "Northeastern stippled band has unresolved footprint and polarity; retain raw evidence separately from route crossings."}},
+          "survey_refs": ["ink-C-terrain-salt_marsh","ink-C-hexside-track"], "uncertainty": ["A printed fork is not an operational transfer junction or exact traced path; human review pending."]
+        },
+        {
+          "hexes": ["C0131","C0132","C0133"],
+          "findings": {"terrain": {"status": "observed", "notes": "Four-times outlined controls establish plain Clear beneath single Track dashes. Nearby Salt Marsh and palms remain outside."}, "transport": {"status": "observed", "notes": "Retain west/east Track through all three cells. Eastern C0133 continuation exits retained section inventory; report source continuity without creating seam adjacency."}},
+          "survey_refs": ["c-01-05-plain-ground","ink-C-hexside-track"], "uncertainty": ["No seam link, operational junction or extra Oasis from cropped neighbors inferred; human review pending."]
+        },
+        {
+          "hexes": ["C0433"],
+          "findings": {"terrain": {"status": "observed", "notes": "Four-times control establishes plain Clear under a gray section line. Salt Marsh lies below the outline, not inside."}},
+          "survey_refs": ["c-01-05-plain-ground"], "uncertainty": ["Section line is not a route, terrain class or resolved seam adjacency; human review pending."]
+        },
+        {
+          "hexes": ["C0432"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain existing Clear. Track and stippled band stay outside northwest; southern Salt Marsh stays below the outline."}},
+          "survey_refs": ["ink-C-terrain-clear"], "uncertainty": ["No new route, band ownership or movement authority inferred; human review pending."]
+        },
+        {
+          "hexes": ["C0521","C0524"],
+          "findings": {"terrain": {"status": "observed", "notes": "Enlarged outlines establish Clear beneath Track; Desert below C0521 and the band beside C0524 remain outside."}, "transport": {"status": "observed", "notes": "Retain northwest/east Track in C0521 and west/southeast Track in C0524. Printed dashes are not completed Road or Railroad."}, "hexside": {"status": "unresolved", "notes": "C0524 has an adjacent eastern/southeastern stippled band; no extra interior band or directional side effect inferred. C0521 has no independent directional side symbol inside."}},
+          "survey_refs": ["c-01-05-plain-ground","ink-C-hexside-track"], "uncertainty": ["Marginal band ownership and operational movement remain unresolved; human review pending."]
+        },
+        {
+          "hexes": ["C0523"],
+          "findings": {"terrain": {"status": "observed", "notes": "Enlarged control establishes Clear; neighboring olive band remains outside west/southwest."}, "transport": {"status": "observed", "notes": "Eight-times source pixels restore the near-vertex northwest crossing from C0622 and retain the east crossing into C0524. The narrow raster margin remains provisional; do not detour through C0623."}, "hexside": {"status": "unresolved", "notes": "Adjacent western/southwestern band has unresolved side ownership and polarity, not an interior Mountain core."}},
+          "survey_refs": ["c-01-05-plain-ground","siwa-western-track-corners","ink-C-hexside-track"], "uncertainty": ["Corner crossing has narrow raster/calibration margin; exact path, junction and band effect remain unresolved. C0622 context receives no whole-cell credit; human review pending."]
+        },
+        {
+          "hexes": ["C0526","C0528","C0529","C0530","C0531"],
+          "findings": {"terrain": {"status": "observed", "notes": "Four-times controls establish plain Clear inside each outline. Adjacent Salt Marsh, Rough and olive bands stay outside; do not pull exterior patches into these interiors."}, "hexside": {"status": "unresolved", "notes": "Stippled bands touch western/southern/eastern neighboring boundaries. Their marginal footprint and Up/Down effect are not resolved by a plain interior."}},
+          "survey_refs": ["c-01-05-plain-ground"], "uncertainty": ["C0528 unfinished-Road capsules are outside northwest. No extra route or directional movement rule inferred; human review pending."]
+        },
+        {
+          "hexes": ["C0527"],
+          "findings": {"terrain": {"status": "observed", "notes": "Four-times control establishes Clear beneath route depictions; Rough lies outside the southern outline."}, "transport": {"status": "observed", "notes": "Disconnected double unfinished-Road capsules pass northeast/southwest. A single Track enters northwest and meets the capsules inside; retain the depicted meeting without promoting completed Road or asserting usable connection."}},
+          "survey_refs": ["c-01-05-plain-ground","ink-C-hexside-track","ink-C-hexside-unfinished_road"], "uncertainty": ["Construction completion, within-cell junction and water/terrain movement effects unresolved; human review pending."]
+        },
+        {
+          "hexes": ["C0533"],
+          "findings": {"terrain": {"status": "observed", "notes": "Four-times control establishes Clear beneath Track and gray section-line overprints. Northern Rough remains outside."}, "transport": {"status": "observed", "notes": "Single dashed Track crosses west/east; eastern continuation leaves section inventory without authorizing a seam link."}},
+          "survey_refs": ["c-01-05-plain-ground","ink-C-hexside-track"], "uncertainty": ["Section continuity is not reconciled adjacency or operational passage; human review pending."]
+        },
+        {
+          "hexes": ["C0330","C0423","C0427","C0430"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain pale smooth Rough patches and plain gaps, separate from neighboring olive bands. No full-cell replacement or Mountain inferred from stippled ink."}, "hexside": {"status": "unresolved", "notes": "Nearby stippled band footprints and boundary ownership remain unresolved. C0423/C0427/C0430 bands are predominantly exterior; no new directional side effect inferred."}},
+          "survey_refs": ["ink-C-terrain-rough"], "uncertainty": ["C0427 unfinished capsules stay outside west; no interior route added. Partial ground and band polarity unresolved; human review pending."]
+        },
+        {
+          "hexes": ["C0426"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain interior Rough patch with plain margins; exterior bands do not create Mountain."}, "transport": {"status": "observed", "notes": "Disconnected double unfinished-Road capsules pass northeast/southeast just inside the eastern edge, separate from the exterior continuation beside C0427."}},
+          "survey_refs": ["ink-C-terrain-rough","ink-C-hexside-unfinished_road"], "uncertainty": ["Construction state and operational route availability unresolved; human review pending."]
+        },
+        {
+          "hexes": ["C0225","C0226"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain gaps and northern olive stippled bands share these untyped interiors. Do not default them to Clear or infer a full-cell Mountain class."}, "transport": {"status": "observed", "notes": "C0225 has west/east Track plus a northwest branch; C0226 bends west/southeast toward Siwa. Neighboring unfinished capsules stay outside northeast C0226."}, "hexside": {"status": "unresolved", "notes": "Broad northern olive bands and detached stipple remain directional-footprint evidence without resolved polarity or side ownership."}},
+          "survey_refs": ["ink-C-hexside-track"], "uncertainty": ["Unmapped ground is not Clear; forks do not establish operational junctions or water supply. Human review pending."]
+        },
+        {
+          "hexes": ["C0227"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain interior with northwestern olive band remains untyped; no Clear fallback or Mountain from band color."}, "transport": {"status": "observed", "notes": "Single dashed Track crosses southwest/east, beside disconnected double unfinished-Road capsules crossing southwest/northwest. Retain both without completion or transfer inference."}, "hexside": {"status": "unresolved", "notes": "Northwestern stippled band footprint, polarity and side association remain unresolved."}},
+          "survey_refs": ["ink-C-hexside-track","ink-C-hexside-unfinished_road"], "uncertainty": ["Ground class, construction completion and within-cell junction remain unresolved; human review pending."]
+        },
+        {
+          "hexes": ["C0230","C0331","C0431","C0532"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain gaps share the outline with western/northwestern olive bands. Keep untyped ground instead of default Clear or broad Mountain."}, "transport": {"status": "observed", "notes": "Retain Track west/northeast in C0230, southwest/northeast in C0331/C0431, and southwest/east bend in C0532. Enlarged controls keep each crossing distinct from stipple or grid."}, "hexside": {"status": "unresolved", "notes": "Olive band footprint and directional side effects remain unresolved; no Up/Down inference."}},
+          "survey_refs": ["ink-C-hexside-track"], "uncertainty": ["Printed bends are not exact source paths or operational passage; human review pending."]
+        },
+        {
+          "hexes": ["C0323","C0422"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Olive northern/eastern band and plain interior remain untyped. Do not convert stipple to a full Mountain core or infer Clear."}, "transport": {"status": "observed", "notes": "Eight-times pixels establish the omitted C0422 southeast to C0323 northwest crossing before the northern vertex. Retain C0422 northwest and C0323 east, without a detour through C0423."}, "hexside": {"status": "unresolved", "notes": "Stippled band crossed by Track retains unresolved footprint, polarity and side ownership."}},
+          "survey_refs": ["siwa-western-track-corners","ink-C-hexside-track"], "uncertainty": ["Corner-sensitive crossing remains provisional; exact route and directional movement effects unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["C0324","C0325","C0424","C0522"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain areas with northern/eastern/western olive bands remain untyped, not automatic Clear or Mountain."}, "transport": {"status": "observed", "notes": "Retain west/southeast Track in C0324/C0522 and northwest/southeast Track in C0325/C0424. No extra northwest crossing in C0324 or completed Road inferred."}, "hexside": {"status": "unresolved", "notes": "Broad olive band and fringe footprints/polarity remain unresolved independently of Track sides."}},
+          "survey_refs": ["ink-C-hexside-track"], "uncertainty": ["No uniform terrain, source centerline, junction or Up/Down effect inferred; human review pending."]
+        },
+        {
+          "hexes": ["C0326","C0328","C0329","C0428","C0429"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "White gaps and olive bands share each outline; keep untyped ground rather than invent Clear or whole-cell Mountain."}, "hexside": {"status": "unresolved", "notes": "Stippled bands occupy western/southern C0326, western C0328, eastern C0329 and northern/western or eastern C0428/C0429 interiors. Exact footprint, polarity and side effects remain unresolved."}},
+          "survey_refs": [], "uncertainty": ["Nearby C0326 southwest Track stays exterior; no operational terrain interpretation or unobserved route inferred. Human review pending."]
+        },
+        {
+          "hexes": ["C0327"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain area and southern olive band remain untyped; no Clear fallback or Mountain inferred from band color."}, "transport": {"status": "observed", "notes": "Retain disconnected double unfinished-Road capsules northwest/southeast, not continuous Road or Railroad."}, "hexside": {"status": "unresolved", "notes": "Southern olive band footprint and directional side effects remain unresolved."}},
+          "survey_refs": ["ink-C-hexside-unfinished_road"], "uncertainty": ["Construction completion, ground class and operational passage unresolved; human review pending."]
+        }
+      ]
+    },
+    {
       "id": "b-56-61-whole-cell-2026-11-03", "date": "2026-11-03", "method": "agent_visual",
       "notes": "Individually viewed all 152 retained northern B outlines in seven 2x sheets, six enlarged contrary-case sheets and separate anchor controls against TEC. Reconciled against a895f83 without changing source/geometry pins. Restore six Track sides, two Road sides, two Clear, two partial Rough and one partial Mountain occurrences. Recover Derna anchor via a new template at unchanged threshold; its Rosetta match was separately spot-inspected but E4120 receives no whole-cell credit. Preserve prior classifications, construction and operational uncertainty. No Railroad observed in these 152 cells; all remaining C-E cells stay not_reviewed.",
       "common_findings": {

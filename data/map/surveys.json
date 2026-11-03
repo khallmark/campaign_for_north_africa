@@ -216,6 +216,26 @@
       "coverage": {"kind": "hexside", "sides": [{"hex":"A2331","direction":"east"},{"hex":"A2530","direction":"north_west"}], "observation": {"status": "provisional", "value": "track"}}
     },
     {
+      "id": "a-27-33-plain-ground", "label": "Nofilia to Beda Fomm plain interiors", "notes": "Whole-cell visual review of A2701–A3333 finds affirmative plain interiors in 23 previously untyped cells. Routes, location lettering and gray section lines are overprints. Exclude mixed coast, the A2828 stippled band and marginal Gravel at A2732/A2733. A2728 has a plain interior despite adjacent Salt Marsh/bands outside the outline. Clear records visible ground, not uniform edge pixels or movement authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2255,2110,665,565", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["A2728","A2730","A2731","A2829","A2831","A2833","A2929","A2930","A2932","A3029","A3030","A3031","A3032","A3033","A3131","A3229","A3231","A3232","A3233","A3330","A3331","A3332","A3333"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "a-27-partial-gravel", "label": "A2732 and A2733 southern Gravel fringes", "notes": "Four-times paired controls show Gravel ring arcs beyond the black grid stroke inside A2732 southeast and A2733 southwest/southeast. Retain partial occurrence, not homogeneous ground. A2832/A2833 provide plain neighboring controls; gray section line is not a route or terrain boundary rule.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2677,2473,243,201", "docs/CNAv2.1.0/images/TEC.png#legend/Gravel"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["A2732","A2733"], "observation": {"status": "provisional", "value": "gravel"}}
+    },
+    {
+      "id": "nofilia-road-tip", "label": "Nofilia northwestern Road tip", "notes": "Enlarged source shows a continuous double Road extending across A2703 northwest into A2802 before its closed tip. The detector's long-stroke gate omits this short crossing. This is not a chain of unfinished-road capsules; no further western connection is inferred. Preserve existing A2703 east road and nearby Track/Wadi separately. Source tip does not establish an operational endpoint or junction.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=119,2473,286,201", "docs/CNAv2.1.0/images/TEC.png#legend/Road"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"A2703","direction":"north_west"}], "observation": {"status": "provisional", "value": "road"}}
+    },
+    {
+      "id": "coastal-anchor-symbols", "label": "Nofilia, Zuetina and Benghazi source anchors", "notes": "White anchor-in-circle symbols independently inspected at 4x. Source template variants recover measured centers Nofilia (283.5,2576.5), Zuetina (2390.5,2450.5), Benghazi (2348.5,1054.5) without reducing the 0.88 match threshold. Full-source candidate search found these three plus unchanged Matruh/Ras el Ali, not complete port recall. Nofilia's footprint straddles A2703/A2803; its center is only about two pixels inside A2703. Center membership does not establish operational ownership or associate the anchor with a settlement. Benghazi is a point-only spot check, not whole-cell review credit.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=124,2478,319,192", "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2255,2332,277,265", "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2255,946,234,265", "docs/CNAv2.1.0/images/TEC.png#legend/Port"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "point", "hexes": ["A2703","A2928","A4827"], "observation": {"status": "unresolved", "source_label": "Anchor glyph measured; footprint membership, operational port association, capacity and efficiency unresolved"}}
+    },
+    {
       "id": "benghazi-major-city", "label": "Benghazi building cluster", "notes": "Blue building cluster matches TEC Major City, distinct from black training-area figures. Its glyph lies in A4827; adjacent El Berca and Benina dots are separate locations. No automatic port or fortification level assignment.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2270,1000,170,150", "docs/CNAv2.1.0/images/TEC.png#legend/Major-City"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-10-25"},
       "coverage": {"kind": "point", "hexes": ["A4827"], "observation": {"status": "provisional", "value": {"type": "major_city"}}}

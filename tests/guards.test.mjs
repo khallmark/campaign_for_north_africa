@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { access, copyFile, mkdir, mkdtemp, rm, symlink, writeFile } from 'node:fs/promises';
+import { access, copyFile, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -53,6 +53,75 @@ test('credential guard accepts clean sparse blobs but rejects missing files and 
   assert.equal(check('no-credentials').status, 1);
   await symlink('outside', path);
   assert.equal(check('no-credentials').status, 1);
+});
+
+test('credential guard accepts the actual compressed-pixel collision, including sparse blobs', async t => {
+  const { root, git, check } = await repository(t);
+  // Original generated terrain, not a source scan. Keep the actual failing bytes
+  // independent of future terrain regeneration and of the filename extension.
+  await copyFile(new URL('./fixtures/terrain-credential-collision.webp', import.meta.url), join(root, 'image.bin'));
+  git('add', 'image.bin');
+  assert.equal(check('no-credentials').status, 0);
+  git('update-index', '--skip-worktree', 'image.bin');
+  await rm(join(root, 'image.bin'));
+  assert.equal(check('no-credentials').status, 0);
+});
+
+test('credential guard scans WebP metadata, trailing bytes and malformed containers', async t => {
+  const { root, git, check } = await repository(t);
+  const actual = await readFile(new URL('./fixtures/terrain-credential-collision.webp', import.meta.url));
+  // A real one-pixel lossless WebP without a coincidental marker, so metadata
+  // cases fail only when the scanner actually reaches the inserted text.
+  const clean = Buffer.from('UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAdQxuIVtP+BiOh/AAA=', 'base64');
+  const secret = Buffer.from('\npass' + 'word=synthetic-do-not-log\n');
+  const chunk = (type, data) => {
+    const header = Buffer.alloc(8);
+    header.write(type);
+    header.writeUInt32LE(data.length, 4);
+    return Buffer.concat([header, data, Buffer.alloc(data.length % 2)]);
+  };
+  const metadata = type => {
+    const extended = Buffer.alloc(10);
+    extended[0] = type === 'EXIF' ? 8 : 4;
+    const body = Buffer.concat([Buffer.from('WEBP'), chunk('VP8X', extended), clean.subarray(12), chunk(type, secret)]);
+    const header = Buffer.alloc(8);
+    header.write('RIFF');
+    header.writeUInt32LE(body.length, 4);
+    return Buffer.concat([header, body]);
+  };
+  const path = join(root, 'image.webp');
+  await writeFile(path, clean);
+  git('add', 'image.webp');
+  assert.equal(check('no-credentials').status, 0);
+  const brokenSize = Buffer.from(actual);
+  brokenSize.writeUInt32LE(actual.length + 100, 4);
+  const brokenChunk = Buffer.from(actual);
+  brokenChunk.writeUInt32LE(actual.length, 16);
+  const badSignature = Buffer.from(actual);
+  badSignature[20] = 0;
+  const badVersion = Buffer.from(actual);
+  badVersion[24] |= 0x20;
+  const badPadding = Buffer.concat([actual, Buffer.from([0, 1])]);
+  badPadding.writeUInt32LE(badPadding.length - 8, 4);
+  badPadding.writeUInt32LE(actual.readUInt32LE(16) + 1, 16);
+  for (const [name, bytes] of [
+    ['trailing secret', Buffer.concat([actual, secret])],
+    ['EXIF secret', metadata('EXIF')],
+    ['XMP secret', metadata('XMP ')],
+    ['oversized RIFF', brokenSize],
+    ['oversized chunk', brokenChunk],
+    ['truncated payload', actual.subarray(0, actual.length - 2)],
+    ['invalid lossless signature', badSignature],
+    ['invalid lossless version', badVersion],
+    ['nonzero chunk padding', badPadding],
+    ['truncated chunk header', Buffer.concat([clean.subarray(0, 16), secret])],
+    ['text disguised as image', secret],
+  ]) {
+    await writeFile(path, bytes);
+    const result = check('no-credentials');
+    assert.equal(result.status, 1, name);
+    assert.ok(!result.stderr.includes('synthetic-do-not-log'), name);
+  }
 });
 
 test('partial sparse clones require fetched blobs and scan them without materializing source files', async t => {

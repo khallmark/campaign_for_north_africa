@@ -5,8 +5,45 @@ python3 - <<'PY'
 from contextlib import ExitStack
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
+from tempfile import TemporaryFile
+
+
+def scan_blocks(stream):
+    header = stream.read(25)
+    # Only the simple lossless container emitted by our raster generator:
+    # https://developers.google.com/speed/webp/docs/riff_container
+    # Extended/animated WebP and all other formats retain the full byte scan.
+    if header[:4] == b'RIFF' and header[8:16] == b'WEBPVP8L' and len(header) == 25:
+        # Sparse Git blobs arrive through a pipe. Validate actual length before
+        # excluding anything, using disk rather than buffering large images.
+        with TemporaryFile() as image:
+            image.write(header)
+            shutil.copyfileobj(stream, image)
+            length = image.tell()
+            riff_end = int.from_bytes(header[4:8], 'little') + 8
+            payload_size = int.from_bytes(header[16:20], 'little')
+            pixel_end = 20 + payload_size
+            valid = (payload_size > 5 and riff_end <= 0xfffffffe
+                     and riff_end == pixel_end + payload_size % 2
+                     and riff_end <= length and header[20] == 0x2f
+                     and header[24] >> 5 == 0)
+            if valid and payload_size % 2:
+                image.seek(pixel_end)
+                valid = image.read(1) == b'\0'
+            image.seek(0)
+            if valid:
+                # Keep container/bitstream headers, padding and *all* trailing
+                # bytes. A second chunk (including metadata) fails the single-
+                # chunk layout check above and falls back to scanning everything.
+                yield image.read(25)
+                image.seek(pixel_end)
+            yield from iter(lambda: image.read(65536), b'')
+    else:
+        yield header + stream.read(65536 - len(header))
+        yield from iter(lambda: stream.read(65536), b'')
 
 # Check bytes without decoding saves or echoing matches into logs/artifacts.
 patterns = [
@@ -34,7 +71,7 @@ for raw in paths:
             process = None
             stream = stack.enter_context(path.open('rb'))
         tail = b''
-        while chunk := stream.read(65536):
+        for chunk in scan_blocks(stream):
             block = tail + chunk
             # Avoid running the full expressions over large image/PDF payloads.
             lower = block.lower()
@@ -51,5 +88,5 @@ if failed:
     for path in failed:
         print(f'{path}: credential/save marker or unreadable tracked file (content withheld)', file=sys.stderr)
     sys.exit(1)
-print(f'Credential check: {len(paths)} tracked files contain no credential/save markers; saves were not decoded.')
+print(f'Credential check: {len(paths)} tracked files contain no credential/save markers outside validated compressed pixels; saves were not decoded.')
 PY

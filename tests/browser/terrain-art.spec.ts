@@ -162,9 +162,9 @@ test('bundled terrain works without private scans and survives map controls', as
   await expect(page.locator('.geography-inspector')).toContainText('mountain');
   expect(await groundPixel()).not.toEqual(desertPixel);
   expect(await groundPixel()).not.toEqual([216, 220, 223, 255]);
-  // A road/name can interrupt classification without changing its paper palette.
+  // Sofafi's mixed directional band remains untyped after visual review.
   // Unknown must stay unclassified, but must not become a cold white corridor.
-  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('C3111');
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('C3427');
   await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
   await expect(page.locator('.geography-inspector')).toContainText('Terrain unmapped — not Clear');
   const paper = await groundPixel();
@@ -184,7 +184,7 @@ test('measured source labels retain positions and uncertainty across viewer cont
   await expect(point).toHaveClass('source-point unresolved');
   await expect(point.locator('title')).toContainText('not operational authority');
   await expect(page.locator('.source-point-evidence')).toContainText('Measured source position [6567, 2324.1]');
-  await expect(page.locator('.geography-inspector')).toContainText('Terrain unmapped — not Clear.');
+  await expect(page.locator('.geography-inspector')).toContainText('El Cuasc and Sofafi plain interiors: clear · provisional');
   await expect(page.locator('.terrain-art-point[data-hex="C3111"]')).toHaveCount(0);
 
   async function checkMeasuredPosition() {

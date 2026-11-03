@@ -149,6 +149,7 @@ class MapDatabaseTests(unittest.TestCase):
                               ("C1715", "clear"), ("C2008", "clear"),
                               ("C2322", "clear"), ("C2405", "clear"),
                               ("C2803", "clear"), ("C3019", "clear"),
+                              ("C3111", "clear"), ("C3226", "clear"),
                               ("A0217", "salt_marsh"), ("A0426", "desert")):
             self.assertEqual(self.db.execute(
                 "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain'",
@@ -166,7 +167,7 @@ class MapDatabaseTests(unittest.TestCase):
         for hex_id in ("Malta 0505", "Malta 0804", "Malta 1301", "A0925",
                        "A1125", "A1325", "A1418", "A1527", "A1617", "A1704",
                        "A1732", "A1819", "A2010", "A2033", "A2209", "A2332",
-                       "A2429", "A2529", "C1118", "C1217", "C2313"):
+                       "A2429", "A2529", "C1118", "C1217", "C2313", "C3427"):
             self.assertEqual(self.db.execute(
                 "SELECT value FROM observations WHERE hex=? AND kind='terrain'", (hex_id,)).fetchall(), [])
         # Independently inspected TEC controls: pale gaps are unfinished, dark
@@ -270,6 +271,9 @@ class MapDatabaseTests(unittest.TestCase):
             'C2013 C1914 C1814',
             'C2321 C2322 C2422 C2522',
             'C2803 C2804 C2805 C2806 C2807',
+            'C3125 C3225 C3226',
+            'C3524 C3424 C3425 C3426',
+            'C3427 C3527 C3626',
             'B1706 B1606 B1507 B1508 B1509',
             'B2118 B2217 B2318 B2418 B2518',
             'B2130 B2229 B2330 B2430 B2531',

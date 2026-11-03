@@ -6,6 +6,26 @@
   },
   "surveys": [
     {
+      "id": "b-51-55-plain-ground", "label": "Tmimi and northern B plain interiors", "notes": "Individual outlined crops and paired four-times controls confirm four plain interiors beneath Wadi, location or unfinished-Road overprints. Near-grid Gravel at B5129/B5130/B5228, stippled bands and mixed coastal cells remain excluded. Clear is a provisional occurrence, not uniform pixels or movement authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=5030,510,400,410", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["B5229","B5426","B5427","B5527"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "b-53-55-mountain-cores", "label": "Northern B and Chaulan Mountain cores", "notes": "Four-times outlined controls separate smooth olive Mountain cores in B5301, B5315 and Chaulan B5518 from pale Rough and stippled side bands. Existing Rough in B5301/B5315 remains; Chaulan's white fringe is not promoted to Rough. Village/Bir dot, label and Track branches remain separate, with operational category and human adjudication unresolved.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2840,500,1580,300", "docs/CNAv2.1.0/images/TEC.png#legend/Mountain"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["B5301","B5315","B5518"], "observation": {"status": "provisional", "value": "mountain"}}
+    },
+    {
+      "id": "barce-martuba-track-crossings", "label": "Barce, Maraua and Martuba missing Track crossings", "notes": "Outlined source controls restore sixteen single-dashed crossings. Barce's Track is separate from the tied Railroad. B5316 bends through B5216 then B5217, not B5317. B5222 and B5325 southern exits lie inside their southeast vertices; B5219 and B5520 northern routes retain narrow vertex uncertainty. The B5515 Track originates in B5614, not B5514; B5614 and Tocra's B5601 continuation are context-only, not whole-cell review credit. B5523 east crosses beneath disconnected double unfinished-Road dashes without changing construction status. B5508's exact northeast-vertex route remains unresolved and excluded. No exact centerline, operational junction, bridge, section seam or movement permission inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2840,425,2250,500", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"B5110","direction":"east"},{"hex":"B5124","direction":"east"},{"hex":"B5202","direction":"north_east"},{"hex":"B5303","direction":"north_east"},{"hex":"B5403","direction":"north_east"},{"hex":"B5216","direction":"north_west"},{"hex":"B5216","direction":"east"},{"hex":"B5217","direction":"east"},{"hex":"B5219","direction":"north_west"},{"hex":"B5123","direction":"north_west"},{"hex":"B5225","direction":"north_west"},{"hex":"B5325","direction":"north_east"},{"hex":"B5419","direction":"north_east"},{"hex":"B5515","direction":"north_west"},{"hex":"B5523","direction":"east"},{"hex":"B5501","direction":"north_east"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "barce-rail-crossings", "label": "Barce approach Railroad crossings", "notes": "Continuous tied Railroad crosses B5202 northeast into B5303 southwest, then the already-recorded B5303 northeast into B5403, then B5403 northeast into Barce B5504 southwest. Two missing crossings are distinguished from adjacent parallel Track and transverse ties. Barce's dot covers the northern endpoint; no operational terminus, transfer junction or availability is inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2980,490,250,390", "docs/CNAv2.1.0/images/TEC.png#legend/Railroad"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"B5202","direction":"north_east"},{"hex":"B5403","direction":"north_east"}], "observation": {"status": "provisional", "value": "railroad"}}
+    },
+    {
       "id": "b-46-50-plain-ground", "label": "B46–50 affirmative plain ground", "notes": "Individual outlined crops and four-times controls confirm six plain interiors beneath Wadi and Track overprints. Nine untyped near-grid Gravel cases, a broad scarp-band cell and two mixed-coast cells remain excluded. Existing ground classes and measured points are unchanged. Clear is a provisional occurrence, not uniform edge pixels or movement authority.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=2850,860,2900,430", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
       "coverage": {"kind": "terrain", "hexes": ["B4604","B4615","B4616","B4617","B4717","B4907"], "observation": {"status": "provisional", "value": "clear"}}

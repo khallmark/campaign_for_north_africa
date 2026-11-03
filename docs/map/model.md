@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 990/1,520 C cells;
-3,067 cells remain not_reviewed**, covering C3101 onward and all of D–E. Rosetta's
+Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 1,155/1,520 C cells;
+2,902 cells remain not_reviewed**, covering C3601 onward and all of D–E. Rosetta's
 anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
@@ -652,6 +652,21 @@ edge-following stroke does not establish an additional perpendicular crossing.
 C2701's western Wadi cap and C3033's southeast Track continuation meet inventory
 boundaries without creating adjacency. Existing Rough and Salt Marsh, blue barred
 meanings, Wadi footprints and operational uncertainty are preserved.
+
+The seventh C batch reviews **165 retained C3101–C3533 cells**. It adds 76
+affirmative Clear occurrences and five Track crossings: C3125 northeast → C3225
+southwest, C3225 east → C3226 west, C3424 northwest → C3524 southeast, C3424 east →
+C3425 west and C3527 northwest → C3626 southeast. The last cell is paired crossing
+context only, not whole-cell review credit. Disconnected cross-ties remain
+unfinished Railroad, distinct from Track and not operational rail or interchanges.
+
+El Cuasc (C3111), El Hamra (C3125), Bir el Sheferzen (C3419) and Sofafi (C3427)
+retain measured source points and unresolved Village/Bir categories. C3427 remains
+untyped because an olive directional band enters its northwest interior. Rough,
+Wadi margins, blue bars and escarpment polarity remain distinct and uncertain.
+C3101's western and C3533's eastern continuations are boundary findings, not new
+adjacency. C3128/C3129's corner-following Track remains unresolved rather than
+inventing a detour from C3028. No operational permissions are inferred.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

@@ -96,14 +96,14 @@ automated or agent-visual record is human-reviewed.
 | --- | ---: | --- | ---: |
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
 | A | 1,000 | 866 / 62 / 64 / 8 | 828 |
-| B | 1,961 | 1,885 / 40 / 34 / 2 | 1,663 |
+| B | 1,961 | 1,885 / 40 / 34 / 2 | 1,721 |
 | C | 1,520 | 1,438 / 41 / 36 / 5 | 859 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **302 surveys / 24,433 observations**: 5,248 terrain,
-19,028 hexside and 157 point observations. **8,194 are provisional, 16,239 unresolved,
-none human-reviewed.** Terrain observations cover 5,100 cells; 1,976 have none.
+The current combined model has **304 surveys / 24,493 observations**: 5,306 terrain,
+19,030 hexside and 157 point observations. **8,254 are provisional, 16,239 unresolved,
+none human-reviewed.** Terrain observations cover 5,158 cells; 1,918 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -260,9 +260,9 @@ route geometry are separate work; the detector's raw findings remain unchanged.
 The Malta whole-cell audit adds four provisional ground observations. The A audit
 adds 199 Clear occurrences, nine partial Mountain cores retaining existing Rough
 fringes, five partial Gravel occurrences and one partial Rough occurrence.
-The first six B batches add 276 Clear occurrences and one partial Rough
-occurrence. Of 1,976 cells without typed ground,
-source-surface measurements report 1,544 land, 228
+The first seven B batches add 334 Clear occurrences and one partial Rough
+occurrence. Of 1,918 cells without typed ground,
+source-surface measurements report 1,486 land, 228
 water, 180 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 990/1,961 B cells; 5,028 cells
-remain not_reviewed**, including B3101 onward and all of C–E. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,155/1,961 B cells; 4,863 cells
+remain not_reviewed**, including B3601 onward and all of C–E. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -450,6 +450,18 @@ Sauhu label transcription remain uncertain. Three Rough, one Gravel and two
 Salt Marsh occurrences stay unchanged. Wadi ribbons retain provisional side
 associations, not exact boundary geometry. B2601/B3001 west and B3033 northeast
 continuations are seam-owner findings, not fabricated cross-section links.
+No new settlement or facility glyph was observed in these 165 cells.
+
+The B3101–B3533 batch adds fifty-eight affirmative Clear occurrences and restores
+**B3208 northeast → B3309** and **B3333 northwest → B3432** Tracks. Enlarged
+controls reject detours through B3209 and B3433. Existing Maaten el-Grara and
+Bir measured dots are retained with unresolved Village/Bir categories; Trigh el
+Abd lettering is not a settlement. Three olive-band interiors B3102/B3201/B3501
+remain untyped; nine Rough and five Salt Marsh occurrences remain unchanged.
+Wadi associations stay provisional, including outside/near-edge ribbons.
+Northwest/southwest Tracks in B3101/B3301/B3501, B3201 west and B3233 southeast
+exit retained inventory and require seam-owner reconciliation. No zero-column
+cells, B3134, cross-section links or operational permissions were invented.
 No new settlement or facility glyph was observed in these 165 cells.
 
 ```sh

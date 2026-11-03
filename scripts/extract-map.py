@@ -126,12 +126,11 @@ def point_candidates(image, cell, rules, templates):
     for spec, template in templates:
         scores = cv2.matchTemplate(masks[spec["ink"]], template, cv2.TM_CCOEFF_NORMED)
         yy, xx = np.where(scores >= spec["minimum_score"])
-        accepted = []
         for score, x, y in sorted(((float(scores[y, x]), int(x), int(y)) for y, x in zip(yy, xx)), reverse=True):
             position = np.array([x + template.shape[1]/2 + bounds[0], y + template.shape[0]/2 + bounds[1]])
-            if cv2.pointPolygonTest(polygon, tuple(position), False) < 0 or any(np.linalg.norm(position-p) < 20 for p in accepted):
+            if cv2.pointPolygonTest(polygon, tuple(position), False) < 0 or any(
+                    p["symbol"] == spec["symbol"] and np.linalg.norm(position-p["center"]) < 20 for p in points):
                 continue
-            accepted.append(position)
             points.append({"symbol": spec["symbol"], "center": position.tolist(), "score": round(score, 5),
                            "template_crop": spec["crop"], "status": "provisional" if spec["symbol"] == "oasis" else "unresolved",
                            "reason": "Source template match; port operational association and efficiency are not inferred"})

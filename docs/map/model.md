@@ -97,13 +97,13 @@ automated or agent-visual record is human-reviewed.
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
 | A | 1,000 | 866 / 62 / 64 / 8 | 828 |
 | B | 1,961 | 1,885 / 40 / 34 / 2 | 1,832 |
-| C | 1,520 | 1,438 / 41 / 36 / 5 | 932 |
+| C | 1,520 | 1,438 / 41 / 36 / 5 | 997 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **331 surveys / 24,746 observations**: 5,496 terrain,
-19,080 hexside and 170 point observations. **8,502 are provisional, 16,244 unresolved,
-none human-reviewed.** Terrain observations cover 5,342 cells; 1,734 have none.
+The current combined model has **332 surveys / 24,811 observations**: 5,561 terrain,
+19,080 hexside and 170 point observations. **8,567 are provisional, 16,244 unresolved,
+none human-reviewed.** Terrain observations cover 5,407 cells; 1,669 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -262,8 +262,8 @@ adds 199 Clear occurrences, nine partial Mountain cores retaining existing Rough
 fringes, five partial Gravel occurrences and one partial Rough occurrence.
 The twelve B batches add 443 Clear occurrences, three partial Rough
 occurrences and six partial Mountain cores, retaining existing Rough where present.
-The first two C batches add 72 Clear occurrences and one marginal Desert occurrence.
-Of 1,734 cells without typed ground, source-surface measurements report 1,303 land, 228
+The first three C batches add 137 Clear occurrences and one marginal Desert occurrence.
+Of 1,669 cells without typed ground, source-surface measurements report 1,238 land, 228
 water, 179 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -281,8 +281,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 330/1,520 C cells;
-3,727 cells remain not_reviewed**, covering C1101 onward and all of D–E. Rosetta's
+Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 495/1,520 C cells;
+3,562 cells remain not_reviewed**, covering C1601 onward and all of D–E. Rosetta's
 anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
@@ -618,6 +618,22 @@ operational effects remain unresolved. **C0901 northwest exits the retained
 inventory**: this is a boundary finding for reconciliation, not a new row-zero
 neighbor, seam link or fabricated terminus. No continuous Road or Railroad is
 observed in this batch; source/geometry pins are unchanged.
+
+The third C batch reviews **165 retained C1101–C1533 cells** at 2× with enlarged
+4× controls, adding 65 affirmative Clear occurrences beneath Track, Wadi,
+unfinished-Road and gray section-line overprints. Plain cores surrounded by Wadi
+in C1306/C1405 remain ground, not full-cell water. C1116/C1117/C1118/C1217 olive
+band interiors stay untyped. Ain Melfa's existing unresolved Village/Bir point at
+**(7170.58,3781.65)** is retained without operational supply or town promotion.
+
+Existing internal route sequences—including **C1119 northwest → C1218 southeast**—
+match the enlarged source controls and require no new sides or reclassification.
+Tracks leaving C1101/C1201 west and Wadi leaving C1501's western boundary are
+reported for seam reconciliation only; no row-zero neighbor is introduced.
+Broad Wadi footprints, terminal tips, blue barred meanings, band polarity and
+construction completion remain unresolved. Existing points, raw evidence,
+geometry and source hashes are unchanged; no continuous Road or Railroad is
+observed in this batch.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

@@ -280,8 +280,9 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 1,520/1,520 C cells;
-2,537 cells remain not_reviewed**, covering all of D–E. Rosetta's
+Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B, 1,520/1,520 C and
+165/1,240 D cells; 2,372 cells remain not_reviewed**, covering the remaining D
+and all 1,297 E cells. Rosetta's
 anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
@@ -708,9 +709,18 @@ C4401/C4402 Gravel fragments, C4517's inward olive band and C4904's small northe
 water intrusion remain explicit uncertainties, not new Clear. Existing Rough,
 Gravel, measured Village/Bir points, Wadi margins, blue bars and face polarity
 remain unchanged. C4111/C4112's near-vertex Track and C4301/C4501/C4901 boundary
-continuations do not create new geometry or seam links. All 4,539 reviewed cells
-retain family-level uncertainty and `human_reviewed: false`; the 2,537 D/E cells
-remain `not_reviewed` regardless of existing detector or spot-survey evidence.
+continuations do not create new geometry or seam links.
+
+The first D batch reviews **165 D0101–D0533 cells**, adding twenty provisional
+Clear occurrences beneath existing Tracks and beside exterior olive bands.
+D0113 and D0206 have plain cores; D0307's southeast stipple, D0330/D0331's
+northern Gravel fragments and D0433/D0533's western fragments remain untyped.
+D0332/D0333 retain prior provisional Clear with explicit Gravel-footprint
+uncertainty. Rough, Salt Marsh, Desert, Gravel and Wadi observations remain
+separate. Boundary Track continuations do not invent seam neighbors; no route,
+location, source identity or geometry changed. All **4,704 reviewed cells** retain
+family-level uncertainty and `human_reviewed: false`; **2,372 cells remain
+`not_reviewed`**, including inspected but unreconciled D0601–D1033 crops.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

@@ -6,6 +6,11 @@
   },
   "surveys": [
     {
+      "id": "d-01-05-plain-ground", "label": "Southern D affirmative plain interiors", "notes": "Twenty individually outlined controls establish affirmative Clear beneath single Tracks and beside exterior olive bands. D0113 northern band and D0206 eastern band remain exterior to the plain core. Exclude D0307 southeast stipple, D0330/D0331/D0433/D0533 Gravel fragments and broad inward olive bands. Preserve existing Rough, Salt Marsh, Desert, Gravel, Wadi, routes and all location uncertainty. No uniform terrain footprint, operational capacity or movement rule inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=8480,4150,2900,420", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["D0101","D0102","D0103","D0104","D0113","D0127","D0130","D0206","D0226","D0230","D0231","D0232","D0233","D0329","D0424","D0427","D0428","D0524","D0526","D0527"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
       "id": "c-41-51-plain-ground", "label": "Northern C affirmative plain interiors", "notes": "Thirty-three individually outlined enlarged controls establish affirmative plain ground beneath lettering, Village/Bir dots, routes and Wadi margins. C4306 has a separate southeast Wadi cap; C4706 and C4801 have exterior faces. Exclude inward olive bands, mixed coast and C4401/C4402 boundary Gravel fragments. Preserve existing partial Rough, Gravel, construction depictions and operational uncertainty; no uniform movement effect inferred.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=5650,730,2910,900", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
       "coverage": {"kind": "terrain", "hexes": ["C4101","C4102","C4103","C4104","C4105","C4108","C4109","C4110","C4111","C4118","C4119","C4120","C4201","C4202","C4205","C4207","C4210","C4211","C4216","C4217","C4301","C4302","C4303","C4304","C4306","C4307","C4418","C4419","C4503","C4518","C4519","C4706","C4801"], "observation": {"status": "provisional", "value": "clear"}}

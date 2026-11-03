@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 825/1,520 C cells;
-3,232 cells remain not_reviewed**, covering C2601 onward and all of D–E. Rosetta's
+Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 990/1,520 C cells;
+3,067 cells remain not_reviewed**, covering C3101 onward and all of D–E. Rosetta's
 anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
@@ -638,6 +638,20 @@ remain distinct from plain margins. Blue barred glyphs continue beyond Wadi
 ribbons around C2419/C2420 and C2520/C2521; their meaning is not promoted to
 Railroad, river or operational effect. No new location or boundary connection
 is inferred. Review coverage does not mean those interpretations are resolved.
+
+The sixth C batch reviews **165 retained C2601–C3033 cells**. It adds 60
+affirmative Clear occurrences beneath Track, Wadi tips, labels and section lines,
+and restores **C2803 east → C2804 west Track**. Paired outlines show the eastward
+branch across C2804 Rough, continuing through C2805–C2807. Requested C3011 east →
+C3012 west already matches the source and remains unchanged.
+
+Fort Maddelenna (C3019), Bir el esc Scegga (C3020) and Bir Khamsa (C3029) retain
+their unresolved Village/Bir labels and legacy absence of measured coordinates;
+no town, water yield or operational fortification is inferred. C3028's northeast
+edge-following stroke does not establish an additional perpendicular crossing.
+C2701's western Wadi cap and C3033's southeast Track continuation meet inventory
+boundaries without creating adjacency. Existing Rough and Salt Marsh, blue barred
+meanings, Wadi footprints and operational uncertainty are preserved.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

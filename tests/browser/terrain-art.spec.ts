@@ -162,6 +162,14 @@ test('bundled terrain works without private scans and survives map controls', as
   await expect(page.locator('.geography-inspector')).toContainText('mountain');
   expect(await groundPixel()).not.toEqual(desertPixel);
   expect(await groundPixel()).not.toEqual([216, 220, 223, 255]);
+  // A road/name can interrupt classification without changing its paper palette.
+  // Unknown must stay unclassified, but must not become a cold white corridor.
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('C3111');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  await expect(page.locator('.geography-inspector')).toContainText('Terrain unmapped — not Clear');
+  const paper = await groundPixel();
+  expect(paper[0] - paper[2]).toBeGreaterThan(50);
+  expect(paper[1] - paper[2]).toBeGreaterThan(25);
   expect(failedArt).toEqual([]);
   expect(errors).toEqual([]);
 });
@@ -235,6 +243,7 @@ test('water shapes retain source channel widths without assigning river classes'
   await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
   const shapes = page.locator('.geography-overlay .source-water');
   await expect(shapes.first()).toBeVisible();
+  await expect(page.locator('.geography-water')).toHaveCount(0);
   await expect(page.locator('.source-water-layer > title')).toContainText('not a river classification');
   async function checkChannel() {
     const wet = await shapes.evaluateAll(nodes => {
@@ -260,9 +269,65 @@ test('water shapes retain source channel widths without assigning river classes'
   await page.keyboard.press('+');
   await checkChannel();
   await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  expect(await page.locator('.geography-water').count()).toBeGreaterThan(0);
   await checkChannel();
   await page.getByRole('button', { name: 'Geography', exact: true }).click();
   await expect(shapes).toHaveCount(0);
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  // Independent source-pixel transects in three sections, including grid
+  // interruptions. These are dry channels, never blue flowing-water shapes.
+  for (const [hex, y, xs] of [
+    ['A0807', 3990, [485, 496, 502, 515]],
+    ['B1515', 3500, [3785, 3798, 3808, 3825]],
+    ['C2016', 3200, [7025, 7040, 7050, 7065]],
+  ] as const) {
+    await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill(hex);
+    await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+    const channels = page.locator('.geography-overlay .source-wadi');
+    await expect(channels.first()).toBeVisible();
+    expect(await channels.evaluateAll((nodes, { y, xs }) => xs.map(x =>
+      nodes.some((node: SVGPathElement) => node.isPointInFill(new DOMPoint(x, y))),
+    ), { y, xs })).toEqual([false, true, true, false]);
+    await expect(channels.first()).toHaveCSS('fill', 'rgb(127, 148, 142)');
+    await page.getByRole('button', { name: 'Geography', exact: true }).click();
+    await expect(channels).toHaveCount(0);
+    await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  }
+});
+
+test('escarpments retain printed faces without turning lettering into terrain', async ({ page }) => {
+  await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'No private scan' }));
+  await page.goto('/');
+  const scarps = page.locator('.geography-overlay .source-escarpment');
+  // Independently sampled original-pixel transects in three sections. The
+  // broad face must stay at its source position, not become a hex-center line.
+  for (const [hex, y, xs] of [
+    ['A4331', 1450, [2665, 2680, 2686, 2700]],
+    ['C3624', 1950, [7677, 7691, 7696, 7710]],
+    ['D1814', 3250, [9640, 9655, 9662, 9678]],
+  ] as const) {
+    await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill(hex);
+    await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+    await expect(scarps.first()).toBeVisible();
+    expect(await scarps.evaluateAll((nodes, { y, xs }) => xs.map(x =>
+      nodes.some((node: SVGPathElement) => node.isPointInFill(new DOMPoint(x, y))),
+    ), { y, xs })).toEqual([false, true, true, false]);
+    await expect(scarps.first()).toHaveCSS('fill', 'rgb(94, 97, 98)');
+  }
+  await expect(page.locator('.source-water-layer > title')).toContainText('Up/Down unresolved');
+  await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  await expect(scarps.first()).toBeVisible();
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await expect(scarps).toHaveCount(0);
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await expect(scarps.first()).toBeVisible();
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('D1720');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  // Qattara Depression lettering uses exactly the same gray as the scarps.
+  expect(await scarps.evaluateAll(nodes => nodes.some((node: SVGPathElement) =>
+    node.isPointInFill(new DOMPoint(10200, 3330)),
+  ))).toBe(false);
 });
 
 test('source scan and original terrain can be compared together or independently', async ({ page }) => {
@@ -315,6 +380,47 @@ test('source scan and original terrain can be compared together or independently
   expect(await camera()).toEqual(initialCamera);
 });
 
+test('tracks stay legible over artwork and beside coincident construction', async ({ page }) => {
+  await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'No private scan' }));
+  await page.goto('/');
+  for (const [from, to] of [['C3632', 'C3633'], ['D3602', 'D3603'], ['C3722', 'C3821']]) {
+    await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill(from);
+    await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+    const separation = await page.evaluate(({ from, to }) => {
+      const center = (hex: string) => {
+        const polygon = document.querySelector<SVGPolygonElement>(`.geography-hex[data-hex="${hex}"]`)!;
+        const points = Array.from(polygon.points);
+        return new DOMPoint(points.reduce((sum, p) => sum + p.x, 0) / points.length,
+          points.reduce((sum, p) => sum + p.y, 0) / points.length);
+      };
+      const a = center(from), b = center(to);
+      const track = document.querySelector<SVGPathElement>('.geography-link.track')!;
+      const construction = document.querySelector<SVGPathElement>(
+        `.geography-construction.unfinished-railroad[data-from="${from}"][data-to="${to}"]`,
+      )!;
+      const midpoint = new DOMPoint((a.x + b.x) / 2, (a.y + b.y) / 2);
+      const railMidpoint = construction.getPointAtLength(construction.getTotalLength() / 2);
+      return { trackAtCrossing: track.isPointInStroke(midpoint),
+        distance: Math.hypot(railMidpoint.x - midpoint.x, railMidpoint.y - midpoint.y) };
+    }, { from, to });
+    expect(separation.trackAtCrossing).toBe(true);
+    expect(separation.distance).toBeGreaterThan(6);
+    expect(separation.distance).toBeLessThan(10);
+  }
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('D3115');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  const track = page.locator('.geography-link.track');
+  const casing = page.locator('.geography-overlay .geography-track-casing');
+  await expect(track).toHaveCSS('stroke', 'rgb(76, 47, 24)');
+  await expect(casing).toHaveCSS('stroke', 'rgb(255, 248, 229)');
+  expect(await casing.getAttribute('d')).toBe(await track.getAttribute('d'));
+  await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
+  await expect(casing).toBeAttached();
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await expect(track).toHaveCount(0);
+  await expect(casing).toHaveCount(0);
+});
+
 test('source-backed unfinished routes are visible without becoming completed links', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -323,11 +429,13 @@ test('source-backed unfinished routes are visible without becoming completed lin
   await page.getByRole('button', { name: 'Fit full board', exact: true }).click();
   // Railroad controls stay separate from the newly recognized hollow road
   // capsules. Generic unresolved ink (including blue bars) is not construction.
-  await expect(page.locator('.geography-construction.unfinished-railroad')).toHaveCount(27);
+  await expect(page.locator('.geography-construction.unfinished-railroad')).toHaveCount(39);
   await expect(page.locator('.geography-construction[data-from="C3019"][data-to="C3020"]')).toHaveCount(0);
   await expect(page.locator('.geography-link.unfinished-railroad, .geography-link.unfinished-road')).toHaveCount(0);
   for (const [hex, to, kind, label] of [
     ['C4217', 'C4218', 'unfinished-railroad', 'Unfinished railroad'],
+    ['D3602', 'D3603', 'unfinished-railroad', 'Unfinished railroad'],
+    ['D3611', 'D3711', 'unfinished-railroad', 'Unfinished railroad'],
     ['C3823', 'C3824', 'unfinished-road', 'Unfinished road'],
     ['C0127', 'C0227', 'unfinished-road', 'Unfinished road'],
     ['C1331', 'C1332', 'unfinished-road', 'Unfinished road'],

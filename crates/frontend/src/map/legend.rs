@@ -45,7 +45,7 @@ pub(super) fn render() -> String {
     }
     html.push_str(
         r#"</ul></section><section class="legend-geography-only"><h3>Routes &amp; construction</h3>
-        <p>Geography shows schematic crossings, not exact paths or movement permission.</p><ul class="legend-samples">"#,
+        <p>Geography shows schematic crossings, not exact paths or movement permission. Parallel display lanes separate a track and construction sharing a crossing; their spacing is not surveyed.</p><ul class="legend-samples">"#,
     );
     for (class, label, ties) in [
         ("legend-route road", "Road", ""),
@@ -63,7 +63,11 @@ pub(super) fn render() -> String {
             "legend-construction construction-ties",
         ),
     ] {
-        write!(html, r#"<li><svg viewBox="0 0 60 32" aria-hidden="true"><path class="{class}" d="M3 16H57"/>"#).unwrap();
+        html.push_str(r#"<li><svg viewBox="0 0 60 32" aria-hidden="true">"#);
+        if class == "legend-route track" {
+            html.push_str(r#"<path class="geography-track-casing" d="M3 16H57"/>"#);
+        }
+        write!(html, r#"<path class="{class}" d="M3 16H57"/>"#).unwrap();
         if !ties.is_empty() {
             write!(html, r#"<path class="{ties}" d="M3 16H57"/>"#).unwrap();
         }
@@ -75,8 +79,10 @@ pub(super) fn render() -> String {
         <li><svg viewBox="0 0 60 32" aria-hidden="true"><rect class="legend-water" x="5" y="3" width="50" height="26"/></svg><span>Water evidence</span></li>
         <li><svg viewBox="0 0 60 32" aria-hidden="true"><rect class="legend-water mixed_water_land" x="5" y="3" width="50" height="26"/></svg><span>Mixed water / land</span></li>
         <li><svg viewBox="0 0 60 32" aria-hidden="true"><path class="source-water" d="M4 3Q40 4 22 17Q9 28 56 25L56 32Q-8 34 10 15Q24 5 4 10Z"/></svg><span>Source water shape<small>Original channel width · display evidence only</small></span></li>
-        <li><svg viewBox="0 0 60 32" aria-hidden="true"><path class="legend-route side" d="M3 16H57"/></svg><span>Natural hexside<small>River, wadi, ridge, slope, escarpment, coast or sea</small></span></li>
-        </ul><p>Blue water tint and source-ink shapes are automated evidence, not Major/Minor River or sea/coast classifications. Source overprint gaps remain; no movement or crossing rules follow from these shapes. Natural hexsides share one style; use Hex evidence to identify the feature.</p></section>
+        <li><svg viewBox="0 0 60 32" aria-hidden="true"><path class="source-wadi" d="M4 3Q40 4 22 17Q9 28 56 25L56 32Q-8 34 10 15Q24 5 4 10Z"/></svg><span>Source wadi shape<small>Dry channel · not flowing water</small></span></li>
+        <li><svg viewBox="0 0 60 32" aria-hidden="true"><path class="source-escarpment" d="M3 7L25 17L57 7V16L49 17L48 23L42 20L39 25L32 23L25 28L17 23L13 25L9 18L3 19Z"/></svg><span>Source escarpment face<small>Printed fringe · Up/Down unresolved</small></span></li>
+        <li><svg viewBox="0 0 60 32" aria-hidden="true"><path class="legend-route side" d="M3 16H57"/></svg><span>Other natural hexside<small>Ridge, slope, escarpment, coast or sea</small></span></li>
+        </ul><p>Source water, dry-wadi and escarpment shapes retain printed widths, bends and scarp faces. Whole-cell water evidence tints appear only with Original terrain off; they are not shorelines. Shapes are automated evidence, not Major/Minor River, sea/coast or Up/Down Escarpment classifications. Source overprint gaps remain; no movement or crossing rules follow from these shapes. Other natural hexsides share one style; use Hex evidence to identify the feature.</p></section>
         <section class="legend-points-only"><h3>Places &amp; facilities</h3><p>Original symbols appear at detail scale with Original terrain and Geography enabled. A symbol gives no capacity or operational status.</p><ul class="legend-samples">"#,
     );
     for (asset, label) in [

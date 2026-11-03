@@ -101,8 +101,8 @@ automated or agent-visual record is human-reviewed.
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **251 surveys / 23,849 observations**: 4,753 terrain,
-18,951 hexside and 145 point observations. **7,633 are provisional, 16,216 unresolved,
+The current combined model has **256 surveys / 23,876 observations**: 4,753 terrain,
+18,978 hexside and 145 point observations. **7,648 are provisional, 16,228 unresolved,
 none human-reviewed.** Terrain observations cover 4,614 cells; 2,462 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
@@ -152,8 +152,8 @@ Conservative detection still leaves routes fragmented and uncertain.
 15,989 extracted unresolved side observations expose generic candidates. Recovering
 antialiased ink admits more candidates, including ambiguous grid/text strokes;
 these are evidence to inspect, not confirmed routes or operational links.
-Separately, 107 unresolved observations carry explicit unfinished construction
-depictions: 80 road observations (70 distinct sides) and 27 railroad observations.
+Separately, 119 unresolved observations carry explicit unfinished construction
+depictions: 80 road observations (70 distinct sides) and 39 railroad observations.
 The 69 retained automatically recognized road sides include all 38 checked Siwa–Matruh
 crossings and source-backed stretches near Martuba, El Adem and Sollum. All 69
 were agent-inspected against enlarged source crops; ten overlap existing manual
@@ -170,8 +170,8 @@ Combined distinct typed crossings (manual plus extracted; duplicates removed):
 | --- | ---: | ---: | ---: |
 | A | 76 | 7 | 248 |
 | B | 57 | 5 | 448 |
-| C | 32 | 0 | 419 |
-| D | 36 | 26 | 283 |
+| C | 32 | 0 | 425 |
+| D | 36 | 26 | 292 |
 | E | 171 | 167 | 151 |
 | Malta | 0 | 0 | 0 |
 
@@ -232,6 +232,30 @@ B1507 has two further source-cited corner corrections: its northwest crossing
 from B1606 and its east crossing into B1508. Tests cover B1706–B1606–B1507–B1508–B1509
 and reject a detour through B1607. Raw detector findings and its conservative
 endpoint exclusion remain unchanged.
+
+The screenshot-led C1832/Qara audit checks 46 consecutive crossings across five
+regional routes, including the adjoining eastern and northeastern branches. Six
+omissions have source-cited corrections: C1831 east, C1832 northeast, D1008
+northeast, D1208 northwest, D1809 northeast and D1915 northeast. The C crossings
+are corner-sensitive; Qara's dot/wadi, the escarpment fringe, curved dashes and
+converging branches interrupt the detector's narrow straight-stroke evidence.
+These corrections preserve its raw uncertainty rather than relaxing safeguards
+globally. Tests also reject a false detour through C1932 and the nonexistent
+D1114 east shortcut: that route passes through D1014. This regional audit does
+not establish complete map-wide recall or exact centerline geometry.
+
+The Barrani–Matruh coastal audit checks 117 within-section crossings: 80 Track,
+19 Road and 18 Unfinished Railroad. Nine missing track crossings receive
+source-cited provisional observations, covering the Barrani–Bir Khamsa route,
+Piccadilly's parallel track/unfinished-rail corridor, Qatrani and Mingar Qaim.
+Twelve missing unfinished-railroad sides extend the Charing Cross sample west
+through D3711/D3710 and D3609 to D3601. These disconnected crosses remain
+unresolved depictions, never completed railroad links. All 19 checked road
+crossings were already present. Tests reject a false road detour through D3610
+and an invented southward extension from Bir Talab's eastern track into D2916.
+The C/D seam still has no cross-section links, so this does not resolve the
+visible section-boundary breaks. Escarpment rendering and exact source-shaped
+route geometry are separate work; the detector's raw findings remain unchanged.
 
 No retained ground assignments changed. Of 2,462 cells without typed ground, source-surface
 measurements report 2,030 land, 228 water, 180 mixed and 24 unresolved. A land

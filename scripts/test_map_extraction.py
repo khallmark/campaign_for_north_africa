@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import unittest
 
+import numpy as np
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -106,6 +107,29 @@ class SourcePointTests(unittest.TestCase):
         self.assertEqual(points[0]["status"], "unresolved")
         for coordinate in points[0]["center"]:
             self.assertAlmostEqual(coordinate, 106.75, delta=.5)
+
+    def test_overlapping_templates_keep_one_point_per_distinct_source_symbol(self):
+        rules = json.loads((ROOT / "data/map/extraction-rules.json").read_text())
+        image = Image.new("RGB", (220, 220), tuple(rules["inks"]["water"]))
+        draw = ImageDraw.Draw(image)
+        white = tuple(rules["inks"]["background"])
+        for x, y in ((60, 60), (120, 90)):
+            draw.ellipse((x + 2, y + 2, x + 28, y + 28), outline=white, width=2)
+            draw.line((x + 15, y + 6, x + 15, y + 24), fill=white, width=2)
+            draw.line((x + 8, y + 12, x + 22, y + 12), fill=white, width=2)
+        # Slightly different source templates recognize both physical glyphs.
+        draw.point((135, 96), fill=tuple(rules["inks"]["water"]))
+        templates = []
+        for x, y in ((60, 60), (120, 90)):
+            spec = {"symbol": "port_icon", "ink": "background", "crop": [x, y, 31, 31], "minimum_score": .88}
+            mask = extract_map.ink_masks(np.array(image.crop((x, y, x + 31, y + 31))), rules)["background"]
+            templates.append((spec, mask))
+        cell = {"id": "A0101", "section": "A", "corners": [[50, 50], [160, 50], [160, 130], [50, 130]]}
+        points = extract_map.examine_cell(image, cell, rules, templates)["points"]
+        self.assertCountEqual([(p["symbol"], p["center"], p["status"]) for p in points], [
+            ("port_icon", [75.5, 75.5], "unresolved"),
+            ("port_icon", [135.5, 105.5], "unresolved"),
+        ])
 
 
 if __name__ == "__main__":

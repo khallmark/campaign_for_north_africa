@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 1,320/1,520 C cells;
-2,737 cells remain not_reviewed**, covering C4101 onward and all of D–E. Rosetta's
+Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 1,520/1,520 C cells;
+2,537 cells remain not_reviewed**, covering all of D–E. Rosetta's
 anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
@@ -685,6 +685,32 @@ directional-band cells remain untyped, including Buq Buq C3926 and C4022. Existi
 Rough, Salt Marsh, blue bars, Wadi and face uncertainty remain intact. C3901's
 southwest and C3633/C4033's eastern continuations are boundary-only findings;
 C4011's top-vertex/edge-following Track remains unresolved without a new detour.
+
+The ninth C batch reviews **all 200 remaining C4101–C5105 cells**. It adds 33
+affirmative Clear occurrences and nine single-Track crossings: C4119 northwest,
+C4121 east, C4216 northwest/northeast, C4314 east, C4315 east, C4408 east,
+C4503 east and C4410 northwest. Thirteen separate unfinished Railroad sides
+extend the existing Capuzzo construction depiction from C4217 through Trigh
+Capuzzo to its terminus in C4707; disconnected crosses never become completed
+rail or operational network links. Three hollow-capsule unfinished Road sides
+are added at C4507 northeast, C4607 northwest and C4510 northeast. Existing
+transport classifications and geometry remain unchanged.
+
+Bardia's anchor is measured at **(7442.5, 1418.5)** in C4321 and Tobruk's at
+**(6293.5, 1041.5)** in C4807. Tobruk's ring straddles C4908, but its center lies
+2.758 source pixels inside C4807. The new template also recognizes Rosetta's
+existing anchor; same-symbol suppression across templates preserves its earlier
+coordinates rather than duplicating or moving it. All eight previous anchors
+remain unchanged. Major City clusters, training figures and unresolved Port
+glyphs remain distinct; no capacity or operational association is inferred.
+
+C4401/C4402 Gravel fragments, C4517's inward olive band and C4904's small northern
+water intrusion remain explicit uncertainties, not new Clear. Existing Rough,
+Gravel, measured Village/Bir points, Wadi margins, blue bars and face polarity
+remain unchanged. C4111/C4112's near-vertex Track and C4301/C4501/C4901 boundary
+continuations do not create new geometry or seam links. All 4,539 reviewed cells
+retain family-level uncertainty and `human_reviewed: false`; the 2,537 D/E cells
+remain `not_reviewed` regardless of existing detector or spot-survey evidence.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

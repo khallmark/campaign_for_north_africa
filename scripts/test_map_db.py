@@ -67,6 +67,8 @@ class MapDatabaseTests(unittest.TestCase):
             ('capuzzo-sofafi-unfinished-railroad', 'unfinished_railroad',
              'C4217 C4218 C4119 C4019 C4020 C3921 C3821 C3722 C3622 C3523 C3423 '
              'C3324 C3325 C3326 C3226 C3227 C3328 C3329 C3429 C3430 C3531 C3631 C3632 C3633'),
+            ('tobruk-trigh-capuzzo-unfinished-railroad', 'unfinished_railroad',
+             'C4707 C4607 C4608 C4609 C4510 C4511 C4411 C4412 C4313 C4314 C4315 C4316 C4216 C4217'),
         ):
             cells = route.split()
             self.assertEqual(self.db.execute(
@@ -151,6 +153,8 @@ class MapDatabaseTests(unittest.TestCase):
                               ("C2803", "clear"), ("C3019", "clear"),
                               ("C3111", "clear"), ("C3226", "clear"),
                               ("C3714", "clear"), ("C4020", "clear"),
+                              ("C4102", "clear"), ("C4306", "clear"),
+                              ("C4706", "clear"), ("C4801", "clear"),
                               ("A0217", "salt_marsh"), ("A0426", "desert")):
             self.assertEqual(self.db.execute(
                 "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain'",
@@ -169,7 +173,8 @@ class MapDatabaseTests(unittest.TestCase):
                        "A1125", "A1325", "A1418", "A1527", "A1617", "A1704",
                        "A1732", "A1819", "A2010", "A2033", "A2209", "A2332",
                        "A2429", "A2529", "C1118", "C1217", "C2313", "C3427",
-                       "C3632", "C3724", "C3926", "C4022"):
+                       "C3632", "C3724", "C3926", "C4022", "C4401", "C4402",
+                       "C4517", "C4904"):
             self.assertEqual(self.db.execute(
                 "SELECT value FROM observations WHERE hex=? AND kind='terrain'", (hex_id,)).fetchall(), [])
         # Independently inspected TEC controls: pale gaps are unfinished, dark
@@ -227,6 +232,11 @@ class MapDatabaseTests(unittest.TestCase):
             'C2908 C3008 C3009',
             'C4216 C4217 C4218 C4219 C4220',
             'C4017 C4118 C4218 C4319',
+            'C4119 C4218',
+            'C4121 C4122',
+            'C4314 C4315 C4316 C4216 C4317',
+            'C4408 C4409 C4410 C4510',
+            'C4503 C4504',
             'A0430 A0431 A0432 A0433',
             'A0903 A0802 A0703 A0704 A0705 A0706 A0707',
             'A1522 A1523 A1524 A1624',
@@ -444,7 +454,7 @@ class MapDatabaseTests(unittest.TestCase):
             SELECT symbol,center_x,center_y,label,status FROM source_points WHERE hex='C3111'
         ''').fetchall(), [('village_bir_dot', 6567.0, 2324.1, 'El Cuasc', 'unresolved')])
         self.assertEqual(dict(self.db.execute('SELECT symbol,count(*) FROM source_points GROUP BY symbol')),
-                         {'village_bir_dot': 119, 'oasis': 8, 'port_icon': 8})
+                         {'village_bir_dot': 119, 'oasis': 8, 'port_icon': 10})
         self.assertEqual(self.db.execute('''
             SELECT symbol,center_x,center_y,status FROM source_points WHERE hex='B0513'
         ''').fetchall(), [('oasis', 3931.5, 4211.5, 'provisional')])
@@ -478,6 +488,8 @@ class MapDatabaseTests(unittest.TestCase):
             ('A4827', 2348.5, 1054.5, 'unresolved'),
             ('B5925', 4962.5, 253.5, 'unresolved'),
             ('C4022', 7530.5, 1649.5, 'unresolved'),
+            ('C4321', 7442.5, 1418.5, 'unresolved'),
+            ('C4807', 6293.5, 1041.5, 'unresolved'),
             ('D3814', 9676.5, 1825.5, 'unresolved'),
             ('E4120', 12978.5, 1565.5, 'unresolved'),
         ])

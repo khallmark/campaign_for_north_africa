@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 660/1,961 B cells; 5,358 cells
-remain not_reviewed**, including B2101 onward and all of C–E. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 825/1,961 B cells; 5,193 cells
+remain not_reviewed**, including B2601 onward and all of C–E. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -427,6 +427,17 @@ ribbons and olive bands retain unresolved edge associations and directional
 interpretations; the isolated yellow slash at B1620 remains unidentified.
 The northwest Track continuation from B1901 exits the retained B inventory
 and is reported to the seam owner without inventing a zero-row neighbor.
+
+The B2101–B2533 batch adds sixty affirmative Clear occurrences and restores
+**B2217 northeast → B2318**, **B2229 northeast → B2330** and
+**B2528 east → B2529** Tracks. Enlarged corner controls reject detours through
+B2218, B2230 and B2628; existing Rough under B2318's Track remains unchanged.
+Seven olive-band interiors remain untyped. Gravel circles straddling the western
+boundaries of B2302, B2402 and B2503 also remain untyped pending glyph-footprint
+interpretation rather than blanket Clear or Gravel. B2101's western Track
+continuation remains a seam-owner finding. Existing Wadi side observations are
+preserved with explicit association uncertainty, including outside/near-edge
+ink at B2406 and B2511. No new settlement or facility glyph was observed.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

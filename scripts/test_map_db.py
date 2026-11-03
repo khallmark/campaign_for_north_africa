@@ -257,6 +257,9 @@ class MapDatabaseTests(unittest.TestCase):
             'C1415 C1515',
             'C0925 C0825',
             'B1706 B1606 B1507 B1508 B1509',
+            'B2118 B2217 B2318 B2418 B2518',
+            'B2130 B2229 B2330 B2430 B2531',
+            'B2528 B2529 B2530',
             # Complete regional source sequences, not just reported endpoints.
             'C1828 C1829 C1830 C1831 C1832 C1933 C2033',
             'D0708 D0808 D0908 D1008 D1109 D1208 D1308 D1407 D1508 D1608 '
@@ -282,6 +285,8 @@ class MapDatabaseTests(unittest.TestCase):
                            ('C0925', 'C0926'), ('B1606', 'B1607'),
                            ('B1507', 'B1607'), ('B1607', 'B1508'),
                            ('C1832', 'C1932'), ('C1932', 'C1933'),
+                           ('B2217', 'B2218'), ('B2229', 'B2230'),
+                           ('B2528', 'B2628'),
                            ('D1114', 'D1115')):
             with self.subTest(unsupported_crossing=(start, end)):
                 self.assertIsNone(self.db.execute('''

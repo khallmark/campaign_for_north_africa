@@ -9,6 +9,119 @@
   "map_source": "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
   "batches": [
     {
+      "id": "c-16-20-whole-cell-2026-11-03", "date": "2026-11-03", "method": "agent_visual",
+      "notes": "Individually inspected all 165 C1601-C2033 outlines in seven 2x sheets, nine 4x plain-ground sheets and two additional paired route/margin sheets. Reconciled canonical sides and El Grein point against d1e72ad with source/geometry pins unchanged. Add 70 affirmative Clear occurrences and three missing single-Track crossings. Existing Rough, Salt Marsh, measured Village/Bir point, raw evidence and construction depictions remain unchanged. Northern C and D-E are not credited. Boundaries, blue barred meanings, Wadi footprints and all operational effects remain unresolved.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Entire retained outline individually inspected as source land. Wadi overprints, crop padding and lettering do not establish full-cell water or operational playability."},
+        "terrain": {"status": "observed", "notes": "Affirmative plain ground matches Clear; exterior Rough and Salt Marsh remain outside the outline. Occurrence is not a homogeneous movement cost."},
+        "transport": {"status": "not_observed", "notes": "No Road, Railroad, Track or construction glyph inside outline. Neighboring dashes and capsules are not imported; source non-observation is not historical absence."},
+        "hexside": {"status": "not_observed", "notes": "No independent Wadi, river, blue barred side or directional band inside outline. Black grid and gray section lines are not operational effects or seam links."},
+        "locations": {"status": "not_observed", "notes": "No independent Village/Bir dot, city, Oasis, anchor, airfield, flying-boat or training glyph inside outline. Lettering and neighboring glyphs do not create locations."}
+      },
+      "groups": [
+        {
+          "hexes": ["C1613","C1614","C1618","C1623","C1625","C1626","C1627","C1628","C1629","C1630","C1631","C1632","C1701","C1709","C1710","C1711","C1712","C1713","C1718","C1723","C1724","C1726","C1727","C1728","C1729","C1730","C1731","C1732","C1801","C1802","C1803","C1806","C1808","C1809","C1810","C1811","C1812","C1813","C1822","C1823","C1901","C1902","C1903","C1908","C1909","C1910","C1911","C1912","C1913","C1922","C1923","C1924","C1926","C1927","C1928","C1929","C1930","C1931","C1932","C2001","C2002","C2003","C2010","C2011","C2012","C2015","C2020","C2021","C2022","C2023","C2024","C2030","C2031","C2032"],
+          "findings": {}, "survey_refs": ["ink-C-terrain-clear"],
+          "uncertainty": ["Each outline inspected independently. Enlarged C1618/C1625 exclude neighboring Track; C1723/C1806 exclude Rough; C1932 excludes the southern Track bend; C2015 excludes Salt Marsh and eastern Track. C2003 Wadi tip stays exterior southeast. Gray section lines in C1701/C1901 are not seam authority. Human review pending."]
+        },
+        {
+          "hexes": ["C1616","C1617","C1716","C1717","C1817"],
+          "findings": {"hexside": {"status": "unresolved", "notes": "Blue barred sides remain unclassified: northeast/east C1616, west/southwest C1617, east C1716, northwest/west/southwest C1717 and northwest/west C1817. Retain plain interiors without treating blue bars as Railroad."}},
+          "survey_refs": ["ink-C-terrain-clear"], "uncertainty": ["El Grein dot stays outside C1716; boundary glyph width does not assign a full-cell class or operational crossing rule. Human review pending."]
+        },
+        {
+          "hexes": ["C1620","C1621","C1622","C1720","C1721","C1722","C1819","C1820","C1821","C1906","C1920","C1921","C2005"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain smooth pale Rough patches, with partial plain margins except largely filled C1621/C1721/C1820. No olive Mountain core or interior Salt Marsh network. No automatic Clear for partial cells."}},
+          "survey_refs": ["ink-C-terrain-rough"], "uncertainty": ["Patch occupancy does not establish homogeneous terrain costs. Nearby Track, Wadi and yellow network remain independent/exterior. Human review pending."]
+        },
+        {
+          "hexes": ["C1919"],
+          "findings": {"terrain": {"status": "observed", "notes": "Partial smooth Rough remains beneath a northeast/southwest Track with plain gaps."}, "transport": {"status": "observed", "notes": "Retain existing northeast/southwest single Track; no tied Railroad or continuous Road."}},
+          "survey_refs": ["ink-C-terrain-rough","ink-C-hexside-track"], "uncertainty": ["Track does not erase Rough or authorize motorized passage. Human review pending."]
+        },
+        {
+          "hexes": ["C2018"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial smooth Rough core, separate from western Wadi ribbon and plain margin."}, "hexside": {"status": "unresolved", "notes": "Wadi and blue barred glyphs occupy northwest/west; blue-bar meaning and exact bank/side footprint remain unresolved."}},
+          "survey_refs": ["ink-C-terrain-rough"], "uncertainty": ["No Railroad, permanent flow, bridge or operational side cost inferred. Human review pending."]
+        },
+        {
+          "hexes": ["C2014"],
+          "findings": {"terrain": {"status": "observed", "notes": "Yellow network inside the pale patch matches Salt Marsh, not smooth Rough. Western Track remains outside this outline."}},
+          "survey_refs": ["ink-C-terrain-salt_marsh"], "uncertainty": ["No full-cell water, supply yield or movement rule inferred. Human review pending."]
+        },
+        {
+          "hexes": ["C1601","C1602","C1603","C1604","C1605","C1606","C1607","C1611","C1612","C1703","C1704","C1705","C1706","C1804","C1805","C1904","C1905","C1915","C2004"],
+          "findings": {"hexside": {"status": "unresolved", "notes": "Gray-green Wadi ribbons remain independent of plain cores: southwest/southeast/east C1601; west C1602/C1706; northwest/northeast C1603; northwest/northeast/east C1604; northwest/west/southwest C1605; east C1606; west/southwest C1607/C1805/C1905; southeast C1611/C1703/C1915; southwest C1612/C2004; southwest/southeast C1704; northeast/east/southeast/southwest C1705; northeast/east C1804/C1904. Exact bank/side footprints remain unresolved rather than newly assigned."}},
+          "survey_refs": ["c-16-20-plain-ground"], "uncertainty": ["Ribbon width and end caps do not establish permanent water, homogeneous terrain, Major/Minor River, bridge or legal passage. Human review pending."]
+        },
+        {
+          "hexes": ["C1702","C1707"],
+          "findings": {"hexside": {"status": "unresolved", "notes": "Wadi terminal tips approach the southern vertex, mostly exterior. Plain interior is independently established; marginal footprint remains unresolved, not a new full-side assignment."}},
+          "survey_refs": ["c-16-20-plain-ground"], "uncertainty": ["No operational water or flow permanence inferred from a vertex tip. Human review pending."]
+        },
+        {
+          "hexes": ["C1714","C2007","C2008","C2009","C2026","C2027","C2028","C2029"],
+          "findings": {}, "survey_refs": ["c-16-20-plain-ground"],
+          "uncertainty": ["El Grein label and large Libya/Egypt lettering overprint affirmative plain ground; they are not dots, towns, routes or border effects. Nearby Track remains outside C2007/C2026. Human review pending."]
+        },
+        {
+          "hexes": ["C1615","C1619","C1624","C1708","C1719","C1725","C1807","C1814","C1818","C1826","C1827","C1828","C1829","C1830","C1831","C1907","C1925","C1933","C2006","C2019","C2025"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain single Track: northwest/southwest C1615/C1619/C1725; northeast/southeast C1624/C1818/C2006; northwest/southeast C1708/C1719/C1807/C1814/C1907; west/east C1826-C1831; northeast/southwest C1925/C1933/C2019/C2025. Enlarged controls exclude a detour through C1932."}},
+          "survey_refs": ["c-16-20-plain-ground","ink-C-hexside-track"], "uncertainty": ["Single dashes do not establish precise centerlines, legal junctions or motorized permissions. C1814 northeast Wadi tip and C2019 southwest Rough stay exterior. Human review pending."]
+        },
+        {
+          "hexes": ["C1832"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain west/northeast single-Track bend. Prior manual crossing corrections match enlarged controls; C1932 stays outside the route."}},
+          "survey_refs": ["c-16-20-plain-ground","c1832-track-bend-corrections"], "uncertainty": ["Near-vertex crossing remains provisional, not precise centerline or movement authority. Human review pending."]
+        },
+        {
+          "hexes": ["C1608"],
+          "findings": {"transport": {"status": "observed", "notes": "Northwest Track turns east across the shared edge into C1609. Restore omitted east crossing; paired outline excludes a northeast detour."}},
+          "survey_refs": ["c-16-20-plain-ground","ink-C-hexside-track","el-grein-corridor-track-crossings"], "uncertainty": ["Source crossing is provisional evidence, not movement authority. Human review pending."]
+        },
+        {
+          "hexes": ["C1609","C1610"],
+          "findings": {"transport": {"status": "observed", "notes": "West/east Track in C1609 continues west/southeast through C1610. Restore C1609 west shared crossing with C1608 only; existing continuation unchanged."}, "hexside": {"status": "unresolved", "notes": "Wadi skirts C1609 southeast and C1610 southwest independently of the route; no bridge or permanent-flow implication."}},
+          "survey_refs": ["c-16-20-plain-ground","ink-C-hexside-track"], "uncertainty": ["Watercourse footprint and operational crossing behavior remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["C1824","C1825"],
+          "findings": {"transport": {"status": "observed", "notes": "Restore east branch from C1824 northeast/southeast Track into C1825 west; C1825 continues east. Single dashed branch is distinct from grid, not Railroad or completed Road."}},
+          "survey_refs": ["c-16-20-plain-ground","ink-C-hexside-track","el-grein-corridor-track-crossings"], "uncertainty": ["Printed fork is not authority for transfer, turn permissions or movement costs. Human review pending."]
+        },
+        {
+          "hexes": ["C1914","C2013"],
+          "findings": {"transport": {"status": "observed", "notes": "Restore C1914 northwest crossing from C2013 southeast; the dashed stroke crosses before C1914 northern vertex. Retain C1914 southeast and C2013 northeast continuation. C1915 contrary outline excludes a detour."}},
+          "survey_refs": ["c-16-20-plain-ground","ink-C-hexside-track","el-grein-corridor-track-crossings"], "uncertainty": ["Near-vertex association remains provisional; it does not alter geometry or create extra side crossings. Human review pending."]
+        },
+        {
+          "hexes": ["C1715"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain northwest branch into northeast/southeast single Track next to El Grein dot."}, "locations": {"status": "unresolved", "notes": "Independent blue dot inside the eastern outline matches existing El Grein measured point; retain unresolved Village/Bir category rather than town, extra location or operational water supply."}},
+          "survey_refs": ["c-16-20-plain-ground","ink-C-hexside-track","label-C1715"], "uncertainty": ["Source point and route proximity do not establish operational junction or transfer permissions. Human review pending."]
+        },
+        {
+          "hexes": ["C1815","C1916","C2016"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain northeast/southwest Track in C1815/C1916 and northwest/southwest in C2016, independent of adjacent Wadi ribbons."}, "hexside": {"status": "unresolved", "notes": "Wadi occupies northwest/northeast C1815, southwest/southeast/east C1916 and a narrow southeast margin of C2016. Retain prior evidence; exact bank and side footprints remain unresolved."}},
+          "survey_refs": ["c-16-20-plain-ground","ink-C-hexside-track"], "uncertainty": ["No bridge, permanent water or operational crossing class inferred. Human review pending."]
+        },
+        {
+          "hexes": ["C1816","C1917","C1918","C2017"],
+          "findings": {"hexside": {"status": "unresolved", "notes": "Wadi northwest C1816/C1918, northwest/northeast/west C1917 and southwest/southeast/east C2017 remain separate from plain interiors. Blue bars occupy east/southeast C1816/C1917/C2017 and northwest/west C1918; meanings unresolved rather than Railroad."}},
+          "survey_refs": ["c-16-20-plain-ground"], "uncertainty": ["C1918 Rough stays outside east. No full-cell water, flow permanence, directionality or operational side effect inferred. Human review pending."]
+        },
+        {
+          "hexes": ["C1633","C1733","C1833"],
+          "findings": {"transport": {"status": "unresolved", "notes": "Disconnected double capsules depict unfinished Road: northwest/southwest C1633, northeast/southeast C1733, northeast/southwest C1833. Preserve internal depictions; C1833 northeast continues beyond retained inventory, not a fabricated adjacent cell or completed Road."}},
+          "survey_refs": ["c-16-20-plain-ground","ink-C-hexside-unfinished_road"], "uncertainty": ["Gray section-line overlap does not define seam adjacency. Construction completion and operational availability unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["C2033"],
+          "findings": {"transport": {"status": "unresolved", "notes": "Single Track enters southwest and exits northeast across the retained boundary. Preserve internal southwest link only; do not invent row-zero, cross-section adjacency or a northwest detour."}},
+          "survey_refs": ["c-16-20-plain-ground","ink-C-hexside-track"], "uncertainty": ["Boundary continuation and gray section-line identity require parent geometry reconciliation. Exterior unfinished-Road capsules are a separate route. Human review pending."]
+        }
+      ]
+    },
+    {
       "id": "c-11-15-whole-cell-2026-11-03", "date": "2026-11-03", "method": "agent_visual",
       "notes": "Individually inspected all 165 C1101-C1533 outlines in seven 2x sheets, nine 4x plain-ground sheets and two additional 4x margin/point control sheets. Reconciled canonical sides and existing Ain Melfa dot against 25b614b without changing source or geometry pins. Add 65 affirmative Clear occurrences; four olive-band interiors remain untyped. Existing internal Track sequences, construction depictions, measured point, Rough, Salt Marsh and Wadi evidence unchanged. No new continuous Road, Railroad or facility observed. Boundary continuations, blue barred meanings, Wadi footprints and operational effects remain unresolved; no later cells credited.",
       "common_findings": {

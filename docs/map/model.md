@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 495/1,520 C cells;
-3,562 cells remain not_reviewed**, covering C1601 onward and all of D–E. Rosetta's
+Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 660/1,520 C cells;
+3,397 cells remain not_reviewed**, covering C2101 onward and all of D–E. Rosetta's
 anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
@@ -610,6 +610,21 @@ Broad Wadi footprints, terminal tips, blue barred meanings, band polarity and
 construction completion remain unresolved. Existing points, raw evidence,
 geometry and source hashes are unchanged; no continuous Road or Railroad is
 observed in this batch.
+
+The fourth C batch reviews **165 retained C1601–C2033 cells** with paired 4×
+controls. It adds 70 affirmative Clear occurrences beneath Track, Wadi,
+unfinished-Road capsules, El Grein and Libya/Egypt lettering. Existing Rough and
+Salt Marsh occurrences remain unchanged; label ink is not a terrain class or a
+second settlement. El Grein's measured Village/Bir point remains unresolved.
+
+Three missing single-Track crossings are restored: **C1608 east → C1609 west**,
+**C1824 east → C1825 west**, and **C1914 northwest → C2013 southeast**. The last
+passes before the northern vertex, not through C1915. Existing C1832 bend
+corrections match the source; C1932 remains outside that route. C1833 unfinished
+Road and C2033 Track continue northeast beyond retained inventory, so those
+boundary findings do not create adjacency or northwest detours. Construction,
+Wadi footprints, blue barred meanings and operational effects remain unresolved;
+no geometry, source hashes, measured points or raw examinations change.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

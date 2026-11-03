@@ -96,14 +96,14 @@ automated or agent-visual record is human-reviewed.
 | --- | ---: | --- | ---: |
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
 | A | 1,000 | 866 / 62 / 64 / 8 | 828 |
-| B | 1,961 | 1,885 / 40 / 34 / 2 | 1,388 |
+| B | 1,961 | 1,885 / 40 / 34 / 2 | 1,403 |
 | C | 1,520 | 1,438 / 41 / 36 / 5 | 859 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **292 surveys / 24,148 observations**: 4,973 terrain,
-19,018 hexside and 157 point observations. **7,909 are provisional, 16,239 unresolved,
-none human-reviewed.** Terrain observations cover 4,825 cells; 2,251 have none.
+The current combined model has **294 surveys / 24,164 observations**: 4,988 terrain,
+19,019 hexside and 157 point observations. **7,925 are provisional, 16,239 unresolved,
+none human-reviewed.** Terrain observations cover 4,840 cells; 2,236 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -260,8 +260,9 @@ route geometry are separate work; the detector's raw findings remain unchanged.
 The Malta whole-cell audit adds four provisional ground observations. The A audit
 adds 199 Clear occurrences, nine partial Mountain cores retaining existing Rough
 fringes, five partial Gravel occurrences and one partial Rough occurrence.
-Southern B adds two Clear occurrences.
-Of 2,251 cells without typed ground, source-surface measurements report 1,819 land, 228
+The first two B batches add 17 Clear
+occurrences. Of 2,236 cells without typed ground,
+source-surface measurements report 1,804 land, 228
 water, 180 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -279,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 165/1,961 B cells; 5,853 cells
-remain not_reviewed**, including B0601 onward and all of C–E. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 330/1,961 B cells; 5,688 cells
+remain not_reviewed**, including B1101 onward and all of C–E. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -393,6 +394,16 @@ additional match; this is not complete Oasis recall. Desert/plain boundaries
 remain partial occurrences. Large Libyan Sand Desert letters are not ridges
 or slopes despite their shared ink. The southern edge Tracks at B0111/B0114/B0117
 and B0401's western continuation remain boundary findings, not invented links.
+
+The next 165 cells B0601–B1033 add fifteen affirmative Clear occurrences and
+the missing **B0707 east → B0708 Track** at Augila. The source fork lies northwest
+of Augila's measured dot; neither it nor El Ergh's fork is snapped to a location
+or given operational junction authority. Eight broad olive stippled band cells
+(B0807, B0904, B0908, B1003, B1006–B1008, B1010) remain untyped: their shared ink
+does not establish Mountain, Rough or homogeneous Clear. Enlarged controls
+separate plain interiors from bands beyond neighboring grid edges, while retaining
+boundary-footprint/direction uncertainty. The southeastern Track continuation
+at B1033 leaves the retained inventory and remains a seam-owner finding.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

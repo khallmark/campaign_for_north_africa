@@ -6,6 +6,16 @@
   },
   "surveys": [
     {
+      "id": "b-06-10-plain-ground", "label": "Augila corridor affirmative plain interiors", "notes": "Individual outlined crops and enlarged boundary controls confirm plain interiors in fifteen previously untyped cells. Gray Tracks/section lines and adjacent olive stippled bands are independent. Where a band follows the outside of the grid, record that boundary uncertainty without painting the plain cell as Mountain or Rough. Broad bands inside B0807/B0904/B0908/B1003/B1006/B1007/B1008/B1010 remain untyped. Clear is a provisional ground occurrence, not homogeneous side pixels or movement authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=3030,3785,2650,440", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["B0606","B0806","B0833","B0903","B0906","B0907","B0911","B0912","B0913","B1002","B1004","B1005","B1009","B1013","B1033"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "augila-east-track", "label": "Augila eastern Track crossing", "notes": "Single gray dashes cross B0707 east into B0708; source context shows the junction just northwest of Augila's blue dot. Restore the omitted crossing without snapping that junction to the dot, creating a second settlement from lettering or interpreting olive stipple as Railroad. Existing northwest/southwest Tracks and operationally unresolved Village/Bir point stay independent.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=3270,3910,380,300", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"B0707","direction":"east"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
       "id": "b-01-05-plain-ground", "label": "Southern B plain ground beneath Track", "notes": "Individual outlined cells and wider desert-boundary control confirm plain ground throughout B0405 and B0506. Neighboring yellow Desert stays outside; single-dashed Track does not replace the ground. Add affirmative provisional Clear, not a default from detector failure or movement authority.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=3170,4130,660,490", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
       "coverage": {"kind": "terrain", "hexes": ["B0405","B0506"], "observation": {"status": "provisional", "value": "clear"}}

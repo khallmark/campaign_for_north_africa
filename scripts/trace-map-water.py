@@ -35,15 +35,34 @@ def channel_mask(crop, rules, kind):
     return ink | (closed & ((dark | grid_blend).astype(np.uint8)*255))
 
 
-def escarpment_mask(mask):
+def escarpment_mask(mask, image):
     """Keep broad source bands, not similarly colored rail/grid antialiasing."""
     # Printed bands support a 7px core; same-palette Qattara lettering and
     # thin route fringes do not. This selects components, not their thickness.
     core = cv2.morphologyEx(mask, cv2.MORPH_OPEN, np.ones((7, 7), np.uint8))
-    count, labels = cv2.connectedComponents(mask)
+    count, labels, stats, _ = cv2.connectedComponentsWithStats(mask)
     supported = np.zeros(count, dtype=bool)
     supported[labels[core > 0]] = True
     supported[0] = False
+    distance = cv2.distanceTransform(255 - mask * supported[labels], cv2.DIST_L2, 5)
+    for index in range(1, count):
+        if supported[index]:
+            continue
+        x, y, width, height, area = map(int, stats[index])
+        # Recover compact stipple and caps only near an established broad face.
+        # Never extend the search through newly recovered fragments.
+        if not 3 <= area <= 150 or max(width, height) > 25 or max(width, height) > 4 * min(width, height):
+            continue
+        component = labels[y:y+height, x:x+width] == index
+        if distance[y:y+height, x:x+width][component].min() > 25:
+            continue
+        crop = np.asarray(image.crop((x-2, y-2, x+width+2, y+height+2)))
+        dark = (crop.max(axis=2) < 92) & (np.ptp(crop, axis=2) < 20)
+        # Tiny gray fringes next to rail/grid ink are ambiguous. Substantial
+        # source-gray caps can survive a crossing grid line without a 7px core.
+        if area < 50 and np.any(dark):
+            continue
+        supported[index] = True
     # Select original components, not the eroded core: the ragged face and
     # pale gaps convey the printed orientation and must not be smoothed away.
     return mask * supported[labels]
@@ -64,10 +83,11 @@ def build():
             ink = channel_mask(crop, rules, kind)
             mask[y:min(y+256, image.height)] = ink[y-top:min(y+256, image.height)-top]
         if kind == "escarpment":
-            mask = escarpment_mask(mask)
+            mask = escarpment_mask(mask, image)
         contours, hierarchy = cv2.findContours(mask, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
         for index, contour in enumerate(contours):
-            if hierarchy[0, index, 3] != -1 or cv2.contourArea(contour) < 150:
+            area = cv2.contourArea(contour)
+            if hierarchy[0, index, 3] != -1 or area < (1 if kind == "escarpment" else 150):
                 continue
             raw = [contour[:, 0, :].tolist()]
             hole = hierarchy[0, index, 2]
@@ -75,14 +95,15 @@ def build():
                 if cv2.contourArea(contours[hole]) >= 20:
                     raw.append(contours[hole][:, 0, :].tolist())
                 hole = hierarchy[0, hole, 0]
-            rings = [cv2.approxPolyDP(np.asarray(ring, np.int32), .75, True)[:, 0, :].tolist() for ring in raw]
+            tolerance = .25 if kind == "escarpment" and area < 150 else .75
+            rings = [cv2.approxPolyDP(np.asarray(ring, np.int32), tolerance, True)[:, 0, :].tolist() for ring in raw]
             bounds = cv2.boundingRect(contour)
             identity = hashlib.sha256(json.dumps(raw).encode()).hexdigest()[:16]
             outlines.append({"id": f"{kind}-{identity}", "kind": kind, "raw_rings": raw, "rings": rings,
                              "bounds": [bounds[0], bounds[1], bounds[0]+bounds[2], bounds[1]+bounds[3]]})
     return {"version": 1, "source_ref": rules["source"], "source_sha256": rules["sha256"],
             "review_status": "provisional", "units": "board pixels", "simplification_tolerance_px": .75,
-            "method": "separate water, dry-wadi and broad-core escarpment ink contours; narrow dark/grid-blend interruptions repaired; pale gaps and larger overprints retained",
+            "method": "separate water, dry-wadi and broad-core escarpment ink contours; nearby compact scarp fragments retained at .25px tolerance; tiny fragments beside dark route/grid ink excluded; narrow dark/grid-blend interruptions repaired; pale gaps and larger overprints retained",
             "interpretation": "Source ink outlines, not Major/Minor River, sea, coast, Up/Down Escarpment or movement classifications. Wadi ink stays separate from water. Printed widths and ragged scarp faces retained; holes preserved; no gap joining across pale ground.",
             "outlines": outlines}
 

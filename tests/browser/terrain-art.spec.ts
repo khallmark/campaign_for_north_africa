@@ -237,6 +237,7 @@ test('measured source labels retain positions and uncertainty across viewer cont
 });
 
 test('water shapes retain source channel widths without assigning river classes', async ({ page }) => {
+  test.setTimeout(60_000);
   await page.route('**/tiles/map/manifest.json', route => route.fulfill({ status: 404, body: 'No private scan' }));
   await page.goto('/');
   await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('E1530');
@@ -275,12 +276,24 @@ test('water shapes retain source channel widths without assigning river classes'
   await expect(shapes).toHaveCount(0);
   await page.getByRole('button', { name: 'Geography', exact: true }).click();
   await page.getByRole('button', { name: 'Original terrain', exact: true }).click();
-  // Independent source-pixel transects in three sections, including grid
+  // The small blue island inside the printed "The Nile" lettering is source
+  // water; the adjoining dark overprint is not an invitation to bridge it.
+  await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill('E0929');
+  await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
+  expect(await shapes.evaluateAll(nodes => [13786, 13792, 13795, 13804].map(x =>
+    nodes.some((node: SVGPathElement) => node.isPointInFill(new DOMPoint(x, 3923))),
+  ))).toEqual([false, true, true, false]);
+  // Independent source-pixel transects in four sections, including grid
   // interruptions. These are dry channels, never blue flowing-water shapes.
   for (const [hex, y, xs] of [
     ['A0807', 3990, [485, 496, 502, 515]],
     ['B1515', 3500, [3785, 3798, 3808, 3825]],
     ['C2016', 3200, [7025, 7040, 7050, 7065]],
+    ['D0908', 4100, [9006, 9016, 9037, 9047]],
+    // Small source fragments beside lettering/roads must not be discarded;
+    // the overprinted gap alongside each fragment must remain unfilled.
+    ['A4232', 1526, [2810, 2814, 2816, 2819]],
+    ['B5130', 819, [5375, 5380, 5384, 5389]],
   ] as const) {
     await page.getByRole('textbox', { name: 'Hex identity', exact: true }).fill(hex);
     await page.getByRole('button', { name: 'Inspect hex', exact: true }).click();
@@ -288,12 +301,14 @@ test('water shapes retain source channel widths without assigning river classes'
     await expect(channels.first()).toBeVisible();
     expect(await channels.evaluateAll((nodes, { y, xs }) => xs.map(x =>
       nodes.some((node: SVGPathElement) => node.isPointInFill(new DOMPoint(x, y))),
-    ), { y, xs })).toEqual([false, true, true, false]);
+    ), { y, xs }), `${hex}: source wadi at y=${y}`).toEqual([false, true, true, false]);
     await expect(channels.first()).toHaveCSS('fill', 'rgb(127, 148, 142)');
-    await page.getByRole('button', { name: 'Geography', exact: true }).click();
-    await expect(channels).toHaveCount(0);
-    await page.getByRole('button', { name: 'Geography', exact: true }).click();
   }
+  const channels = page.locator('.geography-overlay .source-wadi');
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await expect(channels).toHaveCount(0);
+  await page.getByRole('button', { name: 'Geography', exact: true }).click();
+  await expect(channels.first()).toBeVisible();
 });
 
 test('escarpments retain printed faces without turning lettering into terrain', async ({ page }) => {

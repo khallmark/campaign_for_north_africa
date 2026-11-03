@@ -1,9 +1,14 @@
 """Water display tracing must not turn pale land gaps into water."""
+import hashlib
 import importlib.util
+import json
 from pathlib import Path
+import tempfile
 import unittest
+from unittest.mock import patch
 
 import numpy as np
+from PIL import Image
 
 spec = importlib.util.spec_from_file_location("water", Path(__file__).with_name("trace-map-water.py"))
 water = importlib.util.module_from_spec(spec)
@@ -11,6 +16,37 @@ spec.loader.exec_module(water)
 
 
 class WaterTests(unittest.TestCase):
+    def test_small_channel_fragments_stay_in_map_zones_not_marginal_printing(self):
+        inks = {"water": [138, 181, 207], "wadi": [127, 148, 142],
+                "grid": [51, 53, 51], "escarpment": [94, 97, 98]}
+        image = np.full((80, 140, 3), [251, 250, 239], dtype=np.uint8)
+        for kind, y in (("water", 10), ("wadi", 30)):
+            image[y:y+7, 10:17] = inks[kind]
+            image[y:y+7, 90:97] = inks[kind]
+        # Preserve established broad source shapes outside the new-fragment gate.
+        image[50:75, 100:125] = inks["water"]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "data/map").mkdir(parents=True)
+            (root / "public/data/map").mkdir(parents=True)
+            source = root / "scan.png"
+            Image.fromarray(image).save(source)
+            (root / "data/map/extraction-rules.json").write_text(json.dumps({
+                "source": "scan.png", "sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+                "inks": inks,
+            }))
+            (root / "public/data/map/sources.json").write_text(json.dumps({"zones": [
+                {"name": "Map A", "polygon": [[0, 0], [60, 0], [60, 79], [0, 79]]},
+                {"name": "Game Track", "polygon": [[70, 0], [139, 0], [139, 79], [70, 79]]},
+            ]}))
+            with patch.object(water, "ROOT", root):
+                outlines = water.build()["outlines"]
+        self.assertEqual(sorted((o["kind"], o["bounds"]) for o in outlines), [
+            ("wadi", [10, 30, 17, 37]),
+            ("water", [10, 10, 17, 17]),
+            ("water", [100, 50, 125, 75]),
+        ])
+
     def test_scarp_bands_keep_their_printed_fringe_but_reject_thin_route_ink(self):
         mask = np.zeros((70, 180), dtype=np.uint8)
         mask[10:24, 10:160] = 255

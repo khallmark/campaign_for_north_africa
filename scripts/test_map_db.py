@@ -141,6 +141,8 @@ class MapDatabaseTests(unittest.TestCase):
                               ("A1517", "clear"), ("A1518", "gravel"), ("A1532", "clear"),
                               ("A1707", "clear"), ("A1820", "clear"), ("A2003", "clear"),
                               ("A2005", "clear"), ("A2032", "clear"),
+                              ("A2124", "clear"), ("A2305", "clear"), ("A2604", "clear"),
+                              ("A2629", "clear"), ("A2431", "gravel"), ("A2631", "gravel"),
                               ("A0217", "salt_marsh"), ("A0426", "desert")):
             self.assertEqual(self.db.execute(
                 "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain'",
@@ -157,7 +159,8 @@ class MapDatabaseTests(unittest.TestCase):
         ).fetchall(), [])
         for hex_id in ("Malta 0505", "Malta 0804", "Malta 1301", "A0925",
                        "A1125", "A1325", "A1418", "A1527", "A1617", "A1704",
-                       "A1732", "A1819", "A2010", "A2033"):
+                       "A1732", "A1819", "A2010", "A2033", "A2209", "A2332",
+                       "A2429", "A2529"):
             self.assertEqual(self.db.execute(
                 "SELECT value FROM observations WHERE hex=? AND kind='terrain'", (hex_id,)).fetchall(), [])
         # Independently inspected TEC controls: pale gaps are unfinished, dark
@@ -172,6 +175,8 @@ class MapDatabaseTests(unittest.TestCase):
             ('A0703', 'north_east', 'track', False),  # Track crosses NW, not toward A0803.
             ('A2003', 'north_west', 'track', False),  # Actual crossing is NE into A2104.
             ('A1607', 'north_west', 'track', False),  # Track enters from A1606 to the west.
+            ('A2429', 'north_east', 'track', False),  # Separate stub, not linked to Agadabia.
+            ('A2529', 'north_east', 'track', False),  # Double Road, not a parallel Track.
             ('E2520', 'east', 'railroad', True),
             ('B5409', 'east', 'road', True),
             ('B5405', 'east', 'road', True),
@@ -220,6 +225,7 @@ class MapDatabaseTests(unittest.TestCase):
             'A1903 A2003 A2104',
             'A1932 A2032 A2133',
             'A2032 A2033 A1933',
+            'A2232 A2332 A2331 A2430 A2530 A2629 A2630 A2631',
         ):
             cells = route.split()
             for start, destination in zip(cells, cells[1:]):

@@ -882,6 +882,269 @@
           "survey_refs": ["ink-A-hexside-track","a-20-missing-tracks"], "uncertainty": ["Southeastern seam identity, band direction and operational junction status remain unresolved. Human review pending."]
         }
       ]
+    },
+    {
+      "id": "a-21-26-whole-cell-2026-11-03",
+      "date": "2026-11-03",
+      "method": "agent_visual",
+      "notes": "All 120 retained A2101–A2633 outlined cells inspected at 2x and reconciled against model observations, with 4x coast, Gravel, label and route controls and a 3x multi-cell Agadabia context. Geometry/source pins unchanged. Raw detector non-detection is not evidence of absence. Only this recorded batch gains full-cell coverage; nearby northern crops remain not_reviewed. Human adjudication, exact paths, side directions and operational rules remain unresolved.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Land inside the outline; gray-green Wadi and colored overprints are not blue coastal water."},
+        "transport": {"status": "not_observed", "notes": "No Road, Railroad, Track or unfinished transportation symbol observed inside the outline. Neighboring strokes and faint section lines do not establish a route."},
+        "hexside": {"status": "not_observed", "notes": "No separate directional slope, ridge, escarpment, barred-side, Wadi or river glyph observed inside the outline; ordinary grid is not a side feature."},
+        "locations": {"status": "not_observed", "notes": "No location/facility glyph observed inside the outline. Nearby names, italic area lettering and symbols in neighboring cells do not add locations."}
+      },
+      "groups": [
+        {
+          "hexes": ["A2101","A2102","A2103","A2108","A2129","A2131","A2132","A2201","A2207","A2230","A2231","A2401","A2402","A2501","A2502","A2601","A2602"],
+          "findings": {"terrain": {"status": "observed", "notes": "Affirmative plain land agrees with existing Clear. Nearby tracks/roads, Salt Marsh and location lettering stay outside these outlined interiors."}},
+          "survey_refs": ["ink-A-terrain-clear"], "uncertainty": ["Clear is a provisional visible occurrence, not every edge pixel or movement permission. Human review pending."]
+        },
+        {
+          "hexes": ["A2226","A2426"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Existing Clear matches the plain interior; adjacent Salt Marsh, coastal water and broad stippled bands remain outside or at the outline."},
+            "hexside": {"status": "unresolved", "notes": "Neighboring stippled bands follow eastern edges; exact boundary membership and directional interpretation remain unresolved."}
+          },
+          "survey_refs": ["ink-A-terrain-clear"], "uncertainty": ["Retain Clear without asserting that marginal side ink is absent. Human review pending."]
+        },
+        {
+          "hexes": ["A2531"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain interior agrees with existing Clear, but Gravel rings closely touch the eastern grid stroke. Preserve existing Clear while keeping partial-Gravel membership unresolved; neighboring Agadabia lettering is not another dot."}},
+          "survey_refs": ["ink-A-terrain-clear"], "uncertainty": ["Near-grid Gravel contact is not promoted to a separate occurrence or erased by the existing Clear classification. Human review pending."]
+        },
+        {
+          "hexes": ["A2104","A2105","A2130","A2202","A2203","A2204","A2229","A2232","A2302","A2430","A2630"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added affirmative Clear beneath dashed routes and any lettering; nearby Gravel, bands and coast stay outside the interior."},
+            "transport": {"status": "observed", "notes": "Existing dashed Track branches agree with source. A2203 has crossing W/E and NE/SE strokes; A2630 branches toward A2731 and A2631 from Agadabia. A2229's nearby double Road stays outside its northwest corner. No rail/construction glyph or operational junction inferred."}
+          },
+          "survey_refs": ["a-21-26-plain-ground","ink-A-hexside-track"], "uncertainty": ["Crossings remain provisional; exact curves and within-cell junction permissions are not inferred. Human review pending."]
+        },
+        {
+          "hexes": ["A2124","A2126","A2127","A2128","A2228","A2329","A2405","A2505"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added Clear beneath continuous double Road. Enlarged A2124 control keeps the nearby coast outside the northwest corner; Salt Marsh remains outside these cells."},
+            "transport": {"status": "observed", "notes": "Existing continuous double Road crossings agree with source. A2128 also contains the existing southwest dashed Track branch joining the Road; no exact junction authority inferred."},
+            "hexside": {"status": "unresolved", "notes": "Stippled bands approach A2127/A2128/A2228/A2329 boundaries; no directional side type assigned. No separate side glyph observed in the remaining grouped cells."}
+          },
+          "survey_refs": ["a-21-26-plain-ground","ink-A-hexside-road"], "uncertainty": ["Clear describes interior ground, not uniform edge pixels; nearby side-band membership and operational route roles remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2106","A2107","A2205","A2206","A2306","A2404","A2503"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added Clear surrounding gray-green Wadi; RIFI/EL lettering is area text, not a location point or terrain fill."},
+            "hexside": {"status": "unresolved", "notes": "Meandering Wadi enters or closely follows the outline, but whole-side membership, bridge rules and movement effects remain unresolved. No directional slope assigned."}
+          },
+          "survey_refs": ["a-21-26-plain-ground"], "uncertainty": ["Wadi is not blue coastal water; path extent and operational interpretation remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2304","A2307","A2403","A2504","A2603","A2604"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added Clear around route strokes and Wadi. Enlarged A2604 control puts the adjacent Salt Marsh outside its northeast/east outline."},
+            "transport": {"status": "observed", "notes": "Existing dashed Track at A2304/A2403/A2504/A2603 and continuous double Road at A2307/A2604 match source crossings, independently of overlapping Wadi."},
+            "hexside": {"status": "unresolved", "notes": "Wadi meets the northern tip at A2304, northeast/east/southeast at A2403/A2603 and western portions of A2307/A2504/A2604. No bridge, passability or exact whole-side rule inferred."}
+          },
+          "survey_refs": ["a-21-26-plain-ground"], "uncertainty": ["Route and Wadi are separate observations; operational crossing rights remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2305"],
+          "findings": {"terrain": {"status": "observed", "notes": "Added Clear beneath the italic WADI area name. No Wadi stroke or location dot occurs inside this outlined cell."}},
+          "survey_refs": ["a-21-26-plain-ground"], "uncertainty": ["Area lettering is not a location or side feature. Human review pending."]
+        },
+        {
+          "hexes": ["A2133"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added Clear in the plain interior; enlarged control places the broad stippled band outside east/southeast and Wadi outside the southern tip."},
+            "transport": {"status": "observed", "notes": "Dashed Track northwest/southwest agrees with A2232/A2032 crossings. Separate eastern branch leaves the section-local inventory and is a seam-owner finding, not fabricated adjacency."},
+            "hexside": {"status": "unresolved", "notes": "Band lies against the east/southeast outline; exact membership and Up/Down interpretation remain unresolved. Faint vertical section line is not Railroad."}
+          },
+          "survey_refs": ["a-21-26-plain-ground","ink-A-hexside-track","a-20-missing-tracks"], "uncertainty": ["Eastern seam, band direction and operational junction status remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2301"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added affirmative Clear beneath the shallow dashed Track."},
+            "transport": {"status": "observed", "notes": "Existing east Track into A2302 agrees with source. Western stroke reaches the map outline near its upper vertex, with no retained western neighbor; do not invent an off-map connection."}
+          },
+          "survey_refs": ["a-21-26-plain-ground","ink-A-hexside-track"], "uncertainty": ["Western boundary continuation and exact source terminus are not operational adjacency. Human review pending."]
+        },
+        {
+          "hexes": ["A2233","A2327"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added affirmative Clear in the plain interiors. Enlarged controls distinguish outside stippled bands and Gravel from the inside ground; faint section line in A2233 is not terrain or Railroad."},
+            "hexside": {"status": "unresolved", "notes": "Broad stippled bands follow east/southeast boundaries (and northeast at A2327); precise membership and directional interpretation remain unresolved."}
+          },
+          "survey_refs": ["a-21-26-plain-ground"], "uncertainty": ["Visible Clear occurrence is not uniform boundary treatment; no Mountain core or directional slope inferred. Human review pending."]
+        },
+        {
+          "hexes": ["A2330"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added Clear beneath Track; enlarged control puts the stippled band just outside the northwest edge."},
+            "transport": {"status": "observed", "notes": "Existing northwest/southwest Track to A2429/A2229 agrees with source, despite band overprint near the northern crossing."},
+            "hexside": {"status": "unresolved", "notes": "Northwest stippled band boundary and direction remain unresolved; no Mountain or operational pass added."}
+          },
+          "survey_refs": ["a-21-26-plain-ground","ink-A-hexside-track"], "uncertainty": ["Band direction and route passability remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2109"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added Clear beneath Marble Arch dot and double Road; coast stays outside the outline."},
+            "transport": {"status": "unresolved", "notes": "Continuous double Road connects A2208 through A2109 to A2110. Its outer stroke clips the A2208/A2209/A2109 vertex; existing A2109–A2209 footprint observation retained without claiming a distinct branch or exact centerline."},
+            "locations": {"status": "unresolved", "notes": "Existing Marble Arch measured dot/label matches source; Village/Bir category and operational role remain unresolved."}
+          },
+          "survey_refs": ["a-21-26-plain-ground","ink-A-hexside-road","label-A2109"], "uncertainty": ["Corner footprint versus route centerline needs adjudication; no route reclassification or geometry change made. Human review pending."]
+        },
+        {
+          "hexes": ["A2629"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added Clear under Agadabia dot/lettering, Road and Track; band remains outside west/southwest."},
+            "transport": {"status": "observed", "notes": "Added missing southeast Track into A2530 beneath the dot. Existing Road to A2730/A2529 and eastern Track through A2630 remain; no southwest Track along the Road or invented branch into A2429."},
+            "locations": {"status": "unresolved", "notes": "Existing Agadabia measured dot/label agrees with source; category, capacity and operational role remain unresolved."},
+            "hexside": {"status": "unresolved", "notes": "Stippled band closely approaches western/southwestern outline; no Up/Down side interpretation inferred."}
+          },
+          "survey_refs": ["a-21-26-plain-ground","ink-A-hexside-road","ink-A-hexside-track","belindah-agadabia-track-crossings","label-A2629"], "uncertainty": ["Dot-overprinted Track remains provisional; side-band directions and within-cell junctions unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2331","A2530"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added Clear under single dashed Track. Neighboring Belindah/Agadabia dots remain outside these outlines."},
+            "transport": {"status": "observed", "notes": "Added missing A2331 east into Belindah A2332 and A2530 northwest into Agadabia A2629, confirmed on both sides of dot overprint. Retain other Track crossings to A2430."},
+            "hexside": {"status": "unresolved", "notes": "At A2530, adjacent stippled band follows west/southwest outside the plain interior; direction remains unresolved. No separate side glyph observed inside A2331."}
+          },
+          "survey_refs": ["a-21-26-plain-ground","ink-A-hexside-track","belindah-agadabia-track-crossings"], "uncertainty": ["Provisional crossings are not exact curves or operational junction authority. Human review pending."]
+        },
+        {
+          "hexes": ["A2332"],
+          "findings": {
+            "terrain": {"status": "unresolved", "notes": "Plain Belindah interior with Gravel rings touching the eastern grid. Keep untyped rather than claiming homogeneous Clear or confident partial Gravel from near-grid fragments."},
+            "transport": {"status": "observed", "notes": "Added western Track from A2331 into the blue dot; existing southeast crossing to A2232 remains."},
+            "locations": {"status": "unresolved", "notes": "Existing Belindah measured dot and label match source. Village/Bir category and water remain unresolved."}
+          },
+          "survey_refs": ["ink-A-hexside-track","belindah-agadabia-track-crossings","label-A2332"], "uncertainty": ["Eastern Gravel membership, settlement category and operational junctions remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2431"],
+          "findings": {"terrain": {"status": "observed", "notes": "Added partial Gravel: enlarged ring arcs extend past grid stroke into the eastern interior. Plain ground dominates elsewhere; not homogeneous Gravel. Nearby southwest Track stays outside the outline."}},
+          "survey_refs": ["a-24-26-partial-gravel"], "uncertainty": ["Gravel extent remains partial/provisional; no movement effect inferred. Human review pending."]
+        },
+        {
+          "hexes": ["A2631"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Added partial Gravel: enlarged ring arcs extend past grid stroke into the east/southeast interior. Plain ground dominates elsewhere; not homogeneous Gravel."},
+            "transport": {"status": "observed", "notes": "Existing W/E dashed Track agrees with source between A2630 and A2632."}
+          },
+          "survey_refs": ["a-24-26-partial-gravel","ink-A-hexside-track"], "uncertainty": ["Gravel extent remains partial/provisional; no movement effect inferred. Human review pending."]
+        },
+        {
+          "hexes": ["A2333","A2432","A2433","A2532","A2533"],
+          "findings": {"terrain": {"status": "observed", "notes": "Gravel rings agree with existing Gravel. Plain gaps and faint section lines do not establish a homogeneous cell or extra route."}},
+          "survey_refs": ["ink-A-terrain-gravel"], "uncertainty": ["Partial extent and operational terrain effects remain unadjudicated. Human review pending."]
+        },
+        {
+          "hexes": ["A2632","A2633"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Gravel rings match existing Gravel beneath Track."},
+            "transport": {"status": "observed", "notes": "Existing W/E dashed Track crosses A2632 into A2633. Eastern continuation beyond A2633 is a geometry-owner seam finding, not a fabricated connection."}
+          },
+          "survey_refs": ["ink-A-terrain-gravel","ink-A-hexside-track"], "uncertainty": ["Eastern section seam and operational continuity remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2125","A2225","A2303","A2326","A2528"],
+          "findings": {"terrain": {"status": "observed", "notes": "Olive patches with yellow branching marks match existing Salt Marsh; plain gaps remain. Nearby Road/Track strokes stay outside the outlined cells."}},
+          "survey_refs": ["ink-A-terrain-salt_marsh"], "uncertainty": ["Salt Marsh occurrence does not establish uniform extent or operational movement cost. Human review pending."]
+        },
+        {
+          "hexes": ["A2227","A2328","A2427","A2428"],
+          "findings": {
+            "terrain": {"status": "observed", "notes": "Existing Salt Marsh matches yellow branching marks within olive patches, separate from darker surrounding stippled bands."},
+            "hexside": {"status": "unresolved", "notes": "Broad stippled slope/ridge-like band encloses or enters the cell; exact directional classification remains unresolved, not automatically Mountain."}
+          },
+          "survey_refs": ["ink-A-terrain-salt_marsh"], "uncertainty": ["Band type, direction and operational treatment remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2325","A2506","A2605"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Blue coastal water and Salt Marsh/plain land both enter the outlined cell."},
+            "terrain": {"status": "observed", "notes": "Retain existing Salt Marsh occurrence without converting the mixed coastal cell to homogeneous ground or Sea."},
+            "hexside": {"status": "unresolved", "notes": "Coastline crosses the outline; exact Coast-side and playable-land interpretation remain unresolved."}
+          },
+          "survey_refs": ["ink-A-terrain-salt_marsh"], "uncertainty": ["Land fraction, coastline membership and operational terrain effects remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2111","A2112","A2120","A2121","A2122","A2210","A2221","A2222","A2309","A2310","A2323","A2324","A2408","A2424","A2507","A2508","A2525","A2606","A2625"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Blue water fills the outlined interior. Nearby coastal projections, lettering, absent grid segments and Ras el Ali anchor outside A2111 are not land or point features inside these cells."},
+            "terrain": {"status": "unresolved", "notes": "Keep untyped ground: blue water alone does not assign operational Sea terrain or playability."}
+          },
+          "survey_refs": [], "uncertainty": ["Operational water/Coast interpretation remains unresolved; coast approaches some corners. Human review pending."]
+        },
+        {
+          "hexes": ["A2223","A2224","A2407","A2425","A2526","A2626"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Blue coastal water and plain land both enter the outline. Nearby roads stay outside; Salt Marsh and bands approach neighboring edges."},
+            "terrain": {"status": "unresolved", "notes": "Mixed coast remains untyped rather than homogeneous Clear or Sea."},
+            "hexside": {"status": "unresolved", "notes": "Coastline and neighboring bands approach/cross the outline; no operational Coast or directional side rule assigned."}
+          },
+          "survey_refs": [], "uncertainty": ["Coastal land fraction, side membership and playability remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2110","A2123","A2208","A2308"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Blue sea water and plain coastal land meet inside the outline."},
+            "terrain": {"status": "unresolved", "notes": "Retain untyped mixed coast rather than assigning homogeneous Clear from its land portion."},
+            "transport": {"status": "observed", "notes": "Existing continuous double Road passes through the coastal land. At A2208 the southeast exit meets the A2209/A2109 vertex; outer-stroke footprint does not establish a separate centerline branch."},
+            "hexside": {"status": "unresolved", "notes": "Coastline is not snapped to grid; operational Coast assignment remains unresolved."}
+          },
+          "survey_refs": ["ink-A-hexside-road"], "uncertainty": ["Coast-side and Marble Arch corner interpretation remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2209"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Mostly blue water with plain coastal land southwest; Marble Arch dot lies outside in A2109."},
+            "terrain": {"status": "unresolved", "notes": "Mixed coastal cell remains untyped."},
+            "transport": {"status": "unresolved", "notes": "Road outer stroke clips the southwest corner where A2208 meets A2109. Retain existing A2109–A2209 footprint observation pending centerline/edge adjudication; do not claim a distinct branch or silently add A2208 east."},
+            "hexside": {"status": "unresolved", "notes": "Coastline crosses the cell; no Coast-side rule or road-related side direction inferred."}
+          },
+          "survey_refs": ["ink-A-hexside-road"], "uncertainty": ["Road width versus centerline membership at shared vertex is unresolved, not automatically a graph connection. Human review pending."]
+        },
+        {
+          "hexes": ["A2406"],
+          "findings": {
+            "surface": {"status": "observed", "notes": "Blue sea enters northeast; plain land and gray-green Wadi occupy the remainder."},
+            "terrain": {"status": "unresolved", "notes": "Mixed coast remains untyped, not homogeneous Clear."},
+            "transport": {"status": "observed", "notes": "Existing double Road runs west/southeast between A2405/A2307; Wadi overlap does not imply a bridge rule."},
+            "hexside": {"status": "unresolved", "notes": "Wadi enters southeast separately from coastal water. Whole-side assignment and operational Coast/Wadi treatment remain unresolved."}
+          },
+          "survey_refs": ["ink-A-hexside-road"], "uncertainty": ["Coast and Wadi membership, movement and bridge interpretation remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2527","A2627","A2628"],
+          "findings": {
+            "terrain": {"status": "unresolved", "notes": "Plain gaps coexist with broad stippled bands inside the outline. Retain untyped ground rather than classify the band as Mountain or the whole cell as Clear."},
+            "hexside": {"status": "unresolved", "notes": "Band enters northwest/west/southwest at A2527, northwest/west at A2627 and east at A2628. Type and direction remain unresolved."}
+          },
+          "survey_refs": [], "uncertainty": ["Stippled band membership does not establish Up/Down or a movement rule. Human review pending."]
+        },
+        {
+          "hexes": ["A2529"],
+          "findings": {
+            "terrain": {"status": "unresolved", "notes": "Plain core with stippled band northeast/east; retain untyped ground."},
+            "transport": {"status": "observed", "notes": "Existing double Road crosses northeast/southeast toward A2629/A2429. Agadabia dot and its southeast Track are outside this cell; no parallel Track inferred."},
+            "hexside": {"status": "unresolved", "notes": "Stippled band overlaps route region; no slope direction or route passability inferred."}
+          },
+          "survey_refs": ["ink-A-hexside-road"], "uncertainty": ["Side-band direction and road operability remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A2429"],
+          "findings": {
+            "terrain": {"status": "unresolved", "notes": "Stippled band encloses a plain gap; do not assign Mountain or homogeneous Clear."},
+            "transport": {"status": "unresolved", "notes": "Existing Road northwest/southwest and Track southeast to A2330 match source. The separate dashed Track stops beneath stippled band ink inside the northern interior. Multi-cell context shows no affirmative crossing north into A2530/A2529; do not connect it to Agadabia by endpoint proximity."},
+            "hexside": {"status": "unresolved", "notes": "Broad stippled band surrounds and overlaps the Track stub. Source termination versus occlusion and side direction remain unresolved."}
+          },
+          "survey_refs": ["ink-A-hexside-road","ink-A-hexside-track"], "uncertainty": ["Northern Track continuation is unresolved, not inferred through the band. No Up/Down, passability or operational junction assigned. Human review pending."]
+        }
+      ]
     }
   ]
 }

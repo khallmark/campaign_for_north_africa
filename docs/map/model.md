@@ -280,8 +280,8 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,650/1,961 B cells; 4,368 cells
-remain not_reviewed**, including B5101 onward and all of C–E. This is agent source review, not complete interpretation
+Recorded coverage is **58/58 Malta, 1,000/1,000 A and 1,809/1,961 B cells; 4,209 cells
+remain not_reviewed**, including B5601 onward and all of C–E. This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
@@ -515,6 +515,25 @@ El Abiar's western rail/Track and northwest/southwest Track branches, B5001 west
 Track and Gazala B4933 east Road remain boundary findings for the seam owner.
 Gray section lines, broad Wadi and stippled side bands do not establish new
 adjacency, permanent water, operational junctions or Up/Down effects.
+
+The B5101–B5531 batch reviews **159 retained cells**, not a rectangular 165-cell
+range. Four affirmative Clear occurrences at **B5229, B5426, B5427 and B5527**
+remain separate from Wadi, location and unfinished-Road overprints. Partial
+Mountain cores at **B5301, B5315 and Chaulan B5518** do not replace existing Rough
+or turn stippled bands into ground. Sixteen missing Track crossings and two
+Railroad crossings restore the Barce approach and branches near Maraua/Martuba.
+Paired controls place the B5316 route through B5216–B5217, not B5317; the B5515
+Track joins the Road in B5614, not B5514. Tocra's Track crosses northeast into
+B5601 independently of its east Road. B5601/B5614 and other B56 crops remain
+context-only and **not_reviewed**. The exact B5508 northeast/east-vertex route
+toward El Garrib is still unresolved; no side is forced from endpoint connectivity.
+The Track across B5523 east remains independent of the Martuba unfinished Road,
+which is not promoted to a usable Road. Eight measured Village/Bir dots and all
+prior classifications are unchanged. Gravel-boundary B5129/B5130/B5228, five
+stippled-band interiors and mixed coastal cells retain unresolved ground/footprint
+findings. Tocra B5501's western Road exits retained inventory and remains a
+boundary finding for the seam owner. No precise centerline, operational junction,
+port, Up/Down effect or section adjacency is inferred.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

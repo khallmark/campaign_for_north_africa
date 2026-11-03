@@ -9,6 +9,294 @@
   "map_source": "docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png",
   "batches": [
     {
+      "id": "b-51-55-whole-cell-2026-11-03", "date": "2026-11-03", "method": "agent_visual",
+      "notes": "Individually viewed all 159 retained B5101–B5531 outlines in seven 2x sheets and enlarged contrary-case controls, with TEC comparison. Reconciled against 1574e12; source and geometry pins unchanged. Four Clear, three Mountain, sixteen Track and two Railroad occurrences added. Extra B56 crops and B5614 are context-only with no review credit. Preserve eight measured location dots, unfinished Road and unresolved near-grid/band/coast findings. No classification removed, exact path, operational effect or human approval inferred.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Whole retained outline visually inspected against the source; grid, labels and gray section lines separated from feature ink. Padding and neighboring cells are not review coverage."},
+        "terrain": {"status": "observed", "notes": "Retain smooth beige Rough occurrence, including partial patches and plain gaps; not uniform terrain or movement authority."},
+        "transport": {"status": "not_observed", "notes": "No Road, Railroad, Track or unfinished route observed inside this outline. Exterior paths and lettering are not interior routes; source absence does not establish historical absence."},
+        "hexside": {"status": "not_observed", "notes": "No independent Wadi, river, ridge, slope, escarpment or barred-side glyph observed inside outline. Exterior ink, grid and section lines do not establish new side effects."},
+        "locations": {"status": "not_observed", "notes": "No additional Village/Bir dot, Major City cluster, oasis, airfield, flying-boat, port or training glyph observed inside outline. Nearby place lettering is not an additional point."}
+      },
+      "groups": [
+        {
+          "hexes": ["B5107","B5108","B5201","B5214","B5215","B5302","B5308","B5401","B5402"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Rough. Mountain lies outside B5107/B5108/B5201/B5214/B5215/B5302/B5308; Wadi approaches bottom B5107/B5108. B5401 has a plain northern gap. Black fringe remains outside northern B5401/B5402. Tecnis/Tocra lettering is not another dot."}},
+          "survey_refs": ["ink-B-terrain-rough"], "uncertainty": ["Near-edge ink and outside Track B5214 remain independent; no homogeneous terrain or operational effect inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5105","B5204","B5205","B5305","B5306","B5413","B5414","B5516"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain smooth olive Mountain filling the outline, distinct from stippled side bands. No extra Rough inferred merely from surrounding color. B5414/B5516 nearby Track remains exterior."}},
+          "survey_refs": ["ink-B-terrain-mountain"], "uncertainty": ["Existing overlapping survey evidence is not a new occurrence or operational terrain rule. Human review pending."]
+        },
+        {
+          "hexes": ["B5101","B5104","B5106","B5203","B5206","B5207","B5304","B5307","B5312","B5313","B5412","B5506","B5507","B5509","B5510","B5511"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain existing smooth olive Mountain and pale Rough as separate partial occurrences. Gray section line B5101 is not a feature. Railroad is outside west B5203/northwest B5304; roads, Tracks and neighboring dots remain outside these outlines."}},
+          "survey_refs": ["ink-B-terrain-mountain","ink-B-terrain-rough"], "uncertainty": ["No exact terrain partition, additional point or operational effect inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5102","B5112","B5117","B5309","B5310","B5311"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain existing single-dashed Track: southwest/northeast B5102; northwest/southwest B5112; northeast/southeast B5117; northwest/southeast B5309/B5311; northeast/southeast B5310. Enlarged B5310 control keeps southern exit inside southeast corner, not east."}, "terrain": {"status": "observed", "notes": "Retain partial/full Rough. Gravel approaches east B5117 and south B5112; no full-cell Gravel inferred from exterior circles."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track"], "uncertainty": ["Track is not an exact centerline or operational permission. Marginal pattern footprint remains provisional; human review pending."]
+        },
+        {
+          "hexes": ["B5103"],
+          "findings": {"transport": {"status": "observed", "notes": "Existing tied Railroad crosses southwest/northwest near vertices. Parallel Track remains outside west; do not duplicate transverse ties as Track."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-railroad"], "uncertainty": ["Rail footprint and operational availability remain provisional. Human review pending."]
+        },
+        {
+          "hexes": ["B5109","B5114","B5115","B5116","B5208","B5221","B5324","B5421","B5422","B5424"],
+          "findings": {"hexside": {"status": "unresolved", "notes": "Broad Wadi: northeast/east B5109; west/southwest B5114; southeast tip B5115; southwest B5116; east B5208; east/southeast B5221; northwest/west/southeast B5324; northwest/northeast B5421; northwest/east B5422; southwest/southeast B5424. Preserve provisional side associations, not full-cell water."}},
+          "survey_refs": ["ink-B-terrain-rough"], "uncertainty": ["Wadi ribbon, Rough edge and outside Gravel are independent. No permanent water, Major/Minor River, bridge or crossing permission inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5110"],
+          "findings": {"transport": {"status": "observed", "notes": "Restore east Track to B5111 west; retain northwest/southeast and northeast fork. Enlarged control separates branch from Rough boundary and Wadi."}, "hexside": {"status": "unresolved", "notes": "Wadi runs along west/southwest independently of fork; broad footprint and crossing effects remain provisional."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track","barce-martuba-track-crossings"], "uncertainty": ["Track fork does not establish operational junction or bridge. Human review pending."]
+        },
+        {
+          "hexes": ["B5111"],
+          "findings": {"transport": {"status": "observed", "notes": "Restore western Track across B5110 east and retain southeast continuation; not a new northern branch."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track","barce-martuba-track-crossings"], "uncertainty": ["Partial Rough/plain gap does not establish a precise route or operational junction. Human review pending."]
+        },
+        {
+          "hexes": ["B5113","B5121","B5122","B5126","B5127","B5128","B5223","B5224","B5226","B5227","B5318","B5326","B5327","B5328","B5519"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel circle pattern, distinct from Rough, white gaps and broad Wadi overprints."}, "hexside": {"status": "unresolved", "notes": "Wadi: northeast/east B5113/B5126; northwest/west/southwest B5121; northwest B5122; northwest/west plus northeast B5127; northwest/northeast B5128/B5326/B5519; northwest/west and east B5223; northwest/west B5224; west/southwest plus southeast tip B5226; northeast/southwest/southeast B5227; east B5318; northwest/northeast/east B5327; west/southwest/southeast B5328. Preserve broad-ribbon and endpoint uncertainty."}},
+          "survey_refs": ["ink-B-terrain-gravel"], "uncertainty": ["Nearby Tracks remain outside these outlines. No permanent water, bridge, full-cell water or directional terrain inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5118","B5119","B5120","B5220","B5320","B5418","B5420"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel beneath separate Track/Wadi overprints."}, "transport": {"status": "observed", "notes": "Retain existing Tracks: northeast/southeast B5118/B5120/B5420; northwest/southeast B5119/B5418; west/northwest/southwest B5220; northwest/east/southeast B5320. Source bends near vertices are not straight center-to-center paths."}, "hexside": {"status": "unresolved", "notes": "Wadi follows northeast B5118; northwest/southwest B5119; northeast/east/southeast B5120; west/southwest B5220/B5320; southeast tip B5418. B5420 ribbon remains just outside northeast; near-side association stays provisional."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track"], "uncertainty": ["Track/Wadi overlap does not imply bridge or operational passage; side footprints remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["B5123"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel beneath northern Wadi tip and Tracks."}, "transport": {"status": "observed", "notes": "Restore northwest Track to B5222 southeast; retain southwest/east branches. Paired control places northern branch within B5222's southeast corner, not through B5223."}, "hexside": {"status": "unresolved", "notes": "Wadi tip overlaps northern vertex; no new full-side water interpretation."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track","barce-martuba-track-crossings"], "uncertainty": ["Vertex stroke width and exact centerline remain provisional. No bridge or operational fork inferred; human review pending."]
+        },
+        {
+          "hexes": ["B5124","B5125"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel; Wadi tip stays outside northern B5124."}, "transport": {"status": "observed", "notes": "Restore B5124 east to B5125 west above their lower shared corner. Retain B5124 west and B5125 northeast/southeast/southwest branches; enlarged controls distinguish horizontal crossing from lower diagonal."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track","barce-martuba-track-crossings"], "uncertainty": ["No exact junction or route availability inferred from source fork. Human review pending."]
+        },
+        {
+          "hexes": ["B5129"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Mostly plain interior but enlarged control finds Gravel circles touching southwest/west corner. Retain untyped ground, not blanket Clear."}, "transport": {"status": "observed", "notes": "Existing southwest/east single-dashed Track retained."}, "hexside": {"status": "unresolved", "notes": "Wadi spans northwest/northeast; broad footprint is not exactly a side."}},
+          "survey_refs": ["ink-B-hexside-track"], "uncertainty": ["Pattern footprint and operational water crossing unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["B5130"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain interior with Gravel touching southern vertex; retain untyped ground pending pattern-footprint adjudication."}, "transport": {"status": "observed", "notes": "Existing northwest/east double Road meets Track from west inside cell. Not a second Railroad or unfinished line."}, "hexside": {"status": "unresolved", "notes": "Wadi enters northwest near Road; crossing effects unresolved."}},
+          "survey_refs": ["ink-B-hexside-road","ink-B-hexside-track"], "uncertainty": ["Depicted meeting does not establish operational junction or bridge. Human review pending."]
+        },
+        {
+          "hexes": ["B5131","B5330"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Mixed Sea/plain coast remains untyped; Gravel is outside south B5131."}, "transport": {"status": "observed", "notes": "Retain double Road west/southeast B5131 and northwest/southwest B5330; not a shoreline or rail."}, "hexside": {"status": "unresolved", "notes": "Coast cuts interiors rather than canonical edges; B5330 also has southwest/southeast Wadi. Footprints and crossing effects unresolved."}},
+          "survey_refs": ["ink-B-hexside-road"], "uncertainty": ["No full-cell Sea/Clear, port or legal water crossing inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5132","B5230","B5431"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Retain untyped mixed coast: land enters southwest B5132, west B5230 and southwest B5431. Nearby Road/Track and Tmimi/Bomba dots remain outside these outlines."}, "hexside": {"status": "unresolved", "notes": "Irregular coastline and exterior Wadi at B5230 are not new canonical water sides or movement permissions."}},
+          "survey_refs": [], "uncertainty": ["No port, additional settlement or full-cell Sea/Clear inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5133","B5231","B5232","B5332","B5531"],
+          "findings": {"terrain": {"status": "observed", "notes": "Sea inside outlined cell; nearest land and Salt Marsh remain exterior, including enlarged B5531 west/northwest control. Keep surface evidence without inventing land terrain. Bomba lettering B5332 and gray section line B5133 are not features."}},
+          "survey_refs": [], "uncertainty": ["No navigability, harbor, port, capacity or operational water interpretation inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5202","B5303","B5403"],
+          "findings": {"transport": {"status": "observed", "notes": "Restore three consecutive northeast Track crossings B5202–B5303–B5403–B5504 and Railroad crossings B5202 northeast/B5403 northeast. Existing B5303 northeast Railroad retained. Parallel single dashes are independent of continuous rail and transverse ties; no eastward tie-footprint route added."}},
+          "survey_refs": ["ink-B-terrain-rough","barce-martuba-track-crossings","barce-rail-crossings"], "uncertainty": ["Near-vertex centerline and operational rail/Track junction remain provisional; no line made usable by source review. Human review pending."]
+        },
+        {
+          "hexes": ["B5209","B5210","B5211","B5212","B5213"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain existing Track: northwest/southeast B5209; northwest/southwest B5210; northwest/southeast/east B5211; west/east B5212; west/northeast B5213."}, "hexside": {"status": "unresolved", "notes": "Wadi west/southwest B5209, southeast tip B5212 and southwest B5213. No interior Wadi seen B5210/B5211; adjacent ribbons do not determine new side associations."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track"], "uncertainty": ["Track forks and watercourse overlap have no inferred operational meaning. Human review pending."]
+        },
+        {
+          "hexes": ["B5216","B5316"],
+          "findings": {"transport": {"status": "observed", "notes": "Restore B5216 northwest to B5316 southeast, then B5216 east to B5217 west. Paired outlines put the turn inside B5216, not through B5317. Retain B5316 northwest."}, "terrain": {"status": "observed", "notes": "Partial Rough and plain gap retained. Gravel stays outside eastern B5216/B5316; olive Mountain outside north B5316 is not an interior occurrence."}},
+          "survey_refs": ["ink-B-terrain-rough","barce-martuba-track-crossings"], "uncertainty": ["Vertex-sensitive provisional crossing does not establish exact path or homogeneous terrain. Human review pending."]
+        },
+        {
+          "hexes": ["B5217","B5218"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel under forks and broad Wadi."}, "transport": {"status": "observed", "notes": "Restore B5217 west from B5216 and east to B5218 west. Retain southwest branch B5217 and southwest/southeast/northeast branches B5218; horizontal stroke runs above lower shared vertex."}, "hexside": {"status": "unresolved", "notes": "Wadi east B5217 and west/southwest/southeast B5218 obscures parts of the Track, not a bridge glyph."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track","barce-martuba-track-crossings"], "uncertainty": ["Fork/Wadi overlap does not establish legal passage or an operational junction. Human review pending."]
+        },
+        {
+          "hexes": ["B5219","B5319"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel under Wadi ribbons and Track."}, "transport": {"status": "observed", "notes": "Restore B5219 northwest to B5319 southeast: Track runs just left of B5219 northern vertex. Retain B5219 east and B5319 northwest/southwest. Enlargement distinguishes dashed route from Wadi and Gravel outlines."}, "hexside": {"status": "unresolved", "notes": "Wadi surrounds much of each interior, crossing northern/eastern/southern boundaries. Preserve broad footprint and direction uncertainty."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track","barce-martuba-track-crossings"], "uncertainty": ["Near-vertex stroke width remains provisional; no precise centerline, bridge or permanent water inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5222"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain northeast Track and restore southeast to B5123 northwest. Enlargement keeps southern stroke left of east/southeast corner, not through B5223."}, "hexside": {"status": "unresolved", "notes": "Wadi northwest/west and east/southeast partly overlaps Track; preserve provisional footprint, not operational crossing authority."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track","barce-martuba-track-crossings"], "uncertainty": ["Rough/plain edge and route width remain independent unresolved boundaries. Human review pending."]
+        },
+        {
+          "hexes": ["B5225"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel, not blanket Rough from neighboring patches."}, "transport": {"status": "observed", "notes": "Restore northwest Track to B5325 southeast just left of northern vertex; retain southwest continuation."}, "hexside": {"status": "unresolved", "notes": "Wadi follows east; no new water classification or crossing rule."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track","barce-martuba-track-crossings"], "uncertainty": ["Vertex line width remains provisional; no exact path or legal movement inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5228"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Largely plain interior but Gravel circles touch/straddle west boundary in enlarged control. Retain untyped ground."}, "hexside": {"status": "unresolved", "notes": "Wadi spans northern and southern boundaries, not homogeneous water."}, "locations": {"status": "not_observed", "notes": "Tmimi lettering extends here, but measured dot is in B5229. No additional location or facility glyph observed."}},
+          "survey_refs": [], "uncertainty": ["Pattern footprint, watercourse effects and point category remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["B5229"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear under dot, label, Road and Wadi; no patterned ground inside enlarged outline."}, "transport": {"status": "observed", "notes": "Retain double Road northeast/southeast through Tmimi dot, separate from Wadi ribbons."}, "hexside": {"status": "unresolved", "notes": "Wadi crosses northern/southern boundaries; no bridge, permanent water or legal crossing inferred."}, "locations": {"status": "unresolved", "notes": "Retain measured Tmimi Village/Bir dot and label. Adjacent lettering and coast do not imply additional dots or a port."}},
+          "survey_refs": ["b-51-55-plain-ground","ink-B-hexside-road","label-B5229"], "uncertainty": ["Point class, route junction and watercourse effects need human adjudication."]
+        },
+        {
+          "hexes": ["B5301"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add smooth olive Mountain core inside existing partial Rough. White western gap and exterior black stippled band stay separate from core."}},
+          "survey_refs": ["ink-B-terrain-rough","b-53-55-mountain-cores"], "uncertainty": ["Gray section line and outside scarp do not establish adjacency or Up/Down. Human review pending."]
+        },
+        {
+          "hexes": ["B5314","B5415","B5416"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain smooth Mountain/Rough occurrences; plain gaps do not erase partial patterns."}, "transport": {"status": "observed", "notes": "Retain single-dashed Track southwest/east B5314, northwest/southeast and southwest/east B5415, west/northeast B5416. Crossings and forks are not Road or finished rail."}},
+          "survey_refs": ["ink-B-terrain-mountain","ink-B-terrain-rough","ink-B-hexside-track"], "uncertainty": ["No operational junction or movement effect inferred from route intersection. Human review pending."]
+        },
+        {
+          "hexes": ["B5315"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add olive Mountain core and retain Rough separately; not a stippled side band."}, "transport": {"status": "observed", "notes": "Retain west/northeast single-dashed Track across the Mountain patch."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track","b-53-55-mountain-cores"], "uncertainty": ["Partial core does not establish uniform terrain or route passability. Human review pending."]
+        },
+        {
+          "hexes": ["B5317","B5417"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel circles. B5317's southwest Track and B5417's northwest Track/Mountain remain outside outline; no route shortcut or Mountain fill added."}},
+          "survey_refs": ["ink-B-terrain-gravel"], "uncertainty": ["Outside route proximity does not justify adjacency or operational crossing. Human review pending."]
+        },
+        {
+          "hexes": ["B5321","B5322","B5323","B5423"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain Tracks west/east plus northwest B5321, west/east B5322, west/northeast/southwest B5323, northwest/southwest B5423."}, "hexside": {"status": "unresolved", "notes": "No interior Wadi observed B5321. Broad Wadi east/southeast B5322, west plus east/southeast B5323, west/southwest/southeast B5423. Provisional associations are not exact traced edges."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track"], "uncertainty": ["Plain gaps, Rough boundaries, route forks and watercourse crossing effects remain separate. Human review pending."]
+        },
+        {
+          "hexes": ["B5325","B5425"],
+          "findings": {"transport": {"status": "observed", "notes": "Restore B5325 southeast into B5225 northwest and B5325 northeast into B5425 southwest. Paired controls put the near-vertical line inside B5325's right corners; no route through B5326 inferred. Retain B5425 northeast."}, "hexside": {"status": "unresolved", "notes": "Wadi northern and southwest B5325, southwest/southeast B5425; preserve broad footprint and crossing uncertainty."}},
+          "survey_refs": ["ink-B-terrain-rough","barce-martuba-track-crossings"], "uncertainty": ["Corner-sensitive route remains provisional, not a precise centerline or bridge. Human review pending."]
+        },
+        {
+          "hexes": ["B5329","B5428","B5528"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain interiors beside stippled olive bands: inside northwest B5329; near northeast/east/southeast B5428; near northeast/east B5528. Keep untyped pending footprint adjudication, not Mountain cores or blanket Clear."}, "hexside": {"status": "unresolved", "notes": "Wadi southwest/southeast B5329, northwest tip B5428, southwest B5528. Olive bands and broad ribbons retain distinct unresolved class/side ownership and direction."}},
+          "survey_refs": [], "uncertainty": ["Road/unfinished Road remains exterior. No Up/Down, exact terrain boundary or legal crossing inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5331"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Bomba dot lies on a narrow plain peninsula within mixed Sea/coast; keep ground untyped."}, "transport": {"status": "observed", "notes": "Retain northwest single-dashed Track approaching dot; no additional route or port connection inferred."}, "hexside": {"status": "unresolved", "notes": "Irregular coastline is not an exact canonical water side or crossing rule."}, "locations": {"status": "unresolved", "notes": "Retain existing measured Bomba Village/Bir dot and label. Sea and lettering do not independently establish Port or operational harbor."}},
+          "survey_refs": ["label-B5331","ink-B-hexside-track"], "uncertainty": ["Point category, port association and navigability remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["B5404","B5409","B5411","B5505"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain double Road northwest/east B5404, west/east B5409, west/northeast B5411/B5505. Rail and Barce dot remain outside B5404; neighboring Track is not an interior branch."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-road"], "uncertainty": ["Road depiction does not imply operational junction or passability. Human review pending."]
+        },
+        {
+          "hexes": ["B5405","B5406","B5408","B5512","B5513","B5514"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Mountain; pale Rough also occurs B5405/B5408/B5512, not automatically every fully olive cell."}, "transport": {"status": "observed", "notes": "Retain Road west/east B5405/B5406/B5408/B5513, southwest/east B5512, west/northeast B5514. Existing Track southeast B5408 retained. Track beside B5514's northeast Road remains outside: its junction is in B5614, not B5514."}},
+          "survey_refs": ["ink-B-terrain-mountain","ink-B-hexside-road"], "uncertainty": ["No new route between B5514 and B5515, operational junction or uniform ground inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5407"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial Mountain and Rough around Tecnis dot."}, "transport": {"status": "observed", "notes": "Retain west/east Road and northeast single-dashed Track meeting at dot."}, "locations": {"status": "unresolved", "notes": "Existing measured Tecnis Village/Bir dot and label retained; text spill into B5308 is not another settlement."}},
+          "survey_refs": ["label-B5407","ink-B-terrain-mountain","ink-B-terrain-rough","ink-B-hexside-road","ink-B-hexside-track"], "uncertainty": ["Point category and operational route junction remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["B5410"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain west/east double Road and southwest/southeast Tracks near Maraua dot; not a Railroad or new route fork."}, "locations": {"status": "unresolved", "notes": "Retain measured Maraua Village/Bir dot and label; no additional facility glyph observed."}},
+          "survey_refs": ["label-B5410","ink-B-terrain-rough","ink-B-hexside-road","ink-B-hexside-track"], "uncertainty": ["Dot/route overlap does not establish operational junction or location category. Human review pending."]
+        },
+        {
+          "hexes": ["B5419","B5520"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Gravel under narrow Track and Wadi overprints."}, "transport": {"status": "observed", "notes": "Restore B5419 northeast to B5520 southwest. Paired outlines put vertical branch left of B5520 southern vertex. Retain B5419 southeast and B5520 northwest."}, "hexside": {"status": "unresolved", "notes": "Wadi southwest B5419 and northwest/northeast B5520; exact edge ownership and crossing effects unresolved."}},
+          "survey_refs": ["ink-B-terrain-gravel","ink-B-hexside-track","barce-martuba-track-crossings"], "uncertainty": ["Near-vertex width remains provisional; no bridge or operational passage inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5426","B5427"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear; enlarged controls place southern Gravel outside. Northern Track stays outside B5426."}, "hexside": {"status": "unresolved", "notes": "Broad Wadi southwest/southeast/east B5426 and northwest/west/southwest/northeast B5427; plain ground does not erase ribbon or resolve crossing effects."}},
+          "survey_refs": ["b-51-55-plain-ground"], "uncertainty": ["No full-cell water, permanent river, bridge or legal passage inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5429","B5529"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Mostly plain interiors with stippled olive band west B5429 and west/southwest B5529. Retain untyped ground; not smooth Mountain cores."}, "transport": {"status": "observed", "notes": "Retain northwest/southeast double Road in both; east single-dashed Track departs Road in B5429. No extra rail or operational junction."}, "hexside": {"status": "unresolved", "notes": "Olive band class/direction and Wadi northeast B5529 remain provisional; no Up/Down interpretation."}},
+          "survey_refs": ["ink-B-hexside-road"], "uncertainty": ["Band footprints, route availability and crossing effects require human adjudication."]
+        },
+        {
+          "hexes": ["B5430"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain land with Sea entering northeast/east; keep mixed coast untyped. Salt Marsh remains outside northwest."}, "transport": {"status": "observed", "notes": "Retain west/southeast Track toward Bomba, independent of coastline."}, "hexside": {"status": "unresolved", "notes": "Coastline inside outline is not a new permanent hexside-water assignment."}},
+          "survey_refs": ["ink-B-hexside-track"], "uncertainty": ["Bomba dot remains outside southeast; no additional point, port or crossing permission. Human review pending."]
+        },
+        {
+          "hexes": ["B5501"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Heavy Vegetation around Tocra dot, independently of Sea/plain coast and southern black stippled band. Not full-cell vegetation or homogeneous Clear."}, "transport": {"status": "observed", "notes": "Retain east Road; west Road exits retained inventory. Paired Tocra/B5601 outlines restore northeast single-dashed Track through vegetation, not a branch into B5502. B5601 is context-only, not whole-cell review credit."}, "hexside": {"status": "unresolved", "notes": "Coastline and black southern side band remain distinct; exact footprint, direction and section continuation unresolved."}, "locations": {"status": "unresolved", "notes": "Retain measured Tocra Village/Bir dot and label; no independent Port or airfield glyph observed."}},
+          "survey_refs": ["label-B5501","ink-B-terrain-heavy_vegetation","ink-B-hexside-road","barce-martuba-track-crossings"], "uncertainty": ["No section adjacency, port association, operational junction or Up/Down inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5502","B5503"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain double Road west/east across partial Rough and black band."}, "hexside": {"status": "unresolved", "notes": "Broad black stippled band occupies southern interior; B5503 also has eastern olive fringe. Heavy Vegetation remains outside northern B5502/B5503. Preserve unresolved band class/direction and footprint."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-road"], "uncertainty": ["No homogeneous ground, Mountain core, Up/Down or route permission inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5504"],
+          "findings": {"transport": {"status": "observed", "notes": "Restore southwest Railroad and parallel Track from B5403 northeast into Barce. Retain west/east/southeast double Road; source dot overlays the northern rail/Track end."}, "hexside": {"status": "unresolved", "notes": "Black fringe outside north and olive fringe outside west approach outline; ownership/direction remain unresolved rather than new ground classes."}, "locations": {"status": "unresolved", "notes": "Retain measured Barce Village/Bir dot and label, not Major City from importance or route count."}},
+          "survey_refs": ["label-B5504","ink-B-terrain-rough","ink-B-hexside-road","barce-martuba-track-crossings","barce-rail-crossings"], "uncertainty": ["Dot does not establish operational rail terminus, transfer junction or facility capacity. Human review pending."]
+        },
+        {
+          "hexes": ["B5508"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain smooth Mountain core and pale Rough around it."}, "transport": {"status": "unresolved", "notes": "Southwest Track is recorded; northward Track reaches the northeast/east vertex toward El Garrib B5608. Paired outlines cannot reliably separate direct northeast from a tiny neighboring wedge at this scale. Do not force a new side; route presence is not endpoint-only connectivity proof."}},
+          "survey_refs": ["ink-B-terrain-mountain","ink-B-terrain-rough","ink-B-hexside-track"], "uncertainty": ["B5608 is context-only and remains not_reviewed. Exact vertex crossing requires closer adjudication; no operational route inferred. Human review pending."]
+        },
+        {
+          "hexes": ["B5515"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain Mountain beneath Track, not additional Rough from surrounding map color."}, "transport": {"status": "observed", "notes": "Restore northwest Track to Road junction in B5614; retain southeast. Paired controls keep the Road and junction outside B5514 and B5515. B5614 is context-only, not whole-cell review credit."}},
+          "survey_refs": ["ink-B-terrain-mountain","ink-B-hexside-track","barce-martuba-track-crossings"], "uncertainty": ["Source junction does not establish an operational transfer rule or exact centerline. Human review pending."]
+        },
+        {
+          "hexes": ["B5517"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain partial Mountain with white southeast gap; do not infer extra Rough or Gravel from exterior pixels."}, "transport": {"status": "observed", "notes": "Retain southwest/east single-dashed Track approaching Chaulan."}},
+          "survey_refs": ["ink-B-terrain-mountain","ink-B-hexside-track"], "uncertainty": ["Partial pattern is not homogeneous terrain or legal route permission. Human review pending."]
+        },
+        {
+          "hexes": ["B5518"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add smooth olive Mountain under Chaulan dot and Tracks; white east/south fringe is not Rough, and exterior Gravel is not an interior occurrence."}, "transport": {"status": "observed", "notes": "Retain west/northwest/southeast single-dashed Tracks; fork sits beside dot, not a new facility glyph."}, "locations": {"status": "unresolved", "notes": "Retain measured Chaulan Village/Bir dot and Chaulàn source label without changing point coordinate or operational category."}},
+          "survey_refs": ["label-B5518","ink-B-hexside-track","b-53-55-mountain-cores"], "uncertainty": ["Dot/route overlap does not establish operational junction or homogeneous terrain. Human review pending."]
+        },
+        {
+          "hexes": ["B5521"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain northwest/southwest single-dashed Track and separate northwest/east disconnected double unfinished-Road depiction. Crossing is not completion or usable Road."}, "hexside": {"status": "unresolved", "notes": "Wadi west/southwest/southeast crosses partial Rough/plain gap; no bridge glyph or permanent water inferred."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track"], "uncertainty": ["Construction state, operational junction and watercourse effects remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["B5522","B5525"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain disconnected double unfinished-Road depiction west/east; no continuous finished Road or Railroad. Wadi remains outside southern B5522, Track outside northwest B5525; Martuba text is not another dot."}},
+          "survey_refs": ["ink-B-terrain-rough"], "uncertainty": ["Construction completion, scenario usability and operational effects unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["B5523","B5524"],
+          "findings": {"transport": {"status": "observed", "notes": "Restore single-dashed Track across B5523 east/B5524 west beneath independent unfinished-Road bars. Retain B5523 southeast and B5524 northeast Tracks and both west/east unfinished-Road depictions. No finished Road promoted."}},
+          "survey_refs": ["ink-B-terrain-rough","ink-B-hexside-track","barce-martuba-track-crossings"], "uncertainty": ["Crossing/overlap does not establish completion, legal movement or operational junction. Human review pending."]
+        },
+        {
+          "hexes": ["B5526"],
+          "findings": {"transport": {"status": "observed", "notes": "Retain southwest single-dashed Track meeting disconnected double unfinished Road west/east near Martuba dot. Construction remains unresolved, not finished Road."}, "locations": {"status": "unresolved", "notes": "Retain measured Martuba Village/Bir dot and label. Text in adjacent cells is not an extra settlement or facility."}},
+          "survey_refs": ["label-B5526","ink-B-terrain-rough","ink-B-hexside-track"], "uncertainty": ["Dot category, construction completion and operational junction remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["B5527"],
+          "findings": {"terrain": {"status": "observed", "notes": "Add affirmative Clear beneath unfinished-Road overprint; no patterned terrain in enlarged outline."}, "transport": {"status": "observed", "notes": "Retain west/northeast disconnected double unfinished Road. Martuba dot and Track stay outside west; no finished route inferred."}, "hexside": {"status": "unresolved", "notes": "Wadi enters southeast; plain ground does not resolve its side ownership or crossing effects."}},
+          "survey_refs": ["b-51-55-plain-ground"], "uncertainty": ["No operational construction completion, bridge or movement permission. Human review pending."]
+        },
+        {
+          "hexes": ["B5530"],
+          "findings": {"terrain": {"status": "observed", "notes": "Retain yellow network Salt Marsh within mixed plain/Sea coast, independently of exterior Road and olive bands. Not homogeneous Salt Marsh or Rough."}, "hexside": {"status": "unresolved", "notes": "Northwestern Wadi and irregular eastern coastline remain separate; no exact canonical water side or crossing rule."}},
+          "survey_refs": ["ink-B-terrain-salt_marsh"], "uncertainty": ["No permanent river, navigability or movement permission inferred. Human review pending."]
+        }
+      ]
+    },
+    {
       "id": "b-46-50-whole-cell-2026-11-03", "date": "2026-11-03", "method": "agent_visual",
       "notes": "Individually inspected all 165 outlined B4601–B5033 cells at 2x, with thirty-eight distinct controls at 4x and TEC comparison. Reconciled against 24000f8 with unchanged source/geometry pins. Add six Clear, two partial Mountain, eight Track and one Railroad occurrences. Nine Gravel-edge cells, one scarp-band cell and two coastal cells remain untyped. Existing B4903 northwest Railroad retained with explicit tie-footprint dispute. Four measured location points, prior classifications and adjacency unchanged. Human adjudication pending; detector completion is not review.",
       "common_findings": {

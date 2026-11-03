@@ -275,6 +275,17 @@ class MapDatabaseTests(unittest.TestCase):
             'B4901 B4902 B4903 B4904 B4905 B4906 B4907',
             'B4920 B4921 B4922 B4923',
             'B4921 B5021 B5022',
+            'B5110 B5111 B5011',
+            'B5123 B5124 B5125',
+            'B5102 B5202 B5303 B5403 B5504',
+            'B5316 B5216 B5217 B5218',
+            'B5319 B5219 B5220',
+            'B5222 B5123',
+            'B5225 B5325 B5425',
+            'B5419 B5520',
+            'B5515 B5614',
+            'B5523 B5524',
+            'B5501 B5601',
             # Complete regional source sequences, not just reported endpoints.
             'C1828 C1829 C1830 C1831 C1832 C1933 C2033',
             'D0708 D0808 D0908 D1008 D1109 D1208 D1308 D1407 D1508 D1608 '
@@ -309,6 +320,8 @@ class MapDatabaseTests(unittest.TestCase):
                            ('B4013', 'B4114'), ('B4223', 'B4324'),
                            ('B4817', 'B4918'), ('B4917', 'B4916'),
                            ('B4901', 'B5001'),
+                           ('B5216', 'B5317'), ('B5217', 'B5317'),
+                           ('B5514', 'B5515'), ('B5501', 'B5502'),
                            ('D1114', 'D1115')):
             with self.subTest(unsupported_crossing=(start, end)):
                 self.assertIsNone(self.db.execute('''
@@ -318,6 +331,17 @@ class MapDatabaseTests(unittest.TestCase):
         self.assertIsNotNone(self.db.execute('''
             SELECT 1 FROM network_links WHERE from_hex='B4901' AND to_hex='B4902'
               AND feature='railroad' AND status='provisional'
+        ''').fetchone())
+        for start, end in (('B5202', 'B5303'), ('B5403', 'B5504')):
+            with self.subTest(barce_rail=(start, end)):
+                self.assertIsNotNone(self.db.execute('''
+                    SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=?
+                      AND feature='railroad' AND status='provisional'
+                ''', (start, end)).fetchone())
+        # The Track under Martuba's construction depiction is not finished Road.
+        self.assertIsNone(self.db.execute('''
+            SELECT 1 FROM network_links WHERE from_hex='B5523' AND to_hex='B5524'
+              AND feature='road'
         ''').fetchone())
 
     def test_barrani_matruh_coastal_routes_preserve_crossings_and_construction_state(self):

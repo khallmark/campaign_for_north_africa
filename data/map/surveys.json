@@ -6,6 +6,21 @@
   },
   "surveys": [
     {
+      "id": "c-06-10-plain-ground", "label": "Giarabub corridor plain interiors", "notes": "Fifty-six individually outlined four-times controls establish affirmative plain ground beneath Track, Wadi, point, unfinished-Road and section-line overprints. Adjacent Rough, Mountain, Desert, Salt Marsh and olive bands remain outside these interiors. Watercourse ribbons are separate from ground; marginal band ownership remains uncertain. Band-filled cells and the tiny C0801 Desert wedge are excluded, not defaulted to Clear. No homogeneous movement cost or operational water supply inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=5680,3790,2870,420", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["C0607","C0620","C0622","C0624","C0625","C0626","C0627","C0631","C0706","C0707","C0710","C0711","C0712","C0713","C0714","C0716","C0718","C0719","C0722","C0726","C0728","C0732","C0733","C0802","C0805","C0806","C0807","C0810","C0811","C0812","C0815","C0820","C0821","C0822","C0825","C0828","C0833","C0901","C0902","C0906","C0907","C0911","C0913","C0915","C0920","C0921","C0922","C0929","C1009","C1010","C1013","C1019","C1021","C1025","C1029","C1033"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "giarabub-oasis-track-crossings", "label": "Giarabub Oasis Track crossings", "notes": "Paired four-times outlines show single dashed Track crossing C0716 northwest from C0815 southeast over the palm glyph, and C0717 east into C0718 west over Salt Marsh. C0716's stroke crosses just before the northern vertex and remains provisional; C0816 contrary outline has no interior route. Restore crossings without turning palm glyphs, forks or blue barred sides into operational junctions or completed roads. Geometry and raw evidence remain unchanged.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=6890,3940,350,200", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"C0716","direction":"north_west"},{"hex":"C0717","direction":"east"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "c-0801-desert-margin", "label": "C0801 marginal Desert patch", "notes": "Enlarged outlined control shows a small solid yellow Desert wedge inside the southwest border near the southern vertex, distinct from the broad exterior patch. Most of the cell is plain but this affirmative occurrence must not become homogeneous Clear or full-cell Desert. Exact marginal extent and operational effects remain unresolved.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=5701,3936,130,120", "docs/CNAv2.1.0/images/TEC.png#legend/Desert"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["C0801"], "observation": {"status": "provisional", "value": "desert"}}
+    },
+    {
       "id": "c-01-05-plain-ground", "label": "Southern C plain interiors", "notes": "Sixteen individually outlined four-times controls establish plain ground beneath Track, Oasis, unfinished-Road and gray section-line overprints. Neighboring Salt Marsh, Desert, Rough and olive stippled bands stay outside these interiors; their marginal side footprint remains uncertain. Band-filled cells are not defaulted to Clear. These are provisional terrain occurrences, not homogeneous movement costs or operational oasis water supply.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=7380,4100,1210,490", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
       "coverage": {"kind": "terrain", "hexes": ["C0127","C0131","C0132","C0133","C0224","C0433","C0521","C0523","C0524","C0526","C0527","C0528","C0529","C0530","C0531","C0533"], "observation": {"status": "provisional", "value": "clear"}}

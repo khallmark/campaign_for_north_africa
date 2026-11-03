@@ -97,13 +97,13 @@ automated or agent-visual record is human-reviewed.
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
 | A | 1,000 | 866 / 62 / 64 / 8 | 828 |
 | B | 1,961 | 1,885 / 40 / 34 / 2 | 1,832 |
-| C | 1,520 | 1,438 / 41 / 36 / 5 | 875 |
+| C | 1,520 | 1,438 / 41 / 36 / 5 | 932 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **328 surveys / 24,687 observations**: 5,439 terrain,
-19,078 hexside and 170 point observations. **8,443 are provisional, 16,244 unresolved,
-none human-reviewed.** Terrain observations cover 5,285 cells; 1,791 have none.
+The current combined model has **331 surveys / 24,746 observations**: 5,496 terrain,
+19,080 hexside and 170 point observations. **8,502 are provisional, 16,244 unresolved,
+none human-reviewed.** Terrain observations cover 5,342 cells; 1,734 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -262,8 +262,8 @@ adds 199 Clear occurrences, nine partial Mountain cores retaining existing Rough
 fringes, five partial Gravel occurrences and one partial Rough occurrence.
 The twelve B batches add 443 Clear occurrences, three partial Rough
 occurrences and six partial Mountain cores, retaining existing Rough where present.
-The first C batch adds 16 Clear occurrences.
-Of 1,791 cells without typed ground, source-surface measurements report 1,360 land, 228
+The first two C batches add 72 Clear occurrences and one marginal Desert occurrence.
+Of 1,734 cells without typed ground, source-surface measurements report 1,303 land, 228
 water, 179 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -281,9 +281,9 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 165/1,520 C cells;
-3,892 cells remain not_reviewed**, covering C0601 onward and all of D–E. Rosetta's
-anchor and C0718's Oasis are point-only spot checks, not whole-cell coverage.
+Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B and 330/1,520 C cells;
+3,727 cells remain not_reviewed**, covering C1101 onward and all of D–E. Rosetta's
+anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
 or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
@@ -585,18 +585,39 @@ section-line overprints. Other band-filled cells remain untyped; existing Desert
 Rough and Salt Marsh occurrences are preserved. Two near-vertex Track crossings,
 **C0323 northwest and C0523 northwest**, restore paths through C0422 and C0622
 without detours through C0423/C0623. The latter has a narrow raster margin and
-remains provisional. C0622 context does not receive whole-cell review credit.
+remains provisional. C0622 context did not receive whole-cell review credit in
+that first batch; it is covered by the second batch below.
 
 Three source templates at unchanged 0.88 threshold recover five measured Oasis
 centers: C0127 **(7945,4507.5)**, C0130 **(8202.5,4505.5)**, C0224 **(7731,4434.5)**,
 C0233 **(8503,4429.5)** and the already classified C0718 **(7174,4071.5)**. The last
-is independently spot-inspected but stays `not_reviewed` in the whole-cell ledger.
+was initially only spot-inspected; whole-cell review is recorded in the second batch.
 Neighboring C0124/C0333 do not gain glyphs from crop padding. Source names do not
 become additional Village/Bir dots, towns, water yields or operational junctions.
 Disconnected unfinished-Road capsules remain excluded from usable Road links;
 blue barred symbols and olive band polarity remain unresolved. Tracks leaving
 the southern inventory and C0133/C0533 eastern section edges are boundary findings,
 not row-zero or seam links. No continuous Road or Railroad is observed in this batch.
+
+The second C batch reviews **165 retained C0601–C1033 cells**, using individual
+2× outlines and 4× controls. It adds 56 affirmative Clear occurrences, the small
+**C0801 southwest Desert wedge**, and two provisional Track crossings:
+**C0716 northwest → C0815 southeast** and **C0717 east → C0718 west**. The first
+passes close to C0716's northern vertex; C0816 has no interior Track and is not
+a detour. Existing measured Oasis and Village/Bir points stay unchanged. Their
+overlap with Tracks does not establish operational junctions or water supply.
+Integration widens the Clear survey's provenance crop 30 pixels west to enclose
+C0901's full outline; terrain values and individual review crops are unchanged.
+
+Olive-band interiors C0621/C0720/C0914/C0919/C1014 remain untyped. C0905's
+roughly one-pixel Mountain boundary graze stays unresolved while definite Rough
+is retained. Narrow Wadi ribbons in C0822/C0921 remain independent of plain
+ground. Existing C0825 northwest routing is retained despite its near-vertex
+position. Blue barred symbols, construction completion, band polarity and
+operational effects remain unresolved. **C0901 northwest exits the retained
+inventory**: this is a boundary finding for reconciliation, not a new row-zero
+neighbor, seam link or fabricated terminus. No continuous Road or Railroad is
+observed in this batch; source/geometry pins are unchanged.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

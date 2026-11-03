@@ -143,6 +143,8 @@ class MapDatabaseTests(unittest.TestCase):
                               ("A2005", "clear"), ("A2032", "clear"),
                               ("A2124", "clear"), ("A2305", "clear"), ("A2604", "clear"),
                               ("A2629", "clear"), ("A2431", "gravel"), ("A2631", "gravel"),
+                              ("C0801", "desert"), ("C0802", "clear"),
+                              ("C0716", "clear"), ("C0717", "salt_marsh"), ("C0718", "clear"),
                               ("A0217", "salt_marsh"), ("A0426", "desert")):
             self.assertEqual(self.db.execute(
                 "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain'",
@@ -258,6 +260,7 @@ class MapDatabaseTests(unittest.TestCase):
             'C0925 C0825',
             'C0522 C0422 C0323 C0324 C0224',
             'C0622 C0523 C0524 C0424 C0325 C0225',
+            'C0815 C0716 C0717 C0718 C0719',
             'B1706 B1606 B1507 B1508 B1509',
             'B2118 B2217 B2318 B2418 B2518',
             'B2130 B2229 B2330 B2430 B2531',
@@ -329,6 +332,7 @@ class MapDatabaseTests(unittest.TestCase):
                            ('B5704', 'B5705'), ('B5819', 'B5720'),
                            ('C0323', 'C0423'), ('C0422', 'C0423'),
                            ('C0523', 'C0623'), ('C0622', 'C0623'),
+                           ('C0716', 'C0816'), ('C0815', 'C0816'),
                            ('D1114', 'D1115')):
             with self.subTest(unsupported_crossing=(start, end)):
                 self.assertIsNone(self.db.execute('''

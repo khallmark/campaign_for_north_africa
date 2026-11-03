@@ -281,7 +281,7 @@ false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
 Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B, 1,520/1,520 C and
-165/1,240 D cells; 2,372 cells remain not_reviewed**, covering the remaining D
+330/1,240 D cells; 2,207 cells remain not_reviewed**, covering the remaining D
 and all 1,297 E cells. Rosetta's
 anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
@@ -718,9 +718,18 @@ northern Gravel fragments and D0433/D0533's western fragments remain untyped.
 D0332/D0333 retain prior provisional Clear with explicit Gravel-footprint
 uncertainty. Rough, Salt Marsh, Desert, Gravel and Wadi observations remain
 separate. Boundary Track continuations do not invent seam neighbors; no route,
-location, source identity or geometry changed. All **4,704 reviewed cells** retain
-family-level uncertainty and `human_reviewed: false`; **2,372 cells remain
-`not_reviewed`**, including inspected but unreconciled D0601–D1033 crops.
+location, source identity or geometry changed in this batch.
+
+The second D batch reviews **165 D0601–D1033 cells**, adding 37 affirmative Clear
+occurrences and the missing **D1015 northwest ↔ D1115 southeast Track**.
+The separate D1114–D1014–D1115 shallow U-bend remains intact; no D1014 east
+shortcut is inferred. Qara's measured Village/Bir dot, label and Wadi remain
+separate with operational category unresolved. Inward olive bands and Gravel
+fragments retain explicit uncertainty; D1017's bottom-vertex Track retains its
+existing southeast association without a new detour. Boundary continuations do
+not invent neighbors. No source, geometry or point changed. All **4,869 reviewed
+cells** retain `human_reviewed: false`; **2,207 cells remain `not_reviewed`**:
+910 northern D and all 1,297 E, including crossing-only controls D1114/D1115.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

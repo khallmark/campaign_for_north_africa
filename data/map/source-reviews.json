@@ -1490,6 +1490,220 @@
           "survey_refs": ["ink-A-terrain-rough","ink-A-hexside-track"], "uncertainty": ["Partial terrain and Wadi do not establish movement costs or crossing permission. Human review pending."]
         }
       ]
+    },
+    {
+      "id": "a-41-56-whole-cell-2026-11-03",
+      "date": "2026-11-03", "method": "agent_visual",
+      "notes": "Reconciled all 108 retained A4125–A5633 cells after individual 2x outlined source crops, TEC comparison, 4x Giardina/Benghazi/Er Regima paired route controls and 5x northern border controls. Source and geometry remain pinned to add8fb4. No detector-completion credit, operational junction, point capacity or section adjacency inferred. Existing A4832 northwest Railroad is explicitly disputed rather than silently removed. Whole-cell review can retain unresolved family findings.",
+      "common_findings": {
+        "surface": {"status": "observed", "notes": "Land inside the outline; neighboring water or patterned fragments are outside unless recorded below."},
+        "terrain": {"status": "observed", "notes": "Affirmative plain interior matching TEC Clear; route, label and grid overprints do not replace ground."},
+        "transport": {"status": "not_observed", "notes": "No Road, Railroad, Track or unfinished-transport glyph observed inside the outline. Nearby strokes and gray section lines are not inferred connections."},
+        "hexside": {"status": "not_observed", "notes": "No separate directional side glyph observed; ordinary grid does not establish rules."},
+        "locations": {"status": "not_observed", "notes": "No location/facility glyph observed inside the outline; neighboring lettering alone is not another settlement."}
+      },
+      "groups": [
+        {
+          "hexes": ["A4125","A4224","A4225","A4325","A4424","A4425","A4525","A4625","A4726","A4826","A4927","A5027","A5128","A5129","A5229","A5330","A5431","A5532","A5632","A5633"],
+          "findings": {"surface": {"status": "observed", "notes": "Blue water fills the outlined interior. Benghazi lettering and gray section lines are overprints; nearby coastline remains outside. Enlarged A4225/A5633 controls confirm water to the border."}, "terrain": {"status": "unresolved", "notes": "Retain untyped water ground rather than infer operational Sea or playability."}},
+          "survey_refs": [], "uncertainty": ["Near-border coast and source-water color do not assign Coast rules or historical absence. Human review pending."]
+        },
+        {
+          "hexes": ["A4226","A4326","A4426","A5028"],
+          "findings": {"surface": {"status": "observed", "notes": "Blue water and plain coastal land both enter the outline; adjacent Road stays outside."}, "terrain": {"status": "unresolved", "notes": "Mixed coast remains untyped, not homogeneous Clear or Sea."}, "hexside": {"status": "unresolved", "notes": "Coastline crosses or approaches the outline; no directional Coast side assigned."}},
+          "survey_refs": [], "uncertainty": ["Land fraction and operational Coast interpretation remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A4727"],
+          "findings": {"surface": {"status": "observed", "notes": "Mostly blue water with a plain coastal strip southeast."}, "terrain": {"status": "unresolved", "notes": "Mixed coast remains untyped."}, "hexside": {"status": "unresolved", "notes": "Coastline crosses the outline; no Coast rule assigned."}, "locations": {"status": "unresolved", "notes": "Benghazi building footprint approaches the northeast corner from A4827. Do not duplicate the city from marginal blue fragments; El Berca lettering belongs to the A4728 dot."}},
+          "survey_refs": [], "uncertainty": ["City footprint versus cell membership remains uncertain; operational city area is not inferred. Human review pending."]
+        },
+        {
+          "hexes": ["A4126","A4526","A4626"],
+          "findings": {"surface": {"status": "observed", "notes": "Blue coastal water and olive/yellow Salt Marsh land both enter the outline."}, "terrain": {"status": "observed", "notes": "Existing partial Salt Marsh matches yellow branching pattern; not homogeneous water or marsh."}, "hexside": {"status": "unresolved", "notes": "Coastline crosses the outline; no directional Coast rule."}},
+          "survey_refs": ["ink-A-terrain-salt_marsh"], "uncertainty": ["Land fraction and marsh/coast movement interpretation remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A4928","A4929","A5029","A5130","A5230","A5331","A5332"],
+          "findings": {"surface": {"status": "observed", "notes": "Blue coastal water and plain land both enter the outline, sometimes only a small corner."}, "terrain": {"status": "unresolved", "notes": "Mixed coast remains untyped; small water fraction is not a reason to assign Clear."}, "transport": {"status": "observed", "notes": "Continuous double coastal Road crosses the land strip. Existing canonical crossings follow the source, including the short A4928 east/A5230 east/A5331 east transitions near vertices; no additional corner branch inferred."}, "hexside": {"status": "unresolved", "notes": "Coastline approaches Road and grid independently; no Coast-side rule."}},
+          "survey_refs": ["ink-A-hexside-road"], "uncertainty": ["Road width at corners and playable-land fraction remain operationally unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A5432","A5533"],
+          "findings": {"surface": {"status": "observed", "notes": "Blue water, narrow plain land and black scarp band share the outline."}, "terrain": {"status": "unresolved", "notes": "Mixed coast/scarp remains untyped."}, "transport": {"status": "unresolved", "notes": "Double coastal Road crosses northeast/southwest at A5432 and southwest/east at A5533. Existing internal side retained; A5533 eastward continuation leaves retained section inventory, not a fabricated nearby connection."}, "hexside": {"status": "unresolved", "notes": "Coast and black toothed scarp are distinct; no Up/Down or Coast rule assigned."}},
+          "survey_refs": ["ink-A-hexside-road"], "uncertainty": ["A5533 eastern Road is a seam-owner finding; coastline/scarp do not establish passability. Human review pending."]
+        },
+        {
+          "hexes": ["A4227","A4327","A4427","A4527"],
+          "findings": {"transport": {"status": "observed", "notes": "Existing continuous double Road crosses the plain interior; no Track, Railroad or unfinished symbol inside the outline."}},
+          "survey_refs": ["a-41-56-plain-ground","ink-A-hexside-road"], "uncertainty": ["Nearby marsh/coast and neighboring dashed strokes are outside. No operational route authority inferred. Human review pending."]
+        },
+        {
+          "hexes": ["A4128","A4129","A4131","A4228","A4230","A4328","A4330","A4428","A4528","A4632","A4733"],
+          "findings": {"transport": {"status": "observed", "notes": "Single-dashed Tracks cross the plain interior. Existing canonical sides and the recently restored A4031 northwest branch match source; neighboring rail and dots remain outside. At A4230 the southern stroke exits southwest of the bottom vertex into A4130, not an extra southeast branch."}},
+          "survey_refs": ["a-41-56-plain-ground","ink-A-hexside-track"], "uncertainty": ["Lettering from Ghemines/Soluch/Giardina/Er Regima is not a duplicate location. Wadi or Rough approaching A4632/A4733 stays outside the outline. Exact curves and junctions remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A4833"],
+          "findings": {"transport": {"status": "unresolved", "notes": "Dashed Track enters southwest from A4733 and leaves northeast beyond retained section inventory. Retain existing southwestern crossing; no invented northeastern adjacency."}},
+          "survey_refs": ["a-41-56-plain-ground","ink-A-hexside-track"], "uncertainty": ["Northeastern Track continuation is a seam-owner finding, not evidence for a detour through A4933. Human review pending."]
+        },
+        {
+          "hexes": ["A4127"],
+          "findings": {"transport": {"status": "observed", "notes": "Double Road northeast/southeast and dashed Track east meet at Ghemines. Restore the omitted east Track into A4128; existing Road retained."}, "locations": {"status": "unresolved", "notes": "Measured Ghemines Village/Bir dot retained independently from lettering in A4128/A4129."}},
+          "survey_refs": ["a-41-56-plain-ground","label-A4127","ink-A-hexside-road","ghemines-scarp-track-crossings"], "uncertainty": ["Dot and route overlap does not define operational junction or Village rather than Bir. Human review pending."]
+        },
+        {
+          "hexes": ["A4130"],
+          "findings": {"transport": {"status": "observed", "notes": "Railroad enters northwest and visibly ends beside Soluch's dot. Dashed Tracks run west/east, northeast/southwest and southeast; restore east into A4131. The restored A4030 northwest crossing is distinct from rail."}, "locations": {"status": "unresolved", "notes": "Measured Soluch Village/Bir dot retained. Rail ties beneath the dot are not an additional training-area glyph."}},
+          "survey_refs": ["a-41-56-plain-ground","label-A4130","ink-A-hexside-railroad","ink-A-hexside-track","ghemines-scarp-track-crossings"], "uncertainty": ["Drawn rail terminus and intersecting Tracks do not establish operational rail availability, transshipment or junction rules. Human review pending."]
+        },
+        {
+          "hexes": ["A4229"],
+          "findings": {"transport": {"status": "observed", "notes": "Railroad with transverse ties crosses northwest/southeast. Restore northwest side to Giardina A4329; neighboring single-dashed Track and dot are outside."}},
+          "survey_refs": ["a-41-56-plain-ground","benghazi-rail-crossings","ink-A-hexside-railroad"], "uncertainty": ["Tied rail depiction does not establish operational rail service. Human review pending."]
+        },
+        {
+          "hexes": ["A4329"],
+          "findings": {"transport": {"status": "observed", "notes": "Railroad northeast/southeast crosses Giardina's dot; restored A4229 northwest side closes its southern omission. Dashed Track southwest/east remains separate."}, "locations": {"status": "unresolved", "notes": "Measured Giardina Village/Bir dot retained without extending its label into another location."}},
+          "survey_refs": ["a-41-56-plain-ground","label-A4329","ink-A-hexside-railroad","ink-A-hexside-track"], "uncertainty": ["Dot overlap is not an operational rail junction. Human review pending."]
+        },
+        {
+          "hexes": ["A4627"],
+          "findings": {"transport": {"status": "observed", "notes": "Continuous double Road southwest/northeast, plus separate dashed Track southeast. Restore Road northeast into A4728; retain the existing Track and southwestern Road."}},
+          "survey_refs": ["a-41-56-plain-ground","benghazi-road-crossings","ink-A-hexside-road","ink-A-hexside-track"], "uncertainty": ["El Berca lettering here is not its dot; operational junction and exact source curves remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A4628"],
+          "findings": {"transport": {"status": "observed", "notes": "Railroad and parallel single-dashed Track cross northwest/southeast independently. Restore missing Track northwest and both routes across A4529 northwest; rail northwest already exists."}, "hexside": {"status": "unresolved", "notes": "Gray-green Wadi crosses the northwestern/northeastern margin; no operational crossing rule."}},
+          "survey_refs": ["a-41-56-plain-ground","ink-A-hexside-railroad","benghazi-parallel-tracks"], "uncertainty": ["Parallel routes and Wadi overlap do not imply bridge, ford or route interchange. Human review pending."]
+        },
+        {
+          "hexes": ["A4728"],
+          "findings": {"transport": {"status": "observed", "notes": "Double Road, tied Railroad and separate dashed Track all enter Benghazi across northwest. Restore these three crossings and Road southwest across A4627 northeast; retain southeast Railroad and parallel Track."}, "hexside": {"status": "unresolved", "notes": "Wadi crosses southeastern margin; no bridge or crossing permission inferred."}, "locations": {"status": "unresolved", "notes": "Measured El Berca Village/Bir dot retained. Benghazi building footprint approaches northwest; do not add a duplicate Major City or training area from boundary fragments."}},
+          "survey_refs": ["a-41-56-plain-ground","label-A4728","benghazi-road-crossings","benghazi-rail-crossings","benghazi-parallel-tracks"], "uncertainty": ["City-footprint membership and exact junctions under overprinted glyphs remain uncertain. Human review pending."]
+        },
+        {
+          "hexes": ["A4729","A4732"],
+          "findings": {"hexside": {"status": "unresolved", "notes": "Gray-green Wadi enters marginal portions of the plain cell: south at A4729 and around northwest/west/southwest at A4732. No operational side classification inferred."}},
+          "survey_refs": ["a-41-56-plain-ground"], "uncertainty": ["Nearby rail/Track and Benina/Er Regima dots remain outside these outlines. Wadi membership does not imply passability. Human review pending."]
+        },
+        {
+          "hexes": ["A4828"],
+          "findings": {"transport": {"status": "observed", "notes": "Separate tied Railroad and dashed Track run west/east; restore both east crossings and their A4827 east entries. Double coastal Road clips northwest independently."}, "locations": {"status": "unresolved", "notes": "Benghazi buildings/training figures remain west of this interior; glyph-footprint proximity does not justify another city or facility."}},
+          "survey_refs": ["a-41-56-plain-ground","benghazi-rail-crossings","benghazi-parallel-tracks","ink-A-hexside-road"], "uncertainty": ["Distinct lines are not a surveyed junction topology or operational interchange. Human review pending."]
+        },
+        {
+          "hexes": ["A4231","A4331","A4930","A5030"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain ground beside broad black scarp band; retain untyped rather than homogeneous Clear, Rough or Mountain."}, "hexside": {"status": "unresolved", "notes": "Black toothed scarp enters the outline; no Up/Down, pass or movement rule inferred."}},
+          "survey_refs": [], "uncertainty": ["Nearby tracks, Road, Rough and labels remain outside; edge footprint is distinct from directional side classification. Human review pending."]
+        },
+        {
+          "hexes": ["A4132","A4430"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain interior and broad black scarp band; retain untyped ground."}, "transport": {"status": "observed", "notes": "Dashed Track west/east crosses the scarp band; restore A4132 east into A4133. A4430's existing east/west and southwest branch are retained. Track is distinct from scattered black fringe dots."}, "hexside": {"status": "unresolved", "notes": "Black toothed scarp preserved as source evidence, not Up/Down or a pass."}},
+          "survey_refs": ["ink-A-hexside-track"], "uncertainty": ["Scarp/Track overlap does not establish legal passage or junction permissions. Human review pending."]
+        },
+        {
+          "hexes": ["A4431"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain core with broad black scarp north/east/southeast; ground remains untyped."}, "transport": {"status": "observed", "notes": "Single-dashed Track crosses west/east through the scarp, separate from fringe dots. Restore its omitted east side into A4432; west side retained."}, "hexside": {"status": "unresolved", "notes": "Black scarp and gray-green Wadi at southeast are distinct; neither assigns direction or passability."}},
+          "survey_refs": ["ink-A-hexside-track","ghemines-scarp-track-crossings"], "uncertainty": ["Wadi/scarp outline overlap remains operationally unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A4629","A4730"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain core beside black scarp; retain untyped, not homogeneous Clear or Rough."}, "hexside": {"status": "unresolved", "notes": "Broad black scarp and gray-green Wadi enter the outline independently; no Up/Down or crossing rule assigned."}},
+          "survey_refs": [], "uncertainty": ["Rail near A4629 southwest corner and Benina's dot near A4730 northwest remain outside; proximity alone does not create a route/location. Human review pending."]
+        },
+        {
+          "hexes": ["A4429","A4529"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain ground beside black scarp; no homogeneous terrain assignment."}, "transport": {"status": "observed", "notes": "Railroad and separate dashed Track enter northwest. Restore Track northwest at both cells and Railroad northwest at A4529. Rail continues south; Track turns east inside A4429."}, "hexside": {"status": "unresolved", "notes": "Black scarp band overlaps nearby rail/Track ink; no directional scarp or pass interpretation."}},
+          "survey_refs": ["ink-A-hexside-railroad","benghazi-parallel-tracks"], "uncertainty": ["Parallel Track is not a rail tie; visible continuity is not operational rail availability or junction authority. Human review pending."]
+        },
+        {
+          "hexes": ["A4133","A4333","A4432","A4433"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing partial Rough matches pale solid pattern with plain gaps; not homogeneous terrain."}, "transport": {"status": "unresolved", "notes": "Existing dashed Tracks retained: northwest/southeast and west/east at A4133; northeast/southwest at A4333; west/east and northwest at A4432; west with southwest/southeast fork at A4433. Eastern/southeastern strokes outside retained section inventory remain unresolved continuations."}, "hexside": {"status": "unresolved", "notes": "Gray-green Wadi enters outlined Rough/plain ground; nearby black scarp is separate. No operational crossings or direction assigned."}},
+          "survey_refs": ["ink-A-terrain-rough","ink-A-hexside-track"], "uncertainty": ["Section-edge Track continuations are seam-owner findings, not invented internal edges. Human review pending."]
+        },
+        {
+          "hexes": ["A4233","A4332","A4630","A4631","A4731"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing partial Rough matches pale solid areas separated by plain gaps; gray section line is not terrain."}, "hexside": {"status": "unresolved", "notes": "Gray-green Wadi enters the outline; black scarp fringe at A4332 remains distinct and has no Up/Down assignment."}},
+          "survey_refs": ["ink-A-terrain-rough"], "uncertainty": ["Neighboring Tracks and dots remain outside; Wadi overprints do not establish homogeneous terrain or crossing permission. Human review pending."]
+        },
+        {
+          "hexes": ["A4232"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing partial Rough with plain interior around Sidi Brabrin's dot."}, "transport": {"status": "observed", "notes": "Existing single-dashed Track crosses northeast/southeast through the dot."}, "hexside": {"status": "unresolved", "notes": "Gray-green Wadi east/southeast remains separate from scarp outside west/southwest."}, "locations": {"status": "unresolved", "notes": "Measured Sidi Brabrin Village/Bir dot retained without operational category."}},
+          "survey_refs": ["ink-A-terrain-rough","ink-A-hexside-track","label-A4232"], "uncertainty": ["Dot/Track/Wadi proximity does not establish bridge, pass or junction. Human review pending."]
+        },
+        {
+          "hexes": ["A4530","A4931","A5031","A5132","A5133","A5233","A5433"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing partial Rough matches pale solid patches; plain gaps remain visible."}, "hexside": {"status": "unresolved", "notes": "Broad black scarp approaches or enters marginal outline portions. Preserve footprint/direction uncertainty instead of assigning Up/Down from its proximity."}},
+          "survey_refs": ["ink-A-terrain-rough"], "uncertainty": ["Nearby Heavy Vegetation/Mountain cores remain outside these cells; exact scarp membership and movement effects unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A4531","A4533","A4633"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing partial Rough matches source with plain gaps; nearby Track/scarp remains outside the outlined interior."}},
+          "survey_refs": ["ink-A-terrain-rough"], "uncertainty": ["Gray section line at A4633 is not a route. Partial occurrence does not imply homogeneous movement classification. Human review pending."]
+        },
+        {
+          "hexes": ["A4532"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing partial Rough and plain gaps match source."}, "transport": {"status": "observed", "notes": "Existing single-dashed Track crosses northeast/southeast; nearby scarp remains outside southwest."}},
+          "survey_refs": ["ink-A-terrain-rough","ink-A-hexside-track"], "uncertainty": ["Partial terrain and Track do not assign movement permission. Human review pending."]
+        },
+        {
+          "hexes": ["A4830"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing partial Rough around Er Regima's dot; large plain gaps retained."}, "transport": {"status": "observed", "notes": "Tied Railroad and parallel dashed Track cross west/east. Restore both across A4829 east and Track across A4830 east; existing east Railroad retained."}, "locations": {"status": "unresolved", "notes": "Measured Er Regima Village/Bir dot lies here, not in the neighboring name footprint."}},
+          "survey_refs": ["ink-A-terrain-rough","label-A4830","ink-A-hexside-railroad","benghazi-parallel-tracks"], "uncertainty": ["Nearby scarp remains outside; parallel routes and dot do not define operational interchange. Human review pending."]
+        },
+        {
+          "hexes": ["A4831"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing partial Rough matches pale pattern; Er Regima lettering is overprint."}, "transport": {"status": "observed", "notes": "Separate Railroad and dashed Track cross west/east. Restore both east crossings into A4832; Railroad center passes below the northern endpoint rather than through A4932."}, "hexside": {"status": "unresolved", "notes": "Gray-green Wadi crosses southwest/southeast margin; no operational crossing rule."}},
+          "survey_refs": ["ink-A-terrain-rough","benghazi-rail-crossings","benghazi-parallel-tracks"], "uncertainty": ["Er Regima dot remains in A4830. Nearby rail-tie footprint does not establish another operational branch. Human review pending."]
+        },
+        {
+          "hexes": ["A4932"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing dark Mountain core and pale Rough fringe match source, with plain gaps."}, "transport": {"status": "unresolved", "notes": "Rail and parallel Track run near the southern tip. A4832 northwest Railroad observation may capture a transverse tie touching this footprint rather than centerline entering it; preserve the conflict pending adjudication."}},
+          "survey_refs": ["ink-A-terrain-mountain","ink-A-terrain-rough"], "uncertainty": ["Do not silently remove existing rail evidence or infer an operational branch from symbol width. Human review pending."]
+        },
+        {
+          "hexes": ["A5032"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing Mountain core and Rough fringe match source; no route or point glyph inside outline."}},
+          "survey_refs": ["ink-A-terrain-mountain","ink-A-terrain-rough"], "uncertainty": ["Visible patterned ground does not set homogeneous movement costs. Human review pending."]
+        },
+        {
+          "hexes": ["A5033"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing Mountain core and Rough fringe with plain gaps retained."}, "transport": {"status": "unresolved", "notes": "Short hooked dashed Track crosses eastern/southeastern section boundary; no canonical internal side is inferred from the gray section line or nearby Railroad."}},
+          "survey_refs": ["ink-A-terrain-mountain","ink-A-terrain-rough"], "uncertainty": ["Track endpoint and section continuation are seam-owner findings, not resolved adjacency. Human review pending."]
+        },
+        {
+          "hexes": ["A5131","A5232","A5333"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing Heavy Vegetation matches bright green field with teal stipple, distinct from Salt Marsh yellow branching or Mountain core."}, "hexside": {"status": "unresolved", "notes": "Broad black scarp enters vegetation margins; no Up/Down or pass assignment."}},
+          "survey_refs": ["ink-A-terrain-heavy_vegetation"], "uncertainty": ["Nearby coastal Road and water stay outside; vegetation/scarp footprint does not establish movement authority. Human review pending."]
+        },
+        {
+          "hexes": ["A5231"],
+          "findings": {"terrain": {"status": "observed", "notes": "Existing Heavy Vegetation matches green/teal stipple beside plain ground."}, "transport": {"status": "observed", "notes": "Continuous double Road crosses west/northwest near the northern vertex; existing sides retained."}, "hexside": {"status": "unresolved", "notes": "Black scarp southeast remains separate from nearby coastal Road; no Up/Down rule."}},
+          "survey_refs": ["ink-A-terrain-heavy_vegetation","ink-A-hexside-road"], "uncertainty": ["Road width at vertex and vegetation/scarp movement effects remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A4827"],
+          "findings": {"surface": {"status": "observed", "notes": "Blue water and narrow coastal land, heavily overprinted by distinct city, training and anchor symbols."}, "terrain": {"status": "unresolved", "notes": "Mixed coast remains untyped."}, "transport": {"status": "observed", "notes": "Restore tied Railroad and single-dashed Track east into A4828 and both routes plus Road southeast across A4728 northwest. Existing coastal Road east retained separately near the northern endpoint; glyph overlap does not establish exact junction topology."}, "hexside": {"status": "unresolved", "notes": "Coastline crosses outline; no operational Coast assignment."}, "locations": {"status": "unresolved", "notes": "Retain provisional Major City and measured unresolved anchor. Three black standing figures match TEC Training Area and are recorded as unresolved source evidence; current point categories cannot express their operational semantics. Do not duplicate city from nearby footprint fragments."}},
+          "survey_refs": ["benghazi-major-city","coastal-anchor-symbols","benghazi-training-area-glyphs","benghazi-rail-crossings","benghazi-parallel-tracks","ink-A-hexside-road"], "uncertainty": ["Training capacity, port association, exact symbol footprints and operational route topology remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A4829"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain core beside narrow olive stippled band at east; this is not solid Rough or yellow-branched Salt Marsh, so retain untyped ground."}, "transport": {"status": "observed", "notes": "Separate Railroad and single-dashed Track cross west/east; restore both east crossings through the band and both A4828 east entries."}, "hexside": {"status": "unresolved", "notes": "Olive slope/ridge-like stipple needs classification/direction; neighboring black scarp is distinct."}, "locations": {"status": "unresolved", "notes": "Measured Benina Village/Bir dot retained at southeast band interface; label alone in A4729/A4730 is not a second location."}},
+          "survey_refs": ["label-A4829","benghazi-rail-crossings","benghazi-parallel-tracks"], "uncertainty": ["Band type, direction and operational point/route interpretation remain unresolved. Human review pending."]
+        },
+        {
+          "hexes": ["A4832"],
+          "findings": {"terrain": {"status": "unresolved", "notes": "Plain interior with uncertain Rough/grid fringe northwest; retain untyped instead of homogeneous Clear."}, "transport": {"status": "unresolved", "notes": "Restore Railroad west across A4831 east and separate Track west/northeast. Existing northeast rail retained. Existing northwest rail may represent a transverse tie at A4932's bottom vertex rather than a centerline crossing; retain original observation and record the dispute."}, "hexside": {"status": "unresolved", "notes": "Gray-green Wadi meanders across southwest and ends inside east; no crossing or termination rule inferred."}},
+          "survey_refs": ["ink-A-hexside-railroad","benghazi-parallel-tracks","regima-rail-footprint-review"], "uncertainty": ["Rail footprint versus route-center crossing requires adjudication; no adjacency or prior classification changed. Human review pending."]
+        },
+        {
+          "hexes": ["A4933"],
+          "findings": {"terrain": {"status": "observed", "notes": "Enlarged control confirms pale Rough fringe northwest/northeast beyond grid, with large plain interior. Add partial Rough, not homogeneous ground."}, "transport": {"status": "unresolved", "notes": "Railroad and separate dashed Track enter southwest from A4832 and leave east beyond retained section inventory. Restore Track southwest through A4832 northeast; no fabricated eastern side."}},
+          "survey_refs": ["a4933-partial-rough"], "uncertainty": ["Eastern rail/Track continuation belongs to seam owner; gray section line is not another route. Human review pending."]
+        }
+      ]
     }
   ]
 }

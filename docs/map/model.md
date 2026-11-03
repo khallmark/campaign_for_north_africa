@@ -95,15 +95,15 @@ automated or agent-visual record is human-reviewed.
 | Section | Examined cells | Land / mixed / water / unresolved | Cells with terrain observations |
 | --- | ---: | --- | ---: |
 | Malta | 58 | 18 / 16 / 17 / 7 | 18 |
-| A | 1,000 | 866 / 62 / 64 / 8 | 801 |
+| A | 1,000 | 866 / 62 / 64 / 8 | 828 |
 | B | 1,961 | 1,885 / 40 / 34 / 2 | 1,386 |
 | C | 1,520 | 1,438 / 41 / 36 / 5 | 859 |
 | D | 1,240 | 1,166 / 37 / 36 / 1 | 784 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **280 surveys / 24,090 observations**: 4,944 terrain,
-18,992 hexside and 154 point observations. **7,853 are provisional, 16,237 unresolved,
-none human-reviewed.** Terrain observations cover 4,796 cells; 2,280 have none.
+The current combined model has **288 surveys / 24,142 observations**: 4,971 terrain,
+19,016 hexside and 155 point observations. **7,903 are provisional, 16,239 unresolved,
+none human-reviewed.** Terrain observations cover 4,823 cells; 2,253 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -258,9 +258,9 @@ visible section-boundary breaks. Escarpment rendering and exact source-shaped
 route geometry are separate work; the detector's raw findings remain unchanged.
 
 The Malta whole-cell audit adds four provisional ground observations. The A audit
-adds 173 Clear occurrences, nine partial Mountain cores retaining existing Rough
-fringes, and five partial Gravel occurrences. Of 2,280 cells without typed ground,
-source-surface measurements report 1,848 land, 228
+adds 199 Clear occurrences, nine partial Mountain cores retaining existing Rough
+fringes, five partial Gravel occurrences and one partial Rough occurrence.
+Of 2,253 cells without typed ground, source-surface measurements report 1,821 land, 228
 water, 180 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -278,8 +278,9 @@ absence does not certify historical absence. Every record keeps `human_reviewed:
 false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
-Recorded coverage is **58/58 Malta and 892/1,000 A cells; 6,126 cells remain
-not_reviewed**, including all of B–E and A4125 onward. Malta source crops and corners match that pin exactly. Full-inset
+Recorded coverage is **58/58 Malta and 1,000/1,000 A cells; all 6,018 B–E cells
+remain not_reviewed**. This is agent source review, not complete interpretation
+or human approval. Malta source crops and corners match that pin exactly. Full-inset
 context and each individual outlined crop were inspected at 2× against TEC. Four
 airfields and two flying-boat basins match existing surveys; no road, rail, track,
 unfinished transportation, Village/Bir dot or Major City cluster was observed.
@@ -363,6 +364,23 @@ Carcura's Track bypasses A3828 through A3827 → A3928; no extra crossing is add
 there. The eastern Tracks at A3433/A3633/A3833/A3933 remain unresolved section
 continuations. Broad bands stay untyped, Wadi/scarp-tip membership at A3833
 remains uncertain, and no Up/Down, passability or operational junction is inferred.
+
+The remaining 108 northern A cells add 26 Clear occurrences, partial Rough at
+A4933, seven Railroad crossings, two Road crossings and ten rail-parallel Tracks
+around Giardina, Benghazi and Er Regima. Four more Tracks restore the eastward
+Ghemines, Soluch, A4132 and A4431 dot/scarp-obscured crossings.
+Benghazi's three Training Area figures
+are recorded as unresolved point evidence; they are not another city, port or
+capacity assignment. Benina's olive stipple stays an unresolved side band, not
+Rough or Salt Marsh. A4832 stays untyped at its uncertain northwestern fringe.
+
+**A4832 northwest Railroad remains disputed.** Its transverse tie approaches
+A4932's bottom vertex while the visible centerline runs from A4831 east through
+A4832 northeast to A4933. The prior provisional observation is preserved with
+an explicit unresolved review, not silently removed or treated as another branch.
+Eastern Track/Railroad continuations at A4933, the hooked Track at A5033 and
+Road at A5533 remain seam-owner findings. Source review does not authorize
+changes to canonical geometry or operational routes.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

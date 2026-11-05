@@ -573,23 +573,20 @@ test('planning selection and icon actions track pan and zoom; hover waits one se
 });
 
 for (const viewportCase of ['project viewport', '390px viewport'] as const) {
-  test(`selected actions stay reachable at bottom, sides and corners after panning (${viewportCase})`, async ({ page }) => {
-    const errors = collectErrors(page);
-    const viewport = viewportCase === 'project viewport' ? page.viewportSize()! : { width: 390, height: 844 };
-    await page.setViewportSize(viewport);
-    await page.goto('/');
-    await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
-    await addCounter(page);
-    await page.locator('.order-panel > summary').click();
-    await page.locator('.unit-panel > summary').click();
-    const { width, height } = viewport;
-    for (const [edge, x, y] of [
-      ['bottom', width / 2, height - 20],
-      ['left', 20, Math.floor(height * .65)],
-      ['right', width - 20, Math.floor(height * .65)],
-      ['bottom left', 20, height - 20],
-      ['bottom right', width - 20, height - 20],
-    ] as const) {
+  // Each edge is independent; do not share one timeout across five full UI flows.
+  for (const edge of ['bottom', 'left', 'right', 'bottom left', 'bottom right'] as const) {
+    test(`selected actions stay reachable after panning (${viewportCase}, ${edge})`, async ({ page }) => {
+      const errors = collectErrors(page);
+      const viewport = viewportCase === 'project viewport' ? page.viewportSize()! : { width: 390, height: 844 };
+      await page.setViewportSize(viewport);
+      await page.goto('/');
+      await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
+      await addCounter(page);
+      await page.locator('.order-panel > summary').click();
+      await page.locator('.unit-panel > summary').click();
+      const { width, height } = viewport;
+      const x = edge.endsWith('left') ? 20 : edge.endsWith('right') ? width - 20 : width / 2;
+      const y = edge.startsWith('bottom') ? height - 20 : Math.floor(height * .65);
       // Re-selecting the roster row centers the actual counter, without modifying state.
       await page.locator('.order-panel > summary').click();
       await page.locator('.board-roster-unit').click();
@@ -637,9 +634,9 @@ for (const viewportCase of ['project viewport', '390px viewport'] as const) {
       await page.keyboard.press('Enter');
       await expect(page.getByRole('dialog')).toContainText('No active simulation');
       await page.keyboard.press('Escape');
-    }
-    expect(errors).toEqual([]);
-  });
+      expect(errors).toEqual([]);
+    });
+  }
 }
 
 test('open floating panels do not intercept selected actions', async ({ page }) => {

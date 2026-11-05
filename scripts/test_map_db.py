@@ -156,6 +156,8 @@ class MapDatabaseTests(unittest.TestCase):
                               ("C4102", "clear"), ("C4306", "clear"),
                               ("C4706", "clear"), ("C4801", "clear"),
                               ("D0101", "clear"), ("D0206", "clear"), ("D0527", "clear"),
+                              ("D0607", "clear"), ("D1008", "clear"), ("D1015", "clear"),
+                              ("D1109", "clear"), ("D1207", "clear"), ("D1532", "clear"),
                               ("A0217", "salt_marsh"), ("A0426", "desert")):
             self.assertEqual(self.db.execute(
                 "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain'",
@@ -175,7 +177,9 @@ class MapDatabaseTests(unittest.TestCase):
                        "A1732", "A1819", "A2010", "A2033", "A2209", "A2332",
                        "A2429", "A2529", "C1118", "C1217", "C2313", "C3427",
                        "C3632", "C3724", "C3926", "C4022", "C4401", "C4402",
-                       "C4517", "C4904", "D0307", "D0433", "D0533"):
+                       "C4517", "C4904", "D0307", "D0433", "D0533",
+                       "D0606", "D0830", "D1016", "D1017",
+                       "D1108", "D1126", "D1219", "D1517"):
             self.assertEqual(self.db.execute(
                 "SELECT value FROM observations WHERE hex=? AND kind='terrain'", (hex_id,)).fetchall(), [])
         # Independently inspected TEC controls: pale gaps are unfinished, dark
@@ -238,6 +242,8 @@ class MapDatabaseTests(unittest.TestCase):
             'C4314 C4315 C4316 C4216 C4317',
             'C4408 C4409 C4410 C4510',
             'C4503 C4504',
+            'D1114 D1014 D1115 D1015 D1016',
+            'D1115 D1116 D1117',
             'A0430 A0431 A0432 A0433',
             'A0903 A0802 A0703 A0704 A0705 A0706 A0707',
             'A1522 A1523 A1524 A1624',
@@ -256,6 +262,9 @@ class MapDatabaseTests(unittest.TestCase):
                     """, (start, destination)).fetchone())
         self.assertEqual(self.db.execute("""
             SELECT feature FROM network_links WHERE from_hex='C3019' AND to_hex='C3020'
+        """).fetchall(), [])
+        self.assertEqual(self.db.execute("""
+            SELECT feature FROM network_links WHERE from_hex='D1014' AND to_hex='D1015'
         """).fetchall(), [])
         self.assertEqual(self.db.execute("""
             SELECT n.id FROM network_links n JOIN hexes a ON a.id=n.from_hex JOIN hexes b ON b.id=n.to_hex

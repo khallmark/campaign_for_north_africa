@@ -98,12 +98,12 @@ automated or agent-visual record is human-reviewed.
 | A | 1,000 | 866 / 62 / 64 / 8 | 828 |
 | B | 1,961 | 1,885 / 40 / 34 / 2 | 1,832 |
 | C | 1,520 | 1,438 / 41 / 36 / 5 | 1,349 |
-| D | 1,240 | 1,166 / 37 / 36 / 1 | 804 |
+| D | 1,240 | 1,166 / 37 / 36 / 1 | 863 |
 | E | 1,297 | 979 / 272 / 41 / 5 | 948 |
 
-The current combined model has **350 surveys / 25,230 observations**: 5,933 terrain,
-19,121 hexside and 176 point observations. **8,964 are provisional, 16,266 unresolved,
-none human-reviewed.** Terrain observations cover 5,779 cells; 1,297 have none.
+The current combined model has **354 surveys / 25,291 observations**: 5,992 terrain,
+19,123 hexside and 176 point observations. **9,025 are provisional, 16,266 unresolved,
+none human-reviewed.** Terrain observations cover 5,838 cells; 1,238 have none.
 Water is not automatically Sea: inland water shares its ink. Mixed water/land is
 not automatically a Coast side. Clear requires an affirmative near-blank source
 swatch; all failed or unsupported classifications remain unknown.
@@ -283,7 +283,7 @@ false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
 Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B, 1,520/1,520 C and
-165/1,240 D cells; 2,372 cells remain not_reviewed**, covering the remaining D
+495/1,240 D cells; 2,042 cells remain not_reviewed**, covering the remaining D
 and all 1,297 E cells. Rosetta's
 anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
@@ -743,9 +743,28 @@ northern Gravel fragments and D0433/D0533's western fragments remain untyped.
 D0332/D0333 retain prior provisional Clear with explicit Gravel-footprint
 uncertainty. Rough, Salt Marsh, Desert, Gravel and Wadi observations remain
 separate. Boundary Track continuations do not invent seam neighbors; no route,
-location, source identity or geometry changed. All **4,704 reviewed cells** retain
-family-level uncertainty and `human_reviewed: false`; **2,372 cells remain
-`not_reviewed`**, including inspected but unreconciled D0601–D1033 crops.
+location, source identity or geometry changed in this batch.
+
+The second D batch reviews **165 D0601–D1033 cells**, adding 37 affirmative Clear
+occurrences and the missing **D1015 northwest ↔ D1115 southeast Track**.
+The separate D1114–D1014–D1115 shallow U-bend remains intact; no D1014 east
+shortcut is inferred. Qara's measured Village/Bir dot, label and Wadi remain
+separate with operational category unresolved. Inward olive bands and Gravel
+fragments retain explicit uncertainty; D1017's bottom-vertex Track retains its
+existing southeast association without a new detour. Boundary continuations do
+not invent neighbors. No source, geometry or point changed.
+
+The third D batch reviews **165 D1101–D1533 cells**, adding 22 affirmative Clear
+occurrences and **D1115 east ↔ D1116 west Track**. The southeast fork into D1015
+and southwest U-bend through D1014 remain separate. D1114/D1115 now receive
+whole-cell credit; D1631/D1632 remain crossing-only controls. Qara's dot stays
+outside D1109 in D1008. Inward faces and small Desert, Gravel and Salt Marsh
+fragments remain untyped; prior Clear with boundary fragments retains explicit
+uncertainty. D1532's near-vertex Track keeps its northwest association, and
+D1233's southeast continuation invents no neighbor beyond retained inventory.
+All **5,034 reviewed cells** retain `human_reviewed: false`; **2,042 cells remain
+`not_reviewed`**: 745 northern D and all 1,297 E. Source identity, geometry,
+measured points and route classifications remain unchanged.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

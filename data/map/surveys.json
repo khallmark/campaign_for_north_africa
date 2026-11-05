@@ -6,6 +6,26 @@
   },
   "surveys": [
     {
+      "id": "d-11-15-plain-ground", "label": "Northern Qara affirmative plain interiors", "notes": "Twenty-two individually outlined enlarged controls establish affirmative plain ground beneath single Tracks and beside exterior olive/dark faces or Wadi caps. Keep inward bands and small Desert, Gravel, Salt Marsh fragments unresolved rather than adding blanket Clear. Qara dot remains in D1008 outside D1109. No uniform terrain footprint, movement effect or new location inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=8480,3420,2900,430", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["D1107","D1109","D1110","D1111","D1207","D1210","D1211","D1233","D1308","D1309","D1333","D1406","D1408","D1409","D1410","D1411","D1415","D1432","D1510","D1529","D1530","D1532"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "qara-east-track-continuation", "label": "Qara east omitted Track continuation", "notes": "Paired enlarged D1115/D1116 controls confirm single-Track continuation across D1115 east from the existing fork, separately from D1115 southeast branch into D1015 and southwest U-bend through D1014. Preserve Salt Marsh/Gravel evidence and all other sides. No exact centerline, operational junction or passage rule inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=9650,3700,260,200", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"D1115","direction":"east"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
+      "id": "d-06-10-plain-ground", "label": "Qara corridor affirmative plain interiors", "notes": "Thirty-seven individually outlined controls establish affirmative plain ground beneath single Tracks, Qara lettering/dot and beside exterior olive bands or Wadi caps. Exclude inward olive bands D0606/D0707/D0806/D0907/D1007 and boundary Gravel fragments D0830/D1016/D1017. Preserve partial ground patterns and measured Qara point; Clear is not uniform movement cost or operational authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=8480,3780,2900,430", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "terrain", "hexes": ["D0601","D0602","D0603","D0604","D0605","D0607","D0622","D0623","D0624","D0625","D0701","D0706","D0708","D0721","D0722","D0723","D0725","D0808","D0821","D0825","D0826","D0906","D0908","D0909","D0920","D0921","D0927","D0930","D1006","D1008","D1009","D1014","D1015","D1019","D1027","D1029","D1033"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "qara-east-track-fork", "label": "Qara east omitted Track fork", "notes": "Paired enlarged D1015/D1115 outlines show a single-Track branch crossing D1015 northwest from the fork inside D1115 before continuing east. Preserve the separate existing D1114-D1014-D1115 shallow U-bend; no direct D1014 east shortcut. D1114/D1115 are crossing-only controls, not whole-cell review credit. No exact centerline, operational junction or passage rule inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=9580,3710,330,230", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"D1015","direction":"north_west"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
       "id": "d-01-05-plain-ground", "label": "Southern D affirmative plain interiors", "notes": "Twenty individually outlined controls establish affirmative Clear beneath single Tracks and beside exterior olive bands. D0113 northern band and D0206 eastern band remain exterior to the plain core. Exclude D0307 southeast stipple, D0330/D0331/D0433/D0533 Gravel fragments and broad inward olive bands. Preserve existing Rough, Salt Marsh, Desert, Gravel, Wadi, routes and all location uncertainty. No uniform terrain footprint, operational capacity or movement rule inferred.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=8480,4150,2900,420", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
       "coverage": {"kind": "terrain", "hexes": ["D0101","D0102","D0103","D0104","D0113","D0127","D0130","D0206","D0226","D0230","D0231","D0232","D0233","D0329","D0424","D0427","D0428","D0524","D0526","D0527"], "observation": {"status": "provisional", "value": "clear"}}

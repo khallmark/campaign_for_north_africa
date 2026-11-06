@@ -1,7 +1,13 @@
 name: Deploy Pages
 
-# Deliberate releases only: a push must never publish unvalidated map work.
+# Validate calls this only after the full main-branch matrix passes.
 on:
+  workflow_call:
+    inputs:
+      expected_sha:
+        description: Full validated commit SHA at the selected ref
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       expected_sha:

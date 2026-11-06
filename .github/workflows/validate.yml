@@ -67,3 +67,15 @@ jobs:
       - run: npm run check:ci
       # No source tree, dist, traces or screenshots are uploaded. Browser
       # fixtures are synthetic; inspect local ignored output when debugging.
+
+  publish:
+    name: Publish validated main
+    needs: checks
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/pages.yml
+    with:
+      expected_sha: ${{ github.sha }}

@@ -283,7 +283,7 @@ false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
 Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B, 1,520/1,520 C and
-495/1,240 D cells; 2,042 cells remain not_reviewed**, covering the remaining D
+660/1,240 D cells; 1,877 cells remain not_reviewed**, covering the remaining D
 and all 1,297 E cells. Rosetta's
 anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
@@ -762,9 +762,20 @@ outside D1109 in D1008. Inward faces and small Desert, Gravel and Salt Marsh
 fragments remain untyped; prior Clear with boundary fragments retains explicit
 uncertainty. D1532's near-vertex Track keeps its northwest association, and
 D1233's southeast continuation invents no neighbor beyond retained inventory.
-All **5,034 reviewed cells** retain `human_reviewed: false`; **2,042 cells remain
-`not_reviewed`**: 745 northern D and all 1,297 E. Source identity, geometry,
-measured points and route classifications remain unchanged.
+
+The fourth D batch reviews **165 D1601–D2033 cells** from published main
+`0f0a35411f70d08710527b93741eb589a9d5c122`. It adds 25 affirmative Clear
+occurrences, partial Desert at D1930 and **D1716 northwest ↔ D1815 southeast
+Track**, preserving Salt Marsh, Rough and independent dark-face evidence.
+The D1915/D2015 pair retains two source strokes across one existing shared-side
+connection, not a detour through D2014. Unfinished Road remains construction
+evidence, not completed transport. D1925's western Salt Marsh fragment and inward
+olive bands remain untyped. Existing automated Gravel at D1708/D1709 is explicitly
+disputed against the visible olive stipple; those observations remain available,
+not silently removed or described as visually confirmed. Source identity,
+geometry, measured points and existing route classes remain unchanged.
+All **5,199 reviewed cells** retain `human_reviewed: false`; **1,877 cells remain
+`not_reviewed`**: 580 northern D and all 1,297 E.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

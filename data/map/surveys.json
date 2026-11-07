@@ -6,6 +6,21 @@
   },
   "surveys": [
     {
+      "id": "d-16-20-plain-ground", "label": "Western Qattara affirmative plain interiors", "notes": "Twenty-five individually outlined cells establish affirmative plain ground beneath single Tracks and unfinished-Road capsules. Enlarged controls distinguish exterior dark faces at D1611/D1712/D1813/D1914 and near-vertex Tracks at D1732/D1831/D1832. Exclude inward olive bands, disputed D1708/D1709 Gravel and D1925 western Salt Marsh fragment. Preserve construction state, prior Rough/Mountain and partial patterned terrain. Clear is an occurrence, not homogeneous terrain or movement authority.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=8480,3050,2900,430", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-07"},
+      "coverage": {"kind": "terrain", "hexes": ["D1610","D1611","D1630","D1631","D1712","D1731","D1732","D1809","D1812","D1813","D1825","D1826","D1831","D1832","D1901","D1910","D1911","D1914","D1927","D1928","D1929","D2001","D2002","D2011","D2028"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "d1930-partial-desert", "label": "D1930 partial Desert beneath Track", "notes": "Outlined source cell contains a distinct yellow Desert patch entering from northeast/east beneath the west/east single Track. Matches TEC Desert, not the yellow network on beige Salt Marsh. Preserve plain margins and Track; occurrence does not assign a uniform movement cost.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=10950,3130,130,130", "docs/CNAv2.1.0/images/TEC.png#legend/Desert"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-07"},
+      "coverage": {"kind": "terrain", "hexes": ["D1930"], "observation": {"status": "provisional", "value": "desert"}}
+    },
+    {
+      "id": "qattara-west-track-crossing", "label": "Western Qattara omitted Track crossing", "notes": "Paired enlarged D1716/D1815 outlines show single gray dashes crossing D1716 northwest through the dark escarpment band into D1815 southeast. Preserve the Salt Marsh in D1716, Rough in D1815 and independent face evidence. Existing D1615-D1716 and D1815-D1915 branches remain; no shortcut, exact centerline, operational junction or legal cliff passage inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=9710,3200,180,210", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-07"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"D1716","direction":"north_west"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
       "id": "d-11-15-plain-ground", "label": "Northern Qara affirmative plain interiors", "notes": "Twenty-two individually outlined enlarged controls establish affirmative plain ground beneath single Tracks and beside exterior olive/dark faces or Wadi caps. Keep inward bands and small Desert, Gravel, Salt Marsh fragments unresolved rather than adding blanket Clear. Qara dot remains in D1008 outside D1109. No uniform terrain footprint, movement effect or new location inferred.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=8480,3420,2900,430", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-03"},
       "coverage": {"kind": "terrain", "hexes": ["D1107","D1109","D1110","D1111","D1207","D1210","D1211","D1233","D1308","D1309","D1333","D1406","D1408","D1409","D1410","D1411","D1415","D1432","D1510","D1529","D1530","D1532"], "observation": {"status": "provisional", "value": "clear"}}

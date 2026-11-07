@@ -114,3 +114,49 @@ fn instance_references_reject_stats_instead_of_silently_discarding_them() {
     }))
     .is_err());
 }
+
+#[test]
+fn schema_examples_match_reference_types() {
+    use cna_catalog::*;
+    let docs = include_str!("../../../docs/contracts/catalog-v1.md");
+    let examples: serde_json::Value = serde_json::from_str(
+        docs.split_once("```json\n")
+            .unwrap()
+            .1
+            .split_once("\n```")
+            .unwrap()
+            .0,
+    )
+    .unwrap();
+
+    fn check<T: serde::de::DeserializeOwned + serde::Serialize>(
+        examples: &serde_json::Value,
+        name: &str,
+    ) {
+        let value = examples[name].clone();
+        let typed: T = serde_json::from_value(value.clone()).unwrap();
+        assert_eq!(serde_json::to_value(typed).unwrap(), value, "{name}");
+        if let Some(mut object) = value.as_object().cloned() {
+            object.insert("live_strength".into(), json!(7));
+            assert!(
+                serde_json::from_value::<T>(json!(object)).is_err(),
+                "{name}"
+            );
+        }
+    }
+
+    check::<CanonicalUnitId>(&examples, "CanonicalUnitId");
+    check::<IdentityStatus>(&examples, "IdentityStatus");
+    check::<AssetStatus>(&examples, "AssetStatus");
+    check::<ValueStatus>(&examples, "ValueStatus");
+    check::<CanonicalUnit>(&examples, "CanonicalUnit");
+    check::<CounterRepresentation>(&examples, "CounterRepresentation");
+    check::<StateVersion>(&examples, "StateVersion");
+    check::<ScenarioInstanceRef>(&examples, "ScenarioInstanceRef");
+    check::<AssetRef>(&examples, "AssetRef");
+    check::<ReferenceValue<String>>(&examples, "ReferenceValue");
+    check::<ReferenceValue<u32>>(&examples, "CountReference");
+    check::<ReferenceValue<f64>>(&examples, "NumberReference");
+    check::<Toe>(&examples, "Toe");
+    check::<Equipment>(&examples, "Equipment");
+}

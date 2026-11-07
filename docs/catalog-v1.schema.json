@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CNA catalog consumer contract v1",
+  "description": "The existing identity inventory plus reusable reference-layer definitions. No migration or automatic promotion of candidate identities.",
+  "allOf": [{"$ref": "unit-identities.schema.json"}],
+  "$defs": {
+    "SourceCatalog": {"$ref": "unit-catalog.schema.json"},
+    "UnitReference": {"$ref": "unit-reference.schema.json"},
+    "CanonicalUnitId": {"type": "string"},
+    "IdentityStatus": {"enum": ["provisional", "source_identified", "alias_resolved", "verified", "unresolved", "fixture"]},
+    "AssetStatus": {"enum": ["missing", "candidate", "ready"]},
+    "ValueStatus": {"enum": ["sourced", "unverified", "provisional", "unresolved", "not_applicable", "conflict"]},
+    "CanonicalUnit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "side", "nationality", "kind", "names", "aliases", "source_refs", "status"],
+      "properties": {
+        "id": {"$ref": "#/$defs/CanonicalUnitId"},
+        "side": {"type": "string"},
+        "nationality": {"type": "string"},
+        "kind": {"type": "string"},
+        "names": {"type": "array", "items": {"type": "string"}},
+        "aliases": {"type": "array", "items": {"type": "string"}},
+        "source_refs": {"type": "array", "items": {"type": "string"}},
+        "status": {"$ref": "#/$defs/IdentityStatus"}
+      }
+    },
+    "CounterRepresentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["printed_label", "images"],
+      "properties": {
+        "unit_id": {"type": ["string", "null"]},
+        "gpid": {"type": ["string", "null"]},
+        "sheet": {"type": ["string", "null"]},
+        "printed_label": {"type": "string"},
+        "images": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "StateVersion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["axis", "level", "source"],
+      "properties": {
+        "axis": {"type": "string"},
+        "level": {"type": "string"},
+        "source": {"type": "string"}
+      }
+    },
+    "ScenarioInstanceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {"id": {"type": "string"}}
+    },
+    "AssetRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "portrait": {"type": ["string", "null"]},
+        "atlas": {"type": ["string", "null"]},
+        "status": {"$ref": "#/$defs/AssetStatus"}
+      }
+    },
+    "ReferenceValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "source_refs", "note"],
+      "properties": {
+        "value": {},
+        "status": {"$ref": "#/$defs/ValueStatus"},
+        "source_refs": {"type": "array", "items": {"type": "string"}},
+        "note": {"type": "string"}
+      }
+    },
+    "CountReference": {
+      "allOf": [
+        {"$ref": "#/$defs/ReferenceValue"},
+        {"properties": {"value": {"type": ["integer", "null"], "minimum": 0, "maximum": 4294967295}}}
+      ]
+    },
+    "NumberReference": {
+      "allOf": [
+        {"$ref": "#/$defs/ReferenceValue"},
+        {"properties": {"value": {"type": ["number", "null"]}}}
+      ]
+    },
+    "Toe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit_id", "context", "personnel", "equipment"],
+      "properties": {
+        "unit_id": {"$ref": "#/$defs/CanonicalUnitId"},
+        "context": {"type": "string"},
+        "personnel": {"$ref": "#/$defs/CountReference"},
+        "equipment": {"type": "object", "additionalProperties": {"$ref": "#/$defs/CountReference"}}
+      }
+    },
+    "Equipment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "characteristics"],
+      "properties": {
+        "id": {"type": "string"},
+        "name": {"type": "string"},
+        "characteristics": {"type": "object", "additionalProperties": {"$ref": "#/$defs/NumberReference"}}
+      }
+    }
+  }
+}

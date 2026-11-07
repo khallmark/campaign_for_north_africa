@@ -2,12 +2,14 @@
 
 import copy
 import importlib.util
+import json
 import subprocess
 import sys
 import unittest
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
+from referencing import Registry, Resource
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,6 +30,65 @@ class UnitDataTests(unittest.TestCase):
         schema = importer.read_json(ROOT / "docs/unit-reference.schema.json")
         Draft202012Validator.check_schema(schema)
         cls.validator = Draft202012Validator(schema)
+
+    def test_catalog_v1_schema(self):
+        resources = []
+        for path in (ROOT / "docs").glob("*.schema.json"):
+            schema = importer.read_json(path)
+            Draft202012Validator.check_schema(schema)
+            resources.append((path.as_uri(), Resource.from_contents(schema)))
+        registry = Registry().with_resources(resources)
+        uri = (ROOT / "docs/catalog-v1.schema.json").as_uri()
+
+        def validator(name=None):
+            ref = uri if name is None else f"{uri}#/$defs/{name}"
+            return Draft202012Validator({"$ref": ref}, registry=registry)
+
+        validator().validate(self.inventory)
+        validator("SourceCatalog").validate(self.catalog)
+        validator("UnitReference").validate(importer.read_json(ROOT / "public/data/unit-reference.json"))
+        docs = (ROOT / "docs/contracts/catalog-v1.md").read_text()
+        examples = json.loads(docs.split("```json\n", 1)[1].split("\n```", 1)[0])
+        for name, example in examples.items():
+            with self.subTest(definition=name):
+                check = validator(name)
+                check.validate(example)
+                if isinstance(example, dict):
+                    self.assertFalse(check.is_valid({**example, "live_strength": 7}))
+
+        count = examples["CountReference"]
+        for value in [None, 0, 4294967295]:
+            validator("CountReference").validate({**count, "value": value})
+        for value in [-1, 2.5, 4294967296, True, "3"]:
+            with self.subTest(invalid_count=value):
+                self.assertFalse(validator("CountReference").is_valid({**count, "value": value}))
+        for name in ("IdentityStatus", "AssetStatus", "ValueStatus"):
+            self.assertFalse(validator(name).is_valid("not-a-status"))
+        for name in ("CanonicalUnit", "StateVersion", "Toe", "Equipment"):
+            self.assertFalse(validator(name).is_valid({}))
+
+        malformed = copy.deepcopy(self.reference["counters"][0])
+        malformed["layers"] = [{"name": "incomplete"}]
+        self.assertFalse(validator("UnitReference").is_valid({**self.reference, "counters": [malformed]}))
+        bad_inventory = copy.deepcopy(self.inventory)
+        bad_inventory["identity_redirects"] = {"retired": 42}
+        self.assertFalse(validator().is_valid(bad_inventory))
+        bad_inventory = copy.deepcopy(self.inventory)
+        bad_inventory["entries"][0]["sprite"]["status"] = "not-a-status"
+        self.assertFalse(validator().is_valid(bad_inventory))
+
+        citation = {"id": "stat-note:fixture-unit:anti_armor", "title": "Fixture",
+                    "path": "docs/fixture.png", "section": "Row 2", "note": "Synthetic"}
+        catalog_check = validator("SourceCatalog")
+        catalog_check.validate({**self.catalog, "sources": [citation]})
+        for invalid in ("bad id", ":leading", "trailing:"):
+            self.assertFalse(catalog_check.is_valid({**self.catalog, "sources": [{**citation, "id": invalid}]}))
+        for field, value in (("pdf_page", "2"), ("pdf_page", 0), ("lines", [2]), ("path", "/private/fixture.png")):
+            self.assertFalse(catalog_check.is_valid({**self.catalog, "sources": [{**citation, field: value}]}))
+        missing = {key: value for key, value in citation.items() if key != "section"}
+        self.assertFalse(catalog_check.is_valid({**self.catalog, "sources": [missing]}))
+        entry = {**self.catalog["entries"][0], "id": "not:a:unit-id"}
+        self.assertFalse(catalog_check.is_valid({**self.catalog, "entries": [entry]}))
 
     def test_schema_accepts_current_data_and_unresolved_cases(self):
         self.validator.validate(self.reference)

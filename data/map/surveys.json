@@ -6,6 +6,21 @@
   },
   "surveys": [
     {
+      "id": "d-21-25-plain-ground", "label": "Northern Qattara affirmative plain interiors", "notes": "Seventeen individually outlined cells establish affirmative Clear beneath single Tracks and unfinished-Road capsules, or beside exterior olive faces at D2206/D2406/D2528. Exclude inward faces, D2217 Rough and D2230 Salt Marsh boundary fragments, and the isolated olive speck at D2409. Preserve construction state, partial patterns and operational uncertainty; Clear occurrence does not assign uniform terrain or movement permission.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=8480,2690,2900,430", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-12"},
+      "coverage": {"kind": "terrain", "hexes": ["D2101","D2103","D2112","D2201","D2203","D2204","D2206","D2212","D2301","D2305","D2313","D2401","D2405","D2406","D2502","D2507","D2528"], "observation": {"status": "provisional", "value": "clear"}}
+    },
+    {
+      "id": "qattara-north-mountain-cores", "label": "Northern Qattara Mountain cores within Rough", "notes": "Enlarged D2223 and D2332 outlines show solid dark olive cores inside pale Rough fringes, independently matching TEC Mountain and existing D2120 control. Add Mountain occurrence without removing Rough, plain margins or independent exterior dark-face evidence. No homogeneous footprint, directional slope or operational movement rule inferred.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=10400,2840,840,200", "docs/CNAv2.1.0/images/TEC.png#legend/Mountain"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-12"},
+      "coverage": {"kind": "terrain", "hexes": ["D2223","D2332"], "observation": {"status": "provisional", "value": "mountain"}}
+    },
+    {
+      "id": "qattara-north-track-crossings", "label": "Northern Qattara omitted Track crossings", "notes": "Paired enlarged outlines establish two single-gray-dash crossings: D2313 northwest into D2412 southeast, and D2330 northwest through the dark face into D2429 southeast. Preserve the independent D2429 west/east/northeast fork, Rough in D2429, untyped face interiors and all other route classes. Neither crossing detours through the northeast neighbor D2413 or D2430. Printed crossing is not a surveyed centerline, legal cliff passage or operational junction.",
+      "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=9460,2760,1620,210", "docs/CNAv2.1.0/images/TEC.png#legend/Track"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-12"},
+      "coverage": {"kind": "hexside", "sides": [{"hex":"D2313","direction":"north_west"},{"hex":"D2330","direction":"north_west"}], "observation": {"status": "provisional", "value": "track"}}
+    },
+    {
       "id": "d-16-20-plain-ground", "label": "Western Qattara affirmative plain interiors", "notes": "Twenty-five individually outlined cells establish affirmative plain ground beneath single Tracks and unfinished-Road capsules. Enlarged controls distinguish exterior dark faces at D1611/D1712/D1813/D1914 and near-vertex Tracks at D1732/D1831/D1832. Exclude inward olive bands, disputed D1708/D1709 Gravel and D1925 western Salt Marsh fragment. Preserve construction state, prior Rough/Mountain and partial patterned terrain. Clear is an occurrence, not homogeneous terrain or movement authority.",
       "provenance": {"source_refs": ["docs/CNAv2.1.0/images/CNA Map Vassal Mitch Guthrie 2021.png#xywh=8480,3050,2900,430", "docs/CNAv2.1.0/images/TEC.png#legend/Clear"], "reviewer": "Amp visual transcription; human review pending", "date": "2026-11-07"},
       "coverage": {"kind": "terrain", "hexes": ["D1610","D1611","D1630","D1631","D1712","D1731","D1732","D1809","D1812","D1813","D1825","D1826","D1831","D1832","D1901","D1910","D1911","D1914","D1927","D1928","D1929","D2001","D2002","D2011","D2028"], "observation": {"status": "provisional", "value": "clear"}}

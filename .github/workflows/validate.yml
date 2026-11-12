@@ -22,7 +22,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    # Cold toolchain setup plus serial browser coverage can exceed 30 minutes.
+    # Individual Playwright deadlines and zero retries remain unchanged.
+    timeout-minutes: 45
     env:
       CNA_PRIVATE_REVIEW_TILES: ''
     steps:

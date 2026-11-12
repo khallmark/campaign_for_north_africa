@@ -17,7 +17,7 @@ async function endPortion(page: Page) {
   await page.getByRole('button', { name: 'Confirm player portion complete', exact: true }).click();
 }
 
-test('hot-seat setup, orders, opposing turns, resume and concession work on the real board', async ({ page }) => {
+async function startGame(page: Page, firstPlayer = 'axis') {
   const errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
   await page.goto('/');
@@ -26,7 +26,16 @@ test('hot-seat setup, orders, opposing turns, resume and concession work on the 
   await add(page, 'unit-italian-vii-m-tank-bn');
   await page.getByRole('button', { name: 'Play / Save', exact: true }).click();
   await page.getByLabel('Operation / setup reference').fill('Browser integration fixture, not a historical setup');
+  await page.getByLabel('First player (adjudicated initiative)').selectOption(firstPlayer);
   await page.getByRole('button', { name: 'Start hot-seat game', exact: true }).click();
+  return errors;
+}
+
+// Each independent flow creates its game through the real UI. Keeping orders,
+// turn/save progression and game completion separate avoids sharing one 30s
+// deadline across all three flows, without retries or a longer timeout.
+test('hot-seat setup enforces ownership and records exact supplies, moves and construction', async ({ page }) => {
+  const errors = await startGame(page);
   await expect(page.locator('.calendar-chip')).toContainText('Axis to act');
   await page.locator('#board-roster [data-counter="1"]').click();
   await expect(page.locator('#board-detail')).toContainText('Only the active player');
@@ -53,6 +62,16 @@ test('hot-seat setup, orders, opposing turns, resume and concession work on the 
   await note(page, 'Construction completion adjudicated');
   await page.getByRole('button', { name: 'Record order', exact: true }).click();
   await expect(page.locator('#board-detail')).toContainText('Construction recorded');
+  await page.reload();
+  await page.locator('#board-roster [data-counter="2"]').click();
+  await expect(page.locator('#board-detail')).toContainText('C4021');
+  await expect(page.locator('#board-detail')).toContainText('Fuel 17/6');
+  await expect(page.locator('#board-detail')).toContainText('Construction recorded');
+  expect(errors).toEqual([]);
+});
+
+test('hot-seat opposing turns, initiative and dice survive resume and validated import', async ({ page }) => {
+  const errors = await startGame(page);
   await page.getByRole('button', { name: 'Play / Save', exact: true }).click();
   await page.getByRole('button', { name: 'Roll D6', exact: true }).click();
   await expect(page.locator('#board-message')).toContainText('D6 =');
@@ -77,6 +96,16 @@ test('hot-seat setup, orders, opposing turns, resume and concession work on the 
   await expect(page.getByRole('alert')).toContainText('Invalid rulebook session save');
   await page.getByLabel('Session JSON').fill(save);
   await page.getByRole('button', { name: 'Replace with imported game', exact: true }).click();
+  await expect(page.locator('.calendar-chip')).toContainText('Commonwealth to act');
+  await expect(page.locator('.calendar-chip')).toContainText('Stage 2 of 3');
+  await page.getByRole('button', { name: 'Play / Save', exact: true }).click();
+  await expect(page.locator('.play-log')).toContainText(die);
+  expect(errors).toEqual([]);
+});
+
+test('hot-seat elimination and concession persist on the real board', async ({ page }) => {
+  const errors = await startGame(page, 'commonwealth');
+  await expect(page.locator('.calendar-chip')).toContainText('Commonwealth to act');
   await page.locator('#board-roster [data-counter="1"]').click();
   await page.getByRole('button', { name: 'Combat result', exact: true }).click();
   await page.getByLabel('Defender eliminated', { exact: true }).check();

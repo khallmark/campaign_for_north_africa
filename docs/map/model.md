@@ -263,8 +263,9 @@ fringes, five partial Gravel occurrences and one partial Rough occurrence.
 The twelve B batches add 443 Clear occurrences, three partial Rough
 occurrences and six partial Mountain cores, retaining existing Rough where present.
 The nine C batches add 489 Clear occurrences and one marginal Desert occurrence.
-The first D batch adds 20 Clear occurrences.
-Of 1,297 cells without typed ground, source-surface measurements report 866 land, 228
+The first five D batches add 121 Clear occurrences, one partial Desert occurrence
+and two Mountain cores retaining existing Rough fringes.
+Of 1,195 cells without typed ground, source-surface measurements report 764 land, 228
 water, 179 mixed and 24 unresolved. A land
 measurement or a place label does not establish Clear terrain. A neutral unknown
 texture is presentation, not a terrain observation.
@@ -283,7 +284,7 @@ false`. Inventory membership does not establish playability.
 
 The audit starts at integration commit `add8fb4a8f4aec0079f1eb5b916a6d58f35a852c`.
 Recorded coverage is **58/58 Malta, 1,000/1,000 A, 1,961/1,961 B, 1,520/1,520 C and
-660/1,240 D cells; 1,877 cells remain not_reviewed**, covering the remaining D
+825/1,240 D cells; 1,712 cells remain not_reviewed**, covering the remaining D
 and all 1,297 E cells. Rosetta's
 anchor remains a point-only spot check, not whole-cell coverage.
 This is agent source review, not complete interpretation
@@ -774,8 +775,19 @@ olive bands remain untyped. Existing automated Gravel at D1708/D1709 is explicit
 disputed against the visible olive stipple; those observations remain available,
 not silently removed or described as visually confirmed. Source identity,
 geometry, measured points and existing route classes remain unchanged.
-All **5,199 reviewed cells** retain `human_reviewed: false`; **1,877 cells remain
-`not_reviewed`**: 580 northern D and all 1,297 E.
+
+The fifth D batch reviews **165 D2101–D2533 cells** from published main
+`01023ca30a649adce2ba95972d11a264cb133c35`. It adds 17 affirmative Clear
+occurrences, Mountain cores at **D2223/D2332** without replacing their Rough
+fringes, and **D2313 northwest ↔ D2412 southeast** plus **D2330 northwest ↔
+D2429 southeast Track**. The D2429 west/east/northeast fork remains intact;
+neither new crossing detours through the northeast neighbor. D2217's tiny Rough
+fragment, D2230's western Salt Marsh fringe, D2409's isolated olive speck and
+inward faces remain untyped. Unfinished Road stays construction evidence;
+section-boundary continuations invent no seam links. No point, source, geometry,
+prior observation or route class changed.
+All **5,364 reviewed cells** retain `human_reviewed: false`; **1,712 cells remain
+`not_reviewed`**: 415 northern D and all 1,297 E.
 
 ```sh
 python3 scripts/build-map-review-ledger.py --check

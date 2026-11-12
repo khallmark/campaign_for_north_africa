@@ -160,13 +160,15 @@ class MapDatabaseTests(unittest.TestCase):
                               ("D1109", "clear"), ("D1207", "clear"), ("D1532", "clear"),
                               ("D1611", "clear"), ("D1732", "clear"), ("D2002", "clear"),
                               ("D1930", "desert"), ("D1815", "rough"), ("D1716", "salt_marsh"),
+                              ("D2206", "clear"), ("D2313", "clear"),
+                              ("D2406", "clear"), ("D2528", "clear"),
                               ("A0217", "salt_marsh"), ("A0426", "desert")):
             self.assertEqual(self.db.execute(
                 "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain'",
                 (hex_id,)).fetchall(), [('provisional', value)])
         # Partial Mountain cores add evidence without erasing their Rough fringes.
         for hex_id in ("A0623", "A0721", "A0819", "A0919", "A1023",
-                       "A1119", "A1220", "A1320", "A1421"):
+                       "A1119", "A1220", "A1320", "A1421", "D2223", "D2332"):
             self.assertEqual(self.db.execute(
                 "SELECT DISTINCT status,value FROM observations WHERE hex=? AND kind='terrain' ORDER BY value",
                 (hex_id,)).fetchall(), [('provisional', 'mountain'), ('provisional', 'rough')])
@@ -182,7 +184,8 @@ class MapDatabaseTests(unittest.TestCase):
                        "C4517", "C4904", "D0307", "D0433", "D0533",
                        "D0606", "D0830", "D1016", "D1017",
                        "D1108", "D1126", "D1219", "D1517",
-                       "D1608", "D1808", "D1909", "D1925", "D2008"):
+                       "D1608", "D1808", "D1909", "D1925", "D2008",
+                       "D2217", "D2230", "D2330", "D2409", "D2412"):
             self.assertEqual(self.db.execute(
                 "SELECT value FROM observations WHERE hex=? AND kind='terrain'", (hex_id,)).fetchall(), [])
         # Independently inspected TEC controls: pale gaps are unfinished, dark
@@ -248,6 +251,8 @@ class MapDatabaseTests(unittest.TestCase):
             'D1114 D1014 D1115 D1015 D1016',
             'D1115 D1116 D1117',
             'D1615 D1716 D1815 D1915 D2015',
+            'D2212 D2313 D2412 D2513',
+            'D2229 D2330 D2429 D2530',
             'A0430 A0431 A0432 A0433',
             'A0903 A0802 A0703 A0704 A0705 A0706 A0707',
             'A1522 A1523 A1524 A1624',
@@ -270,6 +275,11 @@ class MapDatabaseTests(unittest.TestCase):
         self.assertEqual(self.db.execute("""
             SELECT feature FROM network_links WHERE from_hex='D1014' AND to_hex='D1015'
         """).fetchall(), [])
+        # Paired source outlines cross NW, not a detour through the NE neighbor.
+        for start, end in (('D2313', 'D2413'), ('D2330', 'D2430')):
+            self.assertIsNone(self.db.execute("""
+                SELECT 1 FROM network_links WHERE from_hex=? AND to_hex=? AND feature='track'
+            """, (start, end)).fetchone())
         self.assertEqual(self.db.execute("""
             SELECT n.id FROM network_links n JOIN hexes a ON a.id=n.from_hex JOIN hexes b ON b.id=n.to_hex
             WHERE a.section<>b.section

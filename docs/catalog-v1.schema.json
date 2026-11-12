@@ -1,9 +1,43 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "CNA catalog consumer contract v1",
-  "description": "The existing identity inventory plus reusable reference-layer definitions. No migration or automatic promotion of candidate identities.",
-  "allOf": [{"$ref": "unit-identities.schema.json"}],
+  "description": "The existing identity inventory or an explicitly unverified consumer fixture, plus reusable reference-layer definitions. No migration or automatic promotion of candidate identities.",
+  "oneOf": [{"$ref": "unit-identities.schema.json"}, {"$ref": "#/$defs/Fixture"}],
   "$defs": {
+    "Fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_version", "status", "note", "units"],
+      "properties": {
+        "contract_version": {"const": 1},
+        "status": {"const": "fixture"},
+        "note": {"type": "string"},
+        "units": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/FixtureUnit"}}
+      }
+    },
+    "FixtureUnit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit", "toe"],
+      "properties": {
+        "unit": {
+          "allOf": [
+            {"$ref": "#/$defs/CanonicalUnit"},
+            {"properties": {"status": {"const": "fixture"}}}
+          ]
+        },
+        "attached_to": {"type": ["string", "null"]},
+        "toe": {
+          "allOf": [
+            {"$ref": "#/$defs/Toe"},
+            {"properties": {
+              "personnel": {"properties": {"status": {"const": "unverified"}}},
+              "equipment": {"additionalProperties": {"properties": {"status": {"const": "unverified"}}}}
+            }}
+          ]
+        }
+      }
+    },
     "SourceCatalog": {"$ref": "unit-catalog.schema.json"},
     "UnitReference": {"$ref": "unit-reference.schema.json"},
     "CanonicalUnitId": {"type": "string"},

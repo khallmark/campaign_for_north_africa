@@ -1,0 +1,92 @@
+{
+  "contract_version": 1,
+  "status": "fixture",
+  "note": "Partial consumer sample, not a deployable or certified scenario. SC21 refers to docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf, physical page 4 / printed page 27, sections 60.31 and 60.41. Names and four attachment relationships are transcribed; fixture IDs do not adjudicate canonical identities. Null personnel and empty equipment maps mean unknown, not zero. No live strengths, placements, trucks, supplies or gameplay authority are supplied.",
+  "units": [
+    {
+      "unit": {"id":"fixture-graziani-1-ccnn","side":"axis","nationality":"italian","kind":"division","names":["1st CCNN Division"],"aliases":["1 CCNN Div"],"source_refs":["SC21:60.31"],"status":"fixture"},
+      "attached_to": null,
+      "toe": {"unit_id":"fixture-graziani-1-ccnn","context":"SC21 setup sample; establishment not transcribed","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Unknown; setup truck points are not personnel or equipment establishment."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-i-m","side":"axis","nationality":"italian","kind":"tank_battalion","names":["I(M) Tank Battalion"],"aliases":["I(M)"],"source_refs":["SC21:60.31"],"status":"fixture"},
+      "attached_to": "fixture-graziani-1-ccnn",
+      "toe": {"unit_id":"fixture-graziani-i-m","context":"Attached to 1 CCNN Div in the cited setup; not a new historical identity","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-2-libyan","side":"axis","nationality":"italian","kind":"division","names":["2nd Libyan Division"],"aliases":["2 Libyan Div"],"source_refs":["SC21:60.31"],"status":"fixture"},
+      "attached_to": null,
+      "toe": {"unit_id":"fixture-graziani-2-libyan","context":"SC21 setup sample; establishment not transcribed","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Unknown; no numeric establishment inferred from the setup."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-ix-l","side":"axis","nationality":"italian","kind":"tank_battalion","names":["IX(L) Tank Battalion"],"aliases":["IX(L)"],"source_refs":["SC21:60.31"],"status":"fixture"},
+      "attached_to": "fixture-graziani-2-libyan",
+      "toe": {"unit_id":"fixture-graziani-ix-l","context":"Attached to 2 Libyan Div in the cited setup","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-maletti","side":"axis","nationality":"italian","kind":"division","names":["Maletti Division"],"aliases":["Maletti Div"],"source_refs":["SC21:60.31"],"status":"fixture"},
+      "attached_to": null,
+      "toe": {"unit_id":"fixture-graziani-maletti","context":"Retains the source's Div label without adjudicating organization","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-ii-m","side":"axis","nationality":"italian","kind":"tank_battalion","names":["II(M) Tank Battalion"],"aliases":["II(M)"],"source_refs":["SC21:60.31"],"status":"fixture"},
+      "attached_to": "fixture-graziani-maletti",
+      "toe": {"unit_id":"fixture-graziani-ii-m","context":"Attached to Maletti Div in the cited setup; distinct from I(M)","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-bardia","side":"axis","nationality":"italian","kind":"garrison","names":["Bardia Garrison"],"aliases":[],"source_refs":["SC21:60.31"],"status":"fixture"},
+      "attached_to": null,
+      "toe": {"unit_id":"fixture-graziani-bardia","context":"Named garrison sample; no component roster inferred","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-tobruk","side":"axis","nationality":"italian","kind":"garrison","names":["Tobruk Garrison"],"aliases":[],"source_refs":["SC21:60.31"],"status":"fixture"},
+      "attached_to": null,
+      "toe": {"unit_id":"fixture-graziani-tobruk","context":"Separate from the Libyan Tank Command HQ in the same source entry","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-libyan-tank-hq","side":"axis","nationality":"italian","kind":"headquarters","names":["Libyan Tank Command HQ"],"aliases":["HQ: Libyan Tank Command"],"source_refs":["SC21:60.31"],"status":"fixture"},
+      "attached_to": null,
+      "toe": {"unit_id":"fixture-graziani-libyan-tank-hq","context":"Source explicitly names HQ; this does not aggregate subordinate tank units","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-11-hussars","side":"allied","nationality":"british","kind":"regiment","names":["11th Hussars"],"aliases":["11th Hus"],"source_refs":["SC21:60.41"],"status":"fixture"},
+      "attached_to": null,
+      "toe": {"unit_id":"fixture-graziani-11-hussars","context":"Source assignment 7Spt/7 is not an attachment; no parent link inferred","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-1-rtr","side":"allied","nationality":"british","kind":"regiment","names":["1st RTR"],"aliases":[],"source_refs":["SC21:60.41"],"status":"fixture"},
+      "attached_to": null,
+      "toe": {"unit_id":"fixture-graziani-1-rtr","context":"Source assignment 7/7 is not an attachment; no parent link inferred","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-2-rifle","side":"allied","nationality":"british","kind":"battalion","names":["2nd Rifle Bde"],"aliases":[],"source_refs":["SC21:60.41"],"status":"fixture"},
+      "attached_to": null,
+      "toe": {"unit_id":"fixture-graziani-2-rifle","context":"Preserve printed unit name; Bde in the regimental title does not create a brigade formation","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-4-rha","side":"allied","nationality":"british","kind":"regiment","names":["4th RHA"],"aliases":[],"source_refs":["SC21:60.41"],"status":"fixture"},
+      "attached_to": null,
+      "toe": {"unit_id":"fixture-graziani-4-rha","context":"Source assignment 7Spt/7 is not an attachment; no parent link inferred","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-matruh","side":"allied","nationality":"british","kind":"garrison","names":["Matruh Garrison"],"aliases":[],"source_refs":["SC21:60.41"],"status":"fixture"},
+      "attached_to": null,
+      "toe": {"unit_id":"fixture-graziani-matruh","context":"Partial sample: only the 1 Essex attachment is represented; Durham and South Staffordshires are omitted","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"No aggregate strength inferred for this incomplete sample."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-1-essex","side":"allied","nationality":"british","kind":"battalion","names":["1st Essex"],"aliases":["1 Essex 23/70"],"source_refs":["SC21:60.41"],"status":"fixture"},
+      "attached_to": "fixture-graziani-matruh",
+      "toe": {"unit_id":"fixture-graziani-1-essex","context":"Attached to Matruh Garrison in the cited setup; original assignment is separate","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-7-armored","side":"allied","nationality":"british","kind":"division","names":["7th Armored Division"],"aliases":[],"source_refs":["SC21:60.41"],"status":"fixture"},
+      "attached_to": null,
+      "toe": {"unit_id":"fixture-graziani-7-armored","context":"Source says Division, not HQ-only; detaches all 7 Arm Div units listed earlier. No component or aggregate strength inferred","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed; detached units must not be double-counted."},"equipment":{}}
+    },
+    {
+      "unit": {"id":"fixture-graziani-4-indian","side":"allied","nationality":"indian","kind":"division","names":["4th Indian Division"],"aliases":[],"source_refs":["SC21:60.41"],"status":"fixture"},
+      "attached_to": null,
+      "toe": {"unit_id":"fixture-graziani-4-indian","context":"Source says Division, not HQ-only; detaches 31st Field Arty and 7th In Bde. No component or aggregate strength inferred","personnel":{"value":null,"status":"unverified","source_refs":[],"note":"Establishment not transcribed; detached units must not be double-counted."},"equipment":{}}
+    }
+  ]
+}

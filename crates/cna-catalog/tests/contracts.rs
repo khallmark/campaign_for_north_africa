@@ -4,6 +4,86 @@ use serde_json::json;
 const IDENTITIES: &str = include_str!("../../../public/data/unit-identities.json");
 
 #[test]
+fn graziani_fixture_keeps_sample_identity_attachments_and_unknown_strength() {
+    use cna_catalog::{fixture, IdentityStatus, ValueStatus, CATALOG_CONTRACT_VERSION};
+    use std::collections::BTreeSet;
+
+    let sample = fixture::graziani().unwrap();
+    assert_eq!(CATALOG_CONTRACT_VERSION, 1);
+    assert_eq!(sample.contract_version, CATALOG_CONTRACT_VERSION);
+    assert_eq!(sample.status, IdentityStatus::Fixture);
+    assert_eq!(sample.units.len(), 17);
+    assert_eq!(
+        sample
+            .units
+            .iter()
+            .filter(|r| r.unit.side == "axis")
+            .count(),
+        9
+    );
+    assert_eq!(
+        sample
+            .units
+            .iter()
+            .filter(|r| r.unit.side == "allied")
+            .count(),
+        8
+    );
+    let ids: BTreeSet<_> = sample.units.iter().map(|r| &r.unit.id).collect();
+    assert_eq!(ids.len(), sample.units.len());
+    for record in &sample.units {
+        assert!(record.unit.id.0.starts_with("fixture-graziani-"));
+        assert_eq!(record.unit.status, IdentityStatus::Fixture);
+        assert!(!record.unit.source_refs.is_empty());
+        assert_eq!(record.toe.unit_id, record.unit.id);
+        assert_eq!(record.toe.personnel.status, ValueStatus::Unverified);
+        assert_eq!(record.toe.personnel.value, None);
+        assert!(
+            record.toe.equipment.is_empty(),
+            "no fabricated equipment counts"
+        );
+        if let Some(parent) = &record.attached_to {
+            assert!(ids.contains(parent));
+            assert_ne!(parent, &record.unit.id);
+        }
+    }
+    let attachments: BTreeSet<_> = sample
+        .units
+        .iter()
+        .filter_map(|r| {
+            r.attached_to
+                .as_ref()
+                .map(|parent| (r.unit.id.0.as_str(), parent.0.as_str()))
+        })
+        .collect();
+    assert_eq!(
+        attachments,
+        BTreeSet::from([
+            ("fixture-graziani-i-m", "fixture-graziani-1-ccnn"),
+            ("fixture-graziani-ix-l", "fixture-graziani-2-libyan"),
+            ("fixture-graziani-ii-m", "fixture-graziani-maletti"),
+            ("fixture-graziani-1-essex", "fixture-graziani-matruh"),
+        ])
+    );
+    for (id, name) in [
+        ("fixture-graziani-7-armored", "7th Armored Division"),
+        ("fixture-graziani-4-indian", "4th Indian Division"),
+    ] {
+        let unit = &sample
+            .units
+            .iter()
+            .find(|r| r.unit.id.0 == id)
+            .unwrap()
+            .unit;
+        assert_eq!(unit.names, [name]);
+        assert_eq!(unit.kind, "division");
+    }
+    let raw: serde_json::Value =
+        serde_json::from_str(include_str!("../fixtures/graziani-sample.json")).unwrap();
+    assert_eq!(serde_json::to_value(sample).unwrap(), raw);
+}
+
+#[test]
 fn bundled_sources_parse_and_all_retired_ids_resolve() {
     let catalog = Catalog::parse(include_str!("../../../public/data/unit-catalog.json")).unwrap();
     assert_eq!(catalog.entries.len(), 1450);

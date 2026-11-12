@@ -8,9 +8,11 @@ use std::collections::BTreeMap;
 
 pub mod catalog;
 pub mod census;
+pub mod fixture;
 pub mod inventory;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+pub const CATALOG_CONTRACT_VERSION: u32 = 1;
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[serde(transparent)]

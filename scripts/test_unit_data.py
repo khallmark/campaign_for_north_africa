@@ -47,6 +47,25 @@ class UnitDataTests(unittest.TestCase):
         validator().validate(self.inventory)
         validator("SourceCatalog").validate(self.catalog)
         validator("UnitReference").validate(importer.read_json(ROOT / "public/data/unit-reference.json"))
+        fixture = importer.read_json(ROOT / "crates/cna-catalog/fixtures/graziani-sample.json")
+        validator().validate(fixture)
+        for path, value in [
+            (("status",), "verified"),
+            (("contract_version",), 2),
+            (("units", 0, "unit", "status"), "verified"),
+            (("units", 0, "toe", "personnel", "status"), "sourced"),
+            (("units", 0, "toe", "equipment"), {
+                "sample-tank": {"value": 3, "status": "sourced", "source_refs": [], "note": "Not verified"}
+            }),
+            (("units", 0, "live_strength"), 7),
+        ]:
+            malformed_fixture = copy.deepcopy(fixture)
+            target = malformed_fixture
+            for key in path[:-1]:
+                target = target[key]
+            target[path[-1]] = value
+            with self.subTest(fixture_path=path):
+                self.assertFalse(validator().is_valid(malformed_fixture))
         docs = (ROOT / "docs/contracts/catalog-v1.md").read_text()
         examples = json.loads(docs.split("```json\n", 1)[1].split("\n```", 1)[0])
         for name, example in examples.items():

@@ -2,14 +2,16 @@
 
 This contract documents existing data and `cna-catalog` types; it does not certify
 the historical roster, migrate data, or supply live game state. It implements
-CNA-142, after the layered types in CNA-141. A future Graziani fixture must cite
-its own evidence; these examples are synthetic, not a deployment or establishment.
+CNA-142, after the layered types in CNA-141, and the CNA-143 Graziani consumer
+fixture. The inline examples are synthetic; the separately cited Graziani sample
+is also not a deployment or verified establishment.
 
 ## Wire formats and validation
 
 `docs/catalog-v1.schema.json` extends the existing identity-inventory schema and
 exports named definitions for the layered Rust types. Its root validates
-`public/data/unit-identities.json` unchanged. `$defs/SourceCatalog` references
+`public/data/unit-identities.json` unchanged, or the explicitly labelled
+`$defs/Fixture` envelope. `$defs/SourceCatalog` references
 the existing `public/data/unit-catalog.json` format; `$defs/UnitReference`
 references the supplemental `public/data/unit-reference.json` format, including
 counter layers and the existing `formation_reference` v1 contract. Referencing
@@ -73,6 +75,35 @@ Status enums are serialized in snake_case:
 - `ValueStatus`: `sourced`, `unverified`, `provisional`, `unresolved`,
   `not_applicable`, `conflict`. Supplemental-reference stat statuses retain their
   own schema vocabulary; do not silently reinterpret them as this enum.
+
+## Graziani consumer fixture
+
+`cna_catalog::fixture::graziani()` loads the embedded
+`crates/cna-catalog/fixtures/graziani-sample.json` as a typed `Fixture`, reusing
+`CanonicalUnit` and `Toe`. `CATALOG_CONTRACT_VERSION` and its envelope's
+`contract_version` are both 1. The loader returns a JSON parse result; it is not
+a general scenario importer or a certification gate. Schema validation and the
+bundled-fixture regression tests enforce the sample's status and relationships.
+
+SC21 citations identify `docs/CNAv2.1.0/Rules_Scenarios_07-2021.pdf`, physical page
+4 / printed page 27: Axis section 60.31 and Allied section 60.41. The sample has
+17 identities (9 Axis, 8 Allied), including the four explicit attachment links
+I(M) → 1 CCNN, IX(L) → 2 Libyan, II(M) → Maletti, and 1 Essex → Matruh. The
+`attached_to` ID refers to another sample entry; it does not issue a live order.
+The sample deliberately omits other setup units and is not a complete roster.
+
+Every identity has status `fixture` and a `fixture-graziani-` ID, with no automatic
+join into the production inventory. All personnel counts are null with status
+`unverified`; the empty equipment maps mean unknown, not zero. Truck points,
+strengths, locations and supplies are not inferred from this partial sample.
+The source calls the 7th Armored and 4th Indian formations **divisions**, not
+HQ-only counters; their detachment notes are preserved without inventing an
+aggregate strength. Assignment columns are not silently turned into attachments.
+
+```sh
+cargo test -p cna-catalog fixture
+uvx check-jsonschema --schemafile docs/catalog-v1.schema.json crates/cna-catalog/fixtures/graziani-sample.json
+```
 
 ## Examples checked against Rust and JSON Schema
 

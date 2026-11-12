@@ -82,7 +82,7 @@ test('a small overview covers loading tiles until full detail arrives', async ({
   }
 });
 
-test('tiles follow drag, cursor zoom and a bounded visible ring', async ({ page }, testInfo) => {
+test('tiles follow drag, cursor zoom and a bounded visible ring', async ({ page }) => {
   const requests: string[] = [];
   const errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
@@ -102,7 +102,6 @@ test('tiles follow drag, cursor zoom and a bounded visible ring', async ({ page 
   await expect(page.getByRole('button', { name: 'Original terrain', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('.research-unavailable')).toBeHidden();
   await expect(page.locator('.research-tile[data-ready=true]').first()).toBeVisible();
-  await page.locator('#map-research').screenshot({ path: testInfo.outputPath('overview.png') });
 
   // Freeze each interaction before checking requests, so request-time bounds
   // cannot accidentally be compared with a later viewport.
@@ -128,7 +127,6 @@ test('tiles follow drag, cursor zoom and a bounded visible ring', async ({ page 
   await ring();
   await page.getByRole('button', { name: 'Map detail scale', exact: true }).click();
   await ring();
-  await page.locator('#map-research').screenshot({ path: testInfo.outputPath('gameplay.png') });
   const surface = page.locator('.research-viewport');
   const bounds = (await surface.boundingBox())!;
   const initial = await state(page);

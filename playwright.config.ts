@@ -4,7 +4,9 @@ export default defineConfig({
   testDir: './tests/browser',
   forbidOnly: true,
   retries: 0,
-  workers: 2,
+  // Large DPR2 maps, tracing and video compete for the hosted runner's CPU.
+  // Keep the same deadlines and coverage, but give each CI browser the runner.
+  workers: process.env.CI ? 1 : 2,
   reporter: 'list',
   outputDir: 'test-results',
   snapshotPathTemplate: '{testDir}/__screenshots__/{projectName}/{testFilePath}/{arg}{ext}',

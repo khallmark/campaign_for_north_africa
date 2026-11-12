@@ -30,8 +30,12 @@ test('map legend explains active symbols and scrolls without moving the map', as
   await expect(legend.locator('.legend-route.railroad').first()).toHaveCSS('stroke', 'rgb(41, 61, 58)');
   await expect(legend.locator('.legend-construction.unfinished-railroad')).toHaveCSS('stroke', 'rgb(113, 68, 160)');
   await legend.hover();
+  // wheel() returns before native scrolling finishes. Do not race End against
+  // the remaining wheel animation: wait for the requested distance (or bottom).
+  const scrollTarget = await legend.evaluate(el => Math.min(el.scrollTop + 450, el.scrollHeight - el.clientHeight));
   await page.mouse.wheel(0, 450);
-  await expect.poll(() => legend.evaluate(el => el.scrollTop)).toBeGreaterThan(0);
+  await expect.poll(() => legend.evaluate(el => el.scrollTop)).toBe(scrollTarget);
+  expect(scrollTarget).toBeGreaterThan(0);
   expect(await camera()).toEqual(initialCamera);
   await legend.focus();
   await page.keyboard.press('End');
